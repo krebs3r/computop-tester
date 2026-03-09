@@ -84,6 +84,11 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ## 📋 Changelog
 
+### v1.4 — Security Disclaimer
+- Security disclaimer regarding productive credentials added prominently to the start page
+- User is explicitly informed of their **responsibility** for the safe handling of API credentials
+- **Download button** for local execution — recommended alternative to using the public URL
+
 ### v1.3 — Payment Methods
 - Added **"All enabled payment methods"** as the default `PayTypes` option — omitting the parameter causes Computop to display every method configured for the merchant account
 - Clarified existing `CC`, `VISA`, `MasterCard` and `AMEX` options in the selector
