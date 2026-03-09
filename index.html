@@ -323,6 +323,38 @@
     }
     .info-box strong { color: var(--accent2); font-weight: 500; }
 
+    /* ── SECURITY DISCLAIMER ── */
+    .security-disclaimer {
+      background: rgba(245,158,11,0.06);
+      border-color: rgba(245,158,11,0.25);
+    }
+    html.light .security-disclaimer {
+      background: rgba(217,119,6,0.05);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .security-disclaimer p { font-size: 13px; color: var(--muted2); line-height: 1.65; }
+    .security-disclaimer strong { color: var(--warning) !important; }
+    .disclaimer-header {
+      display: flex; align-items: center; gap: 7px;
+      margin-bottom: 10px; color: var(--warning);
+    }
+    .disclaimer-header strong { font-size: 13px; font-weight: 600; }
+    .disclaimer-actions {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      margin-top: 14px; padding-top: 12px;
+      border-top: 1px solid rgba(245,158,11,0.18);
+    }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3);
+      color: var(--warning); font-family: var(--display); font-size: 12px; font-weight: 600;
+      padding: 7px 14px; border-radius: 8px; text-decoration: none;
+      transition: background .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    .btn-download:hover { background: rgba(245,158,11,0.18); border-color: rgba(245,158,11,0.45); }
+    .disclaimer-hint { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
     /* ── STEP INDICATOR ── */
     .steps { display: flex; gap: 0; margin-bottom: 32px; }
     .step {
@@ -455,9 +487,30 @@
   </header>
 
   <!-- Info Box -->
-  <div class="info-box" style="margin-bottom:28px">
-    <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span> Hinweis:</strong> Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop. 
+  <div class="info-box" style="margin-bottom:16px">
+    <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span> Hinweis:</strong> Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop.
     Im Testmodus bitte nur <strong>kleine Beträge (0,11–2,00 EUR)</strong> verwenden, da Kreditkartenauthorisierungen auch im Test real sind.
+  </div>
+
+  <!-- Security / Credential Disclaimer -->
+  <div class="info-box security-disclaimer" style="margin-bottom:28px">
+    <div class="disclaimer-header">
+      <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+      <strong>Sicherheitshinweis zu Ihren Credentials</strong>
+    </div>
+    <p>
+      Die Eingabe von produktiven API-Credentials in webbasierte Tools birgt grundsätzlich ein Restrisiko. Obwohl dieser Tester ausschließlich im Browser ausgeführt wird und keine Daten an externe Server übermittelt, liegt die Verantwortung für den sicheren Umgang mit Ihren Zugangsdaten bei Ihnen.
+    </p>
+    <p style="margin-top:10px">
+      <strong>Empfehlung:</strong> Verwenden Sie diese Seite bevorzugt lokal in Ihrem Browser, anstatt sie über eine öffentlich erreichbare URL aufzurufen.
+    </p>
+    <div class="disclaimer-actions">
+      <a class="btn-download" href="https://raw.githubusercontent.com/krebs3r/computop-tester/main/index.html" download="computop-payment-tester.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        Seite lokal herunterladen
+      </a>
+      <span class="disclaimer-hint">Datei herunterladen und direkt im Browser öffnen — keine Installation erforderlich</span>
+    </div>
   </div>
 
   <!-- ── STEP 1: CREDENTIALS ── -->
@@ -701,6 +754,18 @@
 
       <div class="cl-entry">
         <div class="cl-header">
+          <span class="cl-version">v1.4</span>
+          <span class="cl-title">Security Disclaimer</span>
+        </div>
+        <ul class="cl-list">
+          <li>Sicherheitshinweis zu produktiven Credentials direkt auf der Startseite hinzugefügt</li>
+          <li>Nutzer wird explizit auf seine <strong>Eigenverantwortung</strong> beim Umgang mit API-Zugangsdaten hingewiesen</li>
+          <li><strong>Download-Button</strong> zur lokalen Ausführung der Seite — empfohlene Alternative zur öffentlichen URL</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
           <span class="cl-version">v1.3</span>
           <span class="cl-title">Payment Methods</span>
         </div>
@@ -762,7 +827,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Computop Payment Tester
-      <span class="footer-ver-badge">v1.3</span>
+      <span class="footer-ver-badge">v1.4</span>
     </span>
     <span class="footer-links">
       <a href="https://github.com/krebs3r/computop-tester" target="_blank" rel="noopener">
