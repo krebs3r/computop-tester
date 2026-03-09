@@ -84,6 +84,12 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ## 📋 Changelog
 
+### v1.5 — Technical Explanation of URL Generation
+- Added detailed **3-step explanation** in the Credentials section: MAC calculation, payload encryption and URL composition
+- Role of the **HMAC password** explained — HMAC-SHA256 signature over `TransID * MerchantID * Amount * Currency` to ensure request integrity
+- Role of the **Blowfish password** explained — ECB encryption of the full payload including MAC, hex-encoded as the `Data` parameter
+- Visual **URL anatomy** with colour-coded parameters (`MerchantID`, `Len`, `Data`) and legend
+
 ### v1.4 — Security Disclaimer
 - Security disclaimer regarding productive credentials added prominently to the start page
 - User is explicitly informed of their **responsibility** for the safe handling of API credentials
