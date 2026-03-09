@@ -102,9 +102,29 @@
     html.light .badge { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.25); }
     html.light select option { background: #ffffff; color: #0f172a; }
 
+    /* ── HEADER CONTROLS ── */
+    .header-controls {
+      position: fixed; top: 18px; right: 20px; z-index: 100;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; padding: 6px 11px;
+      cursor: pointer; font-family: var(--mono); font-size: 12px; font-weight: 500;
+      color: var(--muted2);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      transition: border-color .2s, background .25s, box-shadow .2s;
+    }
+    .lang-toggle:hover { border-color: var(--border2); box-shadow: 0 4px 18px rgba(0,0,0,0.25); }
+    .lang-seg { color: var(--muted); transition: color .15s; }
+    .lang-seg-active { color: var(--text); }
+    .lang-sep { color: var(--border2); }
+
     /* ── THEME TOGGLE ── */
     .theme-toggle {
-      position: fixed; top: 18px; right: 20px; z-index: 100;
       display: flex; align-items: center; gap: 6px;
       background: var(--card); border: 1px solid var(--border);
       border-radius: 24px; padding: 6px 12px 6px 8px;
@@ -553,11 +573,18 @@
 </head>
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn" title="Theme wechseln">
-  <span class="theme-toggle-icon icon" id="theme-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
-  <span id="theme-label">Dark</span>
-  <span class="theme-toggle-auto" id="theme-auto-badge" style="display:none">auto</span>
-</button>
+<div class="header-controls">
+  <button class="lang-toggle" onclick="toggleLang()" id="lang-toggle-btn" title="Switch language / Sprache wechseln">
+    <span class="lang-seg lang-seg-active" id="lang-de">DE</span>
+    <span class="lang-sep">|</span>
+    <span class="lang-seg" id="lang-en">EN</span>
+  </button>
+  <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn" title="Theme wechseln">
+    <span class="theme-toggle-icon icon" id="theme-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+    <span id="theme-label">Dark</span>
+    <span class="theme-toggle-auto" id="theme-auto-badge" style="display:none">auto</span>
+  </button>
+</div>
 
 <div class="wrapper">
 
@@ -565,33 +592,33 @@
   <header>
     <div class="badge"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Computop Paygate</div>
     <h1>Payment Tester</h1>
-    <p class="subtitle">Hosted Payment Page · Blowfish ECB · Kreditkarte · Testumgebung</p>
+    <p class="subtitle" id="subtitle">Hosted Payment Page · Blowfish ECB · Kreditkarte · Testumgebung</p>
   </header>
 
   <!-- Info Box -->
   <div class="info-box" style="margin-bottom:16px">
-    <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span> Hinweis:</strong> Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop.
-    Im Testmodus bitte nur <strong>kleine Beträge (0,11–2,00 EUR)</strong> verwenden, da Kreditkartenauthorisierungen auch im Test real sind.
+    <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span> <span id="info-title">Hinweis:</span></strong> <span id="info-body">Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop.
+    Im Testmodus bitte nur <strong>kleine Beträge (0,11–2,00 EUR)</strong> verwenden, da Kreditkartenauthorisierungen auch im Test real sind.</span>
   </div>
 
   <!-- Security / Credential Disclaimer -->
   <div class="info-box security-disclaimer" style="margin-bottom:28px">
     <div class="disclaimer-header">
       <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
-      <strong>Sicherheitshinweis zu Ihren Credentials</strong>
+      <strong id="sec-title">Sicherheitshinweis zu Ihren Credentials</strong>
     </div>
-    <p>
+    <p id="sec-p1">
       Die Eingabe von produktiven API-Credentials in webbasierte Tools birgt grundsätzlich ein Restrisiko. Obwohl dieser Tester ausschließlich im Browser ausgeführt wird und keine Daten an externe Server übermittelt, liegt die Verantwortung für den sicheren Umgang mit Ihren Zugangsdaten bei Ihnen.
     </p>
-    <p style="margin-top:10px">
+    <p id="sec-p2" style="margin-top:10px">
       <strong>Empfehlung:</strong> Verwenden Sie diese Seite bevorzugt lokal in Ihrem Browser, anstatt sie über eine öffentlich erreichbare URL aufzurufen.
     </p>
     <div class="disclaimer-actions">
       <a class="btn-download" href="https://raw.githubusercontent.com/krebs3r/computop-tester/main/index.html" download="computop-payment-tester.html">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-        Seite lokal herunterladen
+        <span id="sec-download">Seite lokal herunterladen</span>
       </a>
-      <span class="disclaimer-hint">Datei herunterladen und direkt im Browser öffnen — keine Installation erforderlich</span>
+      <span class="disclaimer-hint" id="sec-hint">Datei herunterladen und direkt im Browser öffnen — keine Installation erforderlich</span>
     </div>
   </div>
 
@@ -599,34 +626,34 @@
   <div class="card" id="card-creds">
     <div class="card-header" onclick="toggleCard('card-creds')">
       <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg></span></div>
-      <span class="card-title">Schritt 1 — Credentials</span>
+      <span class="card-title" id="ct-creds">Schritt 1 — Credentials</span>
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
       <div class="field-grid">
         <div class="field">
-          <label>Merchant ID <span class="required">*</span></label>
+          <label><span id="l-mid">Merchant ID</span> <span class="required">*</span></label>
           <input type="text" id="merchantId" placeholder="IhreMerchantID" autocomplete="off">
         </div>
         <div class="field">
-          <label>Blowfish Passwort <span class="required">*</span> <span class="hint">(für Data-Verschlüsselung)</span></label>
+          <label><span id="l-bfpw">Blowfish Passwort</span> <span class="required">*</span> <span class="hint" id="h-bfpw">(für Data-Verschlüsselung)</span></label>
           <div class="input-group">
             <input type="password" id="blowfishKey" placeholder="••••••••••••••••" autocomplete="off" id="bf-pwd">
             <button class="toggle-vis" onclick="togglePwd('blowfishKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
         <div class="field">
-          <label>HMAC Passwort <span class="required">*</span> <span class="hint">(für MAC-Berechnung)</span></label>
+          <label><span id="l-hmacpw">HMAC Passwort</span> <span class="required">*</span> <span class="hint" id="h-hmacpw">(für MAC-Berechnung)</span></label>
           <div class="input-group">
             <input type="password" id="hmacKey" placeholder="••••••••••••••••" autocomplete="off">
             <button class="toggle-vis" onclick="togglePwd('hmacKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
         <div class="field">
-          <label>Umgebung</label>
+          <label id="l-env">Umgebung</label>
           <select id="environment">
-            <option value="https://www.computop-paygate.com/paymentPage.aspx">Production – computop-paygate.com</option>
-            <option value="https://www.computop-paygate.com/paymentPage.aspx" selected>Test – computop-paygate.com (same)</option>
+            <option id="opt-prod" value="https://www.computop-paygate.com/paymentPage.aspx">Production – computop-paygate.com</option>
+            <option id="opt-test" value="https://www.computop-paygate.com/paymentPage.aspx" selected>Test – computop-paygate.com (same)</option>
           </select>
         </div>
       </div>
@@ -635,11 +662,11 @@
 
       <div class="cred-save-row">
         <div class="cred-save-info">
-          <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> Verschlüsselte Speicherung</strong> — Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert.
+          <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> <span id="cred-save-title">Verschlüsselte Speicherung</span></strong> — <span id="cred-save-text">Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert.</span>
         </div>
         <span id="cred-save-status">–</span>
-        <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" onclick="saveCredentials()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></span> Speichern</button>
-        <button class="btn btn-danger-ghost" style="padding:8px 14px;font-size:12px" onclick="clearCredentials()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> Löschen</button>
+        <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" onclick="saveCredentials()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></span> <span id="btn-save-text">Speichern</span></button>
+        <button class="btn btn-danger-ghost" style="padding:8px 14px;font-size:12px" onclick="clearCredentials()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-delete-text">Löschen</span></button>
       </div>
 
       <div class="divider"></div>
@@ -648,7 +675,7 @@
 
         <div class="te-title">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          Wie wird die GET-URL erzeugt?
+          <span id="te-title">Wie wird die GET-URL erzeugt?</span>
         </div>
 
         <div class="te-flow">
@@ -656,8 +683,8 @@
           <div class="te-step">
             <div class="te-step-num">1</div>
             <div class="te-step-body">
-              <div class="te-step-label">MAC-Berechnung <span class="te-key">HMAC-Passwort</span></div>
-              <div class="te-step-desc">
+              <div class="te-step-label"><span id="te-s1-label">MAC-Berechnung</span> <span class="te-key">HMAC-Passwort</span></div>
+              <div class="te-step-desc" id="te-s1-desc">
                 Aus den Klartextparametern <code>TransID</code>, <code>MerchantID</code>, <code>Amount</code> und <code>Currency</code> wird mit dem <strong>HMAC-Passwort</strong> eine digitale Signatur (MAC) per HMAC-SHA256 berechnet. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate kann damit erkennen, ob die Daten manipuliert wurden.
               </div>
             </div>
@@ -670,8 +697,8 @@
           <div class="te-step">
             <div class="te-step-num">2</div>
             <div class="te-step-body">
-              <div class="te-step-label">Payload-Verschlüsselung <span class="te-key">Blowfish-Passwort</span></div>
-              <div class="te-step-desc">
+              <div class="te-step-label"><span id="te-s2-label">Payload-Verschlüsselung</span> <span class="te-key">Blowfish-Passwort</span></div>
+              <div class="te-step-desc" id="te-s2-desc">
                 Alle Zahlungsparameter (inkl. des MAC) werden als Klartextstring im Format <code>Key=Value&amp;Key=Value…</code> zusammengesetzt. Dieser String wird mit dem <strong>Blowfish-Passwort</strong> per Blowfish ECB verschlüsselt und anschließend hexadezimal kodiert. Das Ergebnis bildet den <code>Data</code>-Parameter. Die Länge des ursprünglichen Klartexts wird separat als <code>Len</code> übergeben, da Blowfish auf ein Vielfaches von 8 Byte auffüllt.
               </div>
             </div>
@@ -684,17 +711,17 @@
           <div class="te-step">
             <div class="te-step-num">3</div>
             <div class="te-step-body">
-              <div class="te-step-label">URL-Zusammensetzung</div>
-              <div class="te-step-desc">
+              <div class="te-step-label"><span id="te-s3-label">URL-Zusammensetzung</span></div>
+              <div class="te-step-desc" id="te-s3-desc">
                 Die finale GET-URL setzt sich aus drei unverschlüsselten Pflichtparametern zusammen, die direkt an die Paygate-Endpoint-URL angehängt werden:
               </div>
               <div class="te-url-anatomy">
                 <span class="te-url-base">https://www.computop-paygate.com/paymentPage.aspx</span><span class="te-url-sep">?</span><span class="te-url-param param-mid">MerchantID=<em>IhreMID</em></span><span class="te-url-sep">&amp;</span><span class="te-url-param param-len">Len=<em>142</em></span><span class="te-url-sep">&amp;</span><span class="te-url-param param-data">Data=<em>a3f09c…</em></span>
               </div>
               <div class="te-url-legend">
-                <span class="te-legend-item"><span class="te-dot dot-mid"></span><code>MerchantID</code> — Händlerkennung (Klartext)</span>
-                <span class="te-legend-item"><span class="te-dot dot-len"></span><code>Len</code> — Länge des unverschlüsselten Payloads in Bytes</span>
-                <span class="te-legend-item"><span class="te-dot dot-data"></span><code>Data</code> — Blowfish-ECB-verschlüsselter, hex-kodierter Payload</span>
+                <span class="te-legend-item"><span class="te-dot dot-mid"></span><code>MerchantID</code> <span id="te-leg-mid">— Händlerkennung (Klartext)</span></span>
+                <span class="te-legend-item"><span class="te-dot dot-len"></span><code>Len</code> <span id="te-leg-len">— Länge des unverschlüsselten Payloads in Bytes</span></span>
+                <span class="te-legend-item"><span class="te-dot dot-data"></span><code>Data</code> <span id="te-leg-data">— Blowfish-ECB-verschlüsselter, hex-kodierter Payload</span></span>
               </div>
             </div>
           </div>
@@ -708,21 +735,21 @@
   <div class="card" id="card-payment">
     <div class="card-header" onclick="toggleCard('card-payment')">
       <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span></div>
-      <span class="card-title">Schritt 2 — Zahlungsparameter</span>
+      <span class="card-title" id="ct-payment">Schritt 2 — Zahlungsparameter</span>
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
 
       <div class="field-grid three">
         <div class="field">
-          <label>Betrag <span class="required">*</span></label>
+          <label><span id="l-amount">Betrag</span> <span class="required">*</span></label>
           <div class="input-group">
             <input type="number" id="amount" value="0.99" step="0.01" min="0.01" placeholder="1.00">
             <span class="input-suffix">EUR</span>
           </div>
         </div>
         <div class="field">
-          <label>Währung</label>
+          <label id="l-currency">Währung</label>
           <select id="currency">
             <option value="EUR" selected>EUR – Euro</option>
             <option value="USD">USD – US-Dollar</option>
@@ -734,7 +761,7 @@
           </select>
         </div>
         <div class="field">
-          <label>Sprache</label>
+          <label id="l-language">Sprache</label>
           <select id="language">
             <option value="de" selected>de – Deutsch</option>
             <option value="en">en – Englisch</option>
@@ -748,59 +775,59 @@
 
       <div class="field-grid" style="margin-top:14px">
         <div class="field">
-          <label>Transaction ID <span class="hint">(auto-generiert)</span></label>
+          <label><span id="l-transid">Transaction ID</span> <span class="hint" id="h-transid">(auto-generiert)</span></label>
           <div class="input-group">
             <input type="text" id="transId" placeholder="TID-..." readonly style="cursor:default;color:var(--muted2)">
             <button class="toggle-vis" onclick="generateTransId()" title="Neu generieren"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span></button>
           </div>
         </div>
         <div class="field">
-          <label>Referenznummer <span class="hint">(optional)</span></label>
+          <label><span id="l-refnr">Referenznummer</span> <span class="hint" id="h-refnr">(optional)</span></label>
           <input type="text" id="refNr" placeholder="REF-001" maxlength="30">
         </div>
       </div>
 
       <div class="field" style="margin-top:14px">
-        <label>Bestellbeschreibung <span class="hint">(OrderDesc)</span></label>
+        <label><span id="l-orderdesc">Bestellbeschreibung</span> <span class="hint" id="h-orderdesc">(OrderDesc)</span></label>
         <input type="text" id="orderDesc" value="Testzahlung via Computop Paygate" maxlength="127">
       </div>
 
-      <div class="sep-label">Redirect-URLs</div>
+      <div class="sep-label" id="sep-redirect">Redirect-URLs</div>
 
       <div class="url-fields">
         <div class="field">
-          <label>URLSuccess <span class="required">*</span> <span class="hint">(nach erfolgreicher Zahlung)</span></label>
+          <label><span id="l-urls">URLSuccess</span> <span class="required">*</span> <span class="hint" id="h-urls">(nach erfolgreicher Zahlung)</span></label>
           <input type="url" id="urlSuccess" placeholder="https://meineshop.de/success" value="https://httpbin.org/get?status=success">
         </div>
         <div class="field">
-          <label>URLFailure <span class="required">*</span> <span class="hint">(nach fehlgeschlagener Zahlung)</span></label>
+          <label><span id="l-urlf">URLFailure</span> <span class="required">*</span> <span class="hint" id="h-urlf">(nach fehlgeschlagener Zahlung)</span></label>
           <input type="url" id="urlFailure" placeholder="https://meineshop.de/failure" value="https://httpbin.org/get?status=failure">
         </div>
         <div class="field">
-          <label>URLNotify <span class="hint">(Server-zu-Server Benachrichtigung)</span></label>
+          <label><span id="l-urln">URLNotify</span> <span class="hint" id="h-urln">(Server-zu-Server Benachrichtigung)</span></label>
           <input type="url" id="urlNotify" placeholder="https://meineshop.de/notify" value="https://httpbin.org/post?status=notify">
         </div>
         <div class="field">
-          <label>URLBack <span class="hint">(Abbrechen-Button, unverschlüsselt)</span></label>
+          <label><span id="l-urlb">URLBack</span> <span class="hint" id="h-urlb">(Abbrechen-Button, unverschlüsselt)</span></label>
           <input type="url" id="urlBack" placeholder="https://meineshop.de/warenkorb" value="https://httpbin.org/get?status=back">
         </div>
       </div>
 
-      <div class="sep-label">Erweiterte Einstellungen</div>
+      <div class="sep-label" id="sep-advanced">Erweiterte Einstellungen</div>
 
       <div class="field-grid">
         <div class="field">
-          <label>Zahlarten <span class="hint">(PayTypes)</span></label>
+          <label><span id="l-paytypes">Zahlarten</span> <span class="hint" id="h-paytypes">(PayTypes)</span></label>
           <select id="payTypes">
-            <option value="" selected>— Alle freigeschalteten Zahlarten (PayTypes weglassen)</option>
-            <option value="CC">CC – Alle konfigurierten Kreditkartenmarken</option>
+            <option id="opt-pt-all" value="" selected>— Alle freigeschalteten Zahlarten (PayTypes weglassen)</option>
+            <option id="opt-pt-cc" value="CC">CC – Alle konfigurierten Kreditkartenmarken</option>
             <option value="VISA">VISA</option>
             <option value="MasterCard">MasterCard</option>
             <option value="AMEX">AMEX – American Express</option>
           </select>
         </div>
         <div class="field">
-          <label>Template <span class="hint">(optional, unverschlüsselt)</span></label>
+          <label><span id="l-template">Template</span> <span class="hint" id="h-template">(optional, unverschlüsselt)</span></label>
           <input type="text" id="template" placeholder="z.B. PaymentPageDropDown_v1">
         </div>
       </div>
@@ -812,17 +839,17 @@
   <div class="card" id="card-preview">
     <div class="card-header" onclick="toggleCard('card-preview')">
       <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span></div>
-      <span class="card-title">Schritt 3 — Vorschau & Ausführen</span>
+      <span class="card-title" id="ct-preview">Schritt 3 — Vorschau & Ausführen</span>
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
 
       <div class="btn-row" style="margin-top:0">
         <button class="btn btn-primary" onclick="buildAndPreview()" id="btn-preview">
-          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> Vorschau generieren
+          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> <span id="btn-preview-text">Vorschau generieren</span>
         </button>
         <button class="btn btn-ghost" onclick="generateTransId()">
-          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span> Neue Trans-ID
+          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span> <span id="btn-newtid-text">Neue Trans-ID</span>
         </button>
       </div>
 
@@ -831,8 +858,8 @@
         <div style="margin-bottom:12px">
           <div class="debug-block">
             <div class="debug-label">
-              Unverschlüsselte Parameter (Data-String)
-              <button class="copy-btn" onclick="copyText('plain-params')">Kopieren</button>
+              <span id="debug-plain-label">Unverschlüsselte Parameter (Data-String)</span>
+              <button class="copy-btn" onclick="copyText('plain-params')"><span id="copy-plain-text">Kopieren</span></button>
             </div>
             <pre id="plain-params">–</pre>
           </div>
@@ -841,8 +868,8 @@
         <div style="margin-bottom:12px">
           <div class="debug-block">
             <div class="debug-label">
-              Vollständige GET-URL (Computop Paygate)
-              <button class="copy-btn" onclick="copyText('full-url')">Kopieren</button>
+              <span id="debug-url-label">Vollständige GET-URL (Computop Paygate)</span>
+              <button class="copy-btn" onclick="copyText('full-url')"><span id="copy-url-text">Kopieren</span></button>
             </div>
             <pre id="full-url">–</pre>
           </div>
@@ -850,9 +877,9 @@
 
         <div class="btn-row">
           <button class="btn btn-primary" onclick="submitPayment()" id="btn-submit" style="font-size:14px;padding:13px 28px">
-            <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span> Zur Hosted Payment Page <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
+            <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span> <span id="btn-submit-text">Zur Hosted Payment Page</span> <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
           </button>
-          <span style="font-size:12px;color:var(--muted)">Öffnet Computop in neuem Tab</span>
+          <span style="font-size:12px;color:var(--muted)" id="btn-submit-hint">Öffnet Computop in neuem Tab</span>
         </div>
 
       </div>
@@ -864,14 +891,14 @@
   <div class="card" id="card-log">
     <div class="card-header" onclick="toggleCard('card-log')">
       <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span></div>
-      <span class="card-title">Request-Log</span>
+      <span class="card-title" id="ct-log">Request-Log</span>
       <span id="log-count-badge" style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-right:8px"></span>
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <span style="font-size:12px;color:var(--muted2)">Letzte 50 generierten Requests (lokal gespeichert)</span>
-        <button class="btn btn-danger-ghost" style="padding:6px 12px;font-size:12px" onclick="clearLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> Log leeren</button>
+        <span id="log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 50 generierten Requests (lokal gespeichert)</span>
+        <button class="btn btn-danger-ghost" style="padding:6px 12px;font-size:12px" onclick="clearLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-log-clear-text">Log leeren</span></button>
       </div>
       <div id="log-list"></div>
     </div>
@@ -885,6 +912,19 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v1.6</span>
+          <span class="cl-title">Mehrsprachigkeit (DE / EN)</span>
+        </div>
+        <ul class="cl-list">
+          <li><strong>Sprach-Schalter</strong> im Header (neben dem Dark-/Light-Mode-Toggle): wechselt die gesamte Benutzeroberfläche zwischen Deutsch und Englisch</li>
+          <li>Vollständige <strong>EN-Übersetzung</strong> aller UI-Texte — Labels, Buttons, Hinweise, Fehlermeldungen, Toasts und Bestätigungsdialoge</li>
+          <li>Sprachpräferenz wird in <code>localStorage</code> gespeichert und beim nächsten Besuch automatisch wiederhergestellt</li>
+          <li>i18n-System via <code>TRANSLATIONS</code>-Objekt und <code>t(key)</code>-Funktion — kein externes Framework nötig</li>
+        </ul>
+      </div>
 
       <div class="cl-entry">
         <div class="cl-header">
@@ -973,8 +1013,8 @@
   <div class="footer-inner">
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Computop Payment Tester
-      <span class="footer-ver-badge">v1.5</span>
+      <span id="footer-name-text">Computop Payment Tester</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v1.6</span>
     </span>
     <span class="footer-links">
       <a href="https://github.com/krebs3r/computop-tester" target="_blank" rel="noopener">
@@ -1023,6 +1063,258 @@ const ICONS = {
 
 function icon(name) {
   return ICONS[name] || '';
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// INTERNATIONALISATION — DE / EN
+// ══════════════════════════════════════════════════════════════
+const LANG_LS_KEY = 'computop_lang';
+let currentLang = 'de';
+
+const TRANSLATIONS = {
+  de: {
+    page_title: 'Computop Paygate – Payment Tester',
+    subtitle: 'Hosted Payment Page · Blowfish ECB · Kreditkarte · Testumgebung',
+    info_title: 'Hinweis:',
+    info_body: 'Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop. Im Testmodus bitte nur <strong>kleine Beträge (0,11–2,00 EUR)</strong> verwenden, da Kreditkartenauthorisierungen auch im Test real sind.',
+    sec_title: 'Sicherheitshinweis zu Ihren Credentials',
+    sec_p1: 'Die Eingabe von produktiven API-Credentials in webbasierte Tools birgt grundsätzlich ein Restrisiko. Obwohl dieser Tester ausschließlich im Browser ausgeführt wird und keine Daten an externe Server übermittelt, liegt die Verantwortung für den sicheren Umgang mit Ihren Zugangsdaten bei Ihnen.',
+    sec_p2: '<strong>Empfehlung:</strong> Verwenden Sie diese Seite bevorzugt lokal in Ihrem Browser, anstatt sie über eine öffentlich erreichbare URL aufzurufen.',
+    sec_download: 'Seite lokal herunterladen',
+    sec_hint: 'Datei herunterladen und direkt im Browser öffnen — keine Installation erforderlich',
+    ct_creds: 'Schritt 1 — Credentials',
+    l_mid: 'Merchant ID', l_bfpw: 'Blowfish Passwort', h_bfpw: '(für Data-Verschlüsselung)',
+    l_hmacpw: 'HMAC Passwort', h_hmacpw: '(für MAC-Berechnung)',
+    l_env: 'Umgebung',
+    cred_save_title: 'Verschlüsselte Speicherung',
+    cred_save_text: 'Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert.',
+    btn_save: 'Speichern', btn_delete: 'Löschen',
+    te_title: 'Wie wird die GET-URL erzeugt?',
+    te_s1_label: 'MAC-Berechnung',
+    te_s1_desc: 'Aus den Klartextparametern <code>TransID</code>, <code>MerchantID</code>, <code>Amount</code> und <code>Currency</code> wird mit dem <strong>HMAC-Passwort</strong> eine digitale Signatur (MAC) per HMAC-SHA256 berechnet. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate kann damit erkennen, ob die Daten manipuliert wurden.',
+    te_s2_label: 'Payload-Verschlüsselung',
+    te_s2_desc: 'Alle Zahlungsparameter (inkl. des MAC) werden als Klartextstring im Format <code>Key=Value&amp;Key=Value…</code> zusammengesetzt. Dieser String wird mit dem <strong>Blowfish-Passwort</strong> per Blowfish ECB verschlüsselt und anschließend hexadezimal kodiert. Das Ergebnis bildet den <code>Data</code>-Parameter. Die Länge des ursprünglichen Klartexts wird separat als <code>Len</code> übergeben, da Blowfish auf ein Vielfaches von 8 Byte auffüllt.',
+    te_s3_label: 'URL-Zusammensetzung',
+    te_s3_desc: 'Die finale GET-URL setzt sich aus drei unverschlüsselten Pflichtparametern zusammen, die direkt an die Paygate-Endpoint-URL angehängt werden:',
+    te_leg_mid: '— Händlerkennung (Klartext)',
+    te_leg_len: '— Länge des unverschlüsselten Payloads in Bytes',
+    te_leg_data: '— Blowfish-ECB-verschlüsselter, hex-kodierter Payload',
+    ct_payment: 'Schritt 2 — Zahlungsparameter',
+    l_amount: 'Betrag', l_currency: 'Währung', l_language: 'Sprache',
+    l_transid: 'Transaction ID', h_transid: '(auto-generiert)',
+    l_refnr: 'Referenznummer', h_refnr: '(optional)',
+    l_orderdesc: 'Bestellbeschreibung', h_orderdesc: '(OrderDesc)',
+    sep_redirect: 'Redirect-URLs',
+    l_urls: 'URLSuccess', h_urls: '(nach erfolgreicher Zahlung)',
+    l_urlf: 'URLFailure', h_urlf: '(nach fehlgeschlagener Zahlung)',
+    l_urln: 'URLNotify', h_urln: '(Server-zu-Server Benachrichtigung)',
+    l_urlb: 'URLBack', h_urlb: '(Abbrechen-Button, unverschlüsselt)',
+    sep_advanced: 'Erweiterte Einstellungen',
+    l_paytypes: 'Zahlarten', h_paytypes: '(PayTypes)',
+    opt_pt_all: '— Alle freigeschalteten Zahlarten (PayTypes weglassen)',
+    opt_pt_cc: 'CC – Alle konfigurierten Kreditkartenmarken',
+    l_template: 'Template', h_template: '(optional, unverschlüsselt)',
+    ct_preview: 'Schritt 3 — Vorschau & Ausführen',
+    btn_preview: 'Vorschau generieren', btn_preview_loading: 'Generiere…',
+    btn_newtid: 'Neue Trans-ID',
+    debug_plain_label: 'Unverschlüsselte Parameter (Data-String)',
+    debug_url_label: 'Vollständige GET-URL (Computop Paygate)',
+    btn_copy: 'Kopieren',
+    btn_submit: 'Zur Hosted Payment Page', btn_submit_hint: 'Öffnet Computop in neuem Tab',
+    ct_log: 'Request-Log',
+    log_subtitle: 'Letzte 50 generierten Requests (lokal gespeichert)',
+    btn_log_clear: 'Log leeren',
+    log_empty: 'Noch keine Requests gespeichert.',
+    log_entries: 'Einträge', log_copy_url: 'URL kopieren',
+    footer_name: 'Computop Payment Tester',
+    toast_copied: 'In Zwischenablage kopiert', toast_url_copied: 'URL kopiert',
+    toast_cred_saved: 'Credentials verschlüsselt gespeichert',
+    toast_cred_loaded: 'Gespeicherte Credentials geladen',
+    toast_cred_deleted: 'Credentials gelöscht',
+    toast_cred_err: 'Fehler beim Speichern: ',
+    toast_log_cleared: 'Log geleert',
+    toast_preview_done: 'Vorschau generiert · Len=',
+    toast_submit: 'Öffne Computop Paygate in neuem Tab…',
+    toast_no_url: 'Bitte zuerst Vorschau generieren',
+    toast_err: 'Fehler: ',
+    toast_theme_light: 'Light Mode aktiviert', toast_theme_dark: 'Dark Mode aktiviert',
+    toast_lang: 'Sprache: Deutsch',
+    val_mid: 'Bitte MerchantID eingeben', val_bf: 'Bitte Blowfish-Passwort eingeben',
+    val_hmac: 'Bitte HMAC-Passwort eingeben',
+    val_url_success: 'Bitte URLSuccess eingeben', val_url_failure: 'Bitte URLFailure eingeben',
+    val_amount: 'Ungültiger Betrag',
+    confirm_cred_del: 'Gespeicherte Credentials wirklich löschen?',
+    confirm_log_del: 'Request-Log wirklich löschen?',
+    cred_status_saved: 'Gespeichert', cred_status_none: 'Nicht gespeichert',
+  },
+  en: {
+    page_title: 'Computop Paygate – Payment Tester',
+    subtitle: 'Hosted Payment Page · Blowfish ECB · Credit Card · Test Environment',
+    info_title: 'Note:',
+    info_body: 'This page runs entirely in the browser. All data stays local — no server communication except the final redirect to Computop. In test mode, please use only <strong>small amounts (0.11–2.00 EUR)</strong>, as credit card authorisations may be real even in test environments.',
+    sec_title: 'Security Notice for Your Credentials',
+    sec_p1: 'Entering production API credentials into web-based tools carries an inherent residual risk. Although this tester runs exclusively in the browser and does not transmit any data to external servers, the responsibility for the secure handling of your credentials lies with you.',
+    sec_p2: '<strong>Recommendation:</strong> Prefer running this page locally in your browser rather than accessing it via a publicly reachable URL.',
+    sec_download: 'Download page for local use',
+    sec_hint: 'Download the file and open it directly in your browser — no installation required',
+    ct_creds: 'Step 1 — Credentials',
+    l_mid: 'Merchant ID', l_bfpw: 'Blowfish Password', h_bfpw: '(for Data encryption)',
+    l_hmacpw: 'HMAC Password', h_hmacpw: '(for MAC calculation)',
+    l_env: 'Environment',
+    cred_save_title: 'Encrypted Storage',
+    cred_save_text: 'Credentials are stored AES-GCM encrypted in the browser\'s LocalStorage.',
+    btn_save: 'Save', btn_delete: 'Delete',
+    te_title: 'How is the GET URL generated?',
+    te_s1_label: 'MAC Calculation',
+    te_s1_desc: 'From the plain-text parameters <code>TransID</code>, <code>MerchantID</code>, <code>Amount</code> and <code>Currency</code>, a digital signature (MAC) is computed using HMAC-SHA256 with the <strong>HMAC password</strong>. The MAC is included as a parameter in the payload and ensures the <strong>integrity of the request</strong> — the Paygate can use it to detect any manipulation.',
+    te_s2_label: 'Payload Encryption',
+    te_s2_desc: 'All payment parameters (including the MAC) are assembled into a plain-text string in the format <code>Key=Value&amp;Key=Value…</code>. This string is encrypted with the <strong>Blowfish password</strong> using Blowfish ECB and then hex-encoded. The result forms the <code>Data</code> parameter. The original plain-text length is passed separately as <code>Len</code>, because Blowfish pads to a multiple of 8 bytes.',
+    te_s3_label: 'URL Assembly',
+    te_s3_desc: 'The final GET URL consists of three unencrypted mandatory parameters appended directly to the Paygate endpoint URL:',
+    te_leg_mid: '— Merchant identifier (plain text)',
+    te_leg_len: '— Length of the unencrypted payload in bytes',
+    te_leg_data: '— Blowfish-ECB-encrypted, hex-encoded payload',
+    ct_payment: 'Step 2 — Payment Parameters',
+    l_amount: 'Amount', l_currency: 'Currency', l_language: 'Language',
+    l_transid: 'Transaction ID', h_transid: '(auto-generated)',
+    l_refnr: 'Reference Number', h_refnr: '(optional)',
+    l_orderdesc: 'Order Description', h_orderdesc: '(OrderDesc)',
+    sep_redirect: 'Redirect URLs',
+    l_urls: 'URLSuccess', h_urls: '(after successful payment)',
+    l_urlf: 'URLFailure', h_urlf: '(after failed payment)',
+    l_urln: 'URLNotify', h_urln: '(server-to-server notification)',
+    l_urlb: 'URLBack', h_urlb: '(cancel button, unencrypted)',
+    sep_advanced: 'Advanced Settings',
+    l_paytypes: 'Payment Methods', h_paytypes: '(PayTypes)',
+    opt_pt_all: '— All enabled payment methods (omit PayTypes)',
+    opt_pt_cc: 'CC – All configured card brands',
+    l_template: 'Template', h_template: '(optional, unencrypted)',
+    ct_preview: 'Step 3 — Preview & Submit',
+    btn_preview: 'Generate Preview', btn_preview_loading: 'Generating…',
+    btn_newtid: 'New Trans-ID',
+    debug_plain_label: 'Unencrypted Parameters (Data String)',
+    debug_url_label: 'Full GET URL (Computop Paygate)',
+    btn_copy: 'Copy',
+    btn_submit: 'Go to Hosted Payment Page', btn_submit_hint: 'Opens Computop in a new tab',
+    ct_log: 'Request Log',
+    log_subtitle: 'Last 50 generated requests (stored locally)',
+    btn_log_clear: 'Clear log',
+    log_empty: 'No requests stored yet.',
+    log_entries: 'entries', log_copy_url: 'Copy URL',
+    footer_name: 'Computop Payment Tester',
+    toast_copied: 'Copied to clipboard', toast_url_copied: 'URL copied',
+    toast_cred_saved: 'Credentials saved encrypted',
+    toast_cred_loaded: 'Saved credentials loaded',
+    toast_cred_deleted: 'Credentials deleted',
+    toast_cred_err: 'Error saving: ',
+    toast_log_cleared: 'Log cleared',
+    toast_preview_done: 'Preview generated · Len=',
+    toast_submit: 'Opening Computop Paygate in a new tab…',
+    toast_no_url: 'Please generate a preview first',
+    toast_err: 'Error: ',
+    toast_theme_light: 'Light mode activated', toast_theme_dark: 'Dark mode activated',
+    toast_lang: 'Language: English',
+    val_mid: 'Please enter a MerchantID', val_bf: 'Please enter the Blowfish password',
+    val_hmac: 'Please enter the HMAC password',
+    val_url_success: 'Please enter URLSuccess', val_url_failure: 'Please enter URLFailure',
+    val_amount: 'Invalid amount',
+    confirm_cred_del: 'Really delete saved credentials?',
+    confirm_log_del: 'Really clear the request log?',
+    cred_status_saved: 'Saved', cred_status_none: 'Not saved',
+  }
+};
+
+function t(key) {
+  return (TRANSLATIONS[currentLang] || TRANSLATIONS.de)[key] || key;
+}
+
+function applyLang() {
+  document.title = t('page_title');
+  const setText = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t(key); };
+  const setHtml = (id, key) => { const el = document.getElementById(id); if (el) el.innerHTML = t(key); };
+
+  setText('subtitle', 'subtitle');
+  setText('info-title', 'info_title');
+  setHtml('info-body', 'info_body');
+  setText('sec-title', 'sec_title');
+  setHtml('sec-p1', 'sec_p1');
+  setHtml('sec-p2', 'sec_p2');
+  setText('sec-download', 'sec_download');
+  setText('sec-hint', 'sec_hint');
+
+  setText('ct-creds', 'ct_creds');
+  setText('l-mid', 'l_mid'); setText('l-bfpw', 'l_bfpw'); setText('h-bfpw', 'h_bfpw');
+  setText('l-hmacpw', 'l_hmacpw'); setText('h-hmacpw', 'h_hmacpw');
+  setText('l-env', 'l_env');
+  setText('cred-save-title', 'cred_save_title');
+  setText('cred-save-text', 'cred_save_text');
+  setText('btn-save-text', 'btn_save');
+  setText('btn-delete-text', 'btn_delete');
+
+  setText('te-title', 'te_title');
+  setText('te-s1-label', 'te_s1_label'); setHtml('te-s1-desc', 'te_s1_desc');
+  setText('te-s2-label', 'te_s2_label'); setHtml('te-s2-desc', 'te_s2_desc');
+  setText('te-s3-label', 'te_s3_label'); setText('te-s3-desc', 'te_s3_desc');
+  setText('te-leg-mid', 'te_leg_mid'); setText('te-leg-len', 'te_leg_len'); setText('te-leg-data', 'te_leg_data');
+
+  setText('ct-payment', 'ct_payment');
+  setText('l-amount', 'l_amount'); setText('l-currency', 'l_currency'); setText('l-language', 'l_language');
+  setText('l-transid', 'l_transid'); setText('h-transid', 'h_transid');
+  setText('l-refnr', 'l_refnr'); setText('h-refnr', 'h_refnr');
+  setText('l-orderdesc', 'l_orderdesc'); setText('h-orderdesc', 'h_orderdesc');
+  setText('sep-redirect', 'sep_redirect');
+  setText('l-urls', 'l_urls'); setText('h-urls', 'h_urls');
+  setText('l-urlf', 'l_urlf'); setText('h-urlf', 'h_urlf');
+  setText('l-urln', 'l_urln'); setText('h-urln', 'h_urln');
+  setText('l-urlb', 'l_urlb'); setText('h-urlb', 'h_urlb');
+  setText('sep-advanced', 'sep_advanced');
+  setText('l-paytypes', 'l_paytypes'); setText('h-paytypes', 'h_paytypes');
+  setText('opt-pt-all', 'opt_pt_all'); setText('opt-pt-cc', 'opt_pt_cc');
+  setText('l-template', 'l_template'); setText('h-template', 'h_template');
+
+  setText('ct-preview', 'ct_preview');
+  setText('btn-preview-text', 'btn_preview');
+  setText('btn-newtid-text', 'btn_newtid');
+  setText('debug-plain-label', 'debug_plain_label');
+  setText('debug-url-label', 'debug_url_label');
+  setText('copy-plain-text', 'btn_copy'); setText('copy-url-text', 'btn_copy');
+  setText('btn-submit-text', 'btn_submit');
+  setText('btn-submit-hint', 'btn_submit_hint');
+
+  setText('ct-log', 'ct_log');
+  setText('log-subtitle', 'log_subtitle');
+  setText('btn-log-clear-text', 'btn_log_clear');
+
+  setText('footer-name-text', 'footer_name');
+
+  // Lang toggle indicator
+  const de = document.getElementById('lang-de');
+  const en = document.getElementById('lang-en');
+  if (de && en) {
+    if (currentLang === 'en') {
+      de.className = 'lang-seg'; en.className = 'lang-seg lang-seg-active';
+    } else {
+      de.className = 'lang-seg lang-seg-active'; en.className = 'lang-seg';
+    }
+  }
+
+  // Re-render log (contains translated strings)
+  renderLog();
+  _updateCredStatus();
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'de' ? 'en' : 'de';
+  localStorage.setItem(LANG_LS_KEY, currentLang);
+  applyLang();
+  showToast(t('toast_lang'), 'info');
+}
+
+function initLang() {
+  const saved = localStorage.getItem(LANG_LS_KEY);
+  if (saved === 'en' || saved === 'de') currentLang = saved;
+  applyLang();
 }
 
 
@@ -1300,7 +1592,7 @@ function showToast(msg, type = 'info') {
 function copyText(id) {
   const el = document.getElementById(id);
   const text = el.textContent;
-  navigator.clipboard.writeText(text).then(() => showToast('In Zwischenablage kopiert', 'success'));
+  navigator.clipboard.writeText(text).then(() => showToast(t('toast_copied'), 'success'));
 }
 
 function generateTransId() {
@@ -1324,7 +1616,7 @@ function amountToCents(amountStr) {
 async function buildAndPreview() {
   const btn = document.getElementById('btn-preview');
   btn.disabled = true;
-  btn.innerHTML = '<span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="spin-icon"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg></span> Generiere…';
+  btn.innerHTML = '<span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="spin-icon"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg></span> ' + t('btn_preview_loading');
 
   try {
     const merchantId  = document.getElementById('merchantId').value.trim();
@@ -1342,14 +1634,14 @@ async function buildAndPreview() {
     const payTypes    = document.getElementById('payTypes').value;
 
     // Validation
-    if (!merchantId) { showToast('Bitte MerchantID eingeben', 'error'); return; }
-    if (!blowfishKey) { showToast('Bitte Blowfish-Passwort eingeben', 'error'); return; }
-    if (!hmacKey) { showToast('Bitte HMAC-Passwort eingeben', 'error'); return; }
-    if (!urlSuccess) { showToast('Bitte URLSuccess eingeben', 'error'); return; }
-    if (!urlFailure) { showToast('Bitte URLFailure eingeben', 'error'); return; }
+    if (!merchantId) { showToast(t('val_mid'), 'error'); return; }
+    if (!blowfishKey) { showToast(t('val_bf'), 'error'); return; }
+    if (!hmacKey) { showToast(t('val_hmac'), 'error'); return; }
+    if (!urlSuccess) { showToast(t('val_url_success'), 'error'); return; }
+    if (!urlFailure) { showToast(t('val_url_failure'), 'error'); return; }
 
     const amount = amountToCents(amountRaw);
-    if (!amount || amount < 1) { showToast('Ungültiger Betrag', 'error'); return; }
+    if (!amount || amount < 1) { showToast(t('val_amount'), 'error'); return; }
 
     // Build MAC message: TransID*MerchantID*Amount*Currency
     // (For HPP request, PayID is empty, so: PayID*TransID*MerchantID*Amount*Currency → "*TransID*...")
@@ -1415,24 +1707,24 @@ async function buildAndPreview() {
     _saveLogEntry({ merchantId, transId, amount, currency, url: finalUrl });
     renderLog();
 
-    showToast(`Vorschau generiert · Len=${len} · Data=${dataHex.length/2} Bytes`, 'success');
+    showToast(`${t('toast_preview_done')}${len} · Data=${dataHex.length/2} Bytes`, 'success');
 
     // Scroll to preview
     document.getElementById('debug-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   } catch(e) {
     console.error(e);
-    showToast('Fehler: ' + e.message, 'error');
+    showToast(t('toast_err') + e.message, 'error');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> Vorschau generieren';
+    btn.innerHTML = '<span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> ' + t('btn_preview');
   }
 }
 
 function submitPayment() {
   const url = document.getElementById('btn-submit').dataset.url;
-  if (!url) { showToast('Bitte zuerst Vorschau generieren', 'error'); return; }
-  showToast('Öffne Computop Paygate in neuem Tab…', 'info');
+  if (!url) { showToast(t('toast_no_url'), 'error'); return; }
+  showToast(t('toast_submit'), 'info');
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
@@ -1474,10 +1766,10 @@ async function saveCredentials() {
       ct:   Array.from(new Uint8Array(ct))
     }));
     _updateCredStatus();
-    showToast('Credentials verschlüsselt gespeichert', 'success');
+    showToast(t('toast_cred_saved'), 'success');
   } catch(e) {
     console.error(e);
-    showToast('Fehler beim Speichern: ' + e.message, 'error');
+    showToast(t('toast_cred_err') + e.message, 'error');
   }
 }
 
@@ -1497,17 +1789,17 @@ async function loadCredentials() {
     if (data.hmacKey)     document.getElementById('hmacKey').value     = data.hmacKey;
     if (data.environment) document.getElementById('environment').value = data.environment;
     _updateCredStatus();
-    showToast('Gespeicherte Credentials geladen', 'success');
+    showToast(t('toast_cred_loaded'), 'success');
   } catch(e) {
     console.warn('Credentials konnten nicht entschlüsselt werden:', e);
   }
 }
 
 function clearCredentials() {
-  if (!confirm('Gespeicherte Credentials wirklich löschen?')) return;
+  if (!confirm(t('confirm_cred_del'))) return;
   localStorage.removeItem(CRED_LS_KEY);
   _updateCredStatus();
-  showToast('Credentials gelöscht', 'info');
+  showToast(t('toast_cred_deleted'), 'info');
 }
 
 function _updateCredStatus() {
@@ -1515,9 +1807,9 @@ function _updateCredStatus() {
   if (!el) return;
   const raw = localStorage.getItem(CRED_LS_KEY);
   if (raw) {
-    el.innerHTML = '<span class="icon icon-sm" style="color:var(--success)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span style="color:var(--success)">Gespeichert</span>';
+    el.innerHTML = '<span class="icon icon-sm" style="color:var(--success)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span style="color:var(--success)">' + t('cred_status_saved') + '</span>';
   } else {
-    el.innerHTML = '<span style="color:var(--muted)">Nicht gespeichert</span>';
+    el.innerHTML = '<span style="color:var(--muted)">' + t('cred_status_none') + '</span>';
   }
 }
 
@@ -1542,10 +1834,10 @@ function renderLog() {
   const log = raw ? JSON.parse(raw) : [];
 
   const badge = document.getElementById('log-count-badge');
-  if (badge) badge.textContent = log.length ? `${log.length} Einträge` : '';
+  if (badge) badge.textContent = log.length ? `${log.length} ${t('log_entries')}` : '';
 
   if (log.length === 0) {
-    container.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:6px 0">Noch keine Requests gespeichert.</p>';
+    container.innerHTML = `<p style="color:var(--muted);font-size:13px;padding:6px 0">${t('log_empty')}</p>`;
     return;
   }
 
@@ -1564,7 +1856,7 @@ function renderLog() {
         <div class="log-tid">TransID: <span style="color:var(--accent2)">${e.transId || '–'}</span></div>
         <div class="log-detail" id="log-detail-${i}" style="display:none">
           <pre>${safeUrl}</pre>
-          <button class="copy-btn" onclick="event.stopPropagation();_copyLogUrl(${i})" style="display:inline-flex;align-items:center;gap:4px"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> URL kopieren</button>
+          <button class="copy-btn" onclick="event.stopPropagation();_copyLogUrl(${i})" style="display:inline-flex;align-items:center;gap:4px"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> ${t('log_copy_url')}</button>
         </div>
       </div>`;
   }).join('');
@@ -1574,7 +1866,7 @@ function _copyLogUrl(i) {
   const raw = localStorage.getItem(LOG_LS_KEY);
   const log = raw ? JSON.parse(raw) : [];
   if (log[i]) navigator.clipboard.writeText(log[i].url || '')
-    .then(() => showToast('URL kopiert', 'success'));
+    .then(() => showToast(t('toast_url_copied'), 'success'));
 }
 
 function toggleLogDetail(i) {
@@ -1583,10 +1875,10 @@ function toggleLogDetail(i) {
 }
 
 function clearLog() {
-  if (!confirm('Request-Log wirklich löschen?')) return;
+  if (!confirm(t('confirm_log_del'))) return;
   localStorage.removeItem(LOG_LS_KEY);
   renderLog();
-  showToast('Log geleert', 'info');
+  showToast(t('toast_log_cleared'), 'info');
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1639,7 +1931,7 @@ function toggleTheme() {
   const newMode = isLight ? 'dark' : 'light';
   localStorage.setItem(THEME_LS_KEY, newMode);
   _applyTheme(newMode, false);
-  showToast(newMode === 'light' ? 'Light Mode aktiviert' : 'Dark Mode aktiviert', 'info');
+  showToast(newMode === 'light' ? t('toast_theme_light') : t('toast_theme_dark'), 'info');
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1647,6 +1939,7 @@ function toggleTheme() {
 // ══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
+  initLang();
   generateTransId();
   loadCredentials();
   renderLog();
