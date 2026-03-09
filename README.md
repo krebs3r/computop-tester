@@ -36,6 +36,15 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 - **PayTypes selector** — defaults to no `PayTypes` parameter, which shows all payment methods enabled for the merchant account (credit cards, PayPal, Klarna, direct debit, etc.)
 - Explicit options for `CC` (all configured card brands), `VISA`, `MasterCard` and `AMEX`
 
+### Test Simulation
+- **OrderDesc dropdown** with pre-built simulation presets:
+  - `Testzahlung via Computop Paygate` — regular test, no simulation
+  - `Test:0000` — always successful
+  - `Test:0305` — always declined by acquirer/issuer
+  - Custom input — enter any `OrderDesc` value freely
+- **Test card table** (Non-3DS) — Visa, MasterCard and Amex with success and decline card numbers, inline in the payment form
+- Card numbers are click-to-copy
+
 ### UI & Theme
 - **Dark / Light Mode toggle** — fixed button in the top-right corner
 - **Automatic system theme detection** via `prefers-color-scheme` with live updates
@@ -106,6 +115,17 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 ---
 
 ## 📋 Changelog
+
+### v1.8.1 — Bugfix: MAC Calculation
+- Fixed MAC string format: `*TransID*MerchantID*Amount*Currency` — the leading `*` for empty PayID was missing
+- Without this fix Computop rejected every request with **"MAC INVALID"**
+- Updated the technical explainer in the Credentials section accordingly
+
+### v1.8 — Test Cards & Simulation Modes
+- **OrderDesc dropdown** with presets for success (`Test:0000`), decline (`Test:0305`) and custom input
+- **Test card table** (Non-3DS) embedded in the payment form — Visa, MasterCard, Amex with success and decline card numbers
+- Card numbers are click-to-copy
+- Table and dropdown fully translated (DE / EN)
 
 ### v1.7 — Response Decryptor
 - Added **Response Decryptor** section — decrypts Computop callback URLs directly in the browser

@@ -543,6 +543,30 @@
     }
     html.light .cl-list code { background: rgba(37,99,235,0.07); border-color: rgba(37,99,235,0.18); }
 
+    /* ── TEST CARD TABLE ── */
+    .tc-details { margin-top: 10px; }
+    .tc-details summary {
+      font-size: 11px; color: var(--muted); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 5px;
+      letter-spacing: 0.04em; list-style: none; user-select: none;
+    }
+    .tc-details summary::-webkit-details-marker { display: none; }
+    .tc-details summary::before { content: '▶'; font-size: 8px; display: inline-block; transition: transform .2s; }
+    .tc-details[open] summary::before { transform: rotate(90deg); }
+    .tc-details summary:hover { color: var(--muted2); }
+    .test-card-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; margin-top: 10px; }
+    .test-card-table th {
+      text-align: left; color: var(--muted); font-weight: 500; font-size: 10px;
+      padding: 3px 12px 6px 0; letter-spacing: 0.06em; text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .test-card-table td { padding: 6px 12px 6px 0; color: var(--muted2); border-bottom: 1px solid var(--border); }
+    .test-card-table tr:last-child td { border-bottom: none; }
+    .test-card-table .tc-num { cursor: pointer; transition: color .15s; }
+    .test-card-table .tc-num:hover { color: var(--accent2); }
+    .test-card-table .tc-ok  { color: var(--success); }
+    .test-card-table .tc-dec { color: var(--danger); }
+
     /* ── FOOTER ── */
     footer {
       position: relative; z-index: 1;
@@ -685,7 +709,7 @@
             <div class="te-step-body">
               <div class="te-step-label"><span id="te-s1-label">MAC-Berechnung</span> <span class="te-key">HMAC-Passwort</span></div>
               <div class="te-step-desc" id="te-s1-desc">
-                Aus den Klartextparametern <code>TransID</code>, <code>MerchantID</code>, <code>Amount</code> und <code>Currency</code> wird mit dem <strong>HMAC-Passwort</strong> eine digitale Signatur (MAC) per HMAC-SHA256 berechnet. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate kann damit erkennen, ob die Daten manipuliert wurden.
+                Mit dem <strong>HMAC-Passwort</strong> wird per HMAC-SHA256 eine digitale Signatur über den String <code>*TransID*MerchantID*Amount*Currency</code> berechnet. Das führende <code>*</code> steht für die leere PayID einer neuen Transaktion. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate lehnt Anfragen mit falschem oder fehlendem MAC sofort ab.
               </div>
             </div>
           </div>
@@ -789,8 +813,31 @@
 
       <div class="field" style="margin-top:14px">
         <label><span id="l-orderdesc">Bestellbeschreibung</span> <span class="hint" id="h-orderdesc">(OrderDesc)</span></label>
-        <input type="text" id="orderDesc" value="Testzahlung via Computop Paygate" maxlength="127">
+        <select id="orderDesc" onchange="onOrderDescChange(this)">
+          <option id="opt-od-default" value="Testzahlung via Computop Paygate">Testzahlung via Computop Paygate</option>
+          <option id="opt-od-sim-ok"  value="Test:0000">Simulation: Erfolg (Test:0000)</option>
+          <option id="opt-od-sim-dec" value="Test:0305">Simulation: Abgelehnt – Acquirer/Issuer (Test:0305)</option>
+          <option id="opt-od-custom"  value="__custom__">Eigene Eingabe …</option>
+        </select>
+        <input type="text" id="orderDescCustom" placeholder="Eigene Beschreibung" maxlength="127" style="margin-top:8px;display:none">
       </div>
+
+      <details class="tc-details">
+        <summary id="tc-summary">Testkartennummern (Non-3DS)</summary>
+        <div style="padding:6px 0 2px">
+          <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-note">Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure</p>
+          <table class="test-card-table">
+            <thead>
+              <tr>
+                <th id="tc-h-brand">Marke</th>
+                <th id="tc-h-number">Kartennummer</th>
+                <th id="tc-h-result">Ergebnis</th>
+              </tr>
+            </thead>
+            <tbody id="tc-tbody"></tbody>
+          </table>
+        </div>
+      </details>
 
       <div class="sep-label" id="sep-redirect">Redirect-URLs</div>
 
@@ -965,6 +1012,31 @@
 
       <div class="cl-entry">
         <div class="cl-header">
+          <span class="cl-version">v1.8.1</span>
+          <span class="cl-title">Bugfix: MAC-Berechnung</span>
+        </div>
+        <ul class="cl-list">
+          <li>MAC-String-Format korrigiert: <code>*TransID*MerchantID*Amount*Currency</code> — führendes <code>*</code> für leere PayID war bisher fehlend</li>
+          <li>Ohne diesen Fix lehnte Computop jeden Request mit <strong>„MAC INVALID"</strong> ab</li>
+          <li>Technische Erklärung im Credentials-Bereich entsprechend aktualisiert</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v1.8</span>
+          <span class="cl-title">Testkartennummern &amp; Simulationsmodi</span>
+        </div>
+        <ul class="cl-list">
+          <li><strong>OrderDesc als Dropdown</strong> — vorgefertigte Optionen für Erfolg (<code>Test:0000</code>), Ablehnung (<code>Test:0305</code>) und eigene Eingabe</li>
+          <li><strong>Testkartentabelle</strong> (Non-3DS) in den Zahlungsparametern — Visa, MasterCard, Amex jeweils mit Erfolg und Ablehnung</li>
+          <li>Kartennummer per Klick in die Zwischenablage kopieren</li>
+          <li>Tabelle und Dropdown vollständig übersetzt (DE / EN)</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
           <span class="cl-version">v1.7</span>
           <span class="cl-title">Response-Entschlüsseler</span>
         </div>
@@ -1078,7 +1150,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v1.7</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v1.8.1</span>
     </span>
     <span class="footer-links">
       <a href="https://github.com/krebs3r/computop-tester" target="_blank" rel="noopener">
@@ -1156,7 +1228,7 @@ const TRANSLATIONS = {
     btn_save: 'Speichern', btn_delete: 'Löschen',
     te_title: 'Wie wird die GET-URL erzeugt?',
     te_s1_label: 'MAC-Berechnung',
-    te_s1_desc: 'Aus den Klartextparametern <code>TransID</code>, <code>MerchantID</code>, <code>Amount</code> und <code>Currency</code> wird mit dem <strong>HMAC-Passwort</strong> eine digitale Signatur (MAC) per HMAC-SHA256 berechnet. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate kann damit erkennen, ob die Daten manipuliert wurden.',
+    te_s1_desc: 'Mit dem <strong>HMAC-Passwort</strong> wird per HMAC-SHA256 eine digitale Signatur über den String <code>*TransID*MerchantID*Amount*Currency</code> berechnet. Das führende <code>*</code> steht für die leere PayID einer neuen Transaktion. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate lehnt Anfragen mit falschem oder fehlendem MAC sofort ab.',
     te_s2_label: 'Payload-Verschlüsselung',
     te_s2_desc: 'Alle Zahlungsparameter (inkl. des MAC) werden als Klartextstring im Format <code>Key=Value&amp;Key=Value…</code> zusammengesetzt. Dieser String wird mit dem <strong>Blowfish-Passwort</strong> per Blowfish ECB verschlüsselt und anschließend hexadezimal kodiert. Das Ergebnis bildet den <code>Data</code>-Parameter. Die Länge des ursprünglichen Klartexts wird separat als <code>Len</code> übergeben, da Blowfish auf ein Vielfaches von 8 Byte auffüllt.',
     te_s3_label: 'URL-Zusammensetzung',
@@ -1169,6 +1241,14 @@ const TRANSLATIONS = {
     l_transid: 'Transaction ID', h_transid: '(auto-generiert)',
     l_refnr: 'Referenznummer', h_refnr: '(optional)',
     l_orderdesc: 'Bestellbeschreibung', h_orderdesc: '(OrderDesc)',
+    opt_od_default: 'Testzahlung via Computop Paygate',
+    opt_od_sim_ok:  'Simulation: Erfolg (Test:0000)',
+    opt_od_sim_dec: 'Simulation: Abgelehnt – Acquirer/Issuer (Test:0305)',
+    opt_od_custom:  'Eigene Eingabe …',
+    tc_summary: 'Testkartennummern (Non-3DS)',
+    tc_note: 'Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure',
+    tc_h_brand: 'Marke', tc_h_number: 'Kartennummer', tc_h_result: 'Ergebnis',
+    tc_ok: 'Erfolg', tc_dec: 'Abgelehnt', tc_copy_hint: 'Klicken zum Kopieren',
     sep_redirect: 'Redirect-URLs',
     l_urls: 'URLSuccess', h_urls: '(nach erfolgreicher Zahlung)',
     l_urlf: 'URLFailure', h_urlf: '(nach fehlgeschlagener Zahlung)',
@@ -1243,7 +1323,7 @@ const TRANSLATIONS = {
     btn_save: 'Save', btn_delete: 'Delete',
     te_title: 'How is the GET URL generated?',
     te_s1_label: 'MAC Calculation',
-    te_s1_desc: 'From the plain-text parameters <code>TransID</code>, <code>MerchantID</code>, <code>Amount</code> and <code>Currency</code>, a digital signature (MAC) is computed using HMAC-SHA256 with the <strong>HMAC password</strong>. The MAC is included as a parameter in the payload and ensures the <strong>integrity of the request</strong> — the Paygate can use it to detect any manipulation.',
+    te_s1_desc: 'Using the <strong>HMAC password</strong>, a digital signature is computed via HMAC-SHA256 over the string <code>*TransID*MerchantID*Amount*Currency</code>. The leading <code>*</code> represents the empty PayID of a new transaction. The MAC is included in the payload and ensures <strong>request integrity</strong> — the Paygate immediately rejects any request with an incorrect or missing MAC.',
     te_s2_label: 'Payload Encryption',
     te_s2_desc: 'All payment parameters (including the MAC) are assembled into a plain-text string in the format <code>Key=Value&amp;Key=Value…</code>. This string is encrypted with the <strong>Blowfish password</strong> using Blowfish ECB and then hex-encoded. The result forms the <code>Data</code> parameter. The original plain-text length is passed separately as <code>Len</code>, because Blowfish pads to a multiple of 8 bytes.',
     te_s3_label: 'URL Assembly',
@@ -1256,6 +1336,14 @@ const TRANSLATIONS = {
     l_transid: 'Transaction ID', h_transid: '(auto-generated)',
     l_refnr: 'Reference Number', h_refnr: '(optional)',
     l_orderdesc: 'Order Description', h_orderdesc: '(OrderDesc)',
+    opt_od_default: 'Test payment via Computop Paygate',
+    opt_od_sim_ok:  'Simulation: Success (Test:0000)',
+    opt_od_sim_dec: 'Simulation: Declined – Acquirer/Issuer (Test:0305)',
+    opt_od_custom:  'Custom input …',
+    tc_summary: 'Test card numbers (Non-3DS)',
+    tc_note: 'Expiry: any future date (e.g. 10/30) · CVC: any 3 digits (e.g. 123) · Non-3DS only',
+    tc_h_brand: 'Brand', tc_h_number: 'Card Number', tc_h_result: 'Result',
+    tc_ok: 'Success', tc_dec: 'Declined', tc_copy_hint: 'Click to copy',
     sep_redirect: 'Redirect URLs',
     l_urls: 'URLSuccess', h_urls: '(after successful payment)',
     l_urlf: 'URLFailure', h_urlf: '(after failed payment)',
@@ -1351,6 +1439,14 @@ function applyLang() {
   setText('l-transid', 'l_transid'); setText('h-transid', 'h_transid');
   setText('l-refnr', 'l_refnr'); setText('h-refnr', 'h_refnr');
   setText('l-orderdesc', 'l_orderdesc'); setText('h-orderdesc', 'h_orderdesc');
+  setText('opt-od-default', 'opt_od_default');
+  setText('opt-od-sim-ok',  'opt_od_sim_ok');
+  setText('opt-od-sim-dec', 'opt_od_sim_dec');
+  setText('opt-od-custom',  'opt_od_custom');
+  setText('tc-summary', 'tc_summary');
+  setText('tc-note',    'tc_note');
+  setText('tc-h-brand', 'tc_h_brand'); setText('tc-h-number', 'tc_h_number'); setText('tc-h-result', 'tc_h_result');
+  renderTestCards();
   setText('sep-redirect', 'sep_redirect');
   setText('l-urls', 'l_urls'); setText('h-urls', 'h_urls');
   setText('l-urlf', 'l_urlf'); setText('h-urlf', 'h_urlf');
@@ -1723,6 +1819,34 @@ function copyText(id) {
   navigator.clipboard.writeText(text).then(() => showToast(t('toast_copied'), 'success'));
 }
 
+function onOrderDescChange(sel) {
+  const custom = document.getElementById('orderDescCustom');
+  if (custom) custom.style.display = sel.value === '__custom__' ? 'block' : 'none';
+}
+
+const TEST_CARDS = [
+  ['Visa',       '4111 1111 1111 1111', '4111111111111111', 'tc_ok'],
+  ['Visa',       '4012 8888 8888 1881', '4012888888881881', 'tc_dec'],
+  ['MasterCard', '5555 5555 5555 4444', '5555555555554444', 'tc_ok'],
+  ['MasterCard', '5105 1051 0510 5100', '5105105105105100', 'tc_dec'],
+  ['Amex',       '3750 000000 00007',   '375000000000007',  'tc_ok'],
+  ['Amex',       '3714 496353 98431',   '371449635398431',  'tc_dec'],
+];
+
+function renderTestCards() {
+  const tbody = document.getElementById('tc-tbody');
+  if (!tbody) return;
+  const hint = t('tc_copy_hint');
+  tbody.innerHTML = TEST_CARDS.map(([brand, formatted, raw, key]) => {
+    const cls = key === 'tc_ok' ? 'tc-ok' : 'tc-dec';
+    return `<tr>
+      <td>${brand}</td>
+      <td class="tc-num" onclick="navigator.clipboard.writeText('${raw}').then(()=>showToast(t('toast_copied'),'success'))" title="${hint}">${formatted}</td>
+      <td class="${cls}">${t(key)}</td>
+    </tr>`;
+  }).join('');
+}
+
 function generateTransId() {
   const ts = Date.now();
   const rand = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
@@ -1757,7 +1881,10 @@ async function buildAndPreview() {
     const urlSuccess  = document.getElementById('urlSuccess').value.trim();
     const urlFailure  = document.getElementById('urlFailure').value.trim();
     const urlNotify   = document.getElementById('urlNotify').value.trim();
-    const orderDesc   = document.getElementById('orderDesc').value.trim();
+    const orderDescSel = document.getElementById('orderDesc').value;
+    const orderDesc = orderDescSel === '__custom__'
+      ? document.getElementById('orderDescCustom').value.trim()
+      : orderDescSel;
     const language    = document.getElementById('language').value;
     const payTypes    = document.getElementById('payTypes').value;
 
@@ -1771,10 +1898,9 @@ async function buildAndPreview() {
     const amount = amountToCents(amountRaw);
     if (!amount || amount < 1) { showToast(t('val_amount'), 'error'); return; }
 
-    // Build MAC message: TransID*MerchantID*Amount*Currency
-    // (For HPP request, PayID is empty, so: PayID*TransID*MerchantID*Amount*Currency → "*TransID*...")
-    // Some integrations omit PayID entirely for request. We use without PayID prefix:
-    const macMsg = `${transId}*${merchantId}*${amount}*${currency}`;
+    // Build MAC message: PayID*TransID*MerchantID*Amount*Currency
+    // PayID is empty for the initial request → leading asterisk required (see Computop docs)
+    const macMsg = `*${transId}*${merchantId}*${amount}*${currency}`;
     const mac = await hmacSha256(hmacKey, macMsg);
 
     // Build plaintext parameter string
