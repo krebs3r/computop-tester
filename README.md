@@ -2,6 +2,8 @@
 
 A client-side tool for testing [Computop Paygate](https://www.computop.com) Hosted Payment Page (HPP) integrations. Generates encrypted payment requests using Blowfish ECB and HMAC-SHA256, and decrypts Computop callback responses — entirely in the browser, no backend required.
 
+**[→ Live version](https://krebs3r.github.io/computop-tester/)**
+
 ---
 
 ## ✨ Features
