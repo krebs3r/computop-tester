@@ -13,7 +13,7 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ## 🚀 Usage
 
-1. Open `index.html` directly in your browser — or visit the [live version](https://dein-username.github.io/computop-tester/)
+1. Open `index.html` directly in your browser — or visit the [live version](https://krebs3r.github.io/computop-tester/)
 2. Enter your Computop credentials (MerchantID, Blowfish password, HMAC password)
 3. Optionally save them encrypted via **💾 Speichern**
 4. Fill in the payment parameters (amount, currency, redirect URLs)
