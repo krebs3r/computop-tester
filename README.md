@@ -1,6 +1,6 @@
 # 🛡️ Computop Paygate — Payment Tester
 
-A client-side tool for testing [Computop Paygate](https://www.computop.com) Hosted Payment Page (HPP) integrations. Generates encrypted payment requests using Blowfish ECB and HMAC-SHA256 — entirely in the browser, no backend required.
+A client-side tool for testing [Computop Paygate](https://www.computop.com) Hosted Payment Page (HPP) integrations. Generates encrypted payment requests using Blowfish ECB and HMAC-SHA256, and decrypts Computop callback responses — entirely in the browser, no backend required.
 
 ---
 
@@ -8,9 +8,16 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ### Core
 - **Blowfish ECB encryption** of the `Data` parameter (pure JavaScript, no dependencies)
+- **Blowfish ECB decryption** of Computop callback responses — closes the full request/response loop
 - **HMAC-SHA256** MAC calculation via the native Web Crypto API
 - **Hosted Payment Page redirect** opens in a new tab, keeping the tester available for debugging
 - **Parameter preview** with color-coded plain-text display before submission
+
+### Response Decryptor
+- **Paste the full callback URL** (URLSuccess / URLFailure / URLNotify) — `MerchantID`, `Len` and `Data` are extracted automatically
+- **Manual mode** — enter `Data` (hex) and `Len` directly if only parts of the response are available
+- **Color-coded output** — `Status` highlighted green / red / orange by value, `MAC` in purple, all other parameters in teal
+- Uses the **Blowfish password already entered** in Step 1 — no duplicate input required
 
 ### Credentials
 - **AES-GCM 256-bit encrypted credential storage** — MerchantID, Blowfish password and HMAC password are saved locally in `localStorage`, never transmitted
@@ -64,6 +71,7 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ## 🚀 Usage
 
+### Generating a payment request
 1. Open `index.html` directly in your browser — or visit the [live version](https://krebs3r.github.io/computop-tester/)
 2. Optionally switch the UI language via the **DE | EN** toggle in the top-right corner
 3. Enter your Computop credentials (MerchantID, Blowfish password, HMAC password)
@@ -72,6 +80,13 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 6. Select which payment methods to display, or leave at default to show all enabled methods
 7. Click **Generate Preview** (EN) / **Vorschau generieren** (DE) to build and preview the encrypted request
 8. Click **Go to Hosted Payment Page** (EN) / **Zur Hosted Payment Page** (DE) to open Computop in a new tab
+
+### Decrypting a Computop response
+1. After a payment attempt, copy the full callback URL from the browser address bar (URLSuccess / URLFailure) or from your server log (URLNotify)
+2. Open the **Response Decryptor** / **Response-Entschlüsseler** section
+3. Paste the URL into the text field — `Len` and `Data` are extracted automatically
+4. Click **Decrypt** (EN) / **Entschlüsseln** (DE)
+5. The decrypted payload is displayed with color-coded parameters
 
 ---
 
@@ -91,6 +106,13 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 ---
 
 ## 📋 Changelog
+
+### v1.7 — Response Decryptor
+- Added **Response Decryptor** section — decrypts Computop callback URLs directly in the browser
+- Paste the full callback URL: `MerchantID`, `Len` and `Data` are extracted automatically via `URLSearchParams`
+- Alternative manual mode: enter `Data` (hex) and `Len` directly
+- Color-coded output — `Status` green/red/orange by value, `MAC` purple, all other parameters teal
+- Added Blowfish **`decrypt`** function alongside the existing `encrypt` in the ECB implementation
 
 ### v1.6 — Multilingual UI (DE / EN)
 - Added **DE / EN language toggle** in the header (next to the theme toggle) — switches the entire UI instantly

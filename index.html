@@ -904,6 +904,56 @@
     </div>
   </div>
 
+  <!-- ── RESPONSE DECRYPTOR ── -->
+  <div class="card collapsed" id="card-response">
+    <div class="card-header" onclick="toggleCard('card-response')">
+      <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg></span></div>
+      <span class="card-title" id="ct-response">Response-Entschlüsseler</span>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+
+      <div class="info-box" style="margin-bottom:16px">
+        <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span> <span id="resp-info-title">Hinweis:</span></strong> <span id="resp-info-body">Füge die vollständige Callback-URL von Computop ein (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert und mit dem Blowfish-Passwort aus Schritt&nbsp;1 entschlüsselt.</span>
+      </div>
+
+      <div class="field" style="margin-bottom:14px">
+        <label><span id="l-resp-url">Callback-URL</span> <span class="hint" id="h-resp-url">(URLSuccess / URLFailure / URLNotify)</span></label>
+        <textarea id="resp-url" placeholder="https://meineshop.de/success?MerchantID=...&Len=...&Data=..."></textarea>
+      </div>
+
+      <div class="sep-label" id="sep-resp-manual">Oder manuell</div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label><span id="l-resp-data">Data</span> <span class="hint">(Hex)</span></label>
+          <input type="text" id="resp-data" placeholder="a3f09c…" autocomplete="off">
+        </div>
+        <div class="field">
+          <label id="l-resp-len">Len</label>
+          <input type="number" id="resp-len" placeholder="142" min="1">
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn-primary" onclick="decryptResponse()" id="btn-decrypt">
+          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg></span> <span id="btn-decrypt-text">Entschlüsseln</span>
+        </button>
+      </div>
+
+      <div id="resp-result-section" style="margin-top:20px;display:none">
+        <div class="debug-block">
+          <div class="debug-label">
+            <span id="resp-result-label">Entschlüsselter Payload</span>
+            <button class="copy-btn" onclick="copyRespPlain()"><span id="copy-resp-text">Kopieren</span></button>
+          </div>
+          <pre id="resp-plain">–</pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ── CHANGELOG ── -->
   <div class="card collapsed" id="card-changelog">
     <div class="card-header" onclick="toggleCard('card-changelog')">
@@ -912,6 +962,20 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v1.7</span>
+          <span class="cl-title">Response-Entschlüsseler</span>
+        </div>
+        <ul class="cl-list">
+          <li>Neuer Bereich <strong>„Response-Entschlüsseler"</strong> — entschlüsselt Computop-Callback-URLs direkt im Browser</li>
+          <li>Vollständige Callback-URL einfügen: <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert</li>
+          <li>Alternativ <code>Data</code>-Hex und <code>Len</code> manuell eingeben</li>
+          <li>Farbcodierte Darstellung der entschlüsselten Parameter — <code>Status</code> grün/rot/orange je nach Wert, <code>MAC</code> lila</li>
+          <li>Blowfish-<code>decrypt</code>-Funktion zur bestehenden ECB-Implementierung hinzugefügt</li>
+        </ul>
+      </div>
 
       <div class="cl-entry">
         <div class="cl-header">
@@ -1014,7 +1078,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v1.6</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v1.7</span>
     </span>
     <span class="footer-links">
       <a href="https://github.com/krebs3r/computop-tester" target="_blank" rel="noopener">
@@ -1147,6 +1211,18 @@ const TRANSLATIONS = {
     confirm_cred_del: 'Gespeicherte Credentials wirklich löschen?',
     confirm_log_del: 'Request-Log wirklich löschen?',
     cred_status_saved: 'Gespeichert', cred_status_none: 'Nicht gespeichert',
+    ct_response: 'Response-Entschlüsseler',
+    resp_info_title: 'Hinweis:',
+    resp_info_body: 'Füge die vollständige Callback-URL von Computop ein (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert und mit dem Blowfish-Passwort aus Schritt&nbsp;1 entschlüsselt.',
+    l_resp_url: 'Callback-URL', h_resp_url: '(URLSuccess / URLFailure / URLNotify)',
+    sep_resp_manual: 'Oder manuell',
+    l_resp_data: 'Data', l_resp_len: 'Len',
+    btn_decrypt: 'Entschlüsseln',
+    resp_result_label: 'Entschlüsselter Payload',
+    btn_copy_resp: 'Kopieren',
+    resp_success: 'Payload erfolgreich entschlüsselt',
+    resp_no_data: 'Kein Data-Parameter gefunden',
+    resp_url_parse_err: 'URL konnte nicht geparst werden',
   },
   en: {
     page_title: 'Computop Paygate – Payment Tester',
@@ -1222,6 +1298,18 @@ const TRANSLATIONS = {
     confirm_cred_del: 'Really delete saved credentials?',
     confirm_log_del: 'Really clear the request log?',
     cred_status_saved: 'Saved', cred_status_none: 'Not saved',
+    ct_response: 'Response Decryptor',
+    resp_info_title: 'Note:',
+    resp_info_body: 'Paste the full Computop callback URL (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> and <code>Data</code> are extracted automatically and decrypted using the Blowfish password from Step&nbsp;1.',
+    l_resp_url: 'Callback URL', h_resp_url: '(URLSuccess / URLFailure / URLNotify)',
+    sep_resp_manual: 'Or manually',
+    l_resp_data: 'Data', l_resp_len: 'Len',
+    btn_decrypt: 'Decrypt',
+    resp_result_label: 'Decrypted Payload',
+    btn_copy_resp: 'Copy',
+    resp_success: 'Payload decrypted successfully',
+    resp_no_data: 'No Data parameter found',
+    resp_url_parse_err: 'Could not parse the URL',
   }
 };
 
@@ -1285,6 +1373,16 @@ function applyLang() {
   setText('ct-log', 'ct_log');
   setText('log-subtitle', 'log_subtitle');
   setText('btn-log-clear-text', 'btn_log_clear');
+
+  setText('ct-response', 'ct_response');
+  setText('resp-info-title', 'resp_info_title');
+  setHtml('resp-info-body', 'resp_info_body');
+  setText('l-resp-url', 'l_resp_url'); setText('h-resp-url', 'h_resp_url');
+  setText('sep-resp-manual', 'sep_resp_manual');
+  setText('l-resp-data', 'l_resp_data'); setText('l-resp-len', 'l_resp_len');
+  setText('btn-decrypt-text', 'btn_decrypt');
+  setText('resp-result-label', 'resp_result_label');
+  setText('copy-resp-text', 'btn_copy_resp');
 
   setText('footer-name-text', 'footer_name');
 
@@ -1540,7 +1638,37 @@ const Blowfish = (function () {
     return out.map(b => b.toString(16).padStart(2,'0')).join('');
   }
 
-  return { encrypt };
+  function decryptBlock(P, S, L, R) {
+    for (let i = 17; i > 1; i--) {
+      L = uint32(L ^ P[i]);
+      R = uint32(R ^ F(S, L));
+      [L, R] = [R, L];
+    }
+    [L, R] = [R, L];
+    R = uint32(R ^ P[1]);
+    L = uint32(L ^ P[0]);
+    return [L, R];
+  }
+
+  function decrypt(keyStr, hexStr, len) {
+    const keyBytes = [];
+    for (let i = 0; i < keyStr.length; i++) keyBytes.push(keyStr.charCodeAt(i) & 0xff);
+    const ctBytes = [];
+    for (let i = 0; i < hexStr.length; i += 2) ctBytes.push(parseInt(hexStr.substr(i, 2), 16));
+    const { P, S } = init(keyBytes);
+    const out = [];
+    for (let i = 0; i < ctBytes.length; i += 8) {
+      let L = uint32((ctBytes[i]<<24)|(ctBytes[i+1]<<16)|(ctBytes[i+2]<<8)|ctBytes[i+3]);
+      let R = uint32((ctBytes[i+4]<<24)|(ctBytes[i+5]<<16)|(ctBytes[i+6]<<8)|ctBytes[i+7]);
+      [L, R] = decryptBlock(P, S, L, R);
+      out.push((L>>>24)&0xff,(L>>>16)&0xff,(L>>>8)&0xff,L&0xff,
+               (R>>>24)&0xff,(R>>>16)&0xff,(R>>>8)&0xff,R&0xff);
+    }
+    const trimmed = len ? out.slice(0, len) : out;
+    return new TextDecoder().decode(new Uint8Array(trimmed));
+  }
+
+  return { encrypt, decrypt };
 })();
 
 // ══════════════════════════════════════════════════════════════
@@ -1879,6 +2007,70 @@ function clearLog() {
   localStorage.removeItem(LOG_LS_KEY);
   renderLog();
   showToast(t('toast_log_cleared'), 'info');
+}
+
+// ══════════════════════════════════════════════════════════════
+// RESPONSE DECRYPTOR
+// ══════════════════════════════════════════════════════════════
+function decryptResponse() {
+  const callbackUrl = document.getElementById('resp-url').value.trim();
+  let dataHex = document.getElementById('resp-data').value.trim();
+  let lenVal  = parseInt(document.getElementById('resp-len').value) || 0;
+  const blowfishKey = document.getElementById('blowfishKey').value;
+
+  // Extract MerchantID, Len, Data from URL if provided
+  if (callbackUrl) {
+    try {
+      let urlToParse = callbackUrl;
+      if (!urlToParse.match(/^https?:\/\//)) urlToParse = 'https://x.invalid?' + urlToParse.split('?').pop();
+      const params = new URL(urlToParse).searchParams;
+      const extractedData = params.get('Data') || params.get('data');
+      const extractedLen  = params.get('Len')  || params.get('len');
+      if (extractedData) { dataHex = extractedData; document.getElementById('resp-data').value = dataHex; }
+      if (extractedLen)  { lenVal  = parseInt(extractedLen); document.getElementById('resp-len').value  = lenVal; }
+    } catch(e) {
+      showToast(t('resp_url_parse_err'), 'error'); return;
+    }
+  }
+
+  if (!blowfishKey) { showToast(t('val_bf'), 'error'); return; }
+  if (!dataHex)     { showToast(t('resp_no_data'), 'error'); return; }
+
+  try {
+    const plain = Blowfish.decrypt(blowfishKey, dataHex, lenVal || undefined);
+
+    // Parse key=value pairs
+    const colored = plain.split('&').map(pair => {
+      const eqIdx = pair.indexOf('=');
+      if (eqIdx < 0) return '';
+      const k = pair.substring(0, eqIdx);
+      const v = pair.substring(eqIdx + 1);
+      if (!k) return '';
+      if (k === 'MAC') {
+        return `<span class="key">${k}</span>=<span class="enc">${v}</span>`;
+      }
+      if (k === 'Status') {
+        const style = v === 'OK'     ? 'color:var(--success)'
+                    : v === 'FAILED' ? 'color:var(--danger)'
+                    : 'color:var(--warning)';
+        return `<span class="key">${k}</span>=<span style="${style};font-weight:600">${v}</span>`;
+      }
+      return `<span class="key">${k}</span>=<span class="val">${v}</span>`;
+    }).filter(Boolean).join('\n');
+
+    document.getElementById('resp-plain').innerHTML = colored;
+    document.getElementById('resp-plain').dataset.raw = plain;
+    document.getElementById('resp-result-section').style.display = 'block';
+    document.getElementById('resp-result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    showToast(t('resp_success'), 'success');
+  } catch(e) {
+    showToast(t('toast_err') + e.message, 'error');
+  }
+}
+
+function copyRespPlain() {
+  const raw = document.getElementById('resp-plain').dataset.raw || document.getElementById('resp-plain').textContent;
+  navigator.clipboard.writeText(raw).then(() => showToast(t('toast_copied'), 'success'));
 }
 
 // ══════════════════════════════════════════════════════════════
