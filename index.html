@@ -6,7 +6,29 @@
   <title>Computop Paygate – Payment Tester</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Apply theme before render to avoid flash -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('computop_theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const mode = saved || (prefersDark ? 'dark' : 'light');
+      if (mode === 'light') document.documentElement.classList.add('light');
+    })();
+  </script>
   <style>
+    /* ── LUCIDE ICONS ── */
+    .icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .icon svg { stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-sm svg { width: 13px; height: 13px; }
+    .icon-md svg { width: 15px; height: 15px; }
+    .icon-lg svg { width: 17px; height: 17px; }
+    .card-icon .icon svg { width: 14px; height: 14px; }
+    .toggle-vis .icon svg { width: 14px; height: 14px; }
+    .theme-toggle .icon svg { width: 15px; height: 15px; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin-icon { animation: spin 1s linear infinite; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -27,6 +49,79 @@
       --sans:     'DM Sans', sans-serif;
       --display:  'Syne', sans-serif;
     }
+
+    html.light {
+      --bg:       #f0f4f9;
+      --surface:  #ffffff;
+      --card:     #ffffff;
+      --border:   #d1daea;
+      --border2:  #b0bdd0;
+      --accent:   #2563eb;
+      --accent2:  #1d4ed8;
+      --success:  #16a34a;
+      --warning:  #d97706;
+      --danger:   #dc2626;
+      --text:     #0f172a;
+      --muted:    #94a3b8;
+      --muted2:   #475569;
+    }
+
+    /* Smooth theme transition */
+    html, body, .card, .card-header, .card-body, input, select, textarea, pre, .debug-block, .info-box, .log-entry, .cred-save-row, #toast {
+      transition: background-color .25s ease, border-color .25s ease, color .2s ease, box-shadow .25s ease;
+    }
+
+    /* Light mode specific overrides */
+    html.light body::before {
+      background-image:
+        linear-gradient(rgba(37,99,235,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,0.05) 1px, transparent 1px);
+    }
+    html.light .card-header { background: rgba(0,0,0,0.02); }
+    html.light .card-header:hover { background: rgba(0,0,0,0.04); }
+    html.light input, html.light select, html.light textarea { background: #f8fafc; }
+    html.light input:focus, html.light select:focus, html.light textarea:focus {
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    }
+    html.light h1 {
+      background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 60%, #2563eb 100%);
+      -webkit-background-clip: text; background-clip: text;
+    }
+    html.light .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      box-shadow: 0 2px 16px rgba(37,99,235,0.25);
+    }
+    html.light .btn-primary:hover { box-shadow: 0 4px 24px rgba(37,99,235,0.4); }
+    html.light .btn-ghost { background: rgba(0,0,0,0.04); color: var(--muted2); }
+    html.light .btn-ghost:hover { background: rgba(0,0,0,0.07); }
+    html.light pre { color: #334155; }
+    html.light pre span.key { color: #1d4ed8; }
+    html.light pre span.val { color: #15803d; }
+    html.light pre span.enc { color: #7c3aed; }
+    html.light .info-box { background: rgba(37,99,235,0.05); border-color: rgba(37,99,235,0.2); }
+    html.light .badge { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.25); }
+    html.light select option { background: #ffffff; color: #0f172a; }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      position: fixed; top: 18px; right: 20px; z-index: 100;
+      display: flex; align-items: center; gap: 6px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; padding: 6px 12px 6px 8px;
+      cursor: pointer; font-size: 12px; color: var(--muted2);
+      font-family: var(--sans); font-weight: 500;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      transition: border-color .2s, background .25s, box-shadow .2s;
+    }
+    .theme-toggle:hover { border-color: var(--border2); box-shadow: 0 4px 18px rgba(0,0,0,0.25); }
+    .theme-toggle-icon { font-size: 15px; line-height: 1; }
+    .theme-toggle-auto {
+      font-family: var(--mono); font-size: 10px;
+      background: rgba(61,126,255,0.12); color: var(--accent2);
+      border: 1px solid rgba(61,126,255,0.2);
+      border-radius: 10px; padding: 1px 6px; margin-left: 2px;
+    }
+    html.light .theme-toggle-auto { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.2); }
 
     html { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
 
@@ -290,29 +385,85 @@
     .cred-save-info { font-size: 12px; color: var(--muted2); flex: 1; }
     .cred-save-info strong { color: var(--accent2); }
     #cred-save-status { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+    /* ── CHANGELOG ── */
+    .cl-entry { padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--border); }
+    .cl-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .cl-version {
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      background: rgba(61,126,255,0.12); border: 1px solid rgba(61,126,255,0.22);
+      color: var(--accent2); padding: 2px 9px; border-radius: 20px; flex-shrink: 0;
+    }
+    .cl-title { font-family: var(--display); font-size: 13px; font-weight: 600; color: var(--text); }
+    .cl-list { list-style: none; display: flex; flex-direction: column; gap: 5px; padding-left: 2px; }
+    .cl-list li {
+      font-size: 13px; color: var(--muted2); padding-left: 14px; position: relative; line-height: 1.5;
+    }
+    .cl-list li::before {
+      content: '–'; position: absolute; left: 0; color: var(--muted);
+    }
+    .cl-list code {
+      font-family: var(--mono); font-size: 11px;
+      background: rgba(61,126,255,0.08); border: 1px solid rgba(61,126,255,0.15);
+      color: var(--accent2); padding: 1px 5px; border-radius: 4px;
+    }
+    html.light .cl-list code { background: rgba(37,99,235,0.07); border-color: rgba(37,99,235,0.18); }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 18px 20px;
+      margin-top: 8px;
+    }
+    .footer-inner {
+      max-width: 860px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-version {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: var(--mono); font-size: 12px; color: var(--muted);
+    }
+    .footer-ver-badge {
+      background: rgba(61,126,255,0.12); border: 1px solid rgba(61,126,255,0.22);
+      color: var(--accent2); font-size: 11px; padding: 1px 8px; border-radius: 20px;
+    }
+    .footer-links { display: flex; align-items: center; gap: 18px; }
+    .footer-links a {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; color: var(--muted); text-decoration: none;
+      transition: color .15s;
+    }
+    .footer-links a:hover { color: var(--accent2); }
   </style>
 </head>
 <body>
+
+<button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn" title="Theme wechseln">
+  <span class="theme-toggle-icon icon" id="theme-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+  <span id="theme-label">Dark</span>
+  <span class="theme-toggle-auto" id="theme-auto-badge" style="display:none">auto</span>
+</button>
 
 <div class="wrapper">
 
   <!-- Header -->
   <header>
-    <div class="badge">🔐 Computop Paygate</div>
+    <div class="badge"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Computop Paygate</div>
     <h1>Payment Tester</h1>
     <p class="subtitle">Hosted Payment Page · Blowfish ECB · Kreditkarte · Testumgebung</p>
   </header>
 
   <!-- Info Box -->
   <div class="info-box" style="margin-bottom:28px">
-    <strong>ℹ️ Hinweis:</strong> Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop. 
+    <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span> Hinweis:</strong> Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop. 
     Im Testmodus bitte nur <strong>kleine Beträge (0,11–2,00 EUR)</strong> verwenden, da Kreditkartenauthorisierungen auch im Test real sind.
   </div>
 
   <!-- ── STEP 1: CREDENTIALS ── -->
   <div class="card" id="card-creds">
     <div class="card-header" onclick="toggleCard('card-creds')">
-      <div class="card-icon">🔑</div>
+      <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg></span></div>
       <span class="card-title">Schritt 1 — Credentials</span>
       <span class="card-toggle">▼</span>
     </div>
@@ -326,14 +477,14 @@
           <label>Blowfish Passwort <span class="required">*</span> <span class="hint">(für Data-Verschlüsselung)</span></label>
           <div class="input-group">
             <input type="password" id="blowfishKey" placeholder="••••••••••••••••" autocomplete="off" id="bf-pwd">
-            <button class="toggle-vis" onclick="togglePwd('blowfishKey', this)" title="Passwort anzeigen">👁</button>
+            <button class="toggle-vis" onclick="togglePwd('blowfishKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
         <div class="field">
           <label>HMAC Passwort <span class="required">*</span> <span class="hint">(für MAC-Berechnung)</span></label>
           <div class="input-group">
             <input type="password" id="hmacKey" placeholder="••••••••••••••••" autocomplete="off">
-            <button class="toggle-vis" onclick="togglePwd('hmacKey', this)" title="Passwort anzeigen">👁</button>
+            <button class="toggle-vis" onclick="togglePwd('hmacKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
         <div class="field">
@@ -349,11 +500,11 @@
 
       <div class="cred-save-row">
         <div class="cred-save-info">
-          <strong>🔒 Verschlüsselte Speicherung</strong> — Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert.
+          <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> Verschlüsselte Speicherung</strong> — Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert.
         </div>
         <span id="cred-save-status">–</span>
-        <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" onclick="saveCredentials()">💾 Speichern</button>
-        <button class="btn btn-danger-ghost" style="padding:8px 14px;font-size:12px" onclick="clearCredentials()">🗑 Löschen</button>
+        <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" onclick="saveCredentials()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></span> Speichern</button>
+        <button class="btn btn-danger-ghost" style="padding:8px 14px;font-size:12px" onclick="clearCredentials()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> Löschen</button>
       </div>
 
       <div class="divider"></div>
@@ -369,7 +520,7 @@
   <!-- ── STEP 2: PAYMENT PARAMS ── -->
   <div class="card" id="card-payment">
     <div class="card-header" onclick="toggleCard('card-payment')">
-      <div class="card-icon">💳</div>
+      <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span></div>
       <span class="card-title">Schritt 2 — Zahlungsparameter</span>
       <span class="card-toggle">▼</span>
     </div>
@@ -413,7 +564,7 @@
           <label>Transaction ID <span class="hint">(auto-generiert)</span></label>
           <div class="input-group">
             <input type="text" id="transId" placeholder="TID-..." readonly style="cursor:default;color:var(--muted2)">
-            <button class="toggle-vis" onclick="generateTransId()" title="Neu generieren" style="font-size:13px">↻</button>
+            <button class="toggle-vis" onclick="generateTransId()" title="Neu generieren"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span></button>
           </div>
         </div>
         <div class="field">
@@ -454,7 +605,8 @@
         <div class="field">
           <label>Zahlarten <span class="hint">(PayTypes)</span></label>
           <select id="payTypes">
-            <option value="CC" selected>CC – Kreditkarte (alle konfigurierten)</option>
+            <option value="" selected>— Alle freigeschalteten Zahlarten (PayTypes weglassen)</option>
+            <option value="CC">CC – Alle konfigurierten Kreditkartenmarken</option>
             <option value="VISA">VISA</option>
             <option value="MasterCard">MasterCard</option>
             <option value="AMEX">AMEX – American Express</option>
@@ -472,7 +624,7 @@
   <!-- ── STEP 3: PREVIEW & SUBMIT ── -->
   <div class="card" id="card-preview">
     <div class="card-header" onclick="toggleCard('card-preview')">
-      <div class="card-icon">🚀</div>
+      <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span></div>
       <span class="card-title">Schritt 3 — Vorschau & Ausführen</span>
       <span class="card-toggle">▼</span>
     </div>
@@ -480,10 +632,10 @@
 
       <div class="btn-row" style="margin-top:0">
         <button class="btn btn-primary" onclick="buildAndPreview()" id="btn-preview">
-          ⚡ Vorschau generieren
+          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> Vorschau generieren
         </button>
         <button class="btn btn-ghost" onclick="generateTransId()">
-          ↻ Neue Trans-ID
+          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span> Neue Trans-ID
         </button>
       </div>
 
@@ -511,7 +663,7 @@
 
         <div class="btn-row">
           <button class="btn btn-primary" onclick="submitPayment()" id="btn-submit" style="font-size:14px;padding:13px 28px">
-            💳 Zur Hosted Payment Page ↗
+            <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span> Zur Hosted Payment Page <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
           </button>
           <span style="font-size:12px;color:var(--muted)">Öffnet Computop in neuem Tab</span>
         </div>
@@ -524,7 +676,7 @@
   <!-- ── REQUEST LOG ── -->
   <div class="card" id="card-log">
     <div class="card-header" onclick="toggleCard('card-log')">
-      <div class="card-icon">📋</div>
+      <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span></div>
       <span class="card-title">Request-Log</span>
       <span id="log-count-badge" style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-right:8px"></span>
       <span class="card-toggle">▼</span>
@@ -532,13 +684,98 @@
     <div class="card-body">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
         <span style="font-size:12px;color:var(--muted2)">Letzte 50 generierten Requests (lokal gespeichert)</span>
-        <button class="btn btn-danger-ghost" style="padding:6px 12px;font-size:12px" onclick="clearLog()">🗑 Log leeren</button>
+        <button class="btn btn-danger-ghost" style="padding:6px 12px;font-size:12px" onclick="clearLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> Log leeren</button>
       </div>
       <div id="log-list"></div>
     </div>
   </div>
 
+  <!-- ── CHANGELOG ── -->
+  <div class="card collapsed" id="card-changelog">
+    <div class="card-header" onclick="toggleCard('card-changelog')">
+      <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+      <span class="card-title">Changelog</span>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v1.3</span>
+          <span class="cl-title">Payment Methods</span>
+        </div>
+        <ul class="cl-list">
+          <li>Added <strong>„Alle freigeschalteten Zahlarten"</strong> als Standard — weglassen des <code>PayTypes</code>-Parameters zeigt alle für den Merchant-Account konfigurierten Zahlarten an</li>
+          <li>Bestehende Optionen <code>CC</code>, <code>VISA</code>, <code>MasterCard</code> und <code>AMEX</code> im Selector präzisiert</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v1.2</span>
+          <span class="cl-title">Icons</span>
+        </div>
+        <ul class="cl-list">
+          <li>Alle Emoji durch <strong>professionelle inline SVGs</strong> (Lucide Icon Set) ersetzt</li>
+          <li>Vollständig selbst-enthalten — kein CDN, funktioniert offline</li>
+          <li>Spinning Loader-Animation auf dem Generieren-Button während der Verarbeitung</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v1.1</span>
+          <span class="cl-title">Dark / Light Mode</span>
+        </div>
+        <ul class="cl-list">
+          <li><strong>Dark/Light Mode Toggle</strong> (fixierter Button oben rechts)</li>
+          <li><strong>Auto-Modus</strong> folgt <code>prefers-color-scheme</code> und reagiert auf Live-Änderungen; zeigt <code>auto</code>-Badge</li>
+          <li>Manuelle Präferenz wird in <code>localStorage</code> gespeichert und beim nächsten Besuch wiederhergestellt</li>
+          <li>Flash-freier Load via Inline-Script im <code>&lt;head&gt;</code></li>
+          <li>Vollständige Light-Mode-Farbpalette mit angepassten Gradienten und Code-Farben</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry" style="border-bottom:none;margin-bottom:0;padding-bottom:0">
+        <div class="cl-header">
+          <span class="cl-version">v1.0</span>
+          <span class="cl-title">Initial Release</span>
+        </div>
+        <ul class="cl-list">
+          <li>Blowfish ECB Verschlüsselung des <code>Data</code>-Parameters</li>
+          <li>HMAC-SHA256 MAC-Berechnung</li>
+          <li><strong>Verschlüsselte Credential-Speicherung</strong> (AES-GCM) in <code>localStorage</code> mit PBKDF2-Schlüsselableitung</li>
+          <li><strong>Request-Log</strong> in <code>localStorage</code> (letzte 50 Einträge, aufklappbar, kopierbar)</li>
+          <li><strong>Neuer-Tab-Redirect</strong> — Computop HPP öffnet in neuem Tab</li>
+          <li>Parameter-Vorschau mit farbcodierter Klartext-Anzeige</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
 </div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-version">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Computop Payment Tester
+      <span class="footer-ver-badge">v1.3</span>
+    </span>
+    <span class="footer-links">
+      <a href="https://github.com/krebs3r/computop-tester" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S9 17.44 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        GitHub
+      </a>
+      <a href="https://developer.computop.com/display/DE/Hosted+Payment+Page" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+        Computop Docs
+      </a>
+    </span>
+  </div>
+</footer>
 
 <!-- Toast -->
 <div id="toast"></div>
@@ -548,7 +785,35 @@
 ═══════════════════════════════════════════════════════════ -->
 <script>
 // ══════════════════════════════════════════════════════════════
-// BLOWFISH ECB IMPLEMENTATION (Pure JavaScript)
+// INLINE SVG ICON SYSTEM — no external dependency
+// ══════════════════════════════════════════════════════════════
+const ICONS = {
+  'shield':         '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  'key-round':      '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>',
+  'eye':            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
+  'eye-off':        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>',
+  'lock':           '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+  'save':           '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>',
+  'trash-2':        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>',
+  'credit-card':    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>',
+  'refresh-cw':     '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>',
+  'zap':            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>',
+  'loader':         '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>',
+  'external-link':  '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>',
+  'clipboard-list': '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>',
+  'copy':           '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>',
+  'check-circle':   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>',
+  'x-circle':       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>',
+  'info':           '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
+  'moon':           '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>',
+  'sun':            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>',
+};
+
+function icon(name) {
+  return ICONS[name] || '';
+}
+
+
 // Based on the reference algorithm by Bruce Schneier
 // ══════════════════════════════════════════════════════════════
 const Blowfish = (function () {
@@ -797,13 +1062,25 @@ function toggleCard(id) {
 
 function togglePwd(id, btn) {
   const el = document.getElementById(id);
-  if (el.type === 'password') { el.type = 'text'; btn.textContent = '🙈'; }
-  else { el.type = 'password'; btn.textContent = '👁'; }
+  const eyeIcon     = '<span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>';
+  const eyeOffIcon  = '<span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg></span>';
+  if (el.type === 'password') {
+    el.type = 'text';
+    btn.innerHTML = eyeOffIcon;
+  } else {
+    el.type = 'password';
+    btn.innerHTML = eyeIcon;
+  }
 }
 
 function showToast(msg, type = 'info') {
   const t = document.getElementById('toast');
-  t.innerHTML = (type==='success'?'✅ ':type==='error'?'❌ ':'ℹ️ ') + msg;
+  const icons = {
+    success: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>',
+    error:   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>',
+    info:    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
+  };
+  t.innerHTML = `<span class="icon icon-md">${icons[type] || icons.info}</span> ${msg}`;
   t.className = 'show ' + type;
   setTimeout(() => t.className = '', 3200);
 }
@@ -835,7 +1112,7 @@ function amountToCents(amountStr) {
 async function buildAndPreview() {
   const btn = document.getElementById('btn-preview');
   btn.disabled = true;
-  btn.textContent = '⏳ Generiere…';
+  btn.innerHTML = '<span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="spin-icon"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg></span> Generiere…';
 
   try {
     const merchantId  = document.getElementById('merchantId').value.trim();
@@ -936,7 +1213,7 @@ async function buildAndPreview() {
     showToast('Fehler: ' + e.message, 'error');
   } finally {
     btn.disabled = false;
-    btn.textContent = '⚡ Vorschau generieren';
+    btn.innerHTML = '<span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> Vorschau generieren';
   }
 }
 
@@ -985,7 +1262,7 @@ async function saveCredentials() {
       ct:   Array.from(new Uint8Array(ct))
     }));
     _updateCredStatus();
-    showToast('Credentials verschlüsselt gespeichert 🔒', 'success');
+    showToast('Credentials verschlüsselt gespeichert', 'success');
   } catch(e) {
     console.error(e);
     showToast('Fehler beim Speichern: ' + e.message, 'error');
@@ -1008,7 +1285,7 @@ async function loadCredentials() {
     if (data.hmacKey)     document.getElementById('hmacKey').value     = data.hmacKey;
     if (data.environment) document.getElementById('environment').value = data.environment;
     _updateCredStatus();
-    showToast('Gespeicherte Credentials geladen 🔑', 'success');
+    showToast('Gespeicherte Credentials geladen', 'success');
   } catch(e) {
     console.warn('Credentials konnten nicht entschlüsselt werden:', e);
   }
@@ -1026,11 +1303,9 @@ function _updateCredStatus() {
   if (!el) return;
   const raw = localStorage.getItem(CRED_LS_KEY);
   if (raw) {
-    el.textContent = '✅ Gespeichert';
-    el.style.color = 'var(--success)';
+    el.innerHTML = '<span class="icon icon-sm" style="color:var(--success)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span style="color:var(--success)">Gespeichert</span>';
   } else {
-    el.textContent = '○ Nicht gespeichert';
-    el.style.color = 'var(--muted)';
+    el.innerHTML = '<span style="color:var(--muted)">Nicht gespeichert</span>';
   }
 }
 
@@ -1077,7 +1352,7 @@ function renderLog() {
         <div class="log-tid">TransID: <span style="color:var(--accent2)">${e.transId || '–'}</span></div>
         <div class="log-detail" id="log-detail-${i}" style="display:none">
           <pre>${safeUrl}</pre>
-          <button class="copy-btn" onclick="event.stopPropagation();_copyLogUrl(${i})">📋 URL kopieren</button>
+          <button class="copy-btn" onclick="event.stopPropagation();_copyLogUrl(${i})" style="display:inline-flex;align-items:center;gap:4px"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> URL kopieren</button>
         </div>
       </div>`;
   }).join('');
@@ -1103,9 +1378,63 @@ function clearLog() {
 }
 
 // ══════════════════════════════════════════════════════════════
+// THEME MANAGEMENT — Auto (prefers-color-scheme) + Manual Toggle
+// ══════════════════════════════════════════════════════════════
+const THEME_LS_KEY = 'computop_theme';
+
+function _applyTheme(mode, isAuto) {
+  const html   = document.documentElement;
+  const icon   = document.getElementById('theme-icon');
+  const label  = document.getElementById('theme-label');
+  const badge  = document.getElementById('theme-auto-badge');
+
+  if (mode === 'light') {
+    html.classList.add('light');
+  } else {
+    html.classList.remove('light');
+  }
+
+  const moonSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+  const sunSvg  = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
+  if (icon) {
+    icon.innerHTML = mode === 'light' ? sunSvg : moonSvg;
+  }
+  if (label) label.textContent = mode === 'light' ? 'Light' : 'Dark';
+  if (badge) badge.style.display = isAuto ? 'inline' : 'none';
+}
+
+function initTheme() {
+  const saved  = localStorage.getItem(THEME_LS_KEY);
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (saved === 'light' || saved === 'dark') {
+    _applyTheme(saved, false);
+  } else {
+    // Auto: follow system
+    _applyTheme(prefersDark ? 'dark' : 'light', true);
+  }
+
+  // Listen for system changes when in auto mode
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (!localStorage.getItem(THEME_LS_KEY)) {
+      _applyTheme(e.matches ? 'dark' : 'light', true);
+    }
+  });
+}
+
+function toggleTheme() {
+  const isLight = document.documentElement.classList.contains('light');
+  const newMode = isLight ? 'dark' : 'light';
+  localStorage.setItem(THEME_LS_KEY, newMode);
+  _applyTheme(newMode, false);
+  showToast(newMode === 'light' ? 'Light Mode aktiviert' : 'Dark Mode aktiviert', 'info');
+}
+
+// ══════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
   generateTransId();
   loadCredentials();
   renderLog();
