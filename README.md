@@ -37,6 +37,12 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 - **Professional SVG icons** (Lucide icon set, fully inline — zero external dependencies)
 - Smooth CSS transitions between themes
 
+### Language
+- **DE / EN language toggle** — fixed button next to the theme toggle, switches the entire UI instantly
+- Full English translation of all labels, buttons, hints, toasts, error messages and confirmation dialogs
+- Language preference persisted in `localStorage` and restored automatically on next visit
+- Lightweight built-in i18n system via a `TRANSLATIONS` object and a `t(key)` helper — no external framework
+
 ### General
 - **Zero dependencies** — single self-contained HTML file, no build step, no CDN calls at runtime
 - Pure browser, no server, no data leaves the machine
@@ -59,12 +65,13 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 ## 🚀 Usage
 
 1. Open `index.html` directly in your browser — or visit the [live version](https://krebs3r.github.io/computop-tester/)
-2. Enter your Computop credentials (MerchantID, Blowfish password, HMAC password)
-3. Optionally save them encrypted via **Save**
-4. Fill in the payment parameters (amount, currency, redirect URLs)
-5. Select which payment methods to display, or leave at default to show all enabled methods
-6. Click **Vorschau generieren** to build and preview the encrypted request
-7. Click **Zur Hosted Payment Page** to open Computop in a new tab
+2. Optionally switch the UI language via the **DE | EN** toggle in the top-right corner
+3. Enter your Computop credentials (MerchantID, Blowfish password, HMAC password)
+4. Optionally save them encrypted via **Save**
+5. Fill in the payment parameters (amount, currency, redirect URLs)
+6. Select which payment methods to display, or leave at default to show all enabled methods
+7. Click **Generate Preview** (EN) / **Vorschau generieren** (DE) to build and preview the encrypted request
+8. Click **Go to Hosted Payment Page** (EN) / **Zur Hosted Payment Page** (DE) to open Computop in a new tab
 
 ---
 
@@ -79,10 +86,17 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 | `computop_credentials_enc` | AES-GCM encrypted credentials (salt + IV + ciphertext) |
 | `computop_request_log` | JSON array of last 50 generated requests |
 | `computop_theme` | User's theme preference (`dark` / `light`); absent = auto |
+| `computop_lang` | User's language preference (`de` / `en`); absent = German |
 
 ---
 
 ## 📋 Changelog
+
+### v1.6 — Multilingual UI (DE / EN)
+- Added **DE / EN language toggle** in the header (next to the theme toggle) — switches the entire UI instantly
+- Full **English translation** of all UI text — labels, buttons, hints, error messages, toasts and confirmation dialogs
+- Language preference saved in `localStorage` and restored automatically on the next visit
+- Lightweight built-in i18n system using a `TRANSLATIONS` object and a `t(key)` helper function — no external dependencies
 
 ### v1.5 — Technical Explanation of URL Generation
 - Added detailed **3-step explanation** in the Credentials section: MAC calculation, payload encryption and URL composition
