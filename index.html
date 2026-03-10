@@ -564,8 +564,10 @@
     .test-card-table tr:last-child td { border-bottom: none; }
     .test-card-table .tc-num { cursor: pointer; transition: color .15s; }
     .test-card-table .tc-num:hover { color: var(--accent2); }
-    .test-card-table .tc-ok  { color: var(--success); }
-    .test-card-table .tc-dec { color: var(--danger); }
+    .test-card-table .tc-ok        { color: var(--success); }
+    .test-card-table .tc-dec       { color: var(--danger); }
+    .test-card-table .tc-challenge { color: var(--accent2); }
+    .test-card-table .tc-warn      { color: var(--warning); }
 
     /* ── FOOTER ── */
     footer {
@@ -839,6 +841,23 @@
         </div>
       </details>
 
+      <details class="tc-details">
+        <summary id="tc-3ds-summary">Testkartennummern (3-D Secure 2.x)</summary>
+        <div style="padding:6px 0 2px">
+          <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-3ds-note">Ablauf: beliebig · CVC: beliebig · Nur im Test-Modus mit 3DS-Konfiguration · Challenge-OTP: <strong>1234</strong></p>
+          <table class="test-card-table">
+            <thead>
+              <tr>
+                <th id="tc-3ds-h-brand">Marke</th>
+                <th id="tc-3ds-h-number">Kartennummer</th>
+                <th id="tc-3ds-h-scenario">Szenario</th>
+              </tr>
+            </thead>
+            <tbody id="tc-3ds-tbody"></tbody>
+          </table>
+        </div>
+      </details>
+
       <div class="sep-label" id="sep-redirect">Redirect-URLs</div>
 
       <div class="url-fields">
@@ -1012,6 +1031,18 @@
 
       <div class="cl-entry">
         <div class="cl-header">
+          <span class="cl-version">v1.9</span>
+          <span class="cl-title">3-D Secure Testkartennummern</span>
+        </div>
+        <ul class="cl-list">
+          <li>Zweite Testkartentabelle <strong>(3-D Secure 2.x)</strong> in den Zahlungsparametern hinzugefügt</li>
+          <li>Abgedeckte Szenarien: Frictionless – Authentifiziert, Challenge (OTP: <code>1234</code>), Nicht authentifiziert</li>
+          <li>Karten für Visa, MasterCard und Amex — farbcodiert nach Szenario</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
           <span class="cl-version">v1.8.1</span>
           <span class="cl-title">Bugfix: MAC-Berechnung</span>
         </div>
@@ -1150,7 +1181,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v1.8.1</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v1.9</span>
     </span>
     <span class="footer-links">
       <a href="https://github.com/krebs3r/computop-tester" target="_blank" rel="noopener">
@@ -1249,6 +1280,12 @@ const TRANSLATIONS = {
     tc_note: 'Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure',
     tc_h_brand: 'Marke', tc_h_number: 'Kartennummer', tc_h_result: 'Ergebnis',
     tc_ok: 'Erfolg', tc_dec: 'Abgelehnt', tc_copy_hint: 'Klicken zum Kopieren',
+    tc_3ds_summary: 'Testkartennummern (3-D Secure 2.x)',
+    tc_3ds_note: 'Ablauf: beliebig · CVC: beliebig · Nur im Test-Modus mit 3DS-Konfiguration · Challenge-OTP: <strong>1234</strong>',
+    tc_3ds_h_brand: 'Marke', tc_3ds_h_number: 'Kartennummer', tc_3ds_h_scenario: 'Szenario',
+    tc_3ds_frictionless: 'Frictionless – Authentifiziert',
+    tc_3ds_challenge: 'Challenge (OTP: 1234)',
+    tc_3ds_not_auth: 'Nicht authentifiziert',
     sep_redirect: 'Redirect-URLs',
     l_urls: 'URLSuccess', h_urls: '(nach erfolgreicher Zahlung)',
     l_urlf: 'URLFailure', h_urlf: '(nach fehlgeschlagener Zahlung)',
@@ -1344,6 +1381,12 @@ const TRANSLATIONS = {
     tc_note: 'Expiry: any future date (e.g. 10/30) · CVC: any 3 digits (e.g. 123) · Non-3DS only',
     tc_h_brand: 'Brand', tc_h_number: 'Card Number', tc_h_result: 'Result',
     tc_ok: 'Success', tc_dec: 'Declined', tc_copy_hint: 'Click to copy',
+    tc_3ds_summary: 'Test card numbers (3-D Secure 2.x)',
+    tc_3ds_note: 'Expiry: any · CVC: any · Test mode with 3DS configuration only · Challenge OTP: <strong>1234</strong>',
+    tc_3ds_h_brand: 'Brand', tc_3ds_h_number: 'Card Number', tc_3ds_h_scenario: 'Scenario',
+    tc_3ds_frictionless: 'Frictionless – Authenticated',
+    tc_3ds_challenge: 'Challenge (OTP: 1234)',
+    tc_3ds_not_auth: 'Not authenticated',
     sep_redirect: 'Redirect URLs',
     l_urls: 'URLSuccess', h_urls: '(after successful payment)',
     l_urlf: 'URLFailure', h_urlf: '(after failed payment)',
@@ -1446,7 +1489,11 @@ function applyLang() {
   setText('tc-summary', 'tc_summary');
   setText('tc-note',    'tc_note');
   setText('tc-h-brand', 'tc_h_brand'); setText('tc-h-number', 'tc_h_number'); setText('tc-h-result', 'tc_h_result');
+  setText('tc-3ds-summary', 'tc_3ds_summary');
+  setHtml('tc-3ds-note',    'tc_3ds_note');
+  setText('tc-3ds-h-brand', 'tc_3ds_h_brand'); setText('tc-3ds-h-number', 'tc_3ds_h_number'); setText('tc-3ds-h-scenario', 'tc_3ds_h_scenario');
   renderTestCards();
+  renderTestCards3DS();
   setText('sep-redirect', 'sep_redirect');
   setText('l-urls', 'l_urls'); setText('h-urls', 'h_urls');
   setText('l-urlf', 'l_urlf'); setText('h-urlf', 'h_urlf');
@@ -1832,6 +1879,30 @@ const TEST_CARDS = [
   ['Amex',       '3750 000000 00007',   '375000000000007',  'tc_ok'],
   ['Amex',       '3714 496353 98431',   '371449635398431',  'tc_dec'],
 ];
+
+const TEST_CARDS_3DS = [
+  ['Visa',       '4000019966199434', '4000019966199434', 'tc_3ds_frictionless', 'tc-ok'],
+  ['MasterCard', '5232122422543299', '5232122422543299', 'tc_3ds_frictionless', 'tc-ok'],
+  ['Amex',       '375000000000007',  '375000000000007',  'tc_3ds_frictionless', 'tc-ok'],
+  ['Visa',       '4000012892688323', '4000012892688323', 'tc_3ds_challenge',    'tc-challenge'],
+  ['MasterCard', '5232125125401459', '5232125125401459', 'tc_3ds_challenge',    'tc-challenge'],
+  ['Amex',       '371449635398431',  '371449635398431',  'tc_3ds_challenge',    'tc-challenge'],
+  ['Visa',       '4000011744135012', '4000011744135012', 'tc_3ds_not_auth',     'tc-warn'],
+  ['MasterCard', '5232122741507017', '5232122741507017', 'tc_3ds_not_auth',     'tc-warn'],
+];
+
+function renderTestCards3DS() {
+  const tbody = document.getElementById('tc-3ds-tbody');
+  if (!tbody) return;
+  const hint = t('tc_copy_hint');
+  tbody.innerHTML = TEST_CARDS_3DS.map(([brand, formatted, raw, scenarioKey, cls]) => {
+    return `<tr>
+      <td>${brand}</td>
+      <td class="tc-num" onclick="navigator.clipboard.writeText('${raw}').then(()=>showToast(t('toast_copied'),'success'))" title="${hint}">${formatted}</td>
+      <td class="${cls}">${t(scenarioKey)}</td>
+    </tr>`;
+  }).join('');
+}
 
 function renderTestCards() {
   const tbody = document.getElementById('tc-tbody');

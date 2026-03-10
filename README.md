@@ -118,6 +118,11 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ## 📋 Changelog
 
+### v1.9 — 3-D Secure Test Card Numbers
+- Added second test card table **(3-D Secure 2.x)** in the payment parameters section
+- Scenarios covered: Frictionless – Authenticated, Challenge (OTP: `1234`), Not authenticated
+- Cards for Visa, MasterCard and Amex — colour-coded by scenario
+
 ### v1.8.1 — Bugfix: MAC Calculation
 - Fixed MAC string format: `*TransID*MerchantID*Amount*Currency` — the leading `*` for empty PayID was missing
 - Without this fix Computop rejected every request with **"MAC INVALID"**
