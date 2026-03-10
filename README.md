@@ -118,6 +118,14 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ## 📋 Changelog
 
+### v2.1 — Response Log & Callback Improvements
+- **Response log** — stores the last 50 decrypted responses in the browser; expandable entries with status badge (OK/FAILED), TransID, MerchantID and copyable payload; own clear button; also cleared by the global "Clear all data" button
+- **"Current" badge** — marks the most recently decrypted response in the result area
+- **Auto-expand** — the Response Decryptor card automatically opens on callback redirect
+- **OrderDesc default** changed to `Test:0000` (Simulation: success)
+- Profile name is no longer written back into the name field when loading a profile
+- Bugfix callback receiver: replaced `:has()` selector with compatible `.closest()`; fixed timing issue on auto-decrypt; wrapped `checkCallbackParams()` in try-catch
+
 ### v2.0.5 — Callback Receiver & UX Improvements
 - **Callback receiver** — toggle in the Redirect URLs section sets URLSuccess, URLFailure and URLBack to the tool's own URL; on return from Computop the response is auto-decrypted — no external service required
 - **Multiple credential profiles** — named, AES-GCM encrypted profiles with a dropdown selector; automatic migration from the old single-credential storage

@@ -1178,6 +1178,22 @@
 
       <div class="cl-entry">
         <div class="cl-header">
+          <span class="cl-version">v2.1</span>
+          <span class="cl-title">Response-Log &amp; Callback-Verbesserungen</span>
+        </div>
+        <ul class="cl-list">
+          <li><strong>Response-Log</strong> — speichert die letzten 50 entschlüsselten Responses im Browser; aufklappbare Einträge mit Status-Badge (OK/FAILED), TransID, MerchantID und kopierbarem Payload</li>
+          <li><strong>„Aktuell"-Badge</strong> — kennzeichnet die zuletzt entschlüsselte Response im Ergebnisbereich</li>
+          <li><strong>Auto-Aufklappen</strong> — Response-Entschlüsseler klappt bei Callback-Redirect automatisch auf</li>
+          <li><strong>OrderDesc-Default</strong> geändert auf <code>Test:0000</code> (Simulation: Erfolg)</li>
+          <li>Profilname wird beim Laden eines Profils nicht mehr ins Namensfeld geschrieben</li>
+          <li>Bugfix Callback-Receiver: <code>:has()</code>-Selektor durch kompatibles <code>.closest()</code> ersetzt; Timing-Problem bei der Auto-Entschlüsselung behoben; <code>checkCallbackParams()</code> in try-catch eingefasst</li>
+          <li>„Alles löschen" löscht jetzt auch den Response-Log</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
           <span class="cl-version">v2.0.5</span>
           <span class="cl-title">Callback-Empfänger &amp; UX-Verbesserungen</span>
         </div>
@@ -1370,7 +1386,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v2.0.5</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v2.1</span>
     </span>
     <span class="footer-links">
       <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
