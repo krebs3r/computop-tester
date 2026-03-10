@@ -67,7 +67,7 @@
     }
 
     /* Smooth theme transition */
-    html, body, .card, .card-header, .card-body, input, select, textarea, pre, .debug-block, .info-box, .log-entry, .cred-save-row, #toast {
+    html, body, .card, .card-header, .card-body, input, select, textarea, pre, .debug-block, .info-box, .log-entry, .cred-save-row, #toast, .method-ctrl, .method-info {
       transition: background-color .25s ease, border-color .25s ease, color .2s ease, box-shadow .25s ease;
     }
 
@@ -221,6 +221,65 @@
     label { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted2); }
     label .required { color: var(--accent); margin-left: 3px; }
     label .hint { font-size: 10px; color: var(--muted); text-transform: none; letter-spacing: 0; margin-left: 4px; font-weight: 300; }
+
+    /* ── METHOD SELECTOR ── */
+    .method-ctrl {
+      display: flex; align-items: stretch;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 4px; gap: 4px;
+      margin-bottom: 20px;
+    }
+    .method-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 16px; border-radius: 7px; border: none;
+      background: transparent; cursor: pointer;
+      font-family: var(--sans); font-size: 13px; font-weight: 500;
+      color: var(--muted); transition: background .18s, color .18s, box-shadow .18s;
+    }
+    .method-btn.method-active {
+      background: var(--accent); color: #fff;
+      box-shadow: 0 2px 10px rgba(61,126,255,0.30);
+    }
+    .method-btn:not(.method-active):hover { background: var(--border); color: var(--muted2); }
+    .method-endpoint {
+      font-family: var(--mono); font-size: 10px; opacity: 0.75;
+    }
+    .method-info {
+      background: rgba(61,126,255,0.06); border: 1px solid rgba(61,126,255,0.18);
+      border-radius: 8px; padding: 11px 14px; margin-bottom: 20px;
+      font-size: 12px; color: var(--muted2); line-height: 1.6;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .method-info-icon { flex-shrink: 0; margin-top: 1px; color: var(--accent2); }
+    .method-info strong { color: var(--accent2); font-weight: 500; }
+    html.light .method-btn.method-active { box-shadow: 0 2px 10px rgba(37,99,235,0.25); }
+
+    .paytypes-row { overflow: hidden; transition: opacity .2s, max-height .25s, margin .25s; max-height: 120px; }
+    .collapsible { overflow: hidden; transition: opacity .2s, max-height .3s, margin .3s; max-height: 200px; }
+    .paytypes-row.hidden, .collapsible.hidden { opacity: 0; max-height: 0; pointer-events: none; margin: 0 !important; }
+
+    /* ── PARAM TOOLTIP ── */
+    .param-tip {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: rgba(61,126,255,0.12); border: 1px solid rgba(61,126,255,0.25);
+      color: var(--accent2); font-size: 9px; font-family: var(--mono); font-weight: 600;
+      cursor: default; flex-shrink: 0; margin-left: 5px; line-height: 1;
+      vertical-align: middle; padding: 0; outline: none;
+    }
+    html.light .param-tip { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.25); }
+
+    #g-tip {
+      position: fixed; z-index: 1000; width: 260px;
+      background: var(--card); border: 1px solid var(--border2);
+      color: var(--text); font-size: 11px; font-family: var(--sans); font-weight: 400;
+      text-transform: none; letter-spacing: 0; line-height: 1.55;
+      padding: 9px 13px; border-radius: 9px; white-space: normal;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+      opacity: 0; pointer-events: none; transition: opacity .15s;
+    }
+    #g-tip.visible { opacity: 1; }
+    html.light #g-tip { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
 
     input, select, textarea {
       background: var(--surface);
@@ -520,6 +579,29 @@
     .cred-save-info strong { color: var(--accent2); }
     #cred-save-status { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 
+    /* ── PROFILE MANAGER ── */
+    .profile-section { display: flex; flex-direction: column; gap: 10px; }
+    .profile-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .profile-top-title { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; font-size: 13px; }
+    .profile-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .profile-row input[type="text"] { flex: 1; min-width: 140px; }
+    .profile-row select { flex: 1.5; min-width: 180px; }
+    .profile-hint { font-size: 11px; color: var(--muted); }
+
+    /* ── CALLBACK RECEIVER TOGGLE ── */
+    .cb-receiver-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px; padding:10px 14px; border-radius:8px; background:rgba(61,126,255,0.06); border:1px solid rgba(61,126,255,0.15); }
+    .cb-receiver-label { display:inline-flex; align-items:center; gap:9px; cursor:pointer; font-size:13px; font-weight:500; user-select:none; }
+    .cb-receiver-switch { position:relative; display:inline-block; width:36px; height:20px; flex-shrink:0; }
+    .cb-receiver-switch input { opacity:0; width:0; height:0; position:absolute; }
+    .cb-receiver-knob { position:absolute; cursor:pointer; inset:0; background:var(--border2); border-radius:20px; transition:background 0.2s; }
+    .cb-receiver-knob::before { content:''; position:absolute; width:14px; height:14px; left:3px; top:3px; border-radius:50%; background:#fff; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.3); }
+    .cb-receiver-switch input:checked + .cb-receiver-knob { background:var(--accent2); }
+    .cb-receiver-switch input:checked + .cb-receiver-knob::before { transform:translateX(16px); }
+    .cb-receiver-row .cb-receiver-hint { font-size:11px; color:var(--muted); }
+    .cb-receiver-active-badge { display:none; font-family:var(--mono); font-size:10px; padding:1px 7px; border-radius:10px; background:rgba(61,126,255,0.15); border:1px solid rgba(61,126,255,0.3); color:var(--accent2); }
+    #cb-receiver-toggle:checked ~ .cb-receiver-active-badge,
+    .cb-receiver-switch input:checked ~ .cb-receiver-active-badge { display:inline; }
+
     /* ── CHANGELOG ── */
     .cl-entry { padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--border); }
     .cl-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -618,7 +700,7 @@
   <header>
     <div class="badge"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Computop Paygate</div>
     <h1>Payment Tester</h1>
-    <p class="subtitle" id="subtitle">Hosted Payment Page · Blowfish ECB · Kreditkarte · Testumgebung</p>
+    <p class="subtitle" id="subtitle">Hosted Payment Page &amp; Kreditkartenformular · Blowfish ECB · HMAC-SHA256 · Testumgebung</p>
   </header>
 
   <!-- Info Box -->
@@ -658,41 +740,44 @@
     <div class="card-body">
       <div class="field-grid">
         <div class="field">
-          <label><span id="l-mid">Merchant ID</span> <span class="required">*</span></label>
+          <label><span id="l-mid">Merchant ID</span> <span class="required">*</span><button class="param-tip" id="tip-mid" tabindex="-1">?</button></label>
           <input type="text" id="merchantId" placeholder="IhreMerchantID" autocomplete="off">
         </div>
         <div class="field">
-          <label><span id="l-bfpw">Blowfish Passwort</span> <span class="required">*</span> <span class="hint" id="h-bfpw">(für Data-Verschlüsselung)</span></label>
+          <label><span id="l-bfpw">Blowfish Passwort</span> <span class="required">*</span> <span class="hint" id="h-bfpw">(für Data-Verschlüsselung)</span><button class="param-tip" id="tip-bfpw" tabindex="-1">?</button></label>
           <div class="input-group">
             <input type="password" id="blowfishKey" placeholder="••••••••••••••••" autocomplete="off" id="bf-pwd">
             <button class="toggle-vis" onclick="togglePwd('blowfishKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
+      </div>
+      <div class="field-grid full" style="margin-top:14px">
         <div class="field">
-          <label><span id="l-hmacpw">HMAC Passwort</span> <span class="required">*</span> <span class="hint" id="h-hmacpw">(für MAC-Berechnung)</span></label>
+          <label><span id="l-hmacpw">HMAC Passwort</span> <span class="required">*</span> <span class="hint" id="h-hmacpw">(für MAC-Berechnung)</span><button class="param-tip" id="tip-hmacpw" tabindex="-1">?</button></label>
           <div class="input-group">
             <input type="password" id="hmacKey" placeholder="••••••••••••••••" autocomplete="off">
             <button class="toggle-vis" onclick="togglePwd('hmacKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
-        <div class="field">
-          <label id="l-env">Umgebung</label>
-          <select id="environment">
-            <option id="opt-prod" value="https://www.computop-paygate.com/paymentPage.aspx">Production – computop-paygate.com</option>
-            <option id="opt-test" value="https://www.computop-paygate.com/paymentPage.aspx" selected>Test – computop-paygate.com (same)</option>
-          </select>
-        </div>
       </div>
 
       <div class="divider"></div>
 
-      <div class="cred-save-row">
-        <div class="cred-save-info">
-          <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> <span id="cred-save-title">Verschlüsselte Speicherung</span></strong> — <span id="cred-save-text">Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert.</span>
+      <div class="profile-section">
+        <div class="profile-top">
+          <span class="profile-top-title"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> <span id="cred-save-title">Verschlüsselte Profile</span></span>
+          <span id="cred-save-status" style="margin-left:auto;font-size:12px">–</span>
         </div>
-        <span id="cred-save-status">–</span>
-        <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" onclick="saveCredentials()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></span> <span id="btn-save-text">Speichern</span></button>
-        <button class="btn btn-danger-ghost" style="padding:8px 14px;font-size:12px" onclick="clearCredentials()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-delete-text">Löschen</span></button>
+        <div class="profile-row">
+          <input type="text" id="profile-name" placeholder="Profilname …" style="font-size:13px;padding:9px 12px">
+          <select id="profile-select" onchange="onProfileSelect()" style="font-size:13px;padding:9px 12px">
+            <option value="" id="opt-profile-placeholder">— Gespeicherte Profile —</option>
+          </select>
+          <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" onclick="saveProfile()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></span> <span id="btn-save-text">Speichern</span></button>
+          <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" onclick="loadProfile()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></span> <span id="btn-load-text">Laden</span></button>
+          <button class="btn btn-danger-ghost" style="padding:8px 14px;font-size:12px" onclick="deleteProfile()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-delete-text">Löschen</span></button>
+        </div>
+        <div class="profile-hint" id="cred-save-text">Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert. Mehrere Profile möglich.</div>
       </div>
 
       <div class="divider"></div>
@@ -766,16 +851,35 @@
     </div>
     <div class="card-body">
 
+      <!-- ── INTEGRATION METHOD SELECTOR ── -->
+      <div class="method-ctrl">
+        <button class="method-btn method-active" id="method-hpp" onclick="setMethod('hpp')">
+          <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span>
+          <span id="method-hpp-label">Hosted Payment Page</span>
+          <span class="method-endpoint">paymentPage.aspx</span>
+        </button>
+        <button class="method-btn" id="method-ccf" onclick="setMethod('ccf')">
+          <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="12" x="4" y="6" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M15 12h2"/><path d="M15 9h2"/></svg></span>
+          <span id="method-ccf-label">Kreditkartenformular</span>
+          <span class="method-endpoint">payssl.aspx</span>
+        </button>
+      </div>
+
+      <div class="method-info">
+        <span class="method-info-icon icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
+        <span id="method-info-text"></span>
+      </div>
+
       <div class="field-grid three">
         <div class="field">
-          <label><span id="l-amount">Betrag</span> <span class="required">*</span></label>
+          <label><span id="l-amount">Betrag</span> <span class="required">*</span><button class="param-tip" id="tip-amount" tabindex="-1">?</button></label>
           <div class="input-group">
             <input type="number" id="amount" value="0.99" step="0.01" min="0.01" placeholder="1.00">
             <span class="input-suffix">EUR</span>
           </div>
         </div>
         <div class="field">
-          <label id="l-currency">Währung</label>
+          <label><span id="l-currency">Währung</span><button class="param-tip" id="tip-currency" tabindex="-1">?</button></label>
           <select id="currency">
             <option value="EUR" selected>EUR – Euro</option>
             <option value="USD">USD – US-Dollar</option>
@@ -787,7 +891,7 @@
           </select>
         </div>
         <div class="field">
-          <label id="l-language">Sprache</label>
+          <label><span id="l-language">Sprache</span><button class="param-tip" id="tip-language" tabindex="-1">?</button></label>
           <select id="language">
             <option value="de" selected>de – Deutsch</option>
             <option value="en">en – Englisch</option>
@@ -801,20 +905,20 @@
 
       <div class="field-grid" style="margin-top:14px">
         <div class="field">
-          <label><span id="l-transid">Transaction ID</span> <span class="hint" id="h-transid">(auto-generiert)</span></label>
+          <label><span id="l-transid">Transaction ID</span> <span class="hint" id="h-transid">(auto-generiert)</span><button class="param-tip" id="tip-transid" tabindex="-1">?</button></label>
           <div class="input-group">
             <input type="text" id="transId" placeholder="TID-..." readonly style="cursor:default;color:var(--muted2)">
             <button class="toggle-vis" onclick="generateTransId()" title="Neu generieren"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span></button>
           </div>
         </div>
         <div class="field">
-          <label><span id="l-refnr">Referenznummer</span> <span class="hint" id="h-refnr">(optional)</span></label>
+          <label><span id="l-refnr">Referenznummer</span> <span class="hint" id="h-refnr">(optional)</span><button class="param-tip" id="tip-refnr" tabindex="-1">?</button></label>
           <input type="text" id="refNr" placeholder="REF-001" maxlength="30">
         </div>
       </div>
 
       <div class="field" style="margin-top:14px">
-        <label><span id="l-orderdesc">Bestellbeschreibung</span> <span class="hint" id="h-orderdesc">(OrderDesc)</span></label>
+        <label><span id="l-orderdesc">Bestellbeschreibung</span> <span class="hint" id="h-orderdesc">(OrderDesc)</span><button class="param-tip" id="tip-orderdesc" tabindex="-1">?</button></label>
         <select id="orderDesc" onchange="onOrderDescChange(this)">
           <option id="opt-od-default" value="Testzahlung via Computop Paygate">Testzahlung via Computop Paygate</option>
           <option id="opt-od-sim-ok"  value="Test:0000">Simulation: Erfolg (Test:0000)</option>
@@ -862,41 +966,52 @@
 
       <div class="url-fields">
         <div class="field">
-          <label><span id="l-urls">URLSuccess</span> <span class="required">*</span> <span class="hint" id="h-urls">(nach erfolgreicher Zahlung)</span></label>
+          <label><span id="l-urls">URLSuccess</span> <span class="required">*</span> <span class="hint" id="h-urls">(nach erfolgreicher Zahlung)</span><button class="param-tip" id="tip-urls" tabindex="-1">?</button></label>
           <input type="url" id="urlSuccess" placeholder="https://meineshop.de/success" value="https://httpbin.org/get?status=success">
         </div>
         <div class="field">
-          <label><span id="l-urlf">URLFailure</span> <span class="required">*</span> <span class="hint" id="h-urlf">(nach fehlgeschlagener Zahlung)</span></label>
+          <label><span id="l-urlf">URLFailure</span> <span class="required">*</span> <span class="hint" id="h-urlf">(nach fehlgeschlagener Zahlung)</span><button class="param-tip" id="tip-urlf" tabindex="-1">?</button></label>
           <input type="url" id="urlFailure" placeholder="https://meineshop.de/failure" value="https://httpbin.org/get?status=failure">
         </div>
         <div class="field">
-          <label><span id="l-urln">URLNotify</span> <span class="hint" id="h-urln">(Server-zu-Server Benachrichtigung)</span></label>
+          <label><span id="l-urln">URLNotify</span> <span class="hint" id="h-urln">(Server-zu-Server Benachrichtigung)</span><button class="param-tip" id="tip-urln" tabindex="-1">?</button></label>
           <input type="url" id="urlNotify" placeholder="https://meineshop.de/notify" value="https://httpbin.org/post?status=notify">
         </div>
         <div class="field">
-          <label><span id="l-urlb">URLBack</span> <span class="hint" id="h-urlb">(Abbrechen-Button, unverschlüsselt)</span></label>
+          <label><span id="l-urlb">URLBack</span> <span class="hint" id="h-urlb">(Abbrechen-Button, unverschlüsselt)</span><button class="param-tip" id="tip-urlb" tabindex="-1">?</button></label>
           <input type="url" id="urlBack" placeholder="https://meineshop.de/warenkorb" value="https://httpbin.org/get?status=back">
         </div>
       </div>
 
+      <div class="cb-receiver-row" id="cb-receiver-row">
+        <label class="cb-receiver-label">
+          <span class="cb-receiver-switch">
+            <input type="checkbox" id="cb-receiver-toggle" onchange="toggleCallbackReceiver()">
+            <span class="cb-receiver-knob"></span>
+          </span>
+          <span id="cb-receiver-text">Dieses Tool als Callback-Empfänger aktivieren</span>
+        </label>
+        <span class="cb-receiver-hint" id="cb-receiver-hint">(setzt URLSuccess, URLFailure &amp; URLBack auf diese Seite — kein externer Dienst nötig)</span>
+      </div>
+
+      <div id="advanced-section" class="collapsible">
       <div class="sep-label" id="sep-advanced">Erweiterte Einstellungen</div>
 
-      <div class="field-grid">
-        <div class="field">
-          <label><span id="l-paytypes">Zahlarten</span> <span class="hint" id="h-paytypes">(PayTypes)</span></label>
-          <select id="payTypes">
-            <option id="opt-pt-all" value="" selected>— Alle freigeschalteten Zahlarten (PayTypes weglassen)</option>
-            <option id="opt-pt-cc" value="CC">CC – Alle konfigurierten Kreditkartenmarken</option>
-            <option value="VISA">VISA</option>
-            <option value="MasterCard">MasterCard</option>
-            <option value="AMEX">AMEX – American Express</option>
-          </select>
-        </div>
-        <div class="field">
-          <label><span id="l-template">Template</span> <span class="hint" id="h-template">(optional, unverschlüsselt)</span></label>
-          <input type="text" id="template" placeholder="z.B. PaymentPageDropDown_v1">
+      <div class="paytypes-row" id="paytypes-row">
+        <div class="field-grid full">
+          <div class="field">
+            <label><span id="l-paytypes">Zahlarten</span> <span class="hint" id="h-paytypes">(PayTypes)</span><button class="param-tip" id="tip-paytypes" tabindex="-1">?</button></label>
+            <select id="payTypes">
+              <option id="opt-pt-all" value="" selected>— Alle freigeschalteten Zahlarten (PayTypes weglassen)</option>
+              <option id="opt-pt-cc" value="CC">CC – Alle konfigurierten Kreditkartenmarken</option>
+              <option value="VISA">VISA</option>
+              <option value="MasterCard">MasterCard</option>
+              <option value="AMEX">AMEX – American Express</option>
+            </select>
+          </div>
         </div>
       </div>
+      </div><!-- /advanced-section -->
 
     </div>
   </div>
@@ -1028,6 +1143,48 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v2.0.5</span>
+          <span class="cl-title">Callback-Empfänger &amp; UX-Verbesserungen</span>
+        </div>
+        <ul class="cl-list">
+          <li><strong>Callback-Empfänger</strong> — Toggle in den Redirect-URLs setzt URLSuccess, URLFailure und URLBack auf diese Seite; bei Rückkehr von Computop wird die Antwort automatisch entschlüsselt — kein externer Dienst mehr nötig</li>
+          <li><strong>Mehrere Credential-Profile</strong> — benannte, verschlüsselte Profile mit Dropdown-Wähler; Migration vom alten Einzelprofil automatisch</li>
+          <li><strong>Alles löschen</strong> — Button im Footer entfernt alle gespeicherten Daten (Profile, Log, Einstellungen) auf einmal</li>
+          <li><strong>Profil-Name-Feld</strong> wird nach dem Speichern automatisch geleert</li>
+          <li><strong>Laden-Icon</strong> korrigiert — Pfeil zeigt nun nach oben (Upload-Semantik)</li>
+          <li>Seitenbeschreibung aktualisiert: HPP ausgeschrieben als <em>Hosted Payment Page</em></li>
+          <li>Environment-Selector entfernt — beide Optionen zeigten auf dieselbe URL</li>
+          <li>Credential-Felder: 2-spaltig (MerchantID + Blowfish) + vollbreite HMAC-Zeile</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v2.0</span>
+          <span class="cl-title">Kreditkartenformular (payssl.aspx)</span>
+        </div>
+        <ul class="cl-list">
+          <li><strong>Integrationsmethoden-Wähler</strong> — Segmented Control in Schritt 2 zum Umschalten zwischen <em>Hosted Payment Page</em> (<code>paymentPage.aspx</code>) und <em>Kreditkartenformular</em> (<code>payssl.aspx</code>)</li>
+          <li>Info-Box erklärt den Unterschied der gewählten Methode; Submit-Button-Text passt sich automatisch an</li>
+          <li><strong>Erweiterte Einstellungen</strong> blendet sich bei payssl.aspx aus — PayTypes wird dort nicht unterstützt</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v1.9.1</span>
+          <span class="cl-title">Tooltip-Dokumentation &amp; UX-Verbesserungen</span>
+        </div>
+        <ul class="cl-list">
+          <li><strong>Inline-Tooltips</strong> — <code>?</code>-Icon neben allen 15 Parametern mit kurzer Erklärung; viewport-aware positioniert (kein Abschneiden am Rand)</li>
+          <li><strong>Kartennummern formatiert</strong> — 3DS-2.x-Testkartennummern jetzt mit Leerzeichen wie die Non-3DS-Karten (z.B. <code>4000 0199 6619 9434</code>)</li>
+          <li><strong>Dokumentationslink</strong> — Link zur Computop-Dokumentation in beiden Testkartentabellen (Non-3DS &amp; 3DS) als Quellenangabe</li>
+          <li><strong>Template-Parameter entfernt</strong> — war nicht notwendig; bei gebuchter Corporate PaymentPage lädt Computop das Layout automatisch</li>
+        </ul>
+      </div>
 
       <div class="cl-entry">
         <div class="cl-header">
@@ -1181,9 +1338,13 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v1.9</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v2.0.5</span>
     </span>
     <span class="footer-links">
+      <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
+        <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></span>
+        <span id="btn-clear-all-text">Alles löschen</span>
+      </button>
       <a href="https://github.com/krebs3r/computop-tester" target="_blank" rel="noopener">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S9 17.44 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
         GitHub
@@ -1239,10 +1400,35 @@ function icon(name) {
 const LANG_LS_KEY = 'computop_lang';
 let currentLang = 'de';
 
+// ══════════════════════════════════════════════════════════════
+// INTEGRATION METHOD — hpp | ccf
+// ══════════════════════════════════════════════════════════════
+let currentMethod = 'hpp';
+
+function setMethod(method) {
+  currentMethod = method;
+  document.getElementById('method-hpp').classList.toggle('method-active', method === 'hpp');
+  document.getElementById('method-ccf').classList.toggle('method-active', method === 'ccf');
+
+  // Erweiterte Einstellungen: komplett ausblenden bei payssl.aspx
+  const advSection = document.getElementById('advanced-section');
+  if (advSection) advSection.classList.toggle('hidden', method === 'ccf');
+
+  // Info-Box Text
+  const infoEl = document.getElementById('method-info-text');
+  if (infoEl) infoEl.innerHTML = t(method === 'hpp' ? 'method_info_hpp' : 'method_info_ccf');
+
+  // Submit-Button Text
+  const submitText = document.getElementById('btn-submit-text');
+  const submitHint = document.getElementById('btn-submit-hint');
+  if (submitText) submitText.textContent = t(method === 'hpp' ? 'btn_submit' : 'btn_submit_ccf');
+  if (submitHint) submitHint.textContent = t(method === 'hpp' ? 'btn_submit_hint' : 'btn_submit_hint_ccf');
+}
+
 const TRANSLATIONS = {
   de: {
     page_title: 'Computop Paygate – Payment Tester',
-    subtitle: 'Hosted Payment Page · Blowfish ECB · Kreditkarte · Testumgebung',
+    subtitle: 'Hosted Payment Page & Kreditkartenformular · Blowfish ECB · HMAC-SHA256 · Testumgebung',
     info_title: 'Hinweis:',
     info_body: 'Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop. Im Testmodus bitte nur <strong>kleine Beträge (0,11–2,00 EUR)</strong> verwenden, da Kreditkartenauthorisierungen auch im Test real sind.',
     sec_title: 'Sicherheitshinweis zu Ihren Credentials',
@@ -1253,10 +1439,19 @@ const TRANSLATIONS = {
     ct_creds: 'Schritt 1 — Credentials',
     l_mid: 'Merchant ID', l_bfpw: 'Blowfish Passwort', h_bfpw: '(für Data-Verschlüsselung)',
     l_hmacpw: 'HMAC Passwort', h_hmacpw: '(für MAC-Berechnung)',
-    l_env: 'Umgebung',
-    cred_save_title: 'Verschlüsselte Speicherung',
-    cred_save_text: 'Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert.',
-    btn_save: 'Speichern', btn_delete: 'Löschen',
+    cred_save_title: 'Verschlüsselte Profile',
+    cred_save_text: 'Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert. Mehrere Profile möglich.',
+    btn_save: 'Speichern', btn_load: 'Laden', btn_delete: 'Löschen',
+    profile_placeholder: '— Gespeicherte Profile —',
+    profile_name_ph: 'Profilname …',
+    confirm_profile_del: 'Profil löschen?',
+    toast_profile_saved: 'Profil gespeichert',
+    toast_profile_loaded: 'Profil geladen',
+    toast_profile_deleted: 'Profil gelöscht',
+    toast_profile_name_req: 'Bitte einen Profilnamen eingeben',
+    toast_profile_none: 'Kein Profil ausgewählt',
+    cred_status_saved: 'gespeichert',
+    cred_status_none: 'Kein Profil gespeichert',
     te_title: 'Wie wird die GET-URL erzeugt?',
     te_s1_label: 'MAC-Berechnung',
     te_s1_desc: 'Mit dem <strong>HMAC-Passwort</strong> wird per HMAC-SHA256 eine digitale Signatur über den String <code>*TransID*MerchantID*Amount*Currency</code> berechnet. Das führende <code>*</code> steht für die leere PayID einer neuen Transaktion. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate lehnt Anfragen mit falschem oder fehlendem MAC sofort ab.',
@@ -1277,11 +1472,11 @@ const TRANSLATIONS = {
     opt_od_sim_dec: 'Simulation: Abgelehnt – Acquirer/Issuer (Test:0305)',
     opt_od_custom:  'Eigene Eingabe …',
     tc_summary: 'Testkartennummern (Non-3DS)',
-    tc_note: 'Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure',
+    tc_note: 'Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure · Quelle: <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener" style="color:inherit">Computop Dokumentation</a>',
     tc_h_brand: 'Marke', tc_h_number: 'Kartennummer', tc_h_result: 'Ergebnis',
     tc_ok: 'Erfolg', tc_dec: 'Abgelehnt', tc_copy_hint: 'Klicken zum Kopieren',
     tc_3ds_summary: 'Testkartennummern (3-D Secure 2.x)',
-    tc_3ds_note: 'Ablauf: beliebig · CVC: beliebig · Nur im Test-Modus mit 3DS-Konfiguration · Challenge-OTP: <strong>1234</strong>',
+    tc_3ds_note: 'Ablauf: beliebig · CVC: beliebig · Nur im Test-Modus mit 3DS-Konfiguration · Challenge-OTP: <strong>1234</strong> · Quelle: <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener" style="color:inherit">Computop Dokumentation</a>',
     tc_3ds_h_brand: 'Marke', tc_3ds_h_number: 'Kartennummer', tc_3ds_h_scenario: 'Szenario',
     tc_3ds_frictionless: 'Frictionless – Authentifiziert',
     tc_3ds_challenge: 'Challenge (OTP: 1234)',
@@ -1291,11 +1486,27 @@ const TRANSLATIONS = {
     l_urlf: 'URLFailure', h_urlf: '(nach fehlgeschlagener Zahlung)',
     l_urln: 'URLNotify', h_urln: '(Server-zu-Server Benachrichtigung)',
     l_urlb: 'URLBack', h_urlb: '(Abbrechen-Button, unverschlüsselt)',
+    cb_receiver_label: 'Dieses Tool als Callback-Empfänger aktivieren',
+    cb_receiver_hint: '(setzt URLSuccess, URLFailure &amp; URLBack auf diese Seite — kein externer Dienst nötig)',
+    toast_callback_received: 'Callback empfangen — wird automatisch entschlüsselt …',
     sep_advanced: 'Erweiterte Einstellungen',
     l_paytypes: 'Zahlarten', h_paytypes: '(PayTypes)',
     opt_pt_all: '— Alle freigeschalteten Zahlarten (PayTypes weglassen)',
     opt_pt_cc: 'CC – Alle konfigurierten Kreditkartenmarken',
-    l_template: 'Template', h_template: '(optional, unverschlüsselt)',
+    tip_mid:       'Deine Händlerkennung aus dem Computop-Vertrag. Wird unverschlüsselt in der URL übertragen.',
+    tip_bfpw:      'Wird zur Blowfish-ECB-Verschlüsselung des Payloads verwendet. Zu finden im Computop Händlerportal.',
+    tip_hmacpw:    'Wird zur HMAC-SHA256-Signierung der Anfrage verwendet. Schützt Betrag und Währung vor nachträglicher Manipulation.',
+    tip_amount:    'Zahlbetrag in der gewählten Währung. Wird intern in Cent umgerechnet (z.B. 1.99 → 199).',
+    tip_currency:  'ISO-4217-Währungscode. Muss mit den im Merchant-Account freigeschalteten Währungen übereinstimmen.',
+    tip_language:  'Steuert die Anzeigesprache der Computop-Zahlungsseite.',
+    tip_transid:   'Eindeutige Transaktionskennung (max. 38 Zeichen). Muss pro Transaktion einmalig sein – wird für Rückbuchungen und Statusabfragen benötigt.',
+    tip_refnr:     'Eigene Referenznummer (max. 30 Zeichen), z.B. Bestellnummer. Erscheint in Auswertungen und Benachrichtigungen.',
+    tip_orderdesc: 'Kurzbeschreibung der Bestellung (max. 127 Zeichen). Computop unterstützt Simulationscodes: Test:0000 = Erfolg, Test:0305 = Abgelehnt.',
+    tip_urls:      'Redirect nach erfolgreicher Zahlung. Computop hängt TransID, PayID, MerchantID und Status als Parameter an.',
+    tip_urlf:      'Redirect nach fehlgeschlagener oder abgebrochener Zahlung.',
+    tip_urln:      'Server-zu-Server-Callback. Computop sendet das Ergebnis unabhängig vom Browser-Redirect an diese URL – auch wenn der Käufer den Browser schließt.',
+    tip_urlb:      'Ziel des Abbrechen-Buttons auf der Zahlungsseite. Wird unverschlüsselt übergeben und ist nicht Teil des MAC.',
+    tip_paytypes:  'Schränkt die angezeigten Zahlarten ein. Leer = alle freigeschalteten Zahlarten. „CC" = alle Kreditkarten.',
     ct_preview: 'Schritt 3 — Vorschau & Ausführen',
     btn_preview: 'Vorschau generieren', btn_preview_loading: 'Generiere…',
     btn_newtid: 'Neue Trans-ID',
@@ -1303,6 +1514,11 @@ const TRANSLATIONS = {
     debug_url_label: 'Vollständige GET-URL (Computop Paygate)',
     btn_copy: 'Kopieren',
     btn_submit: 'Zur Hosted Payment Page', btn_submit_hint: 'Öffnet Computop in neuem Tab',
+    btn_submit_ccf: 'Zum Kreditkartenformular', btn_submit_hint_ccf: 'Öffnet payssl.aspx in neuem Tab',
+    method_hpp_label: 'Hosted Payment Page',
+    method_ccf_label: 'Kreditkartenformular',
+    method_info_hpp: '<strong>paymentPage.aspx</strong> — Computop-eigene Zahlungsseite mit allen freigeschalteten Zahlarten (Kreditkarte, PayPal, Klarna, …). Unterstützt PayTypes-Filter zur Einschränkung der angezeigten Methoden.',
+    method_info_ccf: '<strong>payssl.aspx</strong> — Dediziertes Kreditkartenformular, ausschließlich für VISA, MasterCard und AMEX. PayTypes wird nicht unterstützt und daher ausgeblendet.',
     ct_log: 'Request-Log',
     log_subtitle: 'Letzte 50 generierten Requests (lokal gespeichert)',
     btn_log_clear: 'Log leeren',
@@ -1327,6 +1543,9 @@ const TRANSLATIONS = {
     val_amount: 'Ungültiger Betrag',
     confirm_cred_del: 'Gespeicherte Credentials wirklich löschen?',
     confirm_log_del: 'Request-Log wirklich löschen?',
+    confirm_clear_all: 'Wirklich alle gespeicherten Daten löschen?\n\nDas entfernt alle Profile, den Request-Log sowie alle Einstellungen.',
+    btn_clear_all: 'Alles löschen',
+    toast_clear_all: 'Alle lokalen Daten gelöscht',
     cred_status_saved: 'Gespeichert', cred_status_none: 'Nicht gespeichert',
     ct_response: 'Response-Entschlüsseler',
     resp_info_title: 'Hinweis:',
@@ -1343,7 +1562,7 @@ const TRANSLATIONS = {
   },
   en: {
     page_title: 'Computop Paygate – Payment Tester',
-    subtitle: 'Hosted Payment Page · Blowfish ECB · Credit Card · Test Environment',
+    subtitle: 'Hosted Payment Page & Credit Card Form · Blowfish ECB · HMAC-SHA256 · Test Environment',
     info_title: 'Note:',
     info_body: 'This page runs entirely in the browser. All data stays local — no server communication except the final redirect to Computop. In test mode, please use only <strong>small amounts (0.11–2.00 EUR)</strong>, as credit card authorisations may be real even in test environments.',
     sec_title: 'Security Notice for Your Credentials',
@@ -1354,10 +1573,19 @@ const TRANSLATIONS = {
     ct_creds: 'Step 1 — Credentials',
     l_mid: 'Merchant ID', l_bfpw: 'Blowfish Password', h_bfpw: '(for Data encryption)',
     l_hmacpw: 'HMAC Password', h_hmacpw: '(for MAC calculation)',
-    l_env: 'Environment',
-    cred_save_title: 'Encrypted Storage',
-    cred_save_text: 'Credentials are stored AES-GCM encrypted in the browser\'s LocalStorage.',
-    btn_save: 'Save', btn_delete: 'Delete',
+    cred_save_title: 'Encrypted Profiles',
+    cred_save_text: 'Credentials are stored AES-GCM encrypted in the browser\'s LocalStorage. Multiple profiles supported.',
+    btn_save: 'Save', btn_load: 'Load', btn_delete: 'Delete',
+    profile_placeholder: '— Saved profiles —',
+    profile_name_ph: 'Profile name …',
+    confirm_profile_del: 'Delete profile?',
+    toast_profile_saved: 'Profile saved',
+    toast_profile_loaded: 'Profile loaded',
+    toast_profile_deleted: 'Profile deleted',
+    toast_profile_name_req: 'Please enter a profile name',
+    toast_profile_none: 'No profile selected',
+    cred_status_saved: 'saved',
+    cred_status_none: 'No profile saved',
     te_title: 'How is the GET URL generated?',
     te_s1_label: 'MAC Calculation',
     te_s1_desc: 'Using the <strong>HMAC password</strong>, a digital signature is computed via HMAC-SHA256 over the string <code>*TransID*MerchantID*Amount*Currency</code>. The leading <code>*</code> represents the empty PayID of a new transaction. The MAC is included in the payload and ensures <strong>request integrity</strong> — the Paygate immediately rejects any request with an incorrect or missing MAC.',
@@ -1378,11 +1606,11 @@ const TRANSLATIONS = {
     opt_od_sim_dec: 'Simulation: Declined – Acquirer/Issuer (Test:0305)',
     opt_od_custom:  'Custom input …',
     tc_summary: 'Test card numbers (Non-3DS)',
-    tc_note: 'Expiry: any future date (e.g. 10/30) · CVC: any 3 digits (e.g. 123) · Non-3DS only',
+    tc_note: 'Expiry: any future date (e.g. 10/30) · CVC: any 3 digits (e.g. 123) · Non-3DS only · Source: <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener" style="color:inherit">Computop Documentation</a>',
     tc_h_brand: 'Brand', tc_h_number: 'Card Number', tc_h_result: 'Result',
     tc_ok: 'Success', tc_dec: 'Declined', tc_copy_hint: 'Click to copy',
     tc_3ds_summary: 'Test card numbers (3-D Secure 2.x)',
-    tc_3ds_note: 'Expiry: any · CVC: any · Test mode with 3DS configuration only · Challenge OTP: <strong>1234</strong>',
+    tc_3ds_note: 'Expiry: any · CVC: any · Test mode with 3DS configuration only · Challenge OTP: <strong>1234</strong> · Source: <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener" style="color:inherit">Computop Documentation</a>',
     tc_3ds_h_brand: 'Brand', tc_3ds_h_number: 'Card Number', tc_3ds_h_scenario: 'Scenario',
     tc_3ds_frictionless: 'Frictionless – Authenticated',
     tc_3ds_challenge: 'Challenge (OTP: 1234)',
@@ -1392,11 +1620,27 @@ const TRANSLATIONS = {
     l_urlf: 'URLFailure', h_urlf: '(after failed payment)',
     l_urln: 'URLNotify', h_urln: '(server-to-server notification)',
     l_urlb: 'URLBack', h_urlb: '(cancel button, unencrypted)',
+    cb_receiver_label: 'Use this tool as callback receiver',
+    cb_receiver_hint: '(sets URLSuccess, URLFailure &amp; URLBack to this page — no external service needed)',
+    toast_callback_received: 'Callback received — auto-decrypting …',
     sep_advanced: 'Advanced Settings',
     l_paytypes: 'Payment Methods', h_paytypes: '(PayTypes)',
     opt_pt_all: '— All enabled payment methods (omit PayTypes)',
     opt_pt_cc: 'CC – All configured card brands',
-    l_template: 'Template', h_template: '(optional, unencrypted)',
+    tip_mid:       'Your merchant identifier from the Computop contract. Transmitted unencrypted in the URL.',
+    tip_bfpw:      'Used for Blowfish ECB encryption of the payload. Found in the Computop merchant portal.',
+    tip_hmacpw:    'Used for HMAC-SHA256 signing of the request. Protects amount and currency from tampering.',
+    tip_amount:    'Payment amount in the selected currency. Internally converted to cents (e.g. 1.99 → 199).',
+    tip_currency:  'ISO 4217 currency code. Must match the currencies enabled for your merchant account.',
+    tip_language:  'Controls the display language of the Computop payment page.',
+    tip_transid:   'Unique transaction ID (max. 38 chars). Must be unique per transaction – required for refunds and status inquiries.',
+    tip_refnr:     'Your own reference number (max. 30 chars), e.g. order number. Appears in reports and notifications.',
+    tip_orderdesc: 'Short order description (max. 127 chars). Computop supports simulation codes: Test:0000 = success, Test:0305 = declined.',
+    tip_urls:      'Redirect after successful payment. Computop appends TransID, PayID, MerchantID and status as parameters.',
+    tip_urlf:      'Redirect after failed or cancelled payment.',
+    tip_urln:      'Server-to-server callback. Computop sends the result independently of the browser redirect to this URL – even if the buyer closes the browser.',
+    tip_urlb:      'Target of the cancel button on the payment page. Passed unencrypted and not part of the MAC.',
+    tip_paytypes:  'Restricts the displayed payment methods. Empty = all enabled methods. "CC" = all credit card brands.',
     ct_preview: 'Step 3 — Preview & Submit',
     btn_preview: 'Generate Preview', btn_preview_loading: 'Generating…',
     btn_newtid: 'New Trans-ID',
@@ -1404,6 +1648,11 @@ const TRANSLATIONS = {
     debug_url_label: 'Full GET URL (Computop Paygate)',
     btn_copy: 'Copy',
     btn_submit: 'Go to Hosted Payment Page', btn_submit_hint: 'Opens Computop in a new tab',
+    btn_submit_ccf: 'Go to Credit Card Form', btn_submit_hint_ccf: 'Opens payssl.aspx in a new tab',
+    method_hpp_label: 'Hosted Payment Page',
+    method_ccf_label: 'Credit Card Form',
+    method_info_hpp: '<strong>paymentPage.aspx</strong> — Computop\'s payment page with all enabled payment methods (credit card, PayPal, Klarna, …). Supports PayTypes filter to restrict displayed methods.',
+    method_info_ccf: '<strong>payssl.aspx</strong> — Dedicated credit card form for VISA, MasterCard and AMEX only. PayTypes is not supported and therefore hidden.',
     ct_log: 'Request Log',
     log_subtitle: 'Last 50 generated requests (stored locally)',
     btn_log_clear: 'Clear log',
@@ -1428,6 +1677,9 @@ const TRANSLATIONS = {
     val_amount: 'Invalid amount',
     confirm_cred_del: 'Really delete saved credentials?',
     confirm_log_del: 'Really clear the request log?',
+    confirm_clear_all: 'Really delete all stored data?\n\nThis removes all profiles, the request log and all settings.',
+    btn_clear_all: 'Clear all data',
+    toast_clear_all: 'All local data cleared',
     cred_status_saved: 'Saved', cred_status_none: 'Not saved',
     ct_response: 'Response Decryptor',
     resp_info_title: 'Note:',
@@ -1452,6 +1704,7 @@ function applyLang() {
   document.title = t('page_title');
   const setText = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t(key); };
   const setHtml = (id, key) => { const el = document.getElementById(id); if (el) el.innerHTML = t(key); };
+  const setTip  = (id, key) => { const el = document.getElementById(id); if (el) el.dataset.tip = t(key); };
 
   setText('subtitle', 'subtitle');
   setText('info-title', 'info_title');
@@ -1465,11 +1718,17 @@ function applyLang() {
   setText('ct-creds', 'ct_creds');
   setText('l-mid', 'l_mid'); setText('l-bfpw', 'l_bfpw'); setText('h-bfpw', 'h_bfpw');
   setText('l-hmacpw', 'l_hmacpw'); setText('h-hmacpw', 'h_hmacpw');
-  setText('l-env', 'l_env');
+  setTip('tip-mid',     'tip_mid');
+  setTip('tip-bfpw',    'tip_bfpw');
+  setTip('tip-hmacpw',  'tip_hmacpw');
   setText('cred-save-title', 'cred_save_title');
   setText('cred-save-text', 'cred_save_text');
   setText('btn-save-text', 'btn_save');
+  setText('btn-load-text', 'btn_load');
   setText('btn-delete-text', 'btn_delete');
+  setText('opt-profile-placeholder', 'profile_placeholder');
+  const pnEl = document.getElementById('profile-name'); if (pnEl && !pnEl.value) pnEl.placeholder = t('profile_name_ph');
+  _renderProfileSelect(localStorage.getItem(LAST_PROFILE_KEY) || '');
 
   setText('te-title', 'te_title');
   setText('te-s1-label', 'te_s1_label'); setHtml('te-s1-desc', 'te_s1_desc');
@@ -1482,12 +1741,18 @@ function applyLang() {
   setText('l-transid', 'l_transid'); setText('h-transid', 'h_transid');
   setText('l-refnr', 'l_refnr'); setText('h-refnr', 'h_refnr');
   setText('l-orderdesc', 'l_orderdesc'); setText('h-orderdesc', 'h_orderdesc');
+  setTip('tip-amount',   'tip_amount');
+  setTip('tip-currency', 'tip_currency');
+  setTip('tip-language', 'tip_language');
+  setTip('tip-transid',  'tip_transid');
+  setTip('tip-refnr',    'tip_refnr');
+  setTip('tip-orderdesc','tip_orderdesc');
   setText('opt-od-default', 'opt_od_default');
   setText('opt-od-sim-ok',  'opt_od_sim_ok');
   setText('opt-od-sim-dec', 'opt_od_sim_dec');
   setText('opt-od-custom',  'opt_od_custom');
   setText('tc-summary', 'tc_summary');
-  setText('tc-note',    'tc_note');
+  setHtml('tc-note',    'tc_note');
   setText('tc-h-brand', 'tc_h_brand'); setText('tc-h-number', 'tc_h_number'); setText('tc-h-result', 'tc_h_result');
   setText('tc-3ds-summary', 'tc_3ds_summary');
   setHtml('tc-3ds-note',    'tc_3ds_note');
@@ -1499,10 +1764,19 @@ function applyLang() {
   setText('l-urlf', 'l_urlf'); setText('h-urlf', 'h_urlf');
   setText('l-urln', 'l_urln'); setText('h-urln', 'h_urln');
   setText('l-urlb', 'l_urlb'); setText('h-urlb', 'h_urlb');
+  setText('cb-receiver-text', 'cb_receiver_label');
+  setText('cb-receiver-hint', 'cb_receiver_hint');
+  setTip('tip-urls',  'tip_urls');
+  setTip('tip-urlf',  'tip_urlf');
+  setTip('tip-urln',  'tip_urln');
+  setTip('tip-urlb',  'tip_urlb');
   setText('sep-advanced', 'sep_advanced');
   setText('l-paytypes', 'l_paytypes'); setText('h-paytypes', 'h_paytypes');
   setText('opt-pt-all', 'opt_pt_all'); setText('opt-pt-cc', 'opt_pt_cc');
-  setText('l-template', 'l_template'); setText('h-template', 'h_template');
+  setTip('tip-paytypes', 'tip_paytypes');
+  setText('method-hpp-label', 'method_hpp_label');
+  setText('method-ccf-label', 'method_ccf_label');
+  setMethod(currentMethod); // Info-Box + Submit-Button in aktiver Sprache aktualisieren
 
   setText('ct-preview', 'ct_preview');
   setText('btn-preview-text', 'btn_preview');
@@ -1528,6 +1802,7 @@ function applyLang() {
   setText('copy-resp-text', 'btn_copy_resp');
 
   setText('footer-name-text', 'footer_name');
+  setText('btn-clear-all-text', 'btn_clear_all');
 
   // Lang toggle indicator
   const de = document.getElementById('lang-de');
@@ -1881,14 +2156,14 @@ const TEST_CARDS = [
 ];
 
 const TEST_CARDS_3DS = [
-  ['Visa',       '4000019966199434', '4000019966199434', 'tc_3ds_frictionless', 'tc-ok'],
-  ['MasterCard', '5232122422543299', '5232122422543299', 'tc_3ds_frictionless', 'tc-ok'],
-  ['Amex',       '375000000000007',  '375000000000007',  'tc_3ds_frictionless', 'tc-ok'],
-  ['Visa',       '4000012892688323', '4000012892688323', 'tc_3ds_challenge',    'tc-challenge'],
-  ['MasterCard', '5232125125401459', '5232125125401459', 'tc_3ds_challenge',    'tc-challenge'],
-  ['Amex',       '371449635398431',  '371449635398431',  'tc_3ds_challenge',    'tc-challenge'],
-  ['Visa',       '4000011744135012', '4000011744135012', 'tc_3ds_not_auth',     'tc-warn'],
-  ['MasterCard', '5232122741507017', '5232122741507017', 'tc_3ds_not_auth',     'tc-warn'],
+  ['Visa',       '4000 0199 6619 9434', '4000019966199434', 'tc_3ds_frictionless', 'tc-ok'],
+  ['MasterCard', '5232 1224 2254 3299', '5232122422543299', 'tc_3ds_frictionless', 'tc-ok'],
+  ['Amex',       '3750 000000 00007',   '375000000000007',  'tc_3ds_frictionless', 'tc-ok'],
+  ['Visa',       '4000 0128 9268 8323', '4000012892688323', 'tc_3ds_challenge',    'tc-challenge'],
+  ['MasterCard', '5232 1251 2540 1459', '5232125125401459', 'tc_3ds_challenge',    'tc-challenge'],
+  ['Amex',       '3714 496353 98431',   '371449635398431',  'tc_3ds_challenge',    'tc-challenge'],
+  ['Visa',       '4000 0117 4413 5012', '4000011744135012', 'tc_3ds_not_auth',     'tc-warn'],
+  ['MasterCard', '5232 1227 4150 7017', '5232122741507017', 'tc_3ds_not_auth',     'tc-warn'],
 ];
 
 function renderTestCards3DS() {
@@ -1986,7 +2261,7 @@ async function buildAndPreview() {
     params['OrderDesc']   = orderDesc || 'Testzahlung';
     params['Response']    = 'encrypt';
     params['MAC']         = mac;
-    if (payTypes) params['PayTypes'] = payTypes;
+    if (payTypes && currentMethod === 'hpp') params['PayTypes'] = payTypes;
     if (refNr) params['RefNr'] = refNr;
 
     const plainStr = Object.entries(params)
@@ -1999,12 +2274,12 @@ async function buildAndPreview() {
     const dataHex = Blowfish.encrypt(blowfishKey, plainStr);
 
     // Build final URL
-    const base   = document.getElementById('environment').value;
-    const tmpl   = document.getElementById('template').value.trim();
+    const base = currentMethod === 'ccf'
+      ? 'https://www.computop-paygate.com/payssl.aspx'
+      : 'https://www.computop-paygate.com/paymentPage.aspx';
     const urlBack = document.getElementById('urlBack').value.trim();
 
     let finalUrl = `${base}?MerchantID=${encodeURIComponent(merchantId)}&Len=${len}&Data=${dataHex}&Language=${language}`;
-    if (tmpl) finalUrl += `&Template=${encodeURIComponent(tmpl)}`;
     if (urlBack) finalUrl += `&URLBack=${encodeURIComponent(urlBack)}`;
 
     // Show debug
@@ -2056,8 +2331,10 @@ function submitPayment() {
 // ══════════════════════════════════════════════════════════════
 // CREDENTIAL STORAGE — AES-GCM via Web Crypto API
 // ══════════════════════════════════════════════════════════════
-const CRED_LS_KEY   = 'computop_credentials_enc';
-const CRED_PASSPHRASE = 'computop-tester-v1-local-storage';
+const CRED_LS_KEY     = 'computop_credentials_enc'; // kept for migration
+const PROFILES_LS_KEY = 'computop_profiles';
+const LAST_PROFILE_KEY = 'computop_last_profile';
+const CRED_PASSPHRASE  = 'computop-tester-v1-local-storage';
 
 async function _deriveKey(salt) {
   const enc = new TextEncoder();
@@ -2072,67 +2349,155 @@ async function _deriveKey(salt) {
   );
 }
 
-async function saveCredentials() {
+function _getProfiles() {
+  const raw = localStorage.getItem(PROFILES_LS_KEY);
+  return raw ? JSON.parse(raw) : [];
+}
+
+function _saveProfiles(profiles) {
+  localStorage.setItem(PROFILES_LS_KEY, JSON.stringify(profiles));
+}
+
+function _uid() {
+  return Math.random().toString(36).slice(2, 10);
+}
+
+async function _encryptData(data) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv   = crypto.getRandomValues(new Uint8Array(12));
+  const key  = await _deriveKey(salt);
+  const ct   = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(data))
+  );
+  return { salt: Array.from(salt), iv: Array.from(iv), ct: Array.from(new Uint8Array(ct)) };
+}
+
+async function _decryptData(enc) {
+  const salt = new Uint8Array(enc.salt);
+  const iv   = new Uint8Array(enc.iv);
+  const ct   = new Uint8Array(enc.ct);
+  const key  = await _deriveKey(salt);
+  const pt   = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+
+function _readFormCredentials() {
+  return {
+    merchantId:  document.getElementById('merchantId').value,
+    blowfishKey: document.getElementById('blowfishKey').value,
+    hmacKey:     document.getElementById('hmacKey').value,
+  };
+}
+
+function _fillFormCredentials(data) {
+  if (data.merchantId)  document.getElementById('merchantId').value  = data.merchantId;
+  if (data.blowfishKey) document.getElementById('blowfishKey').value = data.blowfishKey;
+  if (data.hmacKey)     document.getElementById('hmacKey').value     = data.hmacKey;
+}
+
+async function saveProfile() {
+  const name = (document.getElementById('profile-name').value || '').trim();
+  if (!name) { showToast(t('toast_profile_name_req'), 'error'); return; }
   try {
-    const data = {
-      merchantId:  document.getElementById('merchantId').value,
-      blowfishKey: document.getElementById('blowfishKey').value,
-      hmacKey:     document.getElementById('hmacKey').value,
-      environment: document.getElementById('environment').value,
-    };
-    const salt = crypto.getRandomValues(new Uint8Array(16));
-    const iv   = crypto.getRandomValues(new Uint8Array(12));
-    const key  = await _deriveKey(salt);
-    const enc  = new TextEncoder();
-    const ct   = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify(data)));
-    localStorage.setItem(CRED_LS_KEY, JSON.stringify({
-      salt: Array.from(salt),
-      iv:   Array.from(iv),
-      ct:   Array.from(new Uint8Array(ct))
-    }));
-    _updateCredStatus();
-    showToast(t('toast_cred_saved'), 'success');
+    const enc      = await _encryptData(_readFormCredentials());
+    const profiles = _getProfiles();
+    const idx      = profiles.findIndex(p => p.name === name);
+    const entry    = { id: idx >= 0 ? profiles[idx].id : _uid(), name, enc };
+    if (idx >= 0) profiles[idx] = entry; else profiles.push(entry);
+    _saveProfiles(profiles);
+    localStorage.setItem(LAST_PROFILE_KEY, entry.id);
+    _renderProfileSelect(entry.id);
+    document.getElementById('profile-name').value = '';
+    showToast(t('toast_profile_saved'), 'success');
   } catch(e) {
-    console.error(e);
     showToast(t('toast_cred_err') + e.message, 'error');
   }
 }
 
-async function loadCredentials() {
+async function loadProfile() {
+  const id = document.getElementById('profile-select').value;
+  if (!id) { showToast(t('toast_profile_none'), 'error'); return; }
+  const profile = _getProfiles().find(p => p.id === id);
+  if (!profile) return;
   try {
-    const raw = localStorage.getItem(CRED_LS_KEY);
-    if (!raw) return;
-    const stored = JSON.parse(raw);
-    const salt   = new Uint8Array(stored.salt);
-    const iv     = new Uint8Array(stored.iv);
-    const ct     = new Uint8Array(stored.ct);
-    const key    = await _deriveKey(salt);
-    const pt     = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
-    const data   = JSON.parse(new TextDecoder().decode(pt));
-    if (data.merchantId)  document.getElementById('merchantId').value  = data.merchantId;
-    if (data.blowfishKey) document.getElementById('blowfishKey').value = data.blowfishKey;
-    if (data.hmacKey)     document.getElementById('hmacKey').value     = data.hmacKey;
-    if (data.environment) document.getElementById('environment').value = data.environment;
+    _fillFormCredentials(await _decryptData(profile.enc));
+    document.getElementById('profile-name').value = profile.name;
+    localStorage.setItem(LAST_PROFILE_KEY, id);
     _updateCredStatus();
-    showToast(t('toast_cred_loaded'), 'success');
+    showToast(t('toast_profile_loaded') + ': ' + profile.name, 'success');
   } catch(e) {
-    console.warn('Credentials konnten nicht entschlüsselt werden:', e);
+    showToast(t('toast_cred_err') + e.message, 'error');
   }
 }
 
-function clearCredentials() {
-  if (!confirm(t('confirm_cred_del'))) return;
-  localStorage.removeItem(CRED_LS_KEY);
+function deleteProfile() {
+  const id = document.getElementById('profile-select').value;
+  if (!id) { showToast(t('toast_profile_none'), 'error'); return; }
+  const profiles = _getProfiles();
+  const profile  = profiles.find(p => p.id === id);
+  if (!profile) return;
+  if (!confirm(t('confirm_profile_del') + '\n"' + profile.name + '"')) return;
+  _saveProfiles(profiles.filter(p => p.id !== id));
+  if (localStorage.getItem(LAST_PROFILE_KEY) === id) localStorage.removeItem(LAST_PROFILE_KEY);
+  document.getElementById('profile-name').value = '';
+  _renderProfileSelect('');
+  showToast(t('toast_profile_deleted'), 'info');
+}
+
+function onProfileSelect() {
+  const id = document.getElementById('profile-select').value;
+  const profile = _getProfiles().find(p => p.id === id);
+  if (profile) document.getElementById('profile-name').value = profile.name;
+}
+
+function _renderProfileSelect(selectedId) {
+  const select = document.getElementById('profile-select');
+  if (!select) return;
+  const profiles = _getProfiles();
+  select.innerHTML = '<option value="">' + t('profile_placeholder') + '</option>' +
+    profiles.map(p =>
+      `<option value="${p.id}"${p.id === selectedId ? ' selected' : ''}>${p.name}</option>`
+    ).join('');
   _updateCredStatus();
-  showToast(t('toast_cred_deleted'), 'info');
+}
+
+async function _migrateOldCredentials() {
+  const old = localStorage.getItem(CRED_LS_KEY);
+  if (!old) return;
+  const profiles = _getProfiles();
+  if (profiles.length > 0) { localStorage.removeItem(CRED_LS_KEY); return; }
+  try {
+    const stored = JSON.parse(old);
+    const data   = await _decryptData(stored);
+    const enc    = await _encryptData(data);
+    _saveProfiles([{ id: _uid(), name: 'Standard', enc }]);
+    localStorage.removeItem(CRED_LS_KEY);
+  } catch(e) {
+    localStorage.removeItem(CRED_LS_KEY);
+  }
+}
+
+async function loadCredentials() {
+  await _migrateOldCredentials();
+  const lastId   = localStorage.getItem(LAST_PROFILE_KEY) || '';
+  _renderProfileSelect(lastId);
+  if (!lastId) return;
+  const profile = _getProfiles().find(p => p.id === lastId);
+  if (!profile) return;
+  try {
+    _fillFormCredentials(await _decryptData(profile.enc));
+    document.getElementById('profile-name').value = profile.name;
+  } catch(e) {
+    console.warn('Profil konnte nicht geladen werden:', e);
+  }
 }
 
 function _updateCredStatus() {
   const el = document.getElementById('cred-save-status');
   if (!el) return;
-  const raw = localStorage.getItem(CRED_LS_KEY);
-  if (raw) {
-    el.innerHTML = '<span class="icon icon-sm" style="color:var(--success)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span style="color:var(--success)">' + t('cred_status_saved') + '</span>';
+  const profiles = _getProfiles();
+  if (profiles.length > 0) {
+    el.innerHTML = '<span style="color:var(--success)">' + profiles.length + '\u00a0' + t('cred_status_saved') + '</span>';
   } else {
     el.innerHTML = '<span style="color:var(--muted)">' + t('cred_status_none') + '</span>';
   }
@@ -2204,6 +2569,16 @@ function clearLog() {
   localStorage.removeItem(LOG_LS_KEY);
   renderLog();
   showToast(t('toast_log_cleared'), 'info');
+}
+
+function clearAllStorage() {
+  if (!confirm(t('confirm_clear_all'))) return;
+  [
+    PROFILES_LS_KEY, LAST_PROFILE_KEY, CRED_LS_KEY,
+    LOG_LS_KEY, THEME_LS_KEY, LANG_LS_KEY, CALLBACK_RECEIVER_KEY
+  ].forEach(k => localStorage.removeItem(k));
+  showToast(t('toast_clear_all'), 'info');
+  setTimeout(() => location.reload(), 800);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -2324,6 +2699,72 @@ function toggleTheme() {
 }
 
 // ══════════════════════════════════════════════════════════════
+// CALLBACK RECEIVER
+// ══════════════════════════════════════════════════════════════
+const CALLBACK_RECEIVER_KEY = 'computop_callback_receiver';
+
+function _callbackBaseUrl() {
+  return window.location.origin + window.location.pathname;
+}
+
+function _applyCallbackReceiver(enabled) {
+  const base = _callbackBaseUrl();
+  const ids = ['urlSuccess', 'urlFailure', 'urlBack'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (enabled) {
+      if (!el.dataset.backup) el.dataset.backup = el.value;
+      el.value    = base;
+      el.readOnly = true;
+      el.style.opacity = '0.65';
+    } else {
+      el.value    = el.dataset.backup || '';
+      delete el.dataset.backup;
+      el.readOnly = false;
+      el.style.opacity = '';
+    }
+  });
+}
+
+function toggleCallbackReceiver() {
+  const enabled = document.getElementById('cb-receiver-toggle').checked;
+  localStorage.setItem(CALLBACK_RECEIVER_KEY, enabled ? '1' : '0');
+  _applyCallbackReceiver(enabled);
+}
+
+function initCallbackReceiver() {
+  const enabled = localStorage.getItem(CALLBACK_RECEIVER_KEY) === '1';
+  const toggle  = document.getElementById('cb-receiver-toggle');
+  if (toggle) toggle.checked = enabled;
+  if (enabled) _applyCallbackReceiver(true);
+  checkCallbackParams();
+}
+
+function checkCallbackParams() {
+  if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return;
+  const params = new URLSearchParams(window.location.search);
+  const data   = params.get('Data') || params.get('data');
+  const len    = params.get('Len')  || params.get('len');
+  if (!data || !len) return;
+
+  // Clean URL without reload
+  window.history.replaceState({}, '', _callbackBaseUrl());
+
+  // Build a reconstructed callback URL string for the decryptor
+  const fakeUrl = `${_callbackBaseUrl()}?Data=${encodeURIComponent(data)}&Len=${encodeURIComponent(len)}`;
+  const respUrlEl = document.getElementById('resp-url');
+  if (respUrlEl) respUrlEl.value = fakeUrl;
+
+  // Scroll to response decryptor section
+  const respSection = document.querySelector('.card:has(#resp-url)') || document.getElementById('resp-url');
+  if (respSection) respSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  showToast(t('toast_callback_received'), 'success');
+  setTimeout(() => decryptResponse(), 500);
+}
+
+// ══════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
@@ -2333,7 +2774,50 @@ document.addEventListener('DOMContentLoaded', () => {
   loadCredentials();
   renderLog();
   _updateCredStatus();
+  initParamTips();
+  initCallbackReceiver();
 });
+
+function initParamTips() {
+  const tip = document.createElement('div');
+  tip.id = 'g-tip';
+  document.body.appendChild(tip);
+
+  function show(btn) {
+    tip.textContent = btn.dataset.tip || '';
+    // Position off-screen first to measure height
+    tip.style.left = '-9999px';
+    tip.style.top  = '-9999px';
+    tip.classList.add('visible');
+
+    const rect   = btn.getBoundingClientRect();
+    const tipW   = tip.offsetWidth;
+    const tipH   = tip.offsetHeight;
+    const margin = 10;
+
+    let left = rect.left + rect.width / 2 - tipW / 2;
+    let top  = rect.top - tipH - 7;
+
+    // Clamp horizontally within viewport
+    left = Math.max(margin, Math.min(left, window.innerWidth - tipW - margin));
+    // Flip below the button if not enough space above
+    if (top < margin) top = rect.bottom + 7;
+
+    tip.style.left = left + 'px';
+    tip.style.top  = top  + 'px';
+  }
+
+  function hide() {
+    tip.classList.remove('visible');
+  }
+
+  document.querySelectorAll('.param-tip').forEach(btn => {
+    btn.addEventListener('mouseenter', () => show(btn));
+    btn.addEventListener('mouseleave', hide);
+    btn.addEventListener('focus',      () => show(btn));
+    btn.addEventListener('blur',       hide);
+  });
+}
 </script>
 </body>
 </html>

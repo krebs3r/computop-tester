@@ -118,6 +118,27 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ## 📋 Changelog
 
+### v2.0.5 — Callback Receiver & UX Improvements
+- **Callback receiver** — toggle in the Redirect URLs section sets URLSuccess, URLFailure and URLBack to the tool's own URL; on return from Computop the response is auto-decrypted — no external service required
+- **Multiple credential profiles** — named, AES-GCM encrypted profiles with a dropdown selector; automatic migration from the old single-credential storage
+- **Clear all data** — button in the footer removes all stored data (profiles, request log, settings) in one step
+- **Profile name field** is cleared automatically after saving
+- **Load icon** corrected — arrow now points upward (upload semantics)
+- Page subtitle updated: HPP spelled out as *Hosted Payment Page*
+- Environment selector removed — both options pointed to the same URL
+- Credential field layout: 2-column row (MerchantID + Blowfish) + full-width HMAC row
+
+### v2.0 — Credit Card Form (payssl.aspx)
+- **Integration method selector** — segmented control in Step 2 to switch between *Hosted Payment Page* (`paymentPage.aspx`) and *Credit Card Form* (`payssl.aspx`)
+- Info box explains the difference of the selected method; submit button text updates automatically
+- **Advanced Settings** section hides when payssl.aspx is selected — PayTypes is not supported there
+
+### v1.9.1 — Tooltip Documentation & UX Improvements
+- **Inline tooltips** — `?` icon next to all 15 parameters with a short explanation; viewport-aware positioning (never clipped at the edge)
+- **Formatted card numbers** — 3DS 2.x test card numbers now use spaces like the Non-3DS cards (e.g. `4000 0199 6619 9434`)
+- **Documentation link** — link to the Computop documentation added to both test card tables (Non-3DS & 3DS) as a source reference
+- **Template parameter removed** — was unnecessary; if Corporate PaymentPage is booked, Computop loads the layout automatically
+
 ### v1.9 — 3-D Secure Test Card Numbers
 - Added second test card table **(3-D Secure 2.x)** in the payment parameters section
 - Scenarios covered: Frictionless – Authenticated, Challenge (OTP: `1234`), Not authenticated
