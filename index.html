@@ -568,6 +568,17 @@
       background: var(--success); display: inline-block; margin-left: auto;
     }
 
+    .resp-new-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-family: var(--mono); font-size: 10px; padding: 1px 8px;
+      border-radius: 10px; background: rgba(34,197,94,0.15);
+      border: 1px solid rgba(34,197,94,0.3); color: var(--success);
+      margin-right: 8px;
+    }
+    .rlog-status-ok   { background: var(--success) !important; }
+    .rlog-status-fail { background: var(--danger)  !important; }
+    .rlog-status-other { background: var(--warning) !important; }
+
     /* ── CREDENTIAL SAVE INDICATOR ── */
     .cred-save-row {
       display: flex; align-items: center; gap: 10px; margin-top: 14px;
@@ -921,7 +932,7 @@
         <label><span id="l-orderdesc">Bestellbeschreibung</span> <span class="hint" id="h-orderdesc">(OrderDesc)</span><button class="param-tip" id="tip-orderdesc" tabindex="-1">?</button></label>
         <select id="orderDesc" onchange="onOrderDescChange(this)">
           <option id="opt-od-default" value="Testzahlung via Computop Paygate">Testzahlung via Computop Paygate</option>
-          <option id="opt-od-sim-ok"  value="Test:0000">Simulation: Erfolg (Test:0000)</option>
+          <option id="opt-od-sim-ok"  value="Test:0000" selected>Simulation: Erfolg (Test:0000)</option>
           <option id="opt-od-sim-dec" value="Test:0305">Simulation: Abgelehnt – Acquirer/Issuer (Test:0305)</option>
           <option id="opt-od-custom"  value="__custom__">Eigene Eingabe …</option>
         </select>
@@ -1126,12 +1137,33 @@
         <div class="debug-block">
           <div class="debug-label">
             <span id="resp-result-label">Entschlüsselter Payload</span>
+            <span id="resp-new-badge" class="resp-new-badge" style="display:none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span id="resp-new-badge-text">Aktuell</span>
+            </span>
             <button class="copy-btn" onclick="copyRespPlain()"><span id="copy-resp-text">Kopieren</span></button>
           </div>
           <pre id="resp-plain">–</pre>
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ── RESPONSE LOG ── -->
+  <div class="card collapsed" id="card-resp-log">
+    <div class="card-header" onclick="toggleCard('card-resp-log')">
+      <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span></div>
+      <span class="card-title" id="ct-resp-log">Response-Log</span>
+      <span id="resp-log-count-badge" style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-right:8px"></span>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span id="resp-log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 50 entschlüsselten Responses (lokal gespeichert)</span>
+        <button class="btn btn-danger-ghost" style="padding:6px 12px;font-size:12px" onclick="clearResponseLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-resp-log-clear-text">Log leeren</span></button>
+      </div>
+      <div id="resp-log-list"></div>
     </div>
   </div>
 
@@ -1524,6 +1556,14 @@ const TRANSLATIONS = {
     btn_log_clear: 'Log leeren',
     log_empty: 'Noch keine Requests gespeichert.',
     log_entries: 'Einträge', log_copy_url: 'URL kopieren',
+    ct_resp_log: 'Response-Log',
+    resp_log_subtitle: 'Letzte 50 entschlüsselten Responses (lokal gespeichert)',
+    btn_resp_log_clear: 'Log leeren',
+    resp_log_empty: 'Noch keine Responses gespeichert.',
+    resp_log_entries: 'Einträge', resp_log_copy: 'Payload kopieren',
+    resp_new_badge: 'Aktuell',
+    confirm_resp_log_del: 'Response-Log wirklich löschen?',
+    toast_resp_log_cleared: 'Response-Log geleert',
     footer_name: 'Computop Payment Tester',
     toast_copied: 'In Zwischenablage kopiert', toast_url_copied: 'URL kopiert',
     toast_cred_saved: 'Credentials verschlüsselt gespeichert',
@@ -1658,6 +1698,14 @@ const TRANSLATIONS = {
     btn_log_clear: 'Clear log',
     log_empty: 'No requests stored yet.',
     log_entries: 'entries', log_copy_url: 'Copy URL',
+    ct_resp_log: 'Response Log',
+    resp_log_subtitle: 'Last 50 decrypted responses (stored locally)',
+    btn_resp_log_clear: 'Clear log',
+    resp_log_empty: 'No responses stored yet.',
+    resp_log_entries: 'entries', resp_log_copy: 'Copy payload',
+    resp_new_badge: 'Current',
+    confirm_resp_log_del: 'Really clear the response log?',
+    toast_resp_log_cleared: 'Response log cleared',
     footer_name: 'Computop Payment Tester',
     toast_copied: 'Copied to clipboard', toast_url_copied: 'URL copied',
     toast_cred_saved: 'Credentials saved encrypted',
@@ -1800,6 +1848,10 @@ function applyLang() {
   setText('btn-decrypt-text', 'btn_decrypt');
   setText('resp-result-label', 'resp_result_label');
   setText('copy-resp-text', 'btn_copy_resp');
+  setText('resp-new-badge-text', 'resp_new_badge');
+  setText('ct-resp-log', 'ct_resp_log');
+  setText('resp-log-subtitle', 'resp_log_subtitle');
+  setText('btn-resp-log-clear-text', 'btn_resp_log_clear');
 
   setText('footer-name-text', 'footer_name');
   setText('btn-clear-all-text', 'btn_clear_all');
@@ -1815,8 +1867,9 @@ function applyLang() {
     }
   }
 
-  // Re-render log (contains translated strings)
+  // Re-render logs (contain translated strings)
   renderLog();
+  renderResponseLog();
   _updateCredStatus();
 }
 
@@ -2567,11 +2620,98 @@ function clearLog() {
   showToast(t('toast_log_cleared'), 'info');
 }
 
+// ══════════════════════════════════════════════════════════════
+// RESPONSE LOG
+// ══════════════════════════════════════════════════════════════
+const RESP_LOG_LS_KEY = 'computop_response_log';
+
+function _parsePlainParams(plain) {
+  const result = {};
+  plain.split('&').forEach(pair => {
+    const idx = pair.indexOf('=');
+    if (idx > 0) result[pair.substring(0, idx)] = pair.substring(idx + 1);
+  });
+  return result;
+}
+
+function _saveRespLogEntry(plain) {
+  const params = _parsePlainParams(plain);
+  const entry  = {
+    timestamp:  new Date().toISOString(),
+    status:     params['Status']     || '',
+    transId:    params['TransID']    || params['TransId'] || '',
+    merchantId: params['MerchantID'] || params['mid']     || '',
+    plain
+  };
+  const raw = localStorage.getItem(RESP_LOG_LS_KEY);
+  const log = raw ? JSON.parse(raw) : [];
+  log.unshift(entry);
+  if (log.length > 50) log.length = 50;
+  localStorage.setItem(RESP_LOG_LS_KEY, JSON.stringify(log));
+}
+
+function renderResponseLog() {
+  const container = document.getElementById('resp-log-list');
+  if (!container) return;
+  const raw = localStorage.getItem(RESP_LOG_LS_KEY);
+  const log = raw ? JSON.parse(raw) : [];
+
+  const badge = document.getElementById('resp-log-count-badge');
+  if (badge) badge.textContent = log.length ? `${log.length} ${t('resp_log_entries')}` : '';
+
+  if (log.length === 0) {
+    container.innerHTML = `<p style="color:var(--muted);font-size:13px;padding:6px 0">${t('resp_log_empty')}</p>`;
+    return;
+  }
+
+  container.innerHTML = log.map((e, i) => {
+    const ts     = new Date(e.timestamp).toLocaleString('de-DE');
+    const status = e.status || '–';
+    const dotCls = status === 'OK'     ? 'rlog-status-ok'
+                 : status === 'FAILED' ? 'rlog-status-fail'
+                 : 'rlog-status-other';
+    const safePlain = (e.plain || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    return `
+      <div class="log-entry" onclick="toggleRespLogDetail(${i})">
+        <div class="log-meta">
+          <span class="log-ts">${ts}</span>
+          <span class="log-badge" style="${status === 'OK' ? 'background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25);color:var(--success)' : status === 'FAILED' ? 'background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:var(--danger)' : ''}">${status}</span>
+          <span class="log-merchant">${e.merchantId || '–'}</span>
+          <span class="log-status-dot ${dotCls}"></span>
+        </div>
+        <div class="log-tid">TransID: <span style="color:var(--accent2)">${e.transId || '–'}</span></div>
+        <div class="log-detail" id="resp-log-detail-${i}" style="display:none">
+          <pre>${safePlain}</pre>
+          <button class="copy-btn" onclick="event.stopPropagation();_copyRespLogEntry(${i})" style="display:inline-flex;align-items:center;gap:4px"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> ${t('resp_log_copy')}</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleRespLogDetail(i) {
+  const el = document.getElementById(`resp-log-detail-${i}`);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function _copyRespLogEntry(i) {
+  const raw = localStorage.getItem(RESP_LOG_LS_KEY);
+  const log = raw ? JSON.parse(raw) : [];
+  if (log[i]) navigator.clipboard.writeText(log[i].plain || '')
+    .then(() => showToast(t('toast_copied'), 'success'));
+}
+
+function clearResponseLog() {
+  if (!confirm(t('confirm_resp_log_del'))) return;
+  localStorage.removeItem(RESP_LOG_LS_KEY);
+  renderResponseLog();
+  showToast(t('toast_resp_log_cleared'), 'info');
+}
+
 function clearAllStorage() {
   if (!confirm(t('confirm_clear_all'))) return;
   [
     PROFILES_LS_KEY, LAST_PROFILE_KEY, CRED_LS_KEY,
-    LOG_LS_KEY, THEME_LS_KEY, LANG_LS_KEY, CALLBACK_RECEIVER_KEY
+    LOG_LS_KEY, RESP_LOG_LS_KEY, THEME_LS_KEY, LANG_LS_KEY, CALLBACK_RECEIVER_KEY
   ].forEach(k => localStorage.removeItem(k));
   showToast(t('toast_clear_all'), 'info');
   setTimeout(() => location.reload(), 800);
@@ -2630,6 +2770,15 @@ function decryptResponse() {
     document.getElementById('resp-plain').dataset.raw = plain;
     document.getElementById('resp-result-section').style.display = 'block';
     document.getElementById('resp-result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // Show "current" badge
+    const newBadge = document.getElementById('resp-new-badge');
+    if (newBadge) newBadge.style.display = 'inline-flex';
+
+    // Save to response log + refresh
+    _saveRespLogEntry(plain);
+    renderResponseLog();
+
     showToast(t('resp_success'), 'success');
   } catch(e) {
     showToast(t('toast_err') + e.message, 'error');
@@ -2748,6 +2897,10 @@ function checkCallbackParams() {
     // Clean URL without reload
     window.history.replaceState({}, '', _callbackBaseUrl());
 
+    // Expand + scroll to response decryptor card
+    const respCard = document.getElementById('card-response');
+    if (respCard) respCard.classList.remove('collapsed');
+
     // Build a reconstructed callback URL string for the decryptor
     const fakeUrl = `${_callbackBaseUrl()}?Data=${encodeURIComponent(data)}&Len=${encodeURIComponent(len)}`;
     const respUrlEl = document.getElementById('resp-url');
@@ -2785,6 +2938,7 @@ document.addEventListener('DOMContentLoaded', () => {
   generateTransId();
   loadCredentials();
   renderLog();
+  renderResponseLog();
   _updateCredStatus();
   initParamTips();
   initCallbackReceiver();
