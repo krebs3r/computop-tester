@@ -1487,7 +1487,7 @@ const TRANSLATIONS = {
     l_urln: 'URLNotify', h_urln: '(Server-zu-Server Benachrichtigung)',
     l_urlb: 'URLBack', h_urlb: '(Abbrechen-Button, unverschlüsselt)',
     cb_receiver_label: 'Dieses Tool als Callback-Empfänger aktivieren',
-    cb_receiver_hint: '(setzt URLSuccess, URLFailure &amp; URLBack auf diese Seite — kein externer Dienst nötig)',
+    cb_receiver_hint: '(setzt URLSuccess, URLFailure & URLBack auf diese Seite — kein externer Dienst nötig)',
     toast_callback_received: 'Callback empfangen — wird automatisch entschlüsselt …',
     sep_advanced: 'Erweiterte Einstellungen',
     l_paytypes: 'Zahlarten', h_paytypes: '(PayTypes)',
@@ -1621,7 +1621,7 @@ const TRANSLATIONS = {
     l_urln: 'URLNotify', h_urln: '(server-to-server notification)',
     l_urlb: 'URLBack', h_urlb: '(cancel button, unencrypted)',
     cb_receiver_label: 'Use this tool as callback receiver',
-    cb_receiver_hint: '(sets URLSuccess, URLFailure &amp; URLBack to this page — no external service needed)',
+    cb_receiver_hint: '(sets URLSuccess, URLFailure & URLBack to this page — no external service needed)',
     toast_callback_received: 'Callback received — auto-decrypting …',
     sep_advanced: 'Advanced Settings',
     l_paytypes: 'Payment Methods', h_paytypes: '(PayTypes)',
@@ -2421,7 +2421,6 @@ async function loadProfile() {
   if (!profile) return;
   try {
     _fillFormCredentials(await _decryptData(profile.enc));
-    document.getElementById('profile-name').value = profile.name;
     localStorage.setItem(LAST_PROFILE_KEY, id);
     _updateCredStatus();
     showToast(t('toast_profile_loaded') + ': ' + profile.name, 'success');
@@ -2445,9 +2444,7 @@ function deleteProfile() {
 }
 
 function onProfileSelect() {
-  const id = document.getElementById('profile-select').value;
-  const profile = _getProfiles().find(p => p.id === id);
-  if (profile) document.getElementById('profile-name').value = profile.name;
+  // Intentionally left empty — profile name input is for new names only
 }
 
 function _renderProfileSelect(selectedId) {
@@ -2486,7 +2483,6 @@ async function loadCredentials() {
   if (!profile) return;
   try {
     _fillFormCredentials(await _decryptData(profile.enc));
-    document.getElementById('profile-name').value = profile.name;
   } catch(e) {
     console.warn('Profil konnte nicht geladen werden:', e);
   }
@@ -2742,26 +2738,42 @@ function initCallbackReceiver() {
 }
 
 function checkCallbackParams() {
-  if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return;
-  const params = new URLSearchParams(window.location.search);
-  const data   = params.get('Data') || params.get('data');
-  const len    = params.get('Len')  || params.get('len');
-  if (!data || !len) return;
+  try {
+    if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return;
+    const params = new URLSearchParams(window.location.search);
+    const data   = params.get('Data') || params.get('data');
+    const len    = params.get('Len')  || params.get('len');
+    if (!data || !len) return;
 
-  // Clean URL without reload
-  window.history.replaceState({}, '', _callbackBaseUrl());
+    // Clean URL without reload
+    window.history.replaceState({}, '', _callbackBaseUrl());
 
-  // Build a reconstructed callback URL string for the decryptor
-  const fakeUrl = `${_callbackBaseUrl()}?Data=${encodeURIComponent(data)}&Len=${encodeURIComponent(len)}`;
-  const respUrlEl = document.getElementById('resp-url');
-  if (respUrlEl) respUrlEl.value = fakeUrl;
+    // Build a reconstructed callback URL string for the decryptor
+    const fakeUrl = `${_callbackBaseUrl()}?Data=${encodeURIComponent(data)}&Len=${encodeURIComponent(len)}`;
+    const respUrlEl = document.getElementById('resp-url');
+    if (respUrlEl) respUrlEl.value = fakeUrl;
 
-  // Scroll to response decryptor section
-  const respSection = document.querySelector('.card:has(#resp-url)') || document.getElementById('resp-url');
-  if (respSection) respSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Scroll to response decryptor section (.closest() — no :has() needed)
+    const anchor = document.getElementById('resp-url');
+    const respSection = anchor ? (anchor.closest('.card') || anchor) : null;
+    if (respSection) respSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  showToast(t('toast_callback_received'), 'success');
-  setTimeout(() => decryptResponse(), 500);
+    showToast(t('toast_callback_received'), 'success');
+
+    // Wait for credentials to load (loadCredentials is async/PBKDF2) before decrypting
+    function _tryDecrypt(attemptsLeft) {
+      const key = document.getElementById('blowfishKey').value;
+      if (key) {
+        decryptResponse();
+      } else if (attemptsLeft > 0) {
+        setTimeout(() => _tryDecrypt(attemptsLeft - 1), 300);
+      }
+      // If key never appears, the user can click Decrypt manually
+    }
+    setTimeout(() => _tryDecrypt(10), 300);
+  } catch(e) {
+    console.warn('checkCallbackParams error:', e);
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
