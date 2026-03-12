@@ -939,40 +939,6 @@
         <input type="text" id="orderDescCustom" placeholder="Eigene Beschreibung" maxlength="127" style="margin-top:8px;display:none">
       </div>
 
-      <details class="tc-details">
-        <summary id="tc-summary">Testkartennummern (Non-3DS)</summary>
-        <div style="padding:6px 0 2px">
-          <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-note">Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure</p>
-          <table class="test-card-table">
-            <thead>
-              <tr>
-                <th id="tc-h-brand">Marke</th>
-                <th id="tc-h-number">Kartennummer</th>
-                <th id="tc-h-result">Ergebnis</th>
-              </tr>
-            </thead>
-            <tbody id="tc-tbody"></tbody>
-          </table>
-        </div>
-      </details>
-
-      <details class="tc-details">
-        <summary id="tc-3ds-summary">Testkartennummern (3-D Secure 2.x)</summary>
-        <div style="padding:6px 0 2px">
-          <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-3ds-note">Ablauf: beliebig · CVC: beliebig · Nur im Test-Modus mit 3DS-Konfiguration · Challenge-OTP: <strong>1234</strong></p>
-          <table class="test-card-table">
-            <thead>
-              <tr>
-                <th id="tc-3ds-h-brand">Marke</th>
-                <th id="tc-3ds-h-number">Kartennummer</th>
-                <th id="tc-3ds-h-scenario">Szenario</th>
-              </tr>
-            </thead>
-            <tbody id="tc-3ds-tbody"></tbody>
-          </table>
-        </div>
-      </details>
-
       <div class="sep-label" id="sep-redirect">Redirect-URLs</div>
 
       <div class="url-fields">
@@ -1038,19 +1004,7 @@
       </div>
       </div><!-- /advanced-section -->
 
-    </div>
-  </div>
-
-  <!-- ── STEP 3: PREVIEW & SUBMIT ── -->
-  <div class="card" id="card-preview">
-    <div class="card-header" onclick="toggleCard('card-preview')">
-      <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span></div>
-      <span class="card-title" id="ct-preview">Schritt 3 — Vorschau & Ausführen</span>
-      <span class="card-toggle">▼</span>
-    </div>
-    <div class="card-body">
-
-      <div class="btn-row" style="margin-top:0">
+      <div class="btn-row">
         <button class="btn btn-primary" onclick="buildAndPreview()" id="btn-preview">
           <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> <span id="btn-preview-text">Vorschau generieren</span>
         </button>
@@ -1059,7 +1013,24 @@
         </button>
       </div>
 
-      <div class="debug-section" id="debug-section" style="margin-top:20px;display:none">
+    </div>
+  </div>
+
+  <!-- ── STEP 3: PREVIEW & SUBMIT ── -->
+  <div class="card collapsed" id="card-preview">
+    <div class="card-header" onclick="toggleCard('card-preview')">
+      <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span></div>
+      <span class="card-title" id="ct-preview">Schritt 3 — Vorschau & Ausführen</span>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+
+      <div id="preview-empty-hint" class="info-box" style="text-align:center;padding:20px 15px;color:var(--muted)">
+        <span class="icon icon-md" style="margin-bottom:6px;display:block"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
+        <span id="preview-empty-text">Noch keine Vorschau generiert. Klicke in Schritt 2 auf <strong>„Vorschau generieren"</strong>, um die verschlüsselten Parameter und die vollständige URL hier anzuzeigen.</span>
+      </div>
+
+      <div class="debug-section" id="debug-section" style="display:none">
 
         <div style="margin-bottom:12px">
           <div class="debug-block">
@@ -1091,8 +1062,42 @@
           </div>
         </div>
 
+        <details class="tc-details">
+          <summary id="tc-summary">Testkartennummern (Non-3DS)</summary>
+          <div style="padding:6px 0 2px">
+            <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-note">Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure</p>
+            <table class="test-card-table">
+              <thead>
+                <tr>
+                  <th id="tc-h-brand">Marke</th>
+                  <th id="tc-h-number">Kartennummer</th>
+                  <th id="tc-h-result">Ergebnis</th>
+                </tr>
+              </thead>
+              <tbody id="tc-tbody"></tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="tc-details">
+          <summary id="tc-3ds-summary">Testkartennummern (3-D Secure 2.x)</summary>
+          <div style="padding:6px 0 2px">
+            <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-3ds-note">Ablauf: beliebig · CVC: beliebig · Nur im Test-Modus mit 3DS-Konfiguration · Challenge-OTP: <strong>1234</strong></p>
+            <table class="test-card-table">
+              <thead>
+                <tr>
+                  <th id="tc-3ds-h-brand">Marke</th>
+                  <th id="tc-3ds-h-number">Kartennummer</th>
+                  <th id="tc-3ds-h-scenario">Szenario</th>
+                </tr>
+              </thead>
+              <tbody id="tc-3ds-tbody"></tbody>
+            </table>
+          </div>
+        </details>
+
         <div class="btn-row">
-          <button class="btn btn-primary" onclick="submitPayment()" id="btn-submit" style="font-size:14px;padding:13px 28px">
+          <button class="btn btn-primary" onclick="submitPayment()" id="btn-submit">
             <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span> <span id="btn-submit-text">Zur Hosted Payment Page</span> <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
           </button>
           <span style="font-size:12px;color:var(--muted)" id="btn-submit-hint">Öffnet Computop in neuem Tab</span>
@@ -1199,229 +1204,7 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v2.2</span>
-          <span class="cl-title">PaySSL Template-Support &amp; URL-Parameter-Übersicht</span>
-        </div>
-        <ul class="cl-list">
-          <li><strong>Template für payssl.aspx</strong> — Template-Parameter wird jetzt auch beim Kreditkartenformular (<code>payssl.aspx</code>) unterstützt; bei PaySSL wird der Parameter verschlüsselt im Data-String übergeben, bei HPP weiterhin unverschlüsselt als URL-Parameter</li>
-          <li><strong>URL-Parameter-Box</strong> — neue Übersicht in Schritt 3 zeigt alle unverschlüsselten Query-Parameter (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>, <code>Language</code>, <code>URLBack</code>, <code>Template</code>) auf einen Blick</li>
-          <li>Erster Debug-Block umbenannt in „Verschlüsselte Parameter (Data-String)" zur klareren Abgrenzung</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v2.1.1</span>
-          <span class="cl-title">Template-Parameter</span>
-        </div>
-        <ul class="cl-list">
-          <li><strong>Template-Parameter</strong> — neues Dropdown in den Erweiterten Einstellungen zum Steuern des Layouts der Zahlungsseite; Optionen: <code>ct_paymentpagelogos_v1</code>, <code>ct_paymentpagedropdown_v1</code>, <code>ct_paymentpagedropdown_v2</code> oder leer (Standard)</li>
-          <li>Template wird unverschlüsselt an die URL angehängt, nur für <code>paymentPage.aspx</code> (HPP)</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v2.1</span>
-          <span class="cl-title">Response-Log &amp; Callback-Verbesserungen</span>
-        </div>
-        <ul class="cl-list">
-          <li><strong>Response-Log</strong> — speichert die letzten 50 entschlüsselten Responses im Browser; aufklappbare Einträge mit Status-Badge (OK/FAILED), TransID, MerchantID und kopierbarem Payload</li>
-          <li><strong>„Aktuell"-Badge</strong> — kennzeichnet die zuletzt entschlüsselte Response im Ergebnisbereich</li>
-          <li><strong>Auto-Aufklappen</strong> — Response-Entschlüsseler klappt bei Callback-Redirect automatisch auf</li>
-          <li><strong>OrderDesc-Default</strong> geändert auf <code>Test:0000</code> (Simulation: Erfolg)</li>
-          <li>Profilname wird beim Laden eines Profils nicht mehr ins Namensfeld geschrieben</li>
-          <li>Bugfix Callback-Receiver: <code>:has()</code>-Selektor durch kompatibles <code>.closest()</code> ersetzt; Timing-Problem bei der Auto-Entschlüsselung behoben; <code>checkCallbackParams()</code> in try-catch eingefasst</li>
-          <li>„Alles löschen" löscht jetzt auch den Response-Log</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v2.0.5</span>
-          <span class="cl-title">Callback-Empfänger &amp; UX-Verbesserungen</span>
-        </div>
-        <ul class="cl-list">
-          <li><strong>Callback-Empfänger</strong> — Toggle in den Redirect-URLs setzt URLSuccess, URLFailure und URLBack auf diese Seite; bei Rückkehr von Computop wird die Antwort automatisch entschlüsselt — kein externer Dienst mehr nötig</li>
-          <li><strong>Mehrere Credential-Profile</strong> — benannte, verschlüsselte Profile mit Dropdown-Wähler; Migration vom alten Einzelprofil automatisch</li>
-          <li><strong>Alles löschen</strong> — Button im Footer entfernt alle gespeicherten Daten (Profile, Log, Einstellungen) auf einmal</li>
-          <li><strong>Profil-Name-Feld</strong> wird nach dem Speichern automatisch geleert</li>
-          <li><strong>Laden-Icon</strong> korrigiert — Pfeil zeigt nun nach oben (Upload-Semantik)</li>
-          <li>Seitenbeschreibung aktualisiert: HPP ausgeschrieben als <em>Hosted Payment Page</em></li>
-          <li>Environment-Selector entfernt — beide Optionen zeigten auf dieselbe URL</li>
-          <li>Credential-Felder: 2-spaltig (MerchantID + Blowfish) + vollbreite HMAC-Zeile</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v2.0</span>
-          <span class="cl-title">Kreditkartenformular (payssl.aspx)</span>
-        </div>
-        <ul class="cl-list">
-          <li><strong>Integrationsmethoden-Wähler</strong> — Segmented Control in Schritt 2 zum Umschalten zwischen <em>Hosted Payment Page</em> (<code>paymentPage.aspx</code>) und <em>Kreditkartenformular</em> (<code>payssl.aspx</code>)</li>
-          <li>Info-Box erklärt den Unterschied der gewählten Methode; Submit-Button-Text passt sich automatisch an</li>
-          <li><strong>Erweiterte Einstellungen</strong> blendet sich bei payssl.aspx aus — PayTypes wird dort nicht unterstützt</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.9.1</span>
-          <span class="cl-title">Tooltip-Dokumentation &amp; UX-Verbesserungen</span>
-        </div>
-        <ul class="cl-list">
-          <li><strong>Inline-Tooltips</strong> — <code>?</code>-Icon neben allen 15 Parametern mit kurzer Erklärung; viewport-aware positioniert (kein Abschneiden am Rand)</li>
-          <li><strong>Kartennummern formatiert</strong> — 3DS-2.x-Testkartennummern jetzt mit Leerzeichen wie die Non-3DS-Karten (z.B. <code>4000 0199 6619 9434</code>)</li>
-          <li><strong>Dokumentationslink</strong> — Link zur Computop-Dokumentation in beiden Testkartentabellen (Non-3DS &amp; 3DS) als Quellenangabe</li>
-          <li><strong>Template-Parameter entfernt</strong> — war nicht notwendig; bei gebuchter Corporate PaymentPage lädt Computop das Layout automatisch</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.9</span>
-          <span class="cl-title">3-D Secure Testkartennummern</span>
-        </div>
-        <ul class="cl-list">
-          <li>Zweite Testkartentabelle <strong>(3-D Secure 2.x)</strong> in den Zahlungsparametern hinzugefügt</li>
-          <li>Abgedeckte Szenarien: Frictionless – Authentifiziert, Challenge (OTP: <code>1234</code>), Nicht authentifiziert</li>
-          <li>Karten für Visa, MasterCard und Amex — farbcodiert nach Szenario</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.8.1</span>
-          <span class="cl-title">Bugfix: MAC-Berechnung</span>
-        </div>
-        <ul class="cl-list">
-          <li>MAC-String-Format korrigiert: <code>*TransID*MerchantID*Amount*Currency</code> — führendes <code>*</code> für leere PayID war bisher fehlend</li>
-          <li>Ohne diesen Fix lehnte Computop jeden Request mit <strong>„MAC INVALID"</strong> ab</li>
-          <li>Technische Erklärung im Credentials-Bereich entsprechend aktualisiert</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.8</span>
-          <span class="cl-title">Testkartennummern &amp; Simulationsmodi</span>
-        </div>
-        <ul class="cl-list">
-          <li><strong>OrderDesc als Dropdown</strong> — vorgefertigte Optionen für Erfolg (<code>Test:0000</code>), Ablehnung (<code>Test:0305</code>) und eigene Eingabe</li>
-          <li><strong>Testkartentabelle</strong> (Non-3DS) in den Zahlungsparametern — Visa, MasterCard, Amex jeweils mit Erfolg und Ablehnung</li>
-          <li>Kartennummer per Klick in die Zwischenablage kopieren</li>
-          <li>Tabelle und Dropdown vollständig übersetzt (DE / EN)</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.7</span>
-          <span class="cl-title">Response-Entschlüsseler</span>
-        </div>
-        <ul class="cl-list">
-          <li>Neuer Bereich <strong>„Response-Entschlüsseler"</strong> — entschlüsselt Computop-Callback-URLs direkt im Browser</li>
-          <li>Vollständige Callback-URL einfügen: <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert</li>
-          <li>Alternativ <code>Data</code>-Hex und <code>Len</code> manuell eingeben</li>
-          <li>Farbcodierte Darstellung der entschlüsselten Parameter — <code>Status</code> grün/rot/orange je nach Wert, <code>MAC</code> lila</li>
-          <li>Blowfish-<code>decrypt</code>-Funktion zur bestehenden ECB-Implementierung hinzugefügt</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.6</span>
-          <span class="cl-title">Mehrsprachigkeit (DE / EN)</span>
-        </div>
-        <ul class="cl-list">
-          <li><strong>Sprach-Schalter</strong> im Header (neben dem Dark-/Light-Mode-Toggle): wechselt die gesamte Benutzeroberfläche zwischen Deutsch und Englisch</li>
-          <li>Vollständige <strong>EN-Übersetzung</strong> aller UI-Texte — Labels, Buttons, Hinweise, Fehlermeldungen, Toasts und Bestätigungsdialoge</li>
-          <li>Sprachpräferenz wird in <code>localStorage</code> gespeichert und beim nächsten Besuch automatisch wiederhergestellt</li>
-          <li>i18n-System via <code>TRANSLATIONS</code>-Objekt und <code>t(key)</code>-Funktion — kein externes Framework nötig</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.5</span>
-          <span class="cl-title">Technische Erläuterung der URL-Generierung</span>
-        </div>
-        <ul class="cl-list">
-          <li>Ausführliche <strong>3-Schritt-Erklärung</strong> im Credentials-Bereich hinzugefügt: MAC-Berechnung, Payload-Verschlüsselung und URL-Zusammensetzung</li>
-          <li>Rolle des <strong>HMAC-Passworts</strong> erläutert — HMAC-SHA256-Signatur über <code>TransID * MerchantID * Amount * Currency</code> zur Sicherstellung der Anfrageintegrität</li>
-          <li>Rolle des <strong>Blowfish-Passworts</strong> erläutert — ECB-Verschlüsselung des vollständigen Payloads inkl. MAC, hex-kodiert als <code>Data</code>-Parameter</li>
-          <li>Visuelle <strong>URL-Anatomie</strong> mit farbcodierten Parametern (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>) und Legende</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.4</span>
-          <span class="cl-title">Security Disclaimer</span>
-        </div>
-        <ul class="cl-list">
-          <li>Sicherheitshinweis zu produktiven Credentials direkt auf der Startseite hinzugefügt</li>
-          <li>Nutzer wird explizit auf seine <strong>Eigenverantwortung</strong> beim Umgang mit API-Zugangsdaten hingewiesen</li>
-          <li><strong>Download-Button</strong> zur lokalen Ausführung der Seite — empfohlene Alternative zur öffentlichen URL</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.3</span>
-          <span class="cl-title">Payment Methods</span>
-        </div>
-        <ul class="cl-list">
-          <li>Added <strong>„Alle freigeschalteten Zahlarten"</strong> als Standard — weglassen des <code>PayTypes</code>-Parameters zeigt alle für den Merchant-Account konfigurierten Zahlarten an</li>
-          <li>Bestehende Optionen <code>CC</code>, <code>VISA</code>, <code>MasterCard</code> und <code>AMEX</code> im Selector präzisiert</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.2</span>
-          <span class="cl-title">Icons</span>
-        </div>
-        <ul class="cl-list">
-          <li>Alle Emoji durch <strong>professionelle inline SVGs</strong> (Lucide Icon Set) ersetzt</li>
-          <li>Vollständig selbst-enthalten — kein CDN, funktioniert offline</li>
-          <li>Spinning Loader-Animation auf dem Generieren-Button während der Verarbeitung</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry">
-        <div class="cl-header">
-          <span class="cl-version">v1.1</span>
-          <span class="cl-title">Dark / Light Mode</span>
-        </div>
-        <ul class="cl-list">
-          <li><strong>Dark/Light Mode Toggle</strong> (fixierter Button oben rechts)</li>
-          <li><strong>Auto-Modus</strong> folgt <code>prefers-color-scheme</code> und reagiert auf Live-Änderungen; zeigt <code>auto</code>-Badge</li>
-          <li>Manuelle Präferenz wird in <code>localStorage</code> gespeichert und beim nächsten Besuch wiederhergestellt</li>
-          <li>Flash-freier Load via Inline-Script im <code>&lt;head&gt;</code></li>
-          <li>Vollständige Light-Mode-Farbpalette mit angepassten Gradienten und Code-Farben</li>
-        </ul>
-      </div>
-
-      <div class="cl-entry" style="border-bottom:none;margin-bottom:0;padding-bottom:0">
-        <div class="cl-header">
-          <span class="cl-version">v1.0</span>
-          <span class="cl-title">Initial Release</span>
-        </div>
-        <ul class="cl-list">
-          <li>Blowfish ECB Verschlüsselung des <code>Data</code>-Parameters</li>
-          <li>HMAC-SHA256 MAC-Berechnung</li>
-          <li><strong>Verschlüsselte Credential-Speicherung</strong> (AES-GCM) in <code>localStorage</code> mit PBKDF2-Schlüsselableitung</li>
-          <li><strong>Request-Log</strong> in <code>localStorage</code> (letzte 50 Einträge, aufklappbar, kopierbar)</li>
-          <li><strong>Neuer-Tab-Redirect</strong> — Computop HPP öffnet in neuem Tab</li>
-          <li>Parameter-Vorschau mit farbcodierter Klartext-Anzeige</li>
-        </ul>
-      </div>
-
+      <div id="changelog-content"></div>
     </div>
   </div>
 
@@ -1433,7 +1216,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v2.2</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v2.2.2</span>
     </span>
     <span class="footer-links">
       <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
@@ -1618,6 +1401,7 @@ const TRANSLATIONS = {
     ct_preview: 'Schritt 3 — Vorschau & Ausführen',
     btn_preview: 'Vorschau generieren', btn_preview_loading: 'Generiere…',
     btn_newtid: 'Neue Trans-ID',
+    preview_empty: 'Noch keine Vorschau generiert. Klicke in Schritt 2 auf <strong>„Vorschau generieren"</strong>, um die verschlüsselten Parameter und die vollständige URL hier anzuzeigen.',
     debug_plain_label: 'Verschlüsselte Parameter (Data-String)',
     debug_urlparams_label: 'Unverschlüsselte URL-Parameter (Query-String)',
     debug_url_label: 'Vollständige GET-URL (Computop Paygate)',
@@ -1766,6 +1550,7 @@ const TRANSLATIONS = {
     ct_preview: 'Step 3 — Preview & Submit',
     btn_preview: 'Generate Preview', btn_preview_loading: 'Generating…',
     btn_newtid: 'New Trans-ID',
+    preview_empty: 'No preview generated yet. Click <strong>"Generate Preview"</strong> in Step 2 to display the encrypted parameters and full URL here.',
     debug_plain_label: 'Encrypted Parameters (Data String)',
     debug_urlparams_label: 'Unencrypted URL Parameters (Query String)',
     debug_url_label: 'Full GET URL (Computop Paygate)',
@@ -1829,6 +1614,231 @@ const TRANSLATIONS = {
 
 function t(key) {
   return (TRANSLATIONS[currentLang] || TRANSLATIONS.de)[key] || key;
+}
+
+// ══════════════════════════════════════════════════════════════
+// CHANGELOG DATA (DE / EN)
+// ══════════════════════════════════════════════════════════════
+const CHANGELOG = [
+  { v: 'v2.2.2', de: { title: 'UX-Verbesserungen & Changelog-Übersetzung', items: [
+    '<strong>Changelog zweisprachig</strong> — Changelog wird jetzt dynamisch gerendert und wechselt beim Sprachwechsel komplett zwischen Deutsch und Englisch',
+    '<strong>Buttons verschoben</strong> — „Vorschau generieren" und „Neue Trans-ID" von Schritt 3 nach Schritt 2 verschoben, wo die Parameter konfiguriert werden',
+    '<strong>Testkarten verschoben</strong> — Testkartentabellen (Non-3DS & 3-D Secure 2.x) von Schritt 2 nach Schritt 3 verschoben, direkt über dem Submit-Button',
+    '<strong>Schritt 3 zugeklappt</strong> — Box ist beim ersten Besuch zugeklappt mit Hinweistext; klappt automatisch auf nach Vorschau-Generierung',
+    'Button-Höhen vereinheitlicht — Inline-Style beim Submit-Button entfernt',
+  ]}, en: { title: 'UX Improvements & Changelog Translation', items: [
+    '<strong>Bilingual changelog</strong> — changelog is now dynamically rendered and fully switches between German and English when changing the language',
+    '<strong>Buttons moved</strong> — "Generate Preview" and "New Trans-ID" moved from Step 3 to Step 2, where parameters are configured',
+    '<strong>Test cards moved</strong> — test card tables (Non-3DS & 3-D Secure 2.x) moved from Step 2 to Step 3, right above the submit button',
+    '<strong>Step 3 collapsed</strong> — box is collapsed on first visit with a hint message; auto-expands after preview generation',
+    'Button heights unified — removed inline style override on the submit button',
+  ]}},
+  { v: 'v2.2', de: { title: 'PaySSL Template-Support & URL-Parameter-Übersicht', items: [
+    '<strong>Template für payssl.aspx</strong> — Template-Parameter wird jetzt auch beim Kreditkartenformular (<code>payssl.aspx</code>) unterstützt; bei PaySSL wird der Parameter verschlüsselt im Data-String übergeben, bei HPP weiterhin unverschlüsselt als URL-Parameter',
+    '<strong>URL-Parameter-Box</strong> — neue Übersicht in Schritt 3 zeigt alle unverschlüsselten Query-Parameter (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>, <code>Language</code>, <code>URLBack</code>, <code>Template</code>) auf einen Blick',
+    'Erster Debug-Block umbenannt in „Verschlüsselte Parameter (Data-String)" zur klareren Abgrenzung',
+  ]}, en: { title: 'PaySSL Template Support & URL Parameter Overview', items: [
+    '<strong>Template for payssl.aspx</strong> — the Template parameter is now supported for the credit card form (<code>payssl.aspx</code>) as well; for PaySSL the parameter is passed encrypted inside the Data string, for HPP it remains unencrypted as a URL parameter',
+    '<strong>URL parameter box</strong> — new overview in Step 3 displays all unencrypted query-string parameters (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>, <code>Language</code>, <code>URLBack</code>, <code>Template</code>) at a glance',
+    'First debug block renamed to "Encrypted Parameters (Data String)" for clearer distinction',
+  ]}},
+  { v: 'v2.1.1', de: { title: 'Template-Parameter', items: [
+    '<strong>Template-Parameter</strong> — neues Dropdown in den Erweiterten Einstellungen zum Steuern des Layouts der Zahlungsseite; Optionen: <code>ct_paymentpagelogos_v1</code>, <code>ct_paymentpagedropdown_v1</code>, <code>ct_paymentpagedropdown_v2</code> oder leer (Standard)',
+    'Template wird unverschlüsselt an die URL angehängt, nur für <code>paymentPage.aspx</code> (HPP)',
+  ]}, en: { title: 'Template Parameter', items: [
+    '<strong>Template parameter</strong> — new dropdown in Advanced Settings to control the payment page layout; options: <code>ct_paymentpagelogos_v1</code>, <code>ct_paymentpagedropdown_v1</code>, <code>ct_paymentpagedropdown_v2</code> or empty (default)',
+    'Template is appended unencrypted to the URL, only for <code>paymentPage.aspx</code> (HPP)',
+  ]}},
+  { v: 'v2.1', de: { title: 'Response-Log & Callback-Verbesserungen', items: [
+    '<strong>Response-Log</strong> — speichert die letzten 50 entschlüsselten Responses im Browser; aufklappbare Einträge mit Status-Badge (OK/FAILED), TransID, MerchantID und kopierbarem Payload',
+    '<strong>„Aktuell"-Badge</strong> — kennzeichnet die zuletzt entschlüsselte Response im Ergebnisbereich',
+    '<strong>Auto-Aufklappen</strong> — Response-Entschlüsseler klappt bei Callback-Redirect automatisch auf',
+    '<strong>OrderDesc-Default</strong> geändert auf <code>Test:0000</code> (Simulation: Erfolg)',
+    'Profilname wird beim Laden eines Profils nicht mehr ins Namensfeld geschrieben',
+    'Bugfix Callback-Receiver: <code>:has()</code>-Selektor durch kompatibles <code>.closest()</code> ersetzt; Timing-Problem bei der Auto-Entschlüsselung behoben; <code>checkCallbackParams()</code> in try-catch eingefasst',
+    '„Alles löschen" löscht jetzt auch den Response-Log',
+  ]}, en: { title: 'Response Log & Callback Improvements', items: [
+    '<strong>Response log</strong> — stores the last 50 decrypted responses in the browser; expandable entries with status badge (OK/FAILED), TransID, MerchantID and copyable payload',
+    '<strong>"Current" badge</strong> — marks the most recently decrypted response in the result area',
+    '<strong>Auto-expand</strong> — the Response Decryptor card automatically opens on callback redirect',
+    '<strong>OrderDesc default</strong> changed to <code>Test:0000</code> (Simulation: success)',
+    'Profile name is no longer written back into the name field when loading a profile',
+    'Bugfix callback receiver: replaced <code>:has()</code> selector with compatible <code>.closest()</code>; fixed timing issue on auto-decrypt; wrapped <code>checkCallbackParams()</code> in try-catch',
+    '"Clear all data" now also clears the response log',
+  ]}},
+  { v: 'v2.0.5', de: { title: 'Callback-Empfänger & UX-Verbesserungen', items: [
+    '<strong>Callback-Empfänger</strong> — Toggle in den Redirect-URLs setzt URLSuccess, URLFailure und URLBack auf diese Seite; bei Rückkehr von Computop wird die Antwort automatisch entschlüsselt — kein externer Dienst mehr nötig',
+    '<strong>Mehrere Credential-Profile</strong> — benannte, verschlüsselte Profile mit Dropdown-Wähler; Migration vom alten Einzelprofil automatisch',
+    '<strong>Alles löschen</strong> — Button im Footer entfernt alle gespeicherten Daten (Profile, Log, Einstellungen) auf einmal',
+    '<strong>Profil-Name-Feld</strong> wird nach dem Speichern automatisch geleert',
+    '<strong>Laden-Icon</strong> korrigiert — Pfeil zeigt nun nach oben (Upload-Semantik)',
+    'Seitenbeschreibung aktualisiert: HPP ausgeschrieben als <em>Hosted Payment Page</em>',
+    'Environment-Selector entfernt — beide Optionen zeigten auf dieselbe URL',
+    'Credential-Felder: 2-spaltig (MerchantID + Blowfish) + vollbreite HMAC-Zeile',
+  ]}, en: { title: 'Callback Receiver & UX Improvements', items: [
+    '<strong>Callback receiver</strong> — toggle in the Redirect URLs section sets URLSuccess, URLFailure and URLBack to the tool\'s own URL; on return from Computop the response is auto-decrypted — no external service required',
+    '<strong>Multiple credential profiles</strong> — named, AES-GCM encrypted profiles with a dropdown selector; automatic migration from the old single-credential storage',
+    '<strong>Clear all data</strong> — button in the footer removes all stored data (profiles, request log, settings) in one step',
+    '<strong>Profile name field</strong> is cleared automatically after saving',
+    '<strong>Load icon</strong> corrected — arrow now points upward (upload semantics)',
+    'Page subtitle updated: HPP spelled out as <em>Hosted Payment Page</em>',
+    'Environment selector removed — both options pointed to the same URL',
+    'Credential field layout: 2-column row (MerchantID + Blowfish) + full-width HMAC row',
+  ]}},
+  { v: 'v2.0', de: { title: 'Kreditkartenformular (payssl.aspx)', items: [
+    '<strong>Integrationsmethoden-Wähler</strong> — Segmented Control in Schritt 2 zum Umschalten zwischen <em>Hosted Payment Page</em> (<code>paymentPage.aspx</code>) und <em>Kreditkartenformular</em> (<code>payssl.aspx</code>)',
+    'Info-Box erklärt den Unterschied der gewählten Methode; Submit-Button-Text passt sich automatisch an',
+    '<strong>Erweiterte Einstellungen</strong> blendet sich bei payssl.aspx aus — PayTypes wird dort nicht unterstützt',
+  ]}, en: { title: 'Credit Card Form (payssl.aspx)', items: [
+    '<strong>Integration method selector</strong> — segmented control in Step 2 to switch between <em>Hosted Payment Page</em> (<code>paymentPage.aspx</code>) and <em>Credit Card Form</em> (<code>payssl.aspx</code>)',
+    'Info box explains the difference of the selected method; submit button text updates automatically',
+    '<strong>Advanced Settings</strong> section hides when payssl.aspx is selected — PayTypes is not supported there',
+  ]}},
+  { v: 'v1.9.1', de: { title: 'Tooltip-Dokumentation & UX-Verbesserungen', items: [
+    '<strong>Inline-Tooltips</strong> — <code>?</code>-Icon neben allen 15 Parametern mit kurzer Erklärung; viewport-aware positioniert (kein Abschneiden am Rand)',
+    '<strong>Kartennummern formatiert</strong> — 3DS-2.x-Testkartennummern jetzt mit Leerzeichen wie die Non-3DS-Karten (z.B. <code>4000 0199 6619 9434</code>)',
+    '<strong>Dokumentationslink</strong> — Link zur Computop-Dokumentation in beiden Testkartentabellen (Non-3DS & 3DS) als Quellenangabe',
+    '<strong>Template-Parameter entfernt</strong> — war nicht notwendig; bei gebuchter Corporate PaymentPage lädt Computop das Layout automatisch',
+  ]}, en: { title: 'Tooltip Documentation & UX Improvements', items: [
+    '<strong>Inline tooltips</strong> — <code>?</code> icon next to all 15 parameters with a short explanation; viewport-aware positioning (never clipped at the edge)',
+    '<strong>Formatted card numbers</strong> — 3DS 2.x test card numbers now use spaces like the Non-3DS cards (e.g. <code>4000 0199 6619 9434</code>)',
+    '<strong>Documentation link</strong> — link to the Computop documentation added to both test card tables (Non-3DS & 3DS) as a source reference',
+    '<strong>Template parameter removed</strong> — was unnecessary; if Corporate PaymentPage is booked, Computop loads the layout automatically',
+  ]}},
+  { v: 'v1.9', de: { title: '3-D Secure Testkartennummern', items: [
+    'Zweite Testkartentabelle <strong>(3-D Secure 2.x)</strong> in den Zahlungsparametern hinzugefügt',
+    'Abgedeckte Szenarien: Frictionless – Authentifiziert, Challenge (OTP: <code>1234</code>), Nicht authentifiziert',
+    'Karten für Visa, MasterCard und Amex — farbcodiert nach Szenario',
+  ]}, en: { title: '3-D Secure Test Card Numbers', items: [
+    'Added second test card table <strong>(3-D Secure 2.x)</strong> in the payment parameters section',
+    'Scenarios covered: Frictionless – Authenticated, Challenge (OTP: <code>1234</code>), Not authenticated',
+    'Cards for Visa, MasterCard and Amex — colour-coded by scenario',
+  ]}},
+  { v: 'v1.8.1', de: { title: 'Bugfix: MAC-Berechnung', items: [
+    'MAC-String-Format korrigiert: <code>*TransID*MerchantID*Amount*Currency</code> — führendes <code>*</code> für leere PayID war bisher fehlend',
+    'Ohne diesen Fix lehnte Computop jeden Request mit <strong>„MAC INVALID"</strong> ab',
+    'Technische Erklärung im Credentials-Bereich entsprechend aktualisiert',
+  ]}, en: { title: 'Bugfix: MAC Calculation', items: [
+    'Fixed MAC string format: <code>*TransID*MerchantID*Amount*Currency</code> — the leading <code>*</code> for empty PayID was missing',
+    'Without this fix Computop rejected every request with <strong>"MAC INVALID"</strong>',
+    'Updated the technical explainer in the Credentials section accordingly',
+  ]}},
+  { v: 'v1.8', de: { title: 'Testkartennummern & Simulationsmodi', items: [
+    '<strong>OrderDesc als Dropdown</strong> — vorgefertigte Optionen für Erfolg (<code>Test:0000</code>), Ablehnung (<code>Test:0305</code>) und eigene Eingabe',
+    '<strong>Testkartentabelle</strong> (Non-3DS) in den Zahlungsparametern — Visa, MasterCard, Amex jeweils mit Erfolg und Ablehnung',
+    'Kartennummer per Klick in die Zwischenablage kopieren',
+    'Tabelle und Dropdown vollständig übersetzt (DE / EN)',
+  ]}, en: { title: 'Test Cards & Simulation Modes', items: [
+    '<strong>OrderDesc dropdown</strong> with presets for success (<code>Test:0000</code>), decline (<code>Test:0305</code>) and custom input',
+    '<strong>Test card table</strong> (Non-3DS) in the payment form — Visa, MasterCard, Amex with success and decline card numbers',
+    'Card numbers are click-to-copy',
+    'Table and dropdown fully translated (DE / EN)',
+  ]}},
+  { v: 'v1.7', de: { title: 'Response-Entschlüsseler', items: [
+    'Neuer Bereich <strong>„Response-Entschlüsseler"</strong> — entschlüsselt Computop-Callback-URLs direkt im Browser',
+    'Vollständige Callback-URL einfügen: <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert',
+    'Alternativ <code>Data</code>-Hex und <code>Len</code> manuell eingeben',
+    'Farbcodierte Darstellung der entschlüsselten Parameter — <code>Status</code> grün/rot/orange je nach Wert, <code>MAC</code> lila',
+    'Blowfish-<code>decrypt</code>-Funktion zur bestehenden ECB-Implementierung hinzugefügt',
+  ]}, en: { title: 'Response Decryptor', items: [
+    'Added <strong>Response Decryptor</strong> section — decrypts Computop callback URLs directly in the browser',
+    'Paste the full callback URL: <code>MerchantID</code>, <code>Len</code> and <code>Data</code> are extracted automatically',
+    'Alternative manual mode: enter <code>Data</code> (hex) and <code>Len</code> directly',
+    'Color-coded output — <code>Status</code> green/red/orange by value, <code>MAC</code> purple',
+    'Added Blowfish <code>decrypt</code> function alongside the existing ECB encrypt implementation',
+  ]}},
+  { v: 'v1.6', de: { title: 'Mehrsprachigkeit (DE / EN)', items: [
+    '<strong>Sprach-Schalter</strong> im Header (neben dem Dark-/Light-Mode-Toggle): wechselt die gesamte Benutzeroberfläche zwischen Deutsch und Englisch',
+    'Vollständige <strong>EN-Übersetzung</strong> aller UI-Texte — Labels, Buttons, Hinweise, Fehlermeldungen, Toasts und Bestätigungsdialoge',
+    'Sprachpräferenz wird in <code>localStorage</code> gespeichert und beim nächsten Besuch automatisch wiederhergestellt',
+    'i18n-System via <code>TRANSLATIONS</code>-Objekt und <code>t(key)</code>-Funktion — kein externes Framework nötig',
+  ]}, en: { title: 'Multilingual UI (DE / EN)', items: [
+    '<strong>Language toggle</strong> in the header (next to the theme toggle): switches the entire UI between German and English',
+    'Full <strong>English translation</strong> of all UI text — labels, buttons, hints, error messages, toasts and confirmation dialogs',
+    'Language preference saved in <code>localStorage</code> and restored automatically on the next visit',
+    'Lightweight i18n system using a <code>TRANSLATIONS</code> object and a <code>t(key)</code> helper — no external framework',
+  ]}},
+  { v: 'v1.5', de: { title: 'Technische Erläuterung der URL-Generierung', items: [
+    'Ausführliche <strong>3-Schritt-Erklärung</strong> im Credentials-Bereich hinzugefügt: MAC-Berechnung, Payload-Verschlüsselung und URL-Zusammensetzung',
+    'Rolle des <strong>HMAC-Passworts</strong> erläutert — HMAC-SHA256-Signatur über <code>TransID * MerchantID * Amount * Currency</code> zur Sicherstellung der Anfrageintegrität',
+    'Rolle des <strong>Blowfish-Passworts</strong> erläutert — ECB-Verschlüsselung des vollständigen Payloads inkl. MAC, hex-kodiert als <code>Data</code>-Parameter',
+    'Visuelle <strong>URL-Anatomie</strong> mit farbcodierten Parametern (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>) und Legende',
+  ]}, en: { title: 'Technical Explanation of URL Generation', items: [
+    'Added detailed <strong>3-step explanation</strong> in the Credentials section: MAC calculation, payload encryption and URL composition',
+    'Role of the <strong>HMAC password</strong> explained — HMAC-SHA256 signature over <code>TransID * MerchantID * Amount * Currency</code> to ensure request integrity',
+    'Role of the <strong>Blowfish password</strong> explained — ECB encryption of the full payload including MAC, hex-encoded as the <code>Data</code> parameter',
+    'Visual <strong>URL anatomy</strong> with colour-coded parameters (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>) and legend',
+  ]}},
+  { v: 'v1.4', de: { title: 'Security Disclaimer', items: [
+    'Sicherheitshinweis zu produktiven Credentials direkt auf der Startseite hinzugefügt',
+    'Nutzer wird explizit auf seine <strong>Eigenverantwortung</strong> beim Umgang mit API-Zugangsdaten hingewiesen',
+    '<strong>Download-Button</strong> zur lokalen Ausführung der Seite — empfohlene Alternative zur öffentlichen URL',
+  ]}, en: { title: 'Security Disclaimer', items: [
+    'Security disclaimer regarding productive credentials added prominently to the start page',
+    'User is explicitly informed of their <strong>responsibility</strong> for the safe handling of API credentials',
+    '<strong>Download button</strong> for local execution — recommended alternative to using the public URL',
+  ]}},
+  { v: 'v1.3', de: { title: 'Zahlarten', items: [
+    '<strong>„Alle freigeschalteten Zahlarten"</strong> als Standard — Weglassen des <code>PayTypes</code>-Parameters zeigt alle für den Merchant-Account konfigurierten Zahlarten an',
+    'Bestehende Optionen <code>CC</code>, <code>VISA</code>, <code>MasterCard</code> und <code>AMEX</code> im Selector präzisiert',
+  ]}, en: { title: 'Payment Methods', items: [
+    'Added <strong>"All enabled payment methods"</strong> as the default — omitting the <code>PayTypes</code> parameter causes Computop to display every method configured for the merchant account',
+    'Clarified existing <code>CC</code>, <code>VISA</code>, <code>MasterCard</code> and <code>AMEX</code> options in the selector',
+  ]}},
+  { v: 'v1.2', de: { title: 'Icons', items: [
+    'Alle Emoji durch <strong>professionelle inline SVGs</strong> (Lucide Icon Set) ersetzt',
+    'Vollständig selbst-enthalten — kein CDN, funktioniert offline',
+    'Spinning Loader-Animation auf dem Generieren-Button während der Verarbeitung',
+  ]}, en: { title: 'Icons', items: [
+    'Replaced all emoji with <strong>professional inline SVGs</strong> (Lucide icon set)',
+    'Fully self-contained — no CDN required, works offline',
+    'Spinning loader animation on the generate button while processing',
+  ]}},
+  { v: 'v1.1', de: { title: 'Dark / Light Mode', items: [
+    '<strong>Dark/Light Mode Toggle</strong> (fixierter Button oben rechts)',
+    '<strong>Auto-Modus</strong> folgt <code>prefers-color-scheme</code> und reagiert auf Live-Änderungen; zeigt <code>auto</code>-Badge',
+    'Manuelle Präferenz wird in <code>localStorage</code> gespeichert und beim nächsten Besuch wiederhergestellt',
+    'Flash-freier Load via Inline-Script im <code>&lt;head&gt;</code>',
+    'Vollständige Light-Mode-Farbpalette mit angepassten Gradienten und Code-Farben',
+  ]}, en: { title: 'Dark / Light Mode', items: [
+    '<strong>Dark / Light Mode toggle</strong> (fixed button in the top-right corner)',
+    '<strong>Auto mode</strong> follows <code>prefers-color-scheme</code> and reacts to live system changes; displays <code>auto</code> badge',
+    'Manual preference saved in <code>localStorage</code> and restored on next visit',
+    'Flash-free load via inline script in <code>&lt;head&gt;</code>',
+    'Full Light Mode colour palette with adjusted gradients and code colours',
+  ]}},
+  { v: 'v1.0', de: { title: 'Initial Release', items: [
+    'Blowfish ECB Verschlüsselung des <code>Data</code>-Parameters',
+    'HMAC-SHA256 MAC-Berechnung',
+    '<strong>Verschlüsselte Credential-Speicherung</strong> (AES-GCM) in <code>localStorage</code> mit PBKDF2-Schlüsselableitung',
+    '<strong>Request-Log</strong> in <code>localStorage</code> (letzte 50 Einträge, aufklappbar, kopierbar)',
+    '<strong>Neuer-Tab-Redirect</strong> — Computop HPP öffnet in neuem Tab',
+    'Parameter-Vorschau mit farbcodierter Klartext-Anzeige',
+  ]}, en: { title: 'Initial Release', items: [
+    'Blowfish ECB encryption of the <code>Data</code> parameter',
+    'HMAC-SHA256 MAC calculation',
+    '<strong>Encrypted credential storage</strong> (AES-GCM) in <code>localStorage</code> with PBKDF2 key derivation',
+    '<strong>Request log</strong> in <code>localStorage</code> (last 50 entries, expandable, copyable)',
+    '<strong>New tab redirect</strong> — Computop HPP opens in a new tab',
+    'Parameter preview with color-coded plain-text display',
+  ]}},
+];
+
+function renderChangelog() {
+  const el = document.getElementById('changelog-content');
+  if (!el) return;
+  el.innerHTML = CHANGELOG.map((entry, i) => {
+    const lang = entry[currentLang] || entry.de;
+    const isLast = i === CHANGELOG.length - 1;
+    const style = isLast ? ' style="border-bottom:none;margin-bottom:0;padding-bottom:0"' : '';
+    return `<div class="cl-entry"${style}>
+      <div class="cl-header">
+        <span class="cl-version">${entry.v}</span>
+        <span class="cl-title">${lang.title}</span>
+      </div>
+      <ul class="cl-list">${lang.items.map(li => `<li>${li}</li>`).join('')}</ul>
+    </div>`;
+  }).join('');
 }
 
 function applyLang() {
@@ -1918,6 +1928,7 @@ function applyLang() {
   setText('ct-preview', 'ct_preview');
   setText('btn-preview-text', 'btn_preview');
   setText('btn-newtid-text', 'btn_newtid');
+  setHtml('preview-empty-text', 'preview_empty');
   setText('debug-plain-label', 'debug_plain_label');
   setText('debug-urlparams-label', 'debug_urlparams_label');
   setText('debug-url-label', 'debug_url_label');
@@ -1957,7 +1968,8 @@ function applyLang() {
     }
   }
 
-  // Re-render logs (contain translated strings)
+  // Re-render dynamic content (contain translated strings)
+  renderChangelog();
   renderLog();
   renderResponseLog();
   _updateCredStatus();
@@ -2435,7 +2447,10 @@ async function buildAndPreview() {
     // paymentPage.aspx: Template wird unverschlüsselt an die URL angehängt
     if (tmpl && currentMethod === 'hpp') finalUrl += `&Template=${encodeURIComponent(tmpl)}`;
 
-    // Show debug
+    // Show debug — expand card if collapsed
+    document.getElementById('card-preview').classList.remove('collapsed');
+    const emptyHint = document.getElementById('preview-empty-hint');
+    if (emptyHint) emptyHint.style.display = 'none';
     document.getElementById('debug-section').style.display = 'block';
 
     // URL-Parameter (unverschlüsselt) sammeln

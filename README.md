@@ -1,8 +1,15 @@
 # 🛡️ Computop Paygate — Payment Tester
 
-A client-side tool for testing [Computop Paygate](https://www.computop.com) Hosted Payment Page (HPP) integrations. Generates encrypted payment requests using Blowfish ECB and HMAC-SHA256, and decrypts Computop callback responses — entirely in the browser, no backend required.
+> A client-side tool for testing [Computop Paygate](https://www.computop.com) Hosted Payment Page (HPP) & Credit Card Form (PaySSL) integrations.
+> Generates encrypted payment requests using Blowfish ECB and HMAC-SHA256, and decrypts Computop callback responses — entirely in the browser, no backend required.
 
-**[→ Live version](https://krebs3r.github.io/computop-tester/)**
+![Version](https://img.shields.io/badge/version-2.2.2-blueviolet)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+
+---
+
+**[▶ Live Demo](https://krebs3r.github.io/computop-tester/)**
 
 ---
 
@@ -117,6 +124,13 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 ---
 
 ## 📋 Changelog
+
+### v2.2.2 — UX Improvements & Changelog Translation
+- **Bilingual changelog** — changelog is now dynamically rendered and fully switches between German and English when changing the language
+- **Buttons moved** — "Generate Preview" and "New Trans-ID" moved from Step 3 to Step 2, where parameters are configured
+- **Test cards moved** — test card tables (Non-3DS & 3-D Secure 2.x) moved from Step 2 to Step 3, right above the submit button
+- **Step 3 collapsed** — box is collapsed on first visit with a hint message; auto-expands after preview generation
+- Button heights unified — removed inline style override on the submit button
 
 ### v2.2 — PaySSL Template Support & URL Parameter Overview
 - **Template for payssl.aspx** — the Template parameter is now supported for the credit card form (`payssl.aspx`) as well; for PaySSL the parameter is passed encrypted inside the Data string, for HPP it remains unencrypted as a URL parameter
