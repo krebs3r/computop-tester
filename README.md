@@ -118,6 +118,10 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ## 📋 Changelog
 
+### v2.1.1 — Template Parameter
+- **Template parameter** — new dropdown in Advanced Settings to control the payment page layout; options: `ct_paymentpagelogos_v1`, `ct_paymentpagedropdown_v1`, `ct_paymentpagedropdown_v2` or empty (default)
+- Template is appended unencrypted to the URL, only for `paymentPage.aspx` (HPP) — automatically ignored for payssl.aspx
+
 ### v2.1 — Response Log & Callback Improvements
 - **Response log** — stores the last 50 decrypted responses in the browser; expandable entries with status badge (OK/FAILED), TransID, MerchantID and copyable payload; own clear button; also cleared by the global "Clear all data" button
 - **"Current" badge** — marks the most recently decrypted response in the result area

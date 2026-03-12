@@ -1009,7 +1009,7 @@
       <div class="sep-label" id="sep-advanced">Erweiterte Einstellungen</div>
 
       <div class="paytypes-row" id="paytypes-row">
-        <div class="field-grid full">
+        <div class="field-grid">
           <div class="field">
             <label><span id="l-paytypes">Zahlarten</span> <span class="hint" id="h-paytypes">(PayTypes)</span><button class="param-tip" id="tip-paytypes" tabindex="-1">?</button></label>
             <select id="payTypes">
@@ -1018,6 +1018,15 @@
               <option value="VISA">VISA</option>
               <option value="MasterCard">MasterCard</option>
               <option value="AMEX">AMEX – American Express</option>
+            </select>
+          </div>
+          <div class="field">
+            <label><span id="l-template">Template</span> <span class="hint" id="h-template">(optional, unverschlüsselt)</span><button class="param-tip" id="tip-template" tabindex="-1">?</button></label>
+            <select id="template">
+              <option id="opt-tmpl-none" value="">— kein Template (Standard)</option>
+              <option value="ct_paymentpagelogos_v1">ct_paymentpagelogos_v1</option>
+              <option value="ct_paymentpagedropdown_v1">ct_paymentpagedropdown_v1</option>
+              <option value="ct_paymentpagedropdown_v2">ct_paymentpagedropdown_v2</option>
             </select>
           </div>
         </div>
@@ -1175,6 +1184,17 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
+
+      <div class="cl-entry">
+        <div class="cl-header">
+          <span class="cl-version">v2.1.1</span>
+          <span class="cl-title">Template-Parameter</span>
+        </div>
+        <ul class="cl-list">
+          <li><strong>Template-Parameter</strong> — neues Dropdown in den Erweiterten Einstellungen zum Steuern des Layouts der Zahlungsseite; Optionen: <code>ct_paymentpagelogos_v1</code>, <code>ct_paymentpagedropdown_v1</code>, <code>ct_paymentpagedropdown_v2</code> oder leer (Standard)</li>
+          <li>Template wird unverschlüsselt an die URL angehängt, nur für <code>paymentPage.aspx</code> (HPP) — bei payssl.aspx automatisch ignoriert</li>
+        </ul>
+      </div>
 
       <div class="cl-entry">
         <div class="cl-header">
@@ -1386,7 +1406,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v2.1</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v2.1.1</span>
     </span>
     <span class="footer-links">
       <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
@@ -1539,6 +1559,9 @@ const TRANSLATIONS = {
     toast_callback_received: 'Callback empfangen — wird automatisch entschlüsselt …',
     sep_advanced: 'Erweiterte Einstellungen',
     l_paytypes: 'Zahlarten', h_paytypes: '(PayTypes)',
+    l_template: 'Template', h_template: '(optional, unverschlüsselt)',
+    opt_tmpl_none: '— kein Template (Standard)',
+    tip_template: 'Steuert das Layout der Zahlungsseite. Nur für paymentPage.aspx. Leer lassen für das Standard-Layout.',
     opt_pt_all: '— Alle freigeschalteten Zahlarten (PayTypes weglassen)',
     opt_pt_cc: 'CC – Alle konfigurierten Kreditkartenmarken',
     tip_mid:       'Deine Händlerkennung aus dem Computop-Vertrag. Wird unverschlüsselt in der URL übertragen.',
@@ -1681,6 +1704,9 @@ const TRANSLATIONS = {
     toast_callback_received: 'Callback received — auto-decrypting …',
     sep_advanced: 'Advanced Settings',
     l_paytypes: 'Payment Methods', h_paytypes: '(PayTypes)',
+    l_template: 'Template', h_template: '(optional, unencrypted)',
+    opt_tmpl_none: '— no template (default)',
+    tip_template: 'Controls the layout of the payment page. Only for paymentPage.aspx. Leave empty for the default layout.',
     opt_pt_all: '— All enabled payment methods (omit PayTypes)',
     opt_pt_cc: 'CC – All configured card brands',
     tip_mid:       'Your merchant identifier from the Computop contract. Transmitted unencrypted in the URL.',
@@ -1836,6 +1862,9 @@ function applyLang() {
   setTip('tip-urlb',  'tip_urlb');
   setText('sep-advanced', 'sep_advanced');
   setText('l-paytypes', 'l_paytypes'); setText('h-paytypes', 'h_paytypes');
+  setText('l-template', 'l_template'); setText('h-template', 'h_template');
+  setText('opt-tmpl-none', 'opt_tmpl_none');
+  setTip('tip-template', 'tip_template');
   setText('opt-pt-all', 'opt_pt_all'); setText('opt-pt-cc', 'opt_pt_cc');
   setTip('tip-paytypes', 'tip_paytypes');
   setText('method-hpp-label', 'method_hpp_label');
@@ -2348,8 +2377,10 @@ async function buildAndPreview() {
       : 'https://www.computop-paygate.com/paymentPage.aspx';
     const urlBack = document.getElementById('urlBack').value.trim();
 
+    const tmpl = currentMethod === 'hpp' ? (document.getElementById('template')?.value.trim() || '') : '';
     let finalUrl = `${base}?MerchantID=${encodeURIComponent(merchantId)}&Len=${len}&Data=${dataHex}&Language=${language}`;
     if (urlBack) finalUrl += `&URLBack=${encodeURIComponent(urlBack)}`;
+    if (tmpl)    finalUrl += `&Template=${encodeURIComponent(tmpl)}`;
 
     // Show debug
     document.getElementById('debug-section').style.display = 'block';
