@@ -255,7 +255,7 @@
     html.light .method-btn.method-active { box-shadow: 0 2px 10px rgba(37,99,235,0.25); }
 
     .paytypes-row { overflow: hidden; transition: opacity .2s, max-height .25s, margin .25s; max-height: 120px; }
-    .collapsible { overflow: hidden; transition: opacity .2s, max-height .3s, margin .3s; max-height: 200px; }
+    .collapsible { overflow: hidden; transition: opacity .2s, max-height .3s, margin .3s; max-height: 320px; }
     .paytypes-row.hidden, .collapsible.hidden { opacity: 0; max-height: 0; pointer-events: none; margin: 0 !important; }
 
     /* ── PARAM TOOLTIP ── */
@@ -1009,7 +1009,7 @@
       <div class="sep-label" id="sep-advanced">Erweiterte Einstellungen</div>
 
       <div class="paytypes-row" id="paytypes-row">
-        <div class="field-grid">
+        <div class="field-grid full">
           <div class="field">
             <label><span id="l-paytypes">Zahlarten</span> <span class="hint" id="h-paytypes">(PayTypes)</span><button class="param-tip" id="tip-paytypes" tabindex="-1">?</button></label>
             <select id="payTypes">
@@ -1020,15 +1020,20 @@
               <option value="AMEX">AMEX – American Express</option>
             </select>
           </div>
-          <div class="field">
-            <label><span id="l-template">Template</span> <span class="hint" id="h-template">(optional, unverschlüsselt)</span><button class="param-tip" id="tip-template" tabindex="-1">?</button></label>
-            <select id="template">
-              <option id="opt-tmpl-none" value="">— kein Template (Standard)</option>
-              <option value="ct_paymentpagelogos_v1">ct_paymentpagelogos_v1</option>
-              <option value="ct_paymentpagedropdown_v1">ct_paymentpagedropdown_v1</option>
-              <option value="ct_paymentpagedropdown_v2">ct_paymentpagedropdown_v2</option>
-            </select>
-          </div>
+        </div>
+      </div>
+
+      <div class="field-grid full" style="margin-top:10px">
+        <div class="field">
+          <label><span id="l-template">Template</span> <span class="hint" id="h-template">(optional, unverschlüsselt)</span><button class="param-tip" id="tip-template" tabindex="-1">?</button></label>
+          <select id="template" onchange="onTemplateChange()">
+            <option id="opt-tmpl-none" value="">— kein Template (Standard)</option>
+            <option value="ct_paymentpagelogos_v1">ct_paymentpagelogos_v1</option>
+            <option value="ct_paymentpagedropdown_v1">ct_paymentpagedropdown_v1</option>
+            <option value="ct_paymentpagedropdown_v2">ct_paymentpagedropdown_v2</option>
+            <option id="opt-tmpl-custom" value="__custom__">— Freitext …</option>
+          </select>
+          <input type="text" id="template-custom" placeholder="eigener Template-Name" style="display:none;margin-top:6px">
         </div>
       </div>
       </div><!-- /advanced-section -->
@@ -1059,10 +1064,20 @@
         <div style="margin-bottom:12px">
           <div class="debug-block">
             <div class="debug-label">
-              <span id="debug-plain-label">Unverschlüsselte Parameter (Data-String)</span>
+              <span id="debug-plain-label">Verschlüsselte Parameter (Data-String)</span>
               <button class="copy-btn" onclick="copyText('plain-params')"><span id="copy-plain-text">Kopieren</span></button>
             </div>
             <pre id="plain-params">–</pre>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div class="debug-block">
+            <div class="debug-label">
+              <span id="debug-urlparams-label">Unverschlüsselte URL-Parameter (Query-String)</span>
+              <button class="copy-btn" onclick="copyText('url-params')"><span id="copy-urlparams-text">Kopieren</span></button>
+            </div>
+            <pre id="url-params">–</pre>
           </div>
         </div>
 
@@ -1187,12 +1202,24 @@
 
       <div class="cl-entry">
         <div class="cl-header">
+          <span class="cl-version">v2.2</span>
+          <span class="cl-title">PaySSL Template-Support &amp; URL-Parameter-Übersicht</span>
+        </div>
+        <ul class="cl-list">
+          <li><strong>Template für payssl.aspx</strong> — Template-Parameter wird jetzt auch beim Kreditkartenformular (<code>payssl.aspx</code>) unterstützt; bei PaySSL wird der Parameter verschlüsselt im Data-String übergeben, bei HPP weiterhin unverschlüsselt als URL-Parameter</li>
+          <li><strong>URL-Parameter-Box</strong> — neue Übersicht in Schritt 3 zeigt alle unverschlüsselten Query-Parameter (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>, <code>Language</code>, <code>URLBack</code>, <code>Template</code>) auf einen Blick</li>
+          <li>Erster Debug-Block umbenannt in „Verschlüsselte Parameter (Data-String)" zur klareren Abgrenzung</li>
+        </ul>
+      </div>
+
+      <div class="cl-entry">
+        <div class="cl-header">
           <span class="cl-version">v2.1.1</span>
           <span class="cl-title">Template-Parameter</span>
         </div>
         <ul class="cl-list">
           <li><strong>Template-Parameter</strong> — neues Dropdown in den Erweiterten Einstellungen zum Steuern des Layouts der Zahlungsseite; Optionen: <code>ct_paymentpagelogos_v1</code>, <code>ct_paymentpagedropdown_v1</code>, <code>ct_paymentpagedropdown_v2</code> oder leer (Standard)</li>
-          <li>Template wird unverschlüsselt an die URL angehängt, nur für <code>paymentPage.aspx</code> (HPP) — bei payssl.aspx automatisch ignoriert</li>
+          <li>Template wird unverschlüsselt an die URL angehängt, nur für <code>paymentPage.aspx</code> (HPP)</li>
         </ul>
       </div>
 
@@ -1406,7 +1433,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v2.1.1</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v2.2</span>
     </span>
     <span class="footer-links">
       <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
@@ -1473,14 +1500,22 @@ let currentLang = 'de';
 // ══════════════════════════════════════════════════════════════
 let currentMethod = 'hpp';
 
+function onTemplateChange() {
+  const sel = document.getElementById('template');
+  const custom = document.getElementById('template-custom');
+  if (!sel || !custom) return;
+  custom.style.display = sel.value === '__custom__' ? '' : 'none';
+  if (sel.value === '__custom__') custom.focus();
+}
+
 function setMethod(method) {
   currentMethod = method;
   document.getElementById('method-hpp').classList.toggle('method-active', method === 'hpp');
   document.getElementById('method-ccf').classList.toggle('method-active', method === 'ccf');
 
-  // Erweiterte Einstellungen: komplett ausblenden bei payssl.aspx
-  const advSection = document.getElementById('advanced-section');
-  if (advSection) advSection.classList.toggle('hidden', method === 'ccf');
+  // PayTypes nur bei HPP verfügbar — nur diese Zeile ausblenden, Template bleibt sichtbar
+  const paytypesRow = document.getElementById('paytypes-row');
+  if (paytypesRow) paytypesRow.classList.toggle('hidden', method === 'ccf');
 
   // Info-Box Text
   const infoEl = document.getElementById('method-info-text');
@@ -1561,7 +1596,9 @@ const TRANSLATIONS = {
     l_paytypes: 'Zahlarten', h_paytypes: '(PayTypes)',
     l_template: 'Template', h_template: '(optional, unverschlüsselt)',
     opt_tmpl_none: '— kein Template (Standard)',
-    tip_template: 'Steuert das Layout der Zahlungsseite. Nur für paymentPage.aspx. Leer lassen für das Standard-Layout.',
+    opt_tmpl_custom: '— Freitext …',
+    tmpl_custom_ph: 'eigener Template-Name',
+    tip_template: 'Steuert das Layout der Zahlungsseite. Leer lassen für das Standard-Layout. „Freitext" erlaubt einen eigenen Template-Namen.',
     opt_pt_all: '— Alle freigeschalteten Zahlarten (PayTypes weglassen)',
     opt_pt_cc: 'CC – Alle konfigurierten Kreditkartenmarken',
     tip_mid:       'Deine Händlerkennung aus dem Computop-Vertrag. Wird unverschlüsselt in der URL übertragen.',
@@ -1581,7 +1618,8 @@ const TRANSLATIONS = {
     ct_preview: 'Schritt 3 — Vorschau & Ausführen',
     btn_preview: 'Vorschau generieren', btn_preview_loading: 'Generiere…',
     btn_newtid: 'Neue Trans-ID',
-    debug_plain_label: 'Unverschlüsselte Parameter (Data-String)',
+    debug_plain_label: 'Verschlüsselte Parameter (Data-String)',
+    debug_urlparams_label: 'Unverschlüsselte URL-Parameter (Query-String)',
     debug_url_label: 'Vollständige GET-URL (Computop Paygate)',
     btn_copy: 'Kopieren',
     btn_submit: 'Zur Hosted Payment Page', btn_submit_hint: 'Öffnet Computop in neuem Tab',
@@ -1589,7 +1627,7 @@ const TRANSLATIONS = {
     method_hpp_label: 'Hosted Payment Page',
     method_ccf_label: 'Kreditkartenformular',
     method_info_hpp: '<strong>paymentPage.aspx</strong> — Computop-eigene Zahlungsseite mit allen freigeschalteten Zahlarten (Kreditkarte, PayPal, Klarna, …). Unterstützt PayTypes-Filter zur Einschränkung der angezeigten Methoden.',
-    method_info_ccf: '<strong>payssl.aspx</strong> — Dediziertes Kreditkartenformular, ausschließlich für VISA, MasterCard und AMEX. PayTypes wird nicht unterstützt und daher ausgeblendet.',
+    method_info_ccf: '<strong>payssl.aspx</strong> — Dediziertes Kreditkartenformular, ausschließlich für VISA, MasterCard und AMEX. PayTypes wird von payssl.aspx nicht unterstützt und daher nicht mitgeschickt. Template wird verschlüsselt im Data-String übergeben (Corporate PayPage).',
     ct_log: 'Request-Log',
     log_subtitle: 'Letzte 50 generierten Requests (lokal gespeichert)',
     btn_log_clear: 'Log leeren',
@@ -1706,7 +1744,9 @@ const TRANSLATIONS = {
     l_paytypes: 'Payment Methods', h_paytypes: '(PayTypes)',
     l_template: 'Template', h_template: '(optional, unencrypted)',
     opt_tmpl_none: '— no template (default)',
-    tip_template: 'Controls the layout of the payment page. Only for paymentPage.aspx. Leave empty for the default layout.',
+    opt_tmpl_custom: '— Custom …',
+    tmpl_custom_ph: 'custom template name',
+    tip_template: 'Controls the layout of the payment page. Leave empty for the default layout. "Custom" allows entering any template name.',
     opt_pt_all: '— All enabled payment methods (omit PayTypes)',
     opt_pt_cc: 'CC – All configured card brands',
     tip_mid:       'Your merchant identifier from the Computop contract. Transmitted unencrypted in the URL.',
@@ -1726,7 +1766,8 @@ const TRANSLATIONS = {
     ct_preview: 'Step 3 — Preview & Submit',
     btn_preview: 'Generate Preview', btn_preview_loading: 'Generating…',
     btn_newtid: 'New Trans-ID',
-    debug_plain_label: 'Unencrypted Parameters (Data String)',
+    debug_plain_label: 'Encrypted Parameters (Data String)',
+    debug_urlparams_label: 'Unencrypted URL Parameters (Query String)',
     debug_url_label: 'Full GET URL (Computop Paygate)',
     btn_copy: 'Copy',
     btn_submit: 'Go to Hosted Payment Page', btn_submit_hint: 'Opens Computop in a new tab',
@@ -1734,7 +1775,7 @@ const TRANSLATIONS = {
     method_hpp_label: 'Hosted Payment Page',
     method_ccf_label: 'Credit Card Form',
     method_info_hpp: '<strong>paymentPage.aspx</strong> — Computop\'s payment page with all enabled payment methods (credit card, PayPal, Klarna, …). Supports PayTypes filter to restrict displayed methods.',
-    method_info_ccf: '<strong>payssl.aspx</strong> — Dedicated credit card form for VISA, MasterCard and AMEX only. PayTypes is not supported and therefore hidden.',
+    method_info_ccf: '<strong>payssl.aspx</strong> — Dedicated credit card form for VISA, MasterCard and AMEX only. PayTypes is not supported by payssl.aspx and is therefore not included. Template is passed encrypted inside the Data string (Corporate PayPage).',
     ct_log: 'Request Log',
     log_subtitle: 'Last 50 generated requests (stored locally)',
     btn_log_clear: 'Clear log',
@@ -1792,9 +1833,10 @@ function t(key) {
 
 function applyLang() {
   document.title = t('page_title');
-  const setText = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t(key); };
-  const setHtml = (id, key) => { const el = document.getElementById(id); if (el) el.innerHTML = t(key); };
-  const setTip  = (id, key) => { const el = document.getElementById(id); if (el) el.dataset.tip = t(key); };
+  const setText  = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t(key); };
+  const setHtml  = (id, key) => { const el = document.getElementById(id); if (el) el.innerHTML = t(key); };
+  const setTip   = (id, key) => { const el = document.getElementById(id); if (el) el.dataset.tip = t(key); };
+  const setAttr  = (id, attr, key) => { const el = document.getElementById(id); if (el) el.setAttribute(attr, t(key)); };
 
   setText('subtitle', 'subtitle');
   setText('info-title', 'info_title');
@@ -1864,6 +1906,8 @@ function applyLang() {
   setText('l-paytypes', 'l_paytypes'); setText('h-paytypes', 'h_paytypes');
   setText('l-template', 'l_template'); setText('h-template', 'h_template');
   setText('opt-tmpl-none', 'opt_tmpl_none');
+  setText('opt-tmpl-custom', 'opt_tmpl_custom');
+  setAttr('template-custom', 'placeholder', 'tmpl_custom_ph');
   setTip('tip-template', 'tip_template');
   setText('opt-pt-all', 'opt_pt_all'); setText('opt-pt-cc', 'opt_pt_cc');
   setTip('tip-paytypes', 'tip_paytypes');
@@ -1875,8 +1919,9 @@ function applyLang() {
   setText('btn-preview-text', 'btn_preview');
   setText('btn-newtid-text', 'btn_newtid');
   setText('debug-plain-label', 'debug_plain_label');
+  setText('debug-urlparams-label', 'debug_urlparams_label');
   setText('debug-url-label', 'debug_url_label');
-  setText('copy-plain-text', 'btn_copy'); setText('copy-url-text', 'btn_copy');
+  setText('copy-plain-text', 'btn_copy'); setText('copy-urlparams-text', 'btn_copy'); setText('copy-url-text', 'btn_copy');
   setText('btn-submit-text', 'btn_submit');
   setText('btn-submit-hint', 'btn_submit_hint');
 
@@ -2362,6 +2407,14 @@ async function buildAndPreview() {
     if (payTypes && currentMethod === 'hpp') params['PayTypes'] = payTypes;
     if (refNr) params['RefNr'] = refNr;
 
+    const tmplSel = document.getElementById('template')?.value || '';
+    const tmpl = tmplSel === '__custom__'
+      ? (document.getElementById('template-custom')?.value.trim() || '')
+      : tmplSel;
+
+    // payssl.aspx: Template muss verschlüsselt im Data-String stehen
+    if (tmpl && currentMethod === 'ccf') params['Template'] = tmpl;
+
     const plainStr = Object.entries(params)
       .map(([k, v]) => `${k}=${v}`)
       .join('&');
@@ -2377,13 +2430,30 @@ async function buildAndPreview() {
       : 'https://www.computop-paygate.com/paymentPage.aspx';
     const urlBack = document.getElementById('urlBack').value.trim();
 
-    const tmpl = currentMethod === 'hpp' ? (document.getElementById('template')?.value.trim() || '') : '';
     let finalUrl = `${base}?MerchantID=${encodeURIComponent(merchantId)}&Len=${len}&Data=${dataHex}&Language=${language}`;
     if (urlBack) finalUrl += `&URLBack=${encodeURIComponent(urlBack)}`;
-    if (tmpl)    finalUrl += `&Template=${encodeURIComponent(tmpl)}`;
+    // paymentPage.aspx: Template wird unverschlüsselt an die URL angehängt
+    if (tmpl && currentMethod === 'hpp') finalUrl += `&Template=${encodeURIComponent(tmpl)}`;
 
     // Show debug
     document.getElementById('debug-section').style.display = 'block';
+
+    // URL-Parameter (unverschlüsselt) sammeln
+    const urlParams = {};
+    urlParams['MerchantID'] = merchantId;
+    urlParams['Len'] = String(len);
+    urlParams['Data'] = dataHex;
+    urlParams['Language'] = language;
+    if (urlBack) urlParams['URLBack'] = urlBack;
+    if (tmpl && currentMethod === 'hpp') urlParams['Template'] = tmpl;
+
+    const coloredUrlParams = Object.entries(urlParams).map(([k, v]) => {
+      const displayVal = (k === 'Data' && v.length > 80) ? v.substring(0, 80) + '…' : v;
+      return `<span class="key">${k}</span>=<span class="val">${displayVal}</span>`;
+    }).join('\n');
+    const urlParamsRaw = Object.entries(urlParams).map(([k, v]) => `${k}=${v}`).join('&');
+    document.getElementById('url-params').innerHTML = coloredUrlParams;
+    document.getElementById('url-params').dataset.raw = urlParamsRaw;
 
     // Color-coded plain params
     const coloredPlain = Object.entries(params).map(([k, v]) => {

@@ -118,9 +118,14 @@ A client-side tool for testing [Computop Paygate](https://www.computop.com) Host
 
 ## 📋 Changelog
 
+### v2.2 — PaySSL Template Support & URL Parameter Overview
+- **Template for payssl.aspx** — the Template parameter is now supported for the credit card form (`payssl.aspx`) as well; for PaySSL the parameter is passed encrypted inside the Data string, for HPP it remains unencrypted as a URL parameter
+- **URL parameter box** — new overview in Step 3 displays all unencrypted query-string parameters (`MerchantID`, `Len`, `Data`, `Language`, `URLBack`, `Template`) at a glance
+- First debug block renamed to "Encrypted Parameters (Data String)" for clearer distinction
+
 ### v2.1.1 — Template Parameter
 - **Template parameter** — new dropdown in Advanced Settings to control the payment page layout; options: `ct_paymentpagelogos_v1`, `ct_paymentpagedropdown_v1`, `ct_paymentpagedropdown_v2` or empty (default)
-- Template is appended unencrypted to the URL, only for `paymentPage.aspx` (HPP) — automatically ignored for payssl.aspx
+- Template is appended unencrypted to the URL, only for `paymentPage.aspx` (HPP)
 
 ### v2.1 — Response Log & Callback Improvements
 - **Response log** — stores the last 50 decrypted responses in the browser; expandable entries with status badge (OK/FAILED), TransID, MerchantID and copyable payload; own clear button; also cleared by the global "Clear all data" button
