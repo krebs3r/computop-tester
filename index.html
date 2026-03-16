@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Computop Paygate – Payment Tester</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23141922'/%3E%3Cpath d='M16 4C16 4 8.5 6.5 6 7.5v9c0 6 4.3 10 10 12 5.7-2 10-6 10-12v-9C23.5 6.5 16 4 16 4z' fill='none' stroke='%233d7eff' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M12 16.5l3 3 5-5.5' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3d7eff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23141922'/%3E%3Cpath d='M16 4C16 4 8.5 6.5 6 7.5v9c0 6 4.3 10 10 12 5.7-2 10-6 10-12v-9C23.5 6.5 16 4 16 4z' fill='none' stroke='%233d7eff' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M12 16.5l3 3 5-5.5' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <!-- Apply theme before render to avoid flash -->
@@ -1216,7 +1222,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v2.2.2</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v2.2.3</span>
     </span>
     <span class="footer-links">
       <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
@@ -1620,6 +1626,17 @@ function t(key) {
 // CHANGELOG DATA (DE / EN)
 // ══════════════════════════════════════════════════════════════
 const CHANGELOG = [
+  { v: 'v2.2.3', de: { title: 'PWA-Support & Favicon', items: [
+    '<strong>Progressive Web App</strong> — Die App kann jetzt als eigenständige Webapp auf allen Geräten installiert werden (Chrome, Edge, Safari)',
+    '<strong>Favicon</strong> — Neues Schild-Icon mit Checkmark als Favicon im Browser-Tab (inline Data-URI)',
+    '<strong>Service Worker</strong> — Network-First-Caching für Offline-Nutzung der App',
+    '<strong>Web App Manifest</strong> — Manifest für App-Name, Icon und Standalone-Modus',
+  ]}, en: { title: 'PWA Support & Favicon', items: [
+    '<strong>Progressive Web App</strong> — the app can now be installed as a standalone webapp on all devices (Chrome, Edge, Safari)',
+    '<strong>Favicon</strong> — new shield icon with checkmark as browser tab favicon (inline data URI)',
+    '<strong>Service Worker</strong> — network-first caching for offline usage of the app',
+    '<strong>Web App Manifest</strong> — manifest for app name, icon, and standalone mode',
+  ]}},
   { v: 'v2.2.2', de: { title: 'UX-Verbesserungen & Changelog-Übersetzung', items: [
     '<strong>Changelog zweisprachig</strong> — Changelog wird jetzt dynamisch gerendert und wechselt beim Sprachwechsel komplett zwischen Deutsch und Englisch',
     '<strong>Buttons verschoben</strong> — „Vorschau generieren" und „Neue Trans-ID" von Schritt 3 nach Schritt 2 verschoben, wo die Parameter konfiguriert werden',
@@ -3115,6 +3132,11 @@ function initParamTips() {
     btn.addEventListener('focus',      () => show(btn));
     btn.addEventListener('blur',       hide);
   });
+}
+
+// ── PWA Service Worker Registration ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js').catch(() => {});
 }
 </script>
 </body>
