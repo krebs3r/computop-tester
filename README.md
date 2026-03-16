@@ -3,7 +3,7 @@
 > A client-side tool for testing [Computop Paygate](https://www.computop.com) Hosted Payment Page (HPP) & Credit Card Form (PaySSL) integrations.
 > Generates encrypted payment requests using Blowfish ECB and HMAC-SHA256, and decrypts Computop callback responses — entirely in the browser, no backend required.
 
-![Version](https://img.shields.io/badge/version-2.2.2-blueviolet)
+![Version](https://img.shields.io/badge/version-2.2.3-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -124,6 +124,12 @@
 ---
 
 ## 📋 Changelog
+
+### v2.2.3 — PWA Support & Favicon
+- **Progressive Web App** — the app can now be installed as a standalone webapp on all devices (Chrome, Edge, Safari)
+- **Favicon** — new shield icon with checkmark as browser tab favicon (inline data URI)
+- **Service Worker** — network-first caching for offline usage of the app
+- **Web App Manifest** — manifest for app name, icon, and standalone mode
 
 ### v2.2.2 — UX Improvements & Changelog Translation
 - **Bilingual changelog** — changelog is now dynamically rendered and fully switches between German and English when changing the language
