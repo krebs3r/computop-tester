@@ -3,17 +3,35 @@
   "_info_en": "Web App Manifest – This file allows the browser to recognize the app as an installable Progressive Web App (PWA). It defines the app name, icon, colors, and display mode (standalone = without browser bar). Without this file, the browser will not show an install button.",
   "name": "Computop Paygate – Payment Tester",
   "short_name": "Computop Tester",
-  "description": "Ein interaktiver Payment-Tester für das Computop Paygate",
+  "description": "Create, inspect and decrypt Computop Paygate payment requests locally in your browser.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#080b10",
   "theme_color": "#3d7eff",
   "icons": [
     {
-      "src": "favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

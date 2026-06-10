@@ -1,247 +1,130 @@
-# 🛡️ Computop Paygate — Payment Tester
+# Computop Paygate Payment Tester
 
-> A client-side tool for testing [Computop Paygate](https://www.computop.com) Hosted Payment Page (HPP) & Credit Card Form (PaySSL) integrations.
-> Generates encrypted payment requests using Blowfish ECB and HMAC-SHA256, and decrypts Computop callback responses — entirely in the browser, no backend required.
+Browser-based development tool for creating and inspecting encrypted
+[Computop Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-2.2.3-blueviolet)
+![Version](https://img.shields.io/badge/version-2.8.0-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
----
+**[Open the live app](https://krebs3r.github.io/computop-tester/)**
 
-**[▶ Live Demo](https://krebs3r.github.io/computop-tester/)**
+## Overview
 
----
+The tester supports Computop Hosted Payment Page (`paymentPage.aspx`), Credit
+Card Form (`payssl.aspx`) and Pay By Link (`PayByLink.aspx`) integrations. It
+creates the HMAC-SHA256 MAC, encrypts request payloads with Blowfish ECB and can
+decrypt encrypted Computop callback responses.
 
-## ✨ Features
+Everything runs in the browser. There is no application backend and no build
+step.
 
-### Core
-- **Blowfish ECB encryption** of the `Data` parameter (pure JavaScript, no dependencies)
-- **Blowfish ECB decryption** of Computop callback responses — closes the full request/response loop
-- **HMAC-SHA256** MAC calculation via the native Web Crypto API
-- **Hosted Payment Page redirect** opens in a new tab, keeping the tester available for debugging
-- **Parameter preview** with color-coded plain-text display before submission
+## Main Features
 
-### Response Decryptor
-- **Paste the full callback URL** (URLSuccess / URLFailure / URLNotify) — `MerchantID`, `Len` and `Data` are extracted automatically
-- **Manual mode** — enter `Data` (hex) and `Len` directly if only parts of the response are available
-- **Color-coded output** — `Status` highlighted green / red / orange by value, `MAC` in purple, all other parameters in teal
-- Uses the **Blowfish password already entered** in Step 1 — no duplicate input required
+- HMAC-SHA256 MAC generation using the native Web Crypto API
+- Blowfish ECB request encryption and callback decryption
+- HPP, PaySSL and Pay By Link integration modes
+- Pay By Link request generation with documented two-stage encryption
+- Automatic locally unique Pay By Link reference numbers
+- Configurable redirect URLs, payment methods and templates
+- Callback receiver for returning directly to the tester
+- Named credential profiles stored locally in the browser
+- IndexedDB request and response logs with up to 250 entries each
+- Syntax-highlighted request URLs and decrypted response parameters
+- Computop simulation presets and Non-3DS/3DS test-card references
+- German and English interface
+- Dark, light and automatic system theme
+- Installable PWA with network-first offline caching
+- iOS-friendly app icon set with standard and maskable PWA variants
+- Touch-oriented responsive layout with safe-area support and 44px interaction targets
+- Direct local operation through `file://` without a development server
 
-### Credentials
-- **AES-GCM 256-bit encrypted credential storage** — MerchantID, Blowfish password and HMAC password are saved locally in `localStorage`, never transmitted
-- **PBKDF2 key derivation** with 100,000 iterations for storage hardening
-- **Auto-load on startup** — saved credentials are decrypted and filled in automatically
-- **Save / Delete controls** with live status indicator
+## Application Views
 
-### Request Log
-- **Automatic logging** of every generated request (timestamp, MerchantID, TransID, amount, currency, full URL)
-- **Persistent storage** via `localStorage`, last 50 entries retained
-- **Expandable entries** — click any log entry to reveal the full encrypted URL
-- **Copy URL** button per entry
-- **Clear log** button
+The fixed glass navigation keeps the main tools available from every view:
 
-### Payment Options
-- **PayTypes selector** — defaults to no `PayTypes` parameter, which shows all payment methods enabled for the merchant account (credit cards, PayPal, Klarna, direct debit, etc.)
-- Explicit options for `CC` (all configured card brands), `VISA`, `MasterCard` and `AMEX`
+| View | Purpose | URL hash |
+|---|---|---|
+| Payment Workflow | Credentials, payment parameters and encrypted preview | `#payment-workflow` |
+| Request Log | Generated Computop requests | `#request-log` |
+| Response Decryption | Callback URL or manual Data/Len decryption | `#response` |
+| Response Log | Previously decrypted responses | `#response-log` |
+| Changelog | Complete bilingual release history | `#changelog` |
 
-### Test Simulation
-- **OrderDesc dropdown** with pre-built simulation presets:
-  - `Testzahlung via Computop Paygate` — regular test, no simulation
-  - `Test:0000` — always successful
-  - `Test:0305` — always declined by acquirer/issuer
-  - Custom input — enter any `OrderDesc` value freely
-- **Test card table** (Non-3DS) — Visa, MasterCard and Amex with success and decline card numbers, inline in the payment form
-- Card numbers are click-to-copy
+The footer, language selector and theme control remain available throughout
+the application.
 
-### UI & Theme
-- **Dark / Light Mode toggle** — fixed button in the top-right corner
-- **Automatic system theme detection** via `prefers-color-scheme` with live updates
-- **Manual override** persisted in `localStorage`; `auto` badge shown while following the system
-- **No flash on load** — theme applied via inline script before first render
-- **Professional SVG icons** (Lucide icon set, fully inline — zero external dependencies)
-- Smooth CSS transitions between themes
+## Local Usage
 
-### Language
-- **DE / EN language toggle** — fixed button next to the theme toggle, switches the entire UI instantly
-- Full English translation of all labels, buttons, hints, toasts, error messages and confirmation dialogs
-- Language preference persisted in `localStorage` and restored automatically on next visit
-- Lightweight built-in i18n system via a `TRANSLATIONS` object and a `t(key)` helper — no external framework
+1. Download and extract the repository ZIP or clone the repository.
+2. Open `index.html` directly in a modern browser.
+3. Enter your Computop Merchant ID, Blowfish password and HMAC password.
+4. Configure the payment parameters in the Payment Workflow.
+5. Generate the preview and inspect `MAC`, `Len`, `Data` and the final URL.
+6. Open the selected Computop endpoint from the preview.
 
-### General
-- **Zero dependencies** — single self-contained HTML file, no build step, no CDN calls at runtime
-- Pure browser, no server, no data leaves the machine
+For Pay By Link, the tester generates a locally unique reference number and a
+default expiration date. The preview exposes both the inner HPP payload and the outer Pay By Link payload.
+Computop documents this endpoint as a server-to-server API, so browser CORS
+rules may prevent the app from reading the returned customer link directly.
+The generated `action=create` request URL can still be inspected, copied and
+opened from the preview.
 
----
+No local HTTP server is required. Service-worker and installation features are
+available only when the app is served through HTTP/HTTPS, including GitHub
+Pages.
 
-## 🔒 Security
+## Callback Decryption
 
-| What | How |
+1. Open **Response Decryption** from the navigation.
+2. Paste the complete Computop callback URL, or enter `Data` and `Len`
+   manually.
+3. The tester uses the Blowfish password from the Payment Workflow.
+4. The decrypted payload is displayed and added to the Response Log.
+
+When the callback receiver is enabled, successful and failed redirect URLs are
+set to the tester itself. Returning callback parameters automatically open the
+Response Decryption view.
+
+## Data and Security
+
+| Data | Storage/processing |
 |---|---|
-| Credentials at rest | AES-GCM 256-bit, PBKDF2 (100,000 iterations) |
-| Credentials in transit | Never transmitted — `localStorage` only |
-| Payment data | Blowfish ECB, as required by Computop |
-| MAC | HMAC-SHA256 via Web Crypto API |
+| Payment request | Generated locally in the browser |
+| MAC | HMAC-SHA256 through Web Crypto |
+| Payment payload | Blowfish ECB as required by Computop |
+| Credential profiles | AES-GCM encrypted data in `localStorage` |
+| Request/response logs | Plain records in `IndexedDB`, with `localStorage` fallback |
+| Language/theme/settings | `localStorage` |
 
-> **Note:** This tool is intended for development and testing only. Use only small amounts (e.g. 0.11–2.00 EUR) in test mode, as credit card authorisations may be real even in test environments.
+The credential encryption key is derived from an application-owned static
+passphrase. This protects against casual inspection of `localStorage`, but it
+is not equivalent to encryption with a user-owned master password and does not
+protect against malicious scripts or access to the active browser profile.
 
----
+Use this application only for development and testing. Prefer test credentials
+and small test amounts. Credit-card authorisations may still be real depending
+on the merchant configuration.
 
-## 🚀 Usage
+## Project Structure
 
-### Generating a payment request
-1. Open `index.html` directly in your browser — or visit the [live version](https://krebs3r.github.io/computop-tester/)
-2. Optionally switch the UI language via the **DE | EN** toggle in the top-right corner
-3. Enter your Computop credentials (MerchantID, Blowfish password, HMAC password)
-4. Optionally save them encrypted via **Save**
-5. Fill in the payment parameters (amount, currency, redirect URLs)
-6. Select which payment methods to display, or leave at default to show all enabled methods
-7. Click **Generate Preview** (EN) / **Vorschau generieren** (DE) to build and preview the encrypted request
-8. Click **Go to Hosted Payment Page** (EN) / **Zur Hosted Payment Page** (DE) to open Computop in a new tab
+```text
+index.html                 Main application, styles and runtime logic
+js/i18n.js                 German and English translations
+js/changelog-data.js       Bilingual in-app release history
+icons/                     Browser, Apple Touch and PWA icons
+service-worker.js          PWA network-first cache
+manifest.json              Web app manifest
+og-image.png               Open Graph and social sharing preview
+VERSION                    Canonical application version
+CHANGELOG.md               Complete release history
+```
 
-### Decrypting a Computop response
-1. After a payment attempt, copy the full callback URL from the browser address bar (URLSuccess / URLFailure) or from your server log (URLNotify)
-2. Open the **Response Decryptor** / **Response-Entschlüsseler** section
-3. Paste the URL into the text field — `Len` and `Data` are extracted automatically
-4. Click **Decrypt** (EN) / **Entschlüsseln** (DE)
-5. The decrypted payload is displayed with color-coded parameters
+## Release History
 
----
+The complete history is available in [CHANGELOG.md](CHANGELOG.md) and in the
+application's **Changelog** view.
 
-## 🛠 Technical Details
+## License
 
-- **No build step** — single HTML file, vanilla JavaScript
-- **No external runtime dependencies** — all icons are inline SVGs; all crypto uses the native [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)
-- **`localStorage` keys:**
-
-| Key | Contents |
-|---|---|
-| `computop_credentials_enc` | AES-GCM encrypted credentials (salt + IV + ciphertext) |
-| `computop_request_log` | JSON array of last 50 generated requests |
-| `computop_theme` | User's theme preference (`dark` / `light`); absent = auto |
-| `computop_lang` | User's language preference (`de` / `en`); absent = German |
-
----
-
-## 📋 Changelog
-
-### v2.2.3 — PWA Support & Favicon
-- **Progressive Web App** — the app can now be installed as a standalone webapp on all devices (Chrome, Edge, Safari)
-- **Favicon** — new shield icon with checkmark as browser tab favicon (inline data URI)
-- **Service Worker** — network-first caching for offline usage of the app
-- **Web App Manifest** — manifest for app name, icon, and standalone mode
-
-### v2.2.2 — UX Improvements & Changelog Translation
-- **Bilingual changelog** — changelog is now dynamically rendered and fully switches between German and English when changing the language
-- **Buttons moved** — "Generate Preview" and "New Trans-ID" moved from Step 3 to Step 2, where parameters are configured
-- **Test cards moved** — test card tables (Non-3DS & 3-D Secure 2.x) moved from Step 2 to Step 3, right above the submit button
-- **Step 3 collapsed** — box is collapsed on first visit with a hint message; auto-expands after preview generation
-- Button heights unified — removed inline style override on the submit button
-
-### v2.2 — PaySSL Template Support & URL Parameter Overview
-- **Template for payssl.aspx** — the Template parameter is now supported for the credit card form (`payssl.aspx`) as well; for PaySSL the parameter is passed encrypted inside the Data string, for HPP it remains unencrypted as a URL parameter
-- **URL parameter box** — new overview in Step 3 displays all unencrypted query-string parameters (`MerchantID`, `Len`, `Data`, `Language`, `URLBack`, `Template`) at a glance
-- First debug block renamed to "Encrypted Parameters (Data String)" for clearer distinction
-
-### v2.1.1 — Template Parameter
-- **Template parameter** — new dropdown in Advanced Settings to control the payment page layout; options: `ct_paymentpagelogos_v1`, `ct_paymentpagedropdown_v1`, `ct_paymentpagedropdown_v2` or empty (default)
-- Template is appended unencrypted to the URL, only for `paymentPage.aspx` (HPP)
-
-### v2.1 — Response Log & Callback Improvements
-- **Response log** — stores the last 50 decrypted responses in the browser; expandable entries with status badge (OK/FAILED), TransID, MerchantID and copyable payload; own clear button; also cleared by the global "Clear all data" button
-- **"Current" badge** — marks the most recently decrypted response in the result area
-- **Auto-expand** — the Response Decryptor card automatically opens on callback redirect
-- **OrderDesc default** changed to `Test:0000` (Simulation: success)
-- Profile name is no longer written back into the name field when loading a profile
-- Bugfix callback receiver: replaced `:has()` selector with compatible `.closest()`; fixed timing issue on auto-decrypt; wrapped `checkCallbackParams()` in try-catch
-
-### v2.0.5 — Callback Receiver & UX Improvements
-- **Callback receiver** — toggle in the Redirect URLs section sets URLSuccess, URLFailure and URLBack to the tool's own URL; on return from Computop the response is auto-decrypted — no external service required
-- **Multiple credential profiles** — named, AES-GCM encrypted profiles with a dropdown selector; automatic migration from the old single-credential storage
-- **Clear all data** — button in the footer removes all stored data (profiles, request log, settings) in one step
-- **Profile name field** is cleared automatically after saving
-- **Load icon** corrected — arrow now points upward (upload semantics)
-- Page subtitle updated: HPP spelled out as *Hosted Payment Page*
-- Environment selector removed — both options pointed to the same URL
-- Credential field layout: 2-column row (MerchantID + Blowfish) + full-width HMAC row
-
-### v2.0 — Credit Card Form (payssl.aspx)
-- **Integration method selector** — segmented control in Step 2 to switch between *Hosted Payment Page* (`paymentPage.aspx`) and *Credit Card Form* (`payssl.aspx`)
-- Info box explains the difference of the selected method; submit button text updates automatically
-- **Advanced Settings** section hides when payssl.aspx is selected — PayTypes is not supported there
-
-### v1.9.1 — Tooltip Documentation & UX Improvements
-- **Inline tooltips** — `?` icon next to all 15 parameters with a short explanation; viewport-aware positioning (never clipped at the edge)
-- **Formatted card numbers** — 3DS 2.x test card numbers now use spaces like the Non-3DS cards (e.g. `4000 0199 6619 9434`)
-- **Documentation link** — link to the Computop documentation added to both test card tables (Non-3DS & 3DS) as a source reference
-- **Template parameter removed** — was unnecessary; if Corporate PaymentPage is booked, Computop loads the layout automatically
-
-### v1.9 — 3-D Secure Test Card Numbers
-- Added second test card table **(3-D Secure 2.x)** in the payment parameters section
-- Scenarios covered: Frictionless – Authenticated, Challenge (OTP: `1234`), Not authenticated
-- Cards for Visa, MasterCard and Amex — colour-coded by scenario
-
-### v1.8.1 — Bugfix: MAC Calculation
-- Fixed MAC string format: `*TransID*MerchantID*Amount*Currency` — the leading `*` for empty PayID was missing
-- Without this fix Computop rejected every request with **"MAC INVALID"**
-- Updated the technical explainer in the Credentials section accordingly
-
-### v1.8 — Test Cards & Simulation Modes
-- **OrderDesc dropdown** with presets for success (`Test:0000`), decline (`Test:0305`) and custom input
-- **Test card table** (Non-3DS) embedded in the payment form — Visa, MasterCard, Amex with success and decline card numbers
-- Card numbers are click-to-copy
-- Table and dropdown fully translated (DE / EN)
-
-### v1.7 — Response Decryptor
-- Added **Response Decryptor** section — decrypts Computop callback URLs directly in the browser
-- Paste the full callback URL: `MerchantID`, `Len` and `Data` are extracted automatically via `URLSearchParams`
-- Alternative manual mode: enter `Data` (hex) and `Len` directly
-- Color-coded output — `Status` green/red/orange by value, `MAC` purple, all other parameters teal
-- Added Blowfish **`decrypt`** function alongside the existing `encrypt` in the ECB implementation
-
-### v1.6 — Multilingual UI (DE / EN)
-- Added **DE / EN language toggle** in the header (next to the theme toggle) — switches the entire UI instantly
-- Full **English translation** of all UI text — labels, buttons, hints, error messages, toasts and confirmation dialogs
-- Language preference saved in `localStorage` and restored automatically on the next visit
-- Lightweight built-in i18n system using a `TRANSLATIONS` object and a `t(key)` helper function — no external dependencies
-
-### v1.5 — Technical Explanation of URL Generation
-- Added detailed **3-step explanation** in the Credentials section: MAC calculation, payload encryption and URL composition
-- Role of the **HMAC password** explained — HMAC-SHA256 signature over `TransID * MerchantID * Amount * Currency` to ensure request integrity
-- Role of the **Blowfish password** explained — ECB encryption of the full payload including MAC, hex-encoded as the `Data` parameter
-- Visual **URL anatomy** with colour-coded parameters (`MerchantID`, `Len`, `Data`) and legend
-
-### v1.4 — Security Disclaimer
-- Security disclaimer regarding productive credentials added prominently to the start page
-- User is explicitly informed of their **responsibility** for the safe handling of API credentials
-- **Download button** for local execution — recommended alternative to using the public URL
-
-### v1.3 — Payment Methods
-- Added **"All enabled payment methods"** as the default `PayTypes` option — omitting the parameter causes Computop to display every method configured for the merchant account
-- Clarified existing `CC`, `VISA`, `MasterCard` and `AMEX` options in the selector
-
-### v1.2 — Icons
-- Replaced all emoji with **professional inline SVGs** (Lucide icon set)
-- Fully self-contained — no CDN required, works offline
-- Spinning loader animation on the generate button while processing
-
-### v1.1 — Dark / Light Mode
-- Added **Dark / Light Mode toggle** (fixed top-right button)
-- **Auto mode** follows `prefers-color-scheme` and reacts to live system changes; displays `auto` badge
-- Manual preference saved in `localStorage` and restored on next visit
-- Flash-free load via inline `<script>` in `<head>` that applies the theme before render
-- Full Light Mode colour palette with adjusted gradients, shadows and code colours
-
-### v1.0 — Initial Release
-- Blowfish ECB encryption of the `Data` parameter
-- HMAC-SHA256 MAC calculation
-- **Encrypted credential storage** (AES-GCM) in `localStorage` with PBKDF2 key derivation
-- **Request log** persisted in `localStorage` (last 50 entries, expandable, copyable)
-- **New tab redirect** — Computop HPP opens in a new tab instead of replacing the current page
-- Parameter preview with color-coded plain-text display
-
----
-
-## 📄 License
-
-MIT — see [LICENSE](LICENSE) for details.
+MIT, see [LICENSE](LICENSE).

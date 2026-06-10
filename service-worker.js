@@ -18,11 +18,23 @@
  * the cached version is used as a fallback.
  */
 
-const CACHE_NAME = 'computop-tester-v2.2.2';
+const CACHE_NAME = 'computop-tester-v2.8.0';
 const ASSETS = [
   './',
   './index.html',
-  './favicon.svg',
+  './CHANGELOG.md',
+  './VERSION',
+  './og-image.png',
+  './js/i18n.js',
+  './js/changelog-data.js',
+  './icons/app-icon.svg',
+  './icons/apple-touch-icon.png',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon.svg',
+  './icons/maskable-icon-192.png',
+  './icons/maskable-icon-512.png',
+  './icons/maskable-icon.svg',
   './manifest.json'
 ];
 

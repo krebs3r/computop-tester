@@ -2,16 +2,55 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Computop Paygate – Payment Tester</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23141922'/%3E%3Cpath d='M16 5C16 5 9.5 7.5 7.5 8.5v8c0 5.5 3.8 9 8.5 10.5 4.7-1.5 8.5-5 8.5-10.5v-8C22.5 7.5 16 5 16 5z' fill='none' stroke='%233d7eff' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M12.5 15.5l2.5 2.5 4.5-5' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <meta name="description" content="Create, inspect and decrypt Computop Paygate payment requests locally for Hosted Payment Page, PaySSL and Pay By Link.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://krebs3r.github.io/computop-tester/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="Computop Paygate Payment Tester">
+  <meta property="og:title" content="Computop Paygate – Payment Tester">
+  <meta property="og:description" content="Create, inspect and decrypt payment requests locally. No backend, directly in your browser.">
+  <meta property="og:url" content="https://krebs3r.github.io/computop-tester/">
+  <meta property="og:image" content="https://krebs3r.github.io/computop-tester/og-image.png">
+  <meta property="og:image:secure_url" content="https://krebs3r.github.io/computop-tester/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Computop Paygate Payment Tester with shield logo and supported payment integrations">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Computop Paygate – Payment Tester">
+  <meta name="twitter:description" content="Create, inspect and decrypt payment requests locally. No backend, directly in your browser.">
+  <meta name="twitter:image" content="https://krebs3r.github.io/computop-tester/og-image.png">
+  <meta name="twitter:image:alt" content="Computop Paygate Payment Tester with shield logo and supported payment integrations">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#3d7eff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23141922'/%3E%3Cpath d='M16 5C16 5 9.5 7.5 7.5 8.5v8c0 5.5 3.8 9 8.5 10.5 4.7-1.5 8.5-5 8.5-10.5v-8C22.5 7.5 16 5 16 5z' fill='none' stroke='%233d7eff' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M12.5 15.5l2.5 2.5 4.5-5' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <meta name="apple-mobile-web-app-title" content="Computop Tester">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Computop Paygate Payment Tester",
+      "description": "Create, inspect and decrypt Computop Paygate payment requests locally for Hosted Payment Page, PaySSL and Pay By Link.",
+      "url": "https://krebs3r.github.io/computop-tester/",
+      "image": "https://krebs3r.github.io/computop-tester/og-image.png",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any modern web browser",
+      "softwareVersion": "2.8.0",
+      "isAccessibleForFree": true,
+      "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
+      "codeRepository": "https://github.com/krebs3r/computop-tester"
+    }
+  </script>
   <!-- Apply theme before render to avoid flash -->
   <script>
     (function() {
@@ -78,14 +117,28 @@
     }
 
     /* Light mode specific overrides */
+    html.light body {
+      background:
+        radial-gradient(circle at 12% 12%, rgba(37,99,235,.18), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(139,92,246,.15), transparent 28%),
+        radial-gradient(circle at 52% 70%, rgba(6,182,212,.13), transparent 32%),
+        linear-gradient(145deg, #eef4ff 0%, #f8faff 45%, #f3efff 100%);
+      background-attachment: fixed;
+    }
     html.light body::before {
       background-image:
-        linear-gradient(rgba(37,99,235,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(37,99,235,0.05) 1px, transparent 1px);
+        linear-gradient(rgba(37,99,235,0.065) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,0.065) 1px, transparent 1px);
+    }
+    html.light body::after {
+      background:
+        radial-gradient(circle, rgba(255,255,255,.92) 0 18%, transparent 62%) 8% 8% / 520px 520px no-repeat,
+        radial-gradient(circle, rgba(255,255,255,.72) 0 16%, transparent 60%) 92% 38% / 620px 620px no-repeat;
+      opacity: .72;
     }
     html.light .card-header { background: rgba(0,0,0,0.02); }
     html.light .card-header:hover { background: rgba(0,0,0,0.04); }
-    html.light input, html.light select, html.light textarea { background: #f8fafc; }
+    html.light input, html.light select, html.light textarea { background-color: #f8fafc; }
     html.light input:focus, html.light select:focus, html.light textarea:focus {
       box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
     }
@@ -104,15 +157,90 @@
     html.light pre span.key { color: #1d4ed8; }
     html.light pre span.val { color: #15803d; }
     html.light pre span.enc { color: #7c3aed; }
+    html.light pre span.endpoint { color: #0369a1; }
+    html.light pre span.number { color: #b45309; }
+    html.light pre span.status-ok { color: #15803d; }
+    html.light pre span.status-fail { color: #dc2626; }
     html.light .info-box { background: rgba(37,99,235,0.05); border-color: rgba(37,99,235,0.2); }
     html.light .badge { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.25); }
     html.light select option { background: #ffffff; color: #0f172a; }
 
-    /* ── HEADER CONTROLS ── */
-    .header-controls {
-      position: fixed; top: 18px; right: 20px; z-index: 100;
-      display: flex; align-items: center; gap: 8px;
+    /* ── GLASS NAVIGATION ── */
+    .glass-nav {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      z-index: 100;
+      width: min(1400px, calc(100% - 28px));
+      min-height: 58px;
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: max-content max-content minmax(max-content, 1fr);
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      background: rgba(20, 25, 34, 0.58);
+      -webkit-backdrop-filter: blur(18px) saturate(145%);
+      backdrop-filter: blur(18px) saturate(145%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 18px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
+    html.light .glass-nav {
+      background: rgba(255, 255, 255, 0.68);
+      border-color: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 14px 40px rgba(67, 84, 112, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+    .nav-group { display: flex; align-items: center; gap: 4px; min-width: 0; }
+    .nav-group-left { justify-content: flex-start; }
+    .nav-group-center {
+      justify-content: flex-start;
+      padding-left: 12px;
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .nav-group-right { justify-content: flex-end; }
+    .nav-link,
+    .glass-nav .lang-toggle,
+    .glass-nav .theme-toggle {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 7px 10px;
+      color: var(--muted2);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.2;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: none;
+      transition: color .18s, background .18s, border-color .18s, transform .18s;
+    }
+    .nav-link:hover,
+    .glass-nav .lang-toggle:hover,
+    .glass-nav .theme-toggle:hover,
+    .nav-link.nav-active {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: none;
+      transform: translateY(-1px);
+    }
+    html.light .nav-link:hover,
+    html.light .glass-nav .lang-toggle:hover,
+    html.light .glass-nav .theme-toggle:hover,
+    html.light .nav-link.nav-active {
+      background: rgba(37, 99, 235, 0.08);
+      border-color: rgba(37, 99, 235, 0.13);
+    }
+    html.light .nav-group-center { border-left-color: rgba(37, 99, 235, 0.14); }
 
     /* ── LANG TOGGLE ── */
     .lang-toggle {
@@ -149,32 +277,161 @@
     }
     html.light .theme-toggle-auto { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.2); }
 
-    html { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+    html { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; scroll-padding-top: 96px; }
 
-    body { min-height: 100vh; background: var(--bg); }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(61,126,255,.28), transparent 29%),
+        radial-gradient(circle at 88% 16%, rgba(139,92,246,.24), transparent 27%),
+        radial-gradient(circle at 55% 66%, rgba(6,182,212,.18), transparent 32%),
+        radial-gradient(circle at 18% 88%, rgba(59,130,246,.14), transparent 26%),
+        linear-gradient(145deg, #060910 0%, #0a0f1a 44%, #100b1d 100%);
+      background-attachment: fixed;
+    }
 
-    /* Animated background grid */
+    /* Layered background grid and light blooms make glass surfaces visible. */
     body::before {
       content: '';
       position: fixed; inset: 0; z-index: 0;
       background-image:
-        linear-gradient(rgba(61,126,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(61,126,255,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
+        linear-gradient(rgba(111,179,255,0.075) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(111,179,255,0.075) 1px, transparent 1px);
+      background-size: 52px 52px;
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.95), rgba(0,0,0,.35));
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.95), rgba(0,0,0,.35));
+      pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle, rgba(96,165,250,.2) 0 16%, transparent 62%) -5% 4% / 580px 580px no-repeat,
+        radial-gradient(circle, rgba(167,139,250,.18) 0 15%, transparent 60%) 106% 20% / 680px 680px no-repeat,
+        radial-gradient(circle, rgba(34,211,238,.11) 0 14%, transparent 58%) 54% 105% / 720px 720px no-repeat;
+      filter: blur(8px);
       pointer-events: none;
     }
 
-    .wrapper { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+    .wrapper { position: relative; z-index: 1; width: 100%; max-width: 960px; margin: 0 auto; padding: 118px 20px 80px; flex: 1 0 auto; }
+
+    .card { scroll-margin-top: 96px; }
+
+    @media (max-width: 1180px) {
+      .glass-nav {
+        display: flex;
+        overflow-x: auto;
+        justify-content: flex-start;
+        scrollbar-width: none;
+        scroll-snap-type: x proximity;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+      }
+      .glass-nav::-webkit-scrollbar { display: none; }
+      .nav-group { flex: 0 0 auto; scroll-snap-align: start; }
+      .nav-group-center { padding-left: 0; border-left: 0; }
+      .nav-group + .nav-group::before { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .glass-nav {
+        top: max(8px, env(safe-area-inset-top));
+        left: max(8px, env(safe-area-inset-left));
+        width: calc(100% - max(16px, env(safe-area-inset-left) + env(safe-area-inset-right)));
+        min-height: 60px;
+        transform: none;
+        border-radius: 15px;
+        gap: 8px;
+        padding: 7px 8px;
+      }
+      .wrapper {
+        padding-top: calc(92px + env(safe-area-inset-top));
+        padding-left: max(14px, env(safe-area-inset-left));
+        padding-right: max(14px, env(safe-area-inset-right));
+      }
+      .nav-group { gap: 3px; }
+      .nav-group-center { padding-left: 0; }
+      .nav-link,
+      .glass-nav .lang-toggle,
+      .glass-nav .theme-toggle {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 10px 12px;
+        font-size: 12px;
+        scroll-snap-align: center;
+      }
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      button, .btn, .method-btn, .copy-btn, .toggle-vis, .param-tip, summary { touch-action: manipulation; }
+      input, select, textarea { font-size: 16px; }
+      .btn, .method-btn { min-height: 44px; }
+      .copy-btn { min-height: 44px; padding: 9px 12px; }
+      .toggle-vis { width: 44px; height: 44px; right: 0; display: grid; place-items: center; }
+      .input-group input { padding-right: 50px; }
+      .param-tip { width: 28px; height: 28px; margin: -7px -7px -7px 4px; }
+      .card-header { min-height: 56px; }
+      .tc-details summary { min-height: 44px; padding-block: 8px; }
+      .cb-receiver-label, .footer-links a { min-height: 44px; }
+      .tc-details { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .test-card-table { min-width: 520px; }
+      footer { margin-bottom: max(8px, env(safe-area-inset-bottom)); }
+    }
+
+    @media (max-width: 480px) {
+      .btn-row .btn { flex: 1 1 100%; }
+      .profile-row { flex-wrap: wrap; }
+      .profile-row select { flex: 1 1 100%; min-width: 0; }
+      .footer-links { width: 100%; gap: 8px 14px; justify-content: space-between; }
+    }
 
     /* ── HEADER ── */
     header { margin-bottom: 48px; }
+    .app-header-layout {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .app-header-icon {
+      width: 72px;
+      height: 72px;
+      flex: 0 0 72px;
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      color: #fff;
+      background: linear-gradient(145deg, rgba(77, 105, 255, .30), rgba(49, 71, 205, .20));
+      -webkit-backdrop-filter: blur(14px) saturate(145%);
+      backdrop-filter: blur(14px) saturate(145%);
+      border: 1px solid rgba(157, 178, 255, .32);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 12px 30px rgba(34, 59, 190, .12);
+    }
+    .app-header-icon svg { width: 43px; height: 43px; }
+    .app-header-copy { min-width: 0; }
+    html:not(.light) .app-header-icon {
+      background: linear-gradient(145deg, rgba(77, 105, 255, .28), rgba(49, 71, 205, .18));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
+    }
+    html.light .app-header-icon {
+      color: #1d4ed8;
+      background: linear-gradient(145deg, rgba(255,255,255,.58), rgba(219,231,255,.42));
+      border-color: rgba(255,255,255,.78);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 12px 28px rgba(37, 75, 190, .10);
+    }
     .badge {
       display: inline-flex; align-items: center; gap: 6px;
       background: rgba(61,126,255,0.12); border: 1px solid rgba(61,126,255,0.25);
       color: var(--accent2); font-family: var(--mono); font-size: 11px; font-weight: 400;
       padding: 4px 10px; border-radius: 20px; letter-spacing: 0.08em; text-transform: uppercase;
-      margin-bottom: 16px;
+      min-height: 30px; line-height: 1; margin-bottom: 16px;
     }
+    .badge .icon { line-height: 0; }
+    .badge .icon svg { display: block; }
     .badge::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
 
@@ -185,16 +442,55 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       margin-bottom: 10px;
     }
-    .subtitle { color: var(--muted2); font-size: 14px; font-weight: 300; letter-spacing: 0.01em; }
+    .subtitle {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: var(--muted2);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+    .header-feature {
+      display: inline-flex;
+      align-items: center;
+      min-height: 25px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(157,178,255,.20);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+      white-space: nowrap;
+    }
+    html.light .header-feature {
+      background: rgba(255,255,255,.52);
+      border-color: rgba(37,99,235,.16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.84);
+    }
+    @media (max-width: 640px) {
+      .app-header-layout { align-items: flex-start; gap: 14px; }
+      .app-header-icon { width: 58px; height: 58px; flex-basis: 58px; border-radius: 16px; }
+      .app-header-icon svg { width: 34px; height: 34px; }
+      header h1,
+      .standalone-view-header h1 { font-size: clamp(26px, 9vw, 36px); }
+    }
 
     /* ── SECTION CARD ── */
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: rgba(20, 25, 34, 0.82);
+      -webkit-backdrop-filter: blur(14px) saturate(125%);
+      backdrop-filter: blur(14px) saturate(125%);
+      border: 1px solid rgba(255,255,255,.11);
       border-radius: 14px;
       overflow: hidden;
       margin-bottom: 20px;
-      transition: border-color .2s;
+      box-shadow: 0 14px 34px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.035);
+      transition: border-color .2s, background-color .25s, box-shadow .25s;
+    }
+    html.light .card {
+      background: rgba(255,255,255,.76);
+      border-color: rgba(255,255,255,.82);
+      box-shadow: 0 14px 34px rgba(51,65,85,.1), inset 0 1px 0 rgba(255,255,255,.9);
     }
     .card:focus-within { border-color: var(--border2); }
 
@@ -259,6 +555,10 @@
     .method-info-icon { flex-shrink: 0; margin-top: 1px; color: var(--accent2); }
     .method-info strong { color: var(--accent2); font-weight: 500; }
     html.light .method-btn.method-active { box-shadow: 0 2px 10px rgba(37,99,235,0.25); }
+    @media (max-width: 900px) {
+      .method-ctrl { flex-direction: column; }
+      .method-btn { justify-content: flex-start; }
+    }
 
     .paytypes-row { overflow: hidden; transition: opacity .2s, max-height .25s, margin .25s; max-height: 120px; }
     .collapsible { overflow: hidden; transition: opacity .2s, max-height .3s, margin .3s; max-height: 320px; }
@@ -305,7 +605,7 @@
     }
     input::placeholder { color: var(--muted); opacity: 0.6; }
     input[type="password"] { letter-spacing: 0.1em; }
-    select { cursor: pointer; appearance: none;
+    select { cursor: pointer; appearance: none; padding-right: 36px;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235c6e88' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
       background-repeat: no-repeat; background-position: right 12px center;
     }
@@ -373,6 +673,61 @@
     #toast.success { border-color: rgba(34,197,94,0.4); }
     #toast.error { border-color: rgba(239,68,68,0.4); }
 
+    /* ── APP MODAL ── */
+    .app-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(3, 7, 13, 0.68);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease, visibility .2s ease;
+    }
+    .app-modal.open { opacity: 1; visibility: visible; }
+    .app-modal-panel {
+      width: min(460px, 100%);
+      padding: 24px;
+      background: rgba(20, 25, 34, 0.92);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 18px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08);
+      transform: translateY(10px) scale(.98);
+      transition: transform .2s ease;
+    }
+    .app-modal.open .app-modal-panel { transform: translateY(0) scale(1); }
+    html.light .app-modal { background: rgba(71, 85, 105, 0.35); }
+    html.light .app-modal-panel {
+      background: rgba(255,255,255,.94);
+      border-color: rgba(255,255,255,.85);
+      box-shadow: 0 24px 80px rgba(51,65,85,.25), inset 0 1px 0 rgba(255,255,255,.9);
+    }
+    .app-modal-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+      color: var(--danger);
+      background: rgba(239,68,68,.1);
+      border: 1px solid rgba(239,68,68,.24);
+      border-radius: 12px;
+    }
+    .app-modal-title { font-family: var(--display); font-size: 20px; margin-bottom: 8px; }
+    .app-modal-text { color: var(--muted2); font-size: 13px; line-height: 1.65; white-space: pre-line; }
+    .app-modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+    .btn-danger {
+      color: #fff;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      box-shadow: 0 6px 20px rgba(239,68,68,.22);
+    }
+    .btn-danger:hover { transform: translateY(-1px); box-shadow: 0 9px 26px rgba(239,68,68,.32); }
+    body.modal-open { overflow: hidden; }
+
     /* ── DEBUG PANEL ── */
     .debug-section { margin-top: 8px; }
     .debug-block {
@@ -399,6 +754,10 @@
     pre span.key { color: #6fb3ff; }
     pre span.val { color: #9be0c0; }
     pre span.enc { color: #c4a7e7; }
+    pre span.endpoint { color: #67e8f9; font-weight: 500; }
+    pre span.number { color: #fbbf24; }
+    pre span.status-ok { color: var(--success); font-weight: 600; }
+    pre span.status-fail { color: var(--danger); font-weight: 600; }
 
     /* ── INFO BOXES ── */
     .info-box {
@@ -407,6 +766,72 @@
       font-size: 12px; color: var(--muted2); line-height: 1.6;
     }
     .info-box strong { color: var(--accent2); font-weight: 500; }
+    .info-lead { display: inline; line-height: inherit; }
+    .info-lead .icon {
+      margin-right: 5px;
+      line-height: 0;
+      vertical-align: -2px;
+    }
+    .info-lead .icon svg { display: block; }
+
+    /* ── APP INTRODUCTION ── */
+    .app-intro {
+      margin-bottom: 20px;
+      padding: 22px;
+      background: rgba(20, 25, 34, 0.62);
+      -webkit-backdrop-filter: blur(14px) saturate(135%);
+      backdrop-filter: blur(14px) saturate(135%);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    html.light .app-intro {
+      background: rgba(255,255,255,.72);
+      border-color: rgba(255,255,255,.82);
+      box-shadow: 0 14px 34px rgba(51,65,85,.09), inset 0 1px 0 rgba(255,255,255,.9);
+    }
+    .app-intro h2 {
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 7px;
+    }
+    .app-intro > p { color: var(--muted2); font-size: 13px; line-height: 1.65; }
+    .app-intro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .app-intro-item {
+      padding: 13px 14px;
+      background: rgba(61,126,255,.055);
+      border: 1px solid rgba(61,126,255,.14);
+      border-radius: 10px;
+    }
+    .app-intro-item strong {
+      display: block;
+      color: var(--accent2);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .app-intro-item span { display: block; color: var(--muted2); font-size: 11px; line-height: 1.55; }
+    .app-intro-local {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+      padding-top: 13px;
+      border-top: 1px solid var(--border);
+      color: var(--muted2);
+      font-size: 11px;
+    }
+    .app-intro-local .icon { color: var(--success); }
+    @media (max-width: 720px) {
+      .app-intro-grid { grid-template-columns: 1fr; }
+    }
 
     /* ── SECURITY DISCLAIMER ── */
     .security-disclaimer {
@@ -568,7 +993,11 @@
     .log-merchant { font-size: 12px; color: var(--muted2); }
     .log-tid { font-family: var(--mono); font-size: 12px; color: var(--text); }
     .log-detail { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
-    .log-detail pre { margin-bottom: 8px; }
+    .log-detail pre {
+      margin-bottom: 8px; padding: 13px; border-radius: 8px;
+      background: rgba(2, 6, 23, .28); border: 1px solid var(--border);
+    }
+    html.light .log-detail pre { background: rgba(248, 250, 252, .78); }
     .log-status-dot {
       width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
       background: var(--success); display: inline-block; margin-left: auto;
@@ -640,6 +1069,46 @@
       background: rgba(61,126,255,0.08); border: 1px solid rgba(61,126,255,0.15);
       color: var(--accent2); padding: 1px 5px; border-radius: 4px;
     }
+    .changelog-intro { margin-bottom: 22px; }
+    .changelog-intro h2 { font-family: var(--display); font-size: 22px; margin-bottom: 4px; }
+    .changelog-intro p { color: var(--muted2); font-size: 13px; }
+    .standalone-view {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 118px 20px 80px;
+      flex: 1 0 auto;
+    }
+    .standalone-view[hidden] { display: none; }
+    .standalone-view-header { margin-bottom: 28px; }
+    .standalone-view-header h1 {
+      margin-bottom: 10px;
+    }
+    .standalone-view-header p {
+      color: var(--muted2);
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      line-height: 1.6;
+    }
+    .standalone-view > .card { margin-bottom: 0; }
+    .standalone-view > .card > .card-header { display: none; }
+    .standalone-view > .card > .card-body { display: block; }
+    #app-view > #card-log,
+    #app-view > #card-response,
+    #app-view > #card-resp-log { display: none; }
+    .changelog-content { display: grid; gap: 14px; }
+    .changelog-content .cl-entry {
+      padding: 22px;
+      margin: 0;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--card);
+      box-shadow: 0 10px 28px rgba(0,0,0,.12);
+    }
     html.light .cl-list code { background: rgba(37,99,235,0.07); border-color: rgba(37,99,235,0.18); }
 
     /* ── TEST CARD TABLE ── */
@@ -671,13 +1140,32 @@
     /* ── FOOTER ── */
     footer {
       position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
+      width: min(1400px, calc(100% - 28px));
+      background: rgba(20, 25, 34, 0.58);
+      -webkit-backdrop-filter: blur(18px) saturate(145%);
+      backdrop-filter: blur(18px) saturate(145%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 18px;
+      box-shadow: 0 -14px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
       padding: 18px 20px;
-      margin-top: 8px;
+      margin: auto auto 14px;
+    }
+    html.light footer {
+      background: rgba(255, 255, 255, 0.68);
+      border-color: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 -14px 40px rgba(67, 84, 112, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9);
     }
     .footer-inner {
-      max-width: 860px; margin: 0 auto;
+      width: 100%; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    @media (max-width: 640px) {
+      footer {
+        width: calc(100% - max(16px, env(safe-area-inset-left) + env(safe-area-inset-right)));
+        border-radius: 15px;
+        padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(safe-area-inset-left));
+        margin-bottom: max(8px, env(safe-area-inset-bottom));
+      }
     }
     .footer-version {
       display: inline-flex; align-items: center; gap: 7px;
@@ -698,31 +1186,83 @@
 </head>
 <body>
 
-<div class="header-controls">
-  <button class="lang-toggle" onclick="toggleLang()" id="lang-toggle-btn" title="Switch language / Sprache wechseln">
-    <span class="lang-seg lang-seg-active" id="lang-de">DE</span>
-    <span class="lang-sep">|</span>
-    <span class="lang-seg" id="lang-en">EN</span>
-  </button>
-  <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn" title="Theme wechseln">
-    <span class="theme-toggle-icon icon" id="theme-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
-    <span id="theme-label">Dark</span>
-    <span class="theme-toggle-auto" id="theme-auto-badge" style="display:none">auto</span>
-  </button>
-</div>
+<nav class="glass-nav" aria-label="Hauptnavigation">
+  <div class="nav-group nav-group-left">
+    <button class="nav-link" data-nav-target="card-creds" id="nav-creds" type="button">Schritt 1 - Credentials</button>
+    <button class="nav-link" data-nav-target="card-payment" id="nav-payment" type="button">Schritt 2 - Zahlungsparameter</button>
+    <button class="nav-link" data-nav-target="card-preview" id="nav-preview" type="button">Schritt 3 - Vorschau &amp; Ausführen</button>
+  </div>
+  <div class="nav-group nav-group-center">
+    <button class="nav-link" data-nav-view="request-log" id="nav-log" type="button">Request-Log</button>
+    <button class="nav-link" data-nav-view="response" id="nav-response" type="button">Response-Entschlüsselung</button>
+    <button class="nav-link" data-nav-view="response-log" id="nav-resp-log" type="button">Response-Log</button>
+  </div>
+  <div class="nav-group nav-group-right">
+    <button class="nav-link" data-nav-view="changelog" id="nav-changelog" type="button">Changelog</button>
+    <button class="lang-toggle" onclick="toggleLang()" id="lang-toggle-btn" title="Switch language / Sprache wechseln">
+      <span class="lang-seg lang-seg-active" id="lang-de">DE</span>
+      <span class="lang-sep">|</span>
+      <span class="lang-seg" id="lang-en">EN</span>
+    </button>
+    <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn" title="Theme wechseln">
+      <span class="theme-toggle-icon icon" id="theme-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+      <span id="theme-label">Dark</span>
+      <span class="theme-toggle-auto" id="theme-auto-badge" style="display:none">auto</span>
+    </button>
+  </div>
+</nav>
 
-<div class="wrapper">
+<main class="wrapper" id="payment-workflow-view" data-view="payment-workflow">
 
   <!-- Header -->
   <header>
-    <div class="badge"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Computop Paygate</div>
-    <h1>Payment Tester</h1>
-    <p class="subtitle" id="subtitle">Hosted Payment Page &amp; Kreditkartenformular · Blowfish ECB · HMAC-SHA256 · Testumgebung</p>
+    <div class="app-header-layout">
+      <div class="app-header-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="app-header-copy">
+        <div class="badge"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Computop Paygate</div>
+        <h1>Payment Tester</h1>
+        <div class="subtitle" id="subtitle">
+          <span class="header-feature" id="header-feature-hpp">Hosted Payment Page</span>
+          <span class="header-feature" id="header-feature-ccf">Kreditkartenformular</span>
+          <span class="header-feature" id="header-feature-pbl">Pay By Link</span>
+          <span class="header-feature" id="header-feature-blowfish">Blowfish ECB</span>
+          <span class="header-feature" id="header-feature-hmac">HMAC-SHA256</span>
+        </div>
+      </div>
+    </div>
   </header>
+
+  <section class="app-intro" aria-labelledby="app-intro-title">
+    <h2 id="app-intro-title">Was ist der Payment Tester?</h2>
+    <p id="app-intro-text">Der Payment Tester unterstützt Entwickler und technische Teams dabei, Computop-Paygate-Integrationen direkt im Browser vorzubereiten und nachzuvollziehen.</p>
+    <div class="app-intro-grid">
+      <div class="app-intro-item">
+        <strong id="app-intro-create-title">Zahlungsrequests erstellen</strong>
+        <span id="app-intro-create-text">Parameter für Hosted Payment Page, Kreditkartenformular und Pay By Link konfigurieren.</span>
+      </div>
+      <div class="app-intro-item">
+        <strong id="app-intro-inspect-title">Verschlüsselung prüfen</strong>
+        <span id="app-intro-inspect-text">MAC, Klartextparameter, Blowfish-Payload, Länge und finale Request-URL transparent kontrollieren.</span>
+      </div>
+      <div class="app-intro-item">
+        <strong id="app-intro-response-title">Responses analysieren</strong>
+        <span id="app-intro-response-text">Computop-Callbacks entschlüsseln und Request- sowie Response-Verläufe lokal nachvollziehen.</span>
+      </div>
+    </div>
+    <div class="app-intro-local">
+      <span class="icon icon-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+      <span id="app-intro-local">Keine Installation und kein eigener Server erforderlich: Die Verarbeitung erfolgt lokal im Browser.</span>
+    </div>
+  </section>
 
   <!-- Info Box -->
   <div class="info-box" style="margin-bottom:16px">
-    <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span> <span id="info-title">Hinweis:</span></strong> <span id="info-body">Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop.
+    <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="info-title">Hinweis:</span></strong> <span id="info-body">Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop.
     Im Testmodus bitte nur <strong>kleine Beträge (0,11–2,00 EUR)</strong> verwenden, da Kreditkartenauthorisierungen auch im Test real sind.</span>
   </div>
 
@@ -739,11 +1279,11 @@
       <strong>Empfehlung:</strong> Verwenden Sie diese Seite bevorzugt lokal in Ihrem Browser, anstatt sie über eine öffentlich erreichbare URL aufzurufen.
     </p>
     <div class="disclaimer-actions">
-      <a class="btn-download" href="https://raw.githubusercontent.com/krebs3r/computop-tester/main/index.html" download="computop-payment-tester.html">
+      <a class="btn-download" href="https://github.com/krebs3r/computop-tester/archive/refs/heads/main.zip">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-        <span id="sec-download">Seite lokal herunterladen</span>
+        <span id="sec-download">App lokal herunterladen</span>
       </a>
-      <span class="disclaimer-hint" id="sec-hint">Datei herunterladen und direkt im Browser öffnen — keine Installation erforderlich</span>
+      <span class="disclaimer-hint" id="sec-hint">ZIP entpacken und index.html öffnen — keine Installation erforderlich</span>
     </div>
   </div>
 
@@ -880,6 +1420,11 @@
           <span id="method-ccf-label">Kreditkartenformular</span>
           <span class="method-endpoint">payssl.aspx</span>
         </button>
+        <button class="method-btn" id="method-pbl" onclick="setMethod('pbl')">
+          <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
+          <span id="method-pbl-label">Pay By Link</span>
+          <span class="method-endpoint">PayByLink.aspx</span>
+        </button>
       </div>
 
       <div class="method-info">
@@ -930,7 +1475,17 @@
         </div>
         <div class="field">
           <label><span id="l-refnr">Referenznummer</span> <span class="hint" id="h-refnr">(optional)</span><button class="param-tip" id="tip-refnr" tabindex="-1">?</button></label>
-          <input type="text" id="refNr" placeholder="REF-001" maxlength="30">
+          <div class="input-group">
+            <input type="text" id="refNr" placeholder="REF-001" maxlength="30">
+            <button class="toggle-vis" id="btn-new-refnr" onclick="generatePayByLinkRef()" title="Neue Referenznummer" style="display:none"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-grid full collapsible hidden" id="pbl-fields" style="margin-top:14px">
+        <div class="field">
+          <label><span id="l-expiration">Ablaufdatum</span> <span class="required">*</span> <span class="hint" id="h-expiration">(ExpirationDate)</span><button class="param-tip" id="tip-expiration" tabindex="-1">?</button></label>
+          <input type="datetime-local" id="expirationDate" step="1">
         </div>
       </div>
 
@@ -1048,6 +1603,16 @@
           </div>
         </div>
 
+        <div id="pbl-outer-section" style="margin-bottom:12px;display:none">
+          <div class="debug-block">
+            <div class="debug-label">
+              <span id="debug-pbl-outer-label">Äußerer Pay-By-Link-Payload</span>
+              <button class="copy-btn" onclick="copyText('pbl-outer-params')"><span id="copy-pbl-outer-text">Kopieren</span></button>
+            </div>
+            <pre id="pbl-outer-params">–</pre>
+          </div>
+        </div>
+
         <div style="margin-bottom:12px">
           <div class="debug-block">
             <div class="debug-label">
@@ -1124,7 +1689,7 @@
     </div>
     <div class="card-body">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <span id="log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 50 generierten Requests (lokal gespeichert)</span>
+        <span id="log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 250 generierten Requests (lokal gespeichert)</span>
         <button class="btn btn-danger-ghost" style="padding:6px 12px;font-size:12px" onclick="clearLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-log-clear-text">Log leeren</span></button>
       </div>
       <div id="log-list"></div>
@@ -1141,7 +1706,7 @@
     <div class="card-body">
 
       <div class="info-box" style="margin-bottom:16px">
-        <strong style="display:inline-flex;align-items:center;gap:5px"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span> <span id="resp-info-title">Hinweis:</span></strong> <span id="resp-info-body">Füge die vollständige Callback-URL von Computop ein (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert und mit dem Blowfish-Passwort aus Schritt&nbsp;1 entschlüsselt.</span>
+        <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="resp-info-title">Hinweis:</span></strong> <span id="resp-info-body">Füge die vollständige Callback-URL von Computop ein (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert und mit dem Blowfish-Passwort aus Schritt&nbsp;1 entschlüsselt.</span>
       </div>
 
       <div class="field" style="margin-bottom:14px">
@@ -1195,34 +1760,55 @@
     </div>
     <div class="card-body">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <span id="resp-log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 50 entschlüsselten Responses (lokal gespeichert)</span>
+        <span id="resp-log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 250 entschlüsselten Responses (lokal gespeichert)</span>
         <button class="btn btn-danger-ghost" style="padding:6px 12px;font-size:12px" onclick="clearResponseLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-resp-log-clear-text">Log leeren</span></button>
       </div>
       <div id="resp-log-list"></div>
     </div>
   </div>
 
-  <!-- ── CHANGELOG ── -->
-  <div class="card collapsed" id="card-changelog">
-    <div class="card-header" onclick="toggleCard('card-changelog')">
-      <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
-      <span class="card-title">Changelog</span>
-      <span class="card-toggle">▼</span>
-    </div>
-    <div class="card-body">
-      <div id="changelog-content"></div>
-    </div>
-  </div>
+</main>
 
-</div>
+<main class="standalone-view" id="request-log-view" hidden>
+  <div class="standalone-view-header">
+    <div class="badge">Computop Paygate</div>
+    <h1 id="request-log-view-title">Request-Log</h1>
+    <p id="request-log-view-subtitle">Letzte 250 generierten Requests (lokal gespeichert)</p>
+  </div>
+</main>
+
+<main class="standalone-view" id="response-view" hidden>
+  <div class="standalone-view-header">
+    <div class="badge">Computop Paygate</div>
+    <h1 id="response-view-title">Response-Entschlüsselung</h1>
+    <p id="response-view-subtitle">Computop-Callback sicher entschlüsseln</p>
+  </div>
+</main>
+
+<main class="standalone-view" id="response-log-view" hidden>
+  <div class="standalone-view-header">
+    <div class="badge">Computop Paygate</div>
+    <h1 id="response-log-view-title">Response-Log</h1>
+    <p id="response-log-view-subtitle">Letzte 250 entschlüsselten Responses (lokal gespeichert)</p>
+  </div>
+</main>
+
+<main class="standalone-view" id="changelog-view" hidden>
+  <div class="standalone-view-header">
+    <div class="badge">Computop Paygate</div>
+    <h1 id="changelog-title">Changelog</h1>
+    <p id="changelog-subtitle">Vollständige Versionshistorie und Änderungen</p>
+  </div>
+  <div class="changelog-content" id="changelog-content"></div>
+</main>
 
 <!-- Footer -->
-<footer>
+<footer id="app-footer">
   <div class="footer-inner">
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v2.2.3</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v2.8.0</span>
     </span>
     <span class="footer-links">
       <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
@@ -1241,12 +1827,28 @@
   </div>
 </footer>
 
+<div class="app-modal" id="clear-all-modal" role="dialog" aria-modal="true" aria-labelledby="clear-all-modal-title" aria-describedby="clear-all-modal-text">
+  <div class="app-modal-panel" role="document">
+    <div class="app-modal-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+    </div>
+    <h2 class="app-modal-title" id="clear-all-modal-title">Alle lokalen Daten löschen?</h2>
+    <p class="app-modal-text" id="clear-all-modal-text">Diese Aktion entfernt alle Profile, Request- und Response-Logs sowie deine Einstellungen. Sie kann nicht rückgängig gemacht werden.</p>
+    <div class="app-modal-actions">
+      <button class="btn btn-secondary" id="clear-all-cancel" type="button">Abbrechen</button>
+      <button class="btn btn-danger" id="clear-all-confirm" type="button">Alle Daten löschen</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div id="toast"></div>
 
 <!-- ═══════════════════════════════════════════════════════════
      JAVASCRIPT: Blowfish ECB + HMAC-SHA256 + Form Logic
 ═══════════════════════════════════════════════════════════ -->
+<script src="js/i18n.js"></script>
+<script src="js/changelog-data.js"></script>
 <script>
 // ══════════════════════════════════════════════════════════════
 // INLINE SVG ICON SYSTEM — no external dependency
@@ -1277,6 +1879,28 @@ function icon(name) {
   return ICONS[name] || '';
 }
 
+function clearElement(el) {
+  while (el && el.firstChild) el.removeChild(el.firstChild);
+}
+
+function appendTextElement(parent, tagName, className, text) {
+  const el = document.createElement(tagName);
+  if (className) el.className = className;
+  el.textContent = String(text ?? '');
+  parent.appendChild(el);
+  return el;
+}
+
+function renderParamLines(target, entries, classForKey) {
+  clearElement(target);
+  entries.forEach(([key, value], index) => {
+    if (index > 0) target.appendChild(document.createTextNode('\n'));
+    appendTextElement(target, 'span', 'key', key);
+    target.appendChild(document.createTextNode('='));
+    appendTextElement(target, 'span', classForKey(key, value), value);
+  });
+}
+
 
 // ══════════════════════════════════════════════════════════════
 // INTERNATIONALISATION — DE / EN
@@ -1285,9 +1909,10 @@ const LANG_LS_KEY = 'computop_lang';
 let currentLang = 'de';
 
 // ══════════════════════════════════════════════════════════════
-// INTEGRATION METHOD — hpp | ccf
+// INTEGRATION METHOD — hpp | ccf | pbl
 // ══════════════════════════════════════════════════════════════
 let currentMethod = 'hpp';
+const PBL_REFS_LS_KEY = 'computop_paybylink_refs';
 
 function onTemplateChange() {
   const sel = document.getElementById('template');
@@ -1298,566 +1923,68 @@ function onTemplateChange() {
 }
 
 function setMethod(method) {
+  const previousMethod = currentMethod;
   currentMethod = method;
   document.getElementById('method-hpp').classList.toggle('method-active', method === 'hpp');
   document.getElementById('method-ccf').classList.toggle('method-active', method === 'ccf');
+  document.getElementById('method-pbl').classList.toggle('method-active', method === 'pbl');
 
-  // PayTypes nur bei HPP verfügbar — nur diese Zeile ausblenden, Template bleibt sichtbar
+  // PayTypes is supported by HPP and the inner Pay By Link payment payload.
   const paytypesRow = document.getElementById('paytypes-row');
   if (paytypesRow) paytypesRow.classList.toggle('hidden', method === 'ccf');
+  const pblFields = document.getElementById('pbl-fields');
+  if (pblFields) pblFields.classList.toggle('hidden', method !== 'pbl');
+  const refHint = document.getElementById('h-refnr');
+  if (refHint) refHint.textContent = t(method === 'pbl' ? 'h_refnr_required' : 'h_refnr');
+  const refInput = document.getElementById('refNr');
+  const refButton = document.getElementById('btn-new-refnr');
+  if (refInput) {
+    refInput.readOnly = method === 'pbl';
+    refInput.style.color = method === 'pbl' ? 'var(--muted2)' : '';
+  }
+  if (refButton) refButton.style.display = method === 'pbl' ? 'grid' : 'none';
+  if (method === 'pbl' && refInput && (previousMethod !== 'pbl' || !refInput.value || isPayByLinkRefUsed(refInput.value))) {
+    generatePayByLinkRef();
+  }
 
   // Info-Box Text
   const infoEl = document.getElementById('method-info-text');
-  if (infoEl) infoEl.innerHTML = t(method === 'hpp' ? 'method_info_hpp' : 'method_info_ccf');
+  if (infoEl) infoEl.innerHTML = t(`method_info_${method}`);
 
   // Submit-Button Text
   const submitText = document.getElementById('btn-submit-text');
   const submitHint = document.getElementById('btn-submit-hint');
-  if (submitText) submitText.textContent = t(method === 'hpp' ? 'btn_submit' : 'btn_submit_ccf');
-  if (submitHint) submitHint.textContent = t(method === 'hpp' ? 'btn_submit_hint' : 'btn_submit_hint_ccf');
+  const submitKey = method === 'hpp' ? 'btn_submit' : `btn_submit_${method}`;
+  const submitHintKey = method === 'hpp' ? 'btn_submit_hint' : `btn_submit_hint_${method}`;
+  if (submitText) submitText.textContent = t(submitKey);
+  if (submitHint) submitHint.textContent = t(submitHintKey);
 }
-
-const TRANSLATIONS = {
-  de: {
-    page_title: 'Computop Paygate – Payment Tester',
-    subtitle: 'Hosted Payment Page & Kreditkartenformular · Blowfish ECB · HMAC-SHA256 · Testumgebung',
-    info_title: 'Hinweis:',
-    info_body: 'Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop. Im Testmodus bitte nur <strong>kleine Beträge (0,11–2,00 EUR)</strong> verwenden, da Kreditkartenauthorisierungen auch im Test real sind.',
-    sec_title: 'Sicherheitshinweis zu Ihren Credentials',
-    sec_p1: 'Die Eingabe von produktiven API-Credentials in webbasierte Tools birgt grundsätzlich ein Restrisiko. Obwohl dieser Tester ausschließlich im Browser ausgeführt wird und keine Daten an externe Server übermittelt, liegt die Verantwortung für den sicheren Umgang mit Ihren Zugangsdaten bei Ihnen.',
-    sec_p2: '<strong>Empfehlung:</strong> Verwenden Sie diese Seite bevorzugt lokal in Ihrem Browser, anstatt sie über eine öffentlich erreichbare URL aufzurufen.',
-    sec_download: 'Seite lokal herunterladen',
-    sec_hint: 'Datei herunterladen und direkt im Browser öffnen — keine Installation erforderlich',
-    ct_creds: 'Schritt 1 — Credentials',
-    l_mid: 'Merchant ID', l_bfpw: 'Blowfish Passwort', h_bfpw: '(für Data-Verschlüsselung)',
-    l_hmacpw: 'HMAC Passwort', h_hmacpw: '(für MAC-Berechnung)',
-    cred_save_title: 'Verschlüsselte Profile',
-    cred_save_text: 'Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert. Mehrere Profile möglich.',
-    btn_save: 'Speichern', btn_load: 'Laden', btn_delete: 'Löschen',
-    profile_placeholder: '— Gespeicherte Profile —',
-    profile_name_ph: 'Profilname …',
-    confirm_profile_del: 'Profil löschen?',
-    toast_profile_saved: 'Profil gespeichert',
-    toast_profile_loaded: 'Profil geladen',
-    toast_profile_deleted: 'Profil gelöscht',
-    toast_profile_name_req: 'Bitte einen Profilnamen eingeben',
-    toast_profile_none: 'Kein Profil ausgewählt',
-    cred_status_saved: 'gespeichert',
-    cred_status_none: 'Kein Profil gespeichert',
-    te_title: 'Wie wird die GET-URL erzeugt?',
-    te_s1_label: 'MAC-Berechnung',
-    te_s1_desc: 'Mit dem <strong>HMAC-Passwort</strong> wird per HMAC-SHA256 eine digitale Signatur über den String <code>*TransID*MerchantID*Amount*Currency</code> berechnet. Das führende <code>*</code> steht für die leere PayID einer neuen Transaktion. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate lehnt Anfragen mit falschem oder fehlendem MAC sofort ab.',
-    te_s2_label: 'Payload-Verschlüsselung',
-    te_s2_desc: 'Alle Zahlungsparameter (inkl. des MAC) werden als Klartextstring im Format <code>Key=Value&amp;Key=Value…</code> zusammengesetzt. Dieser String wird mit dem <strong>Blowfish-Passwort</strong> per Blowfish ECB verschlüsselt und anschließend hexadezimal kodiert. Das Ergebnis bildet den <code>Data</code>-Parameter. Die Länge des ursprünglichen Klartexts wird separat als <code>Len</code> übergeben, da Blowfish auf ein Vielfaches von 8 Byte auffüllt.',
-    te_s3_label: 'URL-Zusammensetzung',
-    te_s3_desc: 'Die finale GET-URL setzt sich aus drei unverschlüsselten Pflichtparametern zusammen, die direkt an die Paygate-Endpoint-URL angehängt werden:',
-    te_leg_mid: '— Händlerkennung (Klartext)',
-    te_leg_len: '— Länge des unverschlüsselten Payloads in Bytes',
-    te_leg_data: '— Blowfish-ECB-verschlüsselter, hex-kodierter Payload',
-    ct_payment: 'Schritt 2 — Zahlungsparameter',
-    l_amount: 'Betrag', l_currency: 'Währung', l_language: 'Sprache',
-    l_transid: 'Transaction ID', h_transid: '(auto-generiert)',
-    l_refnr: 'Referenznummer', h_refnr: '(optional)',
-    l_orderdesc: 'Bestellbeschreibung', h_orderdesc: '(OrderDesc)',
-    opt_od_default: 'Testzahlung via Computop Paygate',
-    opt_od_sim_ok:  'Simulation: Erfolg (Test:0000)',
-    opt_od_sim_dec: 'Simulation: Abgelehnt – Acquirer/Issuer (Test:0305)',
-    opt_od_custom:  'Eigene Eingabe …',
-    tc_summary: 'Testkartennummern (Non-3DS)',
-    tc_note: 'Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure · Quelle: <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener" style="color:inherit">Computop Dokumentation</a>',
-    tc_h_brand: 'Marke', tc_h_number: 'Kartennummer', tc_h_result: 'Ergebnis',
-    tc_ok: 'Erfolg', tc_dec: 'Abgelehnt', tc_copy_hint: 'Klicken zum Kopieren',
-    tc_3ds_summary: 'Testkartennummern (3-D Secure 2.x)',
-    tc_3ds_note: 'Ablauf: beliebig · CVC: beliebig · Nur im Test-Modus mit 3DS-Konfiguration · Challenge-OTP: <strong>1234</strong> · Quelle: <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener" style="color:inherit">Computop Dokumentation</a>',
-    tc_3ds_h_brand: 'Marke', tc_3ds_h_number: 'Kartennummer', tc_3ds_h_scenario: 'Szenario',
-    tc_3ds_frictionless: 'Frictionless – Authentifiziert',
-    tc_3ds_challenge: 'Challenge (OTP: 1234)',
-    tc_3ds_not_auth: 'Nicht authentifiziert',
-    sep_redirect: 'Redirect-URLs',
-    l_urls: 'URLSuccess', h_urls: '(nach erfolgreicher Zahlung)',
-    l_urlf: 'URLFailure', h_urlf: '(nach fehlgeschlagener Zahlung)',
-    l_urln: 'URLNotify', h_urln: '(Server-zu-Server Benachrichtigung)',
-    l_urlb: 'URLBack', h_urlb: '(Abbrechen-Button, unverschlüsselt)',
-    cb_receiver_label: 'Dieses Tool als Callback-Empfänger aktivieren',
-    cb_receiver_hint: '(setzt URLSuccess, URLFailure & URLBack auf diese Seite — kein externer Dienst nötig)',
-    toast_callback_received: 'Callback empfangen — wird automatisch entschlüsselt …',
-    sep_advanced: 'Erweiterte Einstellungen',
-    l_paytypes: 'Zahlarten', h_paytypes: '(PayTypes)',
-    l_template: 'Template', h_template: '(optional, unverschlüsselt)',
-    opt_tmpl_none: '— kein Template (Standard)',
-    opt_tmpl_custom: '— Freitext …',
-    tmpl_custom_ph: 'eigener Template-Name',
-    tip_template: 'Steuert das Layout der Zahlungsseite. Leer lassen für das Standard-Layout. „Freitext" erlaubt einen eigenen Template-Namen.',
-    opt_pt_all: '— Alle freigeschalteten Zahlarten (PayTypes weglassen)',
-    opt_pt_cc: 'CC – Alle konfigurierten Kreditkartenmarken',
-    tip_mid:       'Deine Händlerkennung aus dem Computop-Vertrag. Wird unverschlüsselt in der URL übertragen.',
-    tip_bfpw:      'Wird zur Blowfish-ECB-Verschlüsselung des Payloads verwendet. Zu finden im Computop Händlerportal.',
-    tip_hmacpw:    'Wird zur HMAC-SHA256-Signierung der Anfrage verwendet. Schützt Betrag und Währung vor nachträglicher Manipulation.',
-    tip_amount:    'Zahlbetrag in der gewählten Währung. Wird intern in Cent umgerechnet (z.B. 1.99 → 199).',
-    tip_currency:  'ISO-4217-Währungscode. Muss mit den im Merchant-Account freigeschalteten Währungen übereinstimmen.',
-    tip_language:  'Steuert die Anzeigesprache der Computop-Zahlungsseite.',
-    tip_transid:   'Eindeutige Transaktionskennung (max. 38 Zeichen). Muss pro Transaktion einmalig sein – wird für Rückbuchungen und Statusabfragen benötigt.',
-    tip_refnr:     'Eigene Referenznummer (max. 30 Zeichen), z.B. Bestellnummer. Erscheint in Auswertungen und Benachrichtigungen.',
-    tip_orderdesc: 'Kurzbeschreibung der Bestellung (max. 127 Zeichen). Computop unterstützt Simulationscodes: Test:0000 = Erfolg, Test:0305 = Abgelehnt.',
-    tip_urls:      'Redirect nach erfolgreicher Zahlung. Computop hängt TransID, PayID, MerchantID und Status als Parameter an.',
-    tip_urlf:      'Redirect nach fehlgeschlagener oder abgebrochener Zahlung.',
-    tip_urln:      'Server-zu-Server-Callback. Computop sendet das Ergebnis unabhängig vom Browser-Redirect an diese URL – auch wenn der Käufer den Browser schließt.',
-    tip_urlb:      'Ziel des Abbrechen-Buttons auf der Zahlungsseite. Wird unverschlüsselt übergeben und ist nicht Teil des MAC.',
-    tip_paytypes:  'Schränkt die angezeigten Zahlarten ein. Leer = alle freigeschalteten Zahlarten. „CC" = alle Kreditkarten.',
-    ct_preview: 'Schritt 3 — Vorschau & Ausführen',
-    btn_preview: 'Vorschau generieren', btn_preview_loading: 'Generiere…',
-    btn_newtid: 'Neue Trans-ID',
-    preview_empty: 'Noch keine Vorschau generiert. Klicke in Schritt 2 auf <strong>„Vorschau generieren"</strong>, um die verschlüsselten Parameter und die vollständige URL hier anzuzeigen.',
-    debug_plain_label: 'Verschlüsselte Parameter (Data-String)',
-    debug_urlparams_label: 'Unverschlüsselte URL-Parameter (Query-String)',
-    debug_url_label: 'Vollständige GET-URL (Computop Paygate)',
-    btn_copy: 'Kopieren',
-    btn_submit: 'Zur Hosted Payment Page', btn_submit_hint: 'Öffnet Computop in neuem Tab',
-    btn_submit_ccf: 'Zum Kreditkartenformular', btn_submit_hint_ccf: 'Öffnet payssl.aspx in neuem Tab',
-    method_hpp_label: 'Hosted Payment Page',
-    method_ccf_label: 'Kreditkartenformular',
-    method_info_hpp: '<strong>paymentPage.aspx</strong> — Computop-eigene Zahlungsseite mit allen freigeschalteten Zahlarten (Kreditkarte, PayPal, Klarna, …). Unterstützt PayTypes-Filter zur Einschränkung der angezeigten Methoden.',
-    method_info_ccf: '<strong>payssl.aspx</strong> — Dediziertes Kreditkartenformular, ausschließlich für VISA, MasterCard und AMEX. PayTypes wird von payssl.aspx nicht unterstützt und daher nicht mitgeschickt. Template wird verschlüsselt im Data-String übergeben (Corporate PayPage).',
-    ct_log: 'Request-Log',
-    log_subtitle: 'Letzte 50 generierten Requests (lokal gespeichert)',
-    btn_log_clear: 'Log leeren',
-    log_empty: 'Noch keine Requests gespeichert.',
-    log_entries: 'Einträge', log_copy_url: 'URL kopieren',
-    ct_resp_log: 'Response-Log',
-    resp_log_subtitle: 'Letzte 50 entschlüsselten Responses (lokal gespeichert)',
-    btn_resp_log_clear: 'Log leeren',
-    resp_log_empty: 'Noch keine Responses gespeichert.',
-    resp_log_entries: 'Einträge', resp_log_copy: 'Payload kopieren',
-    resp_new_badge: 'Aktuell',
-    confirm_resp_log_del: 'Response-Log wirklich löschen?',
-    toast_resp_log_cleared: 'Response-Log geleert',
-    footer_name: 'Computop Payment Tester',
-    toast_copied: 'In Zwischenablage kopiert', toast_url_copied: 'URL kopiert',
-    toast_cred_saved: 'Credentials verschlüsselt gespeichert',
-    toast_cred_loaded: 'Gespeicherte Credentials geladen',
-    toast_cred_deleted: 'Credentials gelöscht',
-    toast_cred_err: 'Fehler beim Speichern: ',
-    toast_log_cleared: 'Log geleert',
-    toast_preview_done: 'Vorschau generiert · Len=',
-    toast_submit: 'Öffne Computop Paygate in neuem Tab…',
-    toast_no_url: 'Bitte zuerst Vorschau generieren',
-    toast_err: 'Fehler: ',
-    toast_theme_light: 'Light Mode aktiviert', toast_theme_dark: 'Dark Mode aktiviert',
-    toast_lang: 'Sprache: Deutsch',
-    val_mid: 'Bitte MerchantID eingeben', val_bf: 'Bitte Blowfish-Passwort eingeben',
-    val_hmac: 'Bitte HMAC-Passwort eingeben',
-    val_url_success: 'Bitte URLSuccess eingeben', val_url_failure: 'Bitte URLFailure eingeben',
-    val_amount: 'Ungültiger Betrag',
-    confirm_cred_del: 'Gespeicherte Credentials wirklich löschen?',
-    confirm_log_del: 'Request-Log wirklich löschen?',
-    confirm_clear_all: 'Wirklich alle gespeicherten Daten löschen?\n\nDas entfernt alle Profile, den Request-Log sowie alle Einstellungen.',
-    btn_clear_all: 'Alles löschen',
-    toast_clear_all: 'Alle lokalen Daten gelöscht',
-    cred_status_saved: 'Gespeichert', cred_status_none: 'Nicht gespeichert',
-    ct_response: 'Response-Entschlüsseler',
-    resp_info_title: 'Hinweis:',
-    resp_info_body: 'Füge die vollständige Callback-URL von Computop ein (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert und mit dem Blowfish-Passwort aus Schritt&nbsp;1 entschlüsselt.',
-    l_resp_url: 'Callback-URL', h_resp_url: '(URLSuccess / URLFailure / URLNotify)',
-    sep_resp_manual: 'Oder manuell',
-    l_resp_data: 'Data', l_resp_len: 'Len',
-    btn_decrypt: 'Entschlüsseln',
-    resp_result_label: 'Entschlüsselter Payload',
-    btn_copy_resp: 'Kopieren',
-    resp_success: 'Payload erfolgreich entschlüsselt',
-    resp_no_data: 'Kein Data-Parameter gefunden',
-    resp_url_parse_err: 'URL konnte nicht geparst werden',
-  },
-  en: {
-    page_title: 'Computop Paygate – Payment Tester',
-    subtitle: 'Hosted Payment Page & Credit Card Form · Blowfish ECB · HMAC-SHA256 · Test Environment',
-    info_title: 'Note:',
-    info_body: 'This page runs entirely in the browser. All data stays local — no server communication except the final redirect to Computop. In test mode, please use only <strong>small amounts (0.11–2.00 EUR)</strong>, as credit card authorisations may be real even in test environments.',
-    sec_title: 'Security Notice for Your Credentials',
-    sec_p1: 'Entering production API credentials into web-based tools carries an inherent residual risk. Although this tester runs exclusively in the browser and does not transmit any data to external servers, the responsibility for the secure handling of your credentials lies with you.',
-    sec_p2: '<strong>Recommendation:</strong> Prefer running this page locally in your browser rather than accessing it via a publicly reachable URL.',
-    sec_download: 'Download page for local use',
-    sec_hint: 'Download the file and open it directly in your browser — no installation required',
-    ct_creds: 'Step 1 — Credentials',
-    l_mid: 'Merchant ID', l_bfpw: 'Blowfish Password', h_bfpw: '(for Data encryption)',
-    l_hmacpw: 'HMAC Password', h_hmacpw: '(for MAC calculation)',
-    cred_save_title: 'Encrypted Profiles',
-    cred_save_text: 'Credentials are stored AES-GCM encrypted in the browser\'s LocalStorage. Multiple profiles supported.',
-    btn_save: 'Save', btn_load: 'Load', btn_delete: 'Delete',
-    profile_placeholder: '— Saved profiles —',
-    profile_name_ph: 'Profile name …',
-    confirm_profile_del: 'Delete profile?',
-    toast_profile_saved: 'Profile saved',
-    toast_profile_loaded: 'Profile loaded',
-    toast_profile_deleted: 'Profile deleted',
-    toast_profile_name_req: 'Please enter a profile name',
-    toast_profile_none: 'No profile selected',
-    cred_status_saved: 'saved',
-    cred_status_none: 'No profile saved',
-    te_title: 'How is the GET URL generated?',
-    te_s1_label: 'MAC Calculation',
-    te_s1_desc: 'Using the <strong>HMAC password</strong>, a digital signature is computed via HMAC-SHA256 over the string <code>*TransID*MerchantID*Amount*Currency</code>. The leading <code>*</code> represents the empty PayID of a new transaction. The MAC is included in the payload and ensures <strong>request integrity</strong> — the Paygate immediately rejects any request with an incorrect or missing MAC.',
-    te_s2_label: 'Payload Encryption',
-    te_s2_desc: 'All payment parameters (including the MAC) are assembled into a plain-text string in the format <code>Key=Value&amp;Key=Value…</code>. This string is encrypted with the <strong>Blowfish password</strong> using Blowfish ECB and then hex-encoded. The result forms the <code>Data</code> parameter. The original plain-text length is passed separately as <code>Len</code>, because Blowfish pads to a multiple of 8 bytes.',
-    te_s3_label: 'URL Assembly',
-    te_s3_desc: 'The final GET URL consists of three unencrypted mandatory parameters appended directly to the Paygate endpoint URL:',
-    te_leg_mid: '— Merchant identifier (plain text)',
-    te_leg_len: '— Length of the unencrypted payload in bytes',
-    te_leg_data: '— Blowfish-ECB-encrypted, hex-encoded payload',
-    ct_payment: 'Step 2 — Payment Parameters',
-    l_amount: 'Amount', l_currency: 'Currency', l_language: 'Language',
-    l_transid: 'Transaction ID', h_transid: '(auto-generated)',
-    l_refnr: 'Reference Number', h_refnr: '(optional)',
-    l_orderdesc: 'Order Description', h_orderdesc: '(OrderDesc)',
-    opt_od_default: 'Test payment via Computop Paygate',
-    opt_od_sim_ok:  'Simulation: Success (Test:0000)',
-    opt_od_sim_dec: 'Simulation: Declined – Acquirer/Issuer (Test:0305)',
-    opt_od_custom:  'Custom input …',
-    tc_summary: 'Test card numbers (Non-3DS)',
-    tc_note: 'Expiry: any future date (e.g. 10/30) · CVC: any 3 digits (e.g. 123) · Non-3DS only · Source: <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener" style="color:inherit">Computop Documentation</a>',
-    tc_h_brand: 'Brand', tc_h_number: 'Card Number', tc_h_result: 'Result',
-    tc_ok: 'Success', tc_dec: 'Declined', tc_copy_hint: 'Click to copy',
-    tc_3ds_summary: 'Test card numbers (3-D Secure 2.x)',
-    tc_3ds_note: 'Expiry: any · CVC: any · Test mode with 3DS configuration only · Challenge OTP: <strong>1234</strong> · Source: <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener" style="color:inherit">Computop Documentation</a>',
-    tc_3ds_h_brand: 'Brand', tc_3ds_h_number: 'Card Number', tc_3ds_h_scenario: 'Scenario',
-    tc_3ds_frictionless: 'Frictionless – Authenticated',
-    tc_3ds_challenge: 'Challenge (OTP: 1234)',
-    tc_3ds_not_auth: 'Not authenticated',
-    sep_redirect: 'Redirect URLs',
-    l_urls: 'URLSuccess', h_urls: '(after successful payment)',
-    l_urlf: 'URLFailure', h_urlf: '(after failed payment)',
-    l_urln: 'URLNotify', h_urln: '(server-to-server notification)',
-    l_urlb: 'URLBack', h_urlb: '(cancel button, unencrypted)',
-    cb_receiver_label: 'Use this tool as callback receiver',
-    cb_receiver_hint: '(sets URLSuccess, URLFailure & URLBack to this page — no external service needed)',
-    toast_callback_received: 'Callback received — auto-decrypting …',
-    sep_advanced: 'Advanced Settings',
-    l_paytypes: 'Payment Methods', h_paytypes: '(PayTypes)',
-    l_template: 'Template', h_template: '(optional, unencrypted)',
-    opt_tmpl_none: '— no template (default)',
-    opt_tmpl_custom: '— Custom …',
-    tmpl_custom_ph: 'custom template name',
-    tip_template: 'Controls the layout of the payment page. Leave empty for the default layout. "Custom" allows entering any template name.',
-    opt_pt_all: '— All enabled payment methods (omit PayTypes)',
-    opt_pt_cc: 'CC – All configured card brands',
-    tip_mid:       'Your merchant identifier from the Computop contract. Transmitted unencrypted in the URL.',
-    tip_bfpw:      'Used for Blowfish ECB encryption of the payload. Found in the Computop merchant portal.',
-    tip_hmacpw:    'Used for HMAC-SHA256 signing of the request. Protects amount and currency from tampering.',
-    tip_amount:    'Payment amount in the selected currency. Internally converted to cents (e.g. 1.99 → 199).',
-    tip_currency:  'ISO 4217 currency code. Must match the currencies enabled for your merchant account.',
-    tip_language:  'Controls the display language of the Computop payment page.',
-    tip_transid:   'Unique transaction ID (max. 38 chars). Must be unique per transaction – required for refunds and status inquiries.',
-    tip_refnr:     'Your own reference number (max. 30 chars), e.g. order number. Appears in reports and notifications.',
-    tip_orderdesc: 'Short order description (max. 127 chars). Computop supports simulation codes: Test:0000 = success, Test:0305 = declined.',
-    tip_urls:      'Redirect after successful payment. Computop appends TransID, PayID, MerchantID and status as parameters.',
-    tip_urlf:      'Redirect after failed or cancelled payment.',
-    tip_urln:      'Server-to-server callback. Computop sends the result independently of the browser redirect to this URL – even if the buyer closes the browser.',
-    tip_urlb:      'Target of the cancel button on the payment page. Passed unencrypted and not part of the MAC.',
-    tip_paytypes:  'Restricts the displayed payment methods. Empty = all enabled methods. "CC" = all credit card brands.',
-    ct_preview: 'Step 3 — Preview & Submit',
-    btn_preview: 'Generate Preview', btn_preview_loading: 'Generating…',
-    btn_newtid: 'New Trans-ID',
-    preview_empty: 'No preview generated yet. Click <strong>"Generate Preview"</strong> in Step 2 to display the encrypted parameters and full URL here.',
-    debug_plain_label: 'Encrypted Parameters (Data String)',
-    debug_urlparams_label: 'Unencrypted URL Parameters (Query String)',
-    debug_url_label: 'Full GET URL (Computop Paygate)',
-    btn_copy: 'Copy',
-    btn_submit: 'Go to Hosted Payment Page', btn_submit_hint: 'Opens Computop in a new tab',
-    btn_submit_ccf: 'Go to Credit Card Form', btn_submit_hint_ccf: 'Opens payssl.aspx in a new tab',
-    method_hpp_label: 'Hosted Payment Page',
-    method_ccf_label: 'Credit Card Form',
-    method_info_hpp: '<strong>paymentPage.aspx</strong> — Computop\'s payment page with all enabled payment methods (credit card, PayPal, Klarna, …). Supports PayTypes filter to restrict displayed methods.',
-    method_info_ccf: '<strong>payssl.aspx</strong> — Dedicated credit card form for VISA, MasterCard and AMEX only. PayTypes is not supported by payssl.aspx and is therefore not included. Template is passed encrypted inside the Data string (Corporate PayPage).',
-    ct_log: 'Request Log',
-    log_subtitle: 'Last 50 generated requests (stored locally)',
-    btn_log_clear: 'Clear log',
-    log_empty: 'No requests stored yet.',
-    log_entries: 'entries', log_copy_url: 'Copy URL',
-    ct_resp_log: 'Response Log',
-    resp_log_subtitle: 'Last 50 decrypted responses (stored locally)',
-    btn_resp_log_clear: 'Clear log',
-    resp_log_empty: 'No responses stored yet.',
-    resp_log_entries: 'entries', resp_log_copy: 'Copy payload',
-    resp_new_badge: 'Current',
-    confirm_resp_log_del: 'Really clear the response log?',
-    toast_resp_log_cleared: 'Response log cleared',
-    footer_name: 'Computop Payment Tester',
-    toast_copied: 'Copied to clipboard', toast_url_copied: 'URL copied',
-    toast_cred_saved: 'Credentials saved encrypted',
-    toast_cred_loaded: 'Saved credentials loaded',
-    toast_cred_deleted: 'Credentials deleted',
-    toast_cred_err: 'Error saving: ',
-    toast_log_cleared: 'Log cleared',
-    toast_preview_done: 'Preview generated · Len=',
-    toast_submit: 'Opening Computop Paygate in a new tab…',
-    toast_no_url: 'Please generate a preview first',
-    toast_err: 'Error: ',
-    toast_theme_light: 'Light mode activated', toast_theme_dark: 'Dark mode activated',
-    toast_lang: 'Language: English',
-    val_mid: 'Please enter a MerchantID', val_bf: 'Please enter the Blowfish password',
-    val_hmac: 'Please enter the HMAC password',
-    val_url_success: 'Please enter URLSuccess', val_url_failure: 'Please enter URLFailure',
-    val_amount: 'Invalid amount',
-    confirm_cred_del: 'Really delete saved credentials?',
-    confirm_log_del: 'Really clear the request log?',
-    confirm_clear_all: 'Really delete all stored data?\n\nThis removes all profiles, the request log and all settings.',
-    btn_clear_all: 'Clear all data',
-    toast_clear_all: 'All local data cleared',
-    cred_status_saved: 'Saved', cred_status_none: 'Not saved',
-    ct_response: 'Response Decryptor',
-    resp_info_title: 'Note:',
-    resp_info_body: 'Paste the full Computop callback URL (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> and <code>Data</code> are extracted automatically and decrypted using the Blowfish password from Step&nbsp;1.',
-    l_resp_url: 'Callback URL', h_resp_url: '(URLSuccess / URLFailure / URLNotify)',
-    sep_resp_manual: 'Or manually',
-    l_resp_data: 'Data', l_resp_len: 'Len',
-    btn_decrypt: 'Decrypt',
-    resp_result_label: 'Decrypted Payload',
-    btn_copy_resp: 'Copy',
-    resp_success: 'Payload decrypted successfully',
-    resp_no_data: 'No Data parameter found',
-    resp_url_parse_err: 'Could not parse the URL',
-  }
-};
 
 function t(key) {
   return (TRANSLATIONS[currentLang] || TRANSLATIONS.de)[key] || key;
 }
 
-// ══════════════════════════════════════════════════════════════
-// CHANGELOG DATA (DE / EN)
-// ══════════════════════════════════════════════════════════════
-const CHANGELOG = [
-  { v: 'v2.2.3', de: { title: 'PWA-Support & Favicon', items: [
-    '<strong>Progressive Web App</strong> — Die App kann jetzt als eigenständige Webapp auf allen Geräten installiert werden (Chrome, Edge, Safari)',
-    '<strong>Favicon</strong> — Neues Schild-Icon mit Checkmark als Favicon im Browser-Tab (inline Data-URI)',
-    '<strong>Service Worker</strong> — Network-First-Caching für Offline-Nutzung der App',
-    '<strong>Web App Manifest</strong> — Manifest für App-Name, Icon und Standalone-Modus',
-  ]}, en: { title: 'PWA Support & Favicon', items: [
-    '<strong>Progressive Web App</strong> — the app can now be installed as a standalone webapp on all devices (Chrome, Edge, Safari)',
-    '<strong>Favicon</strong> — new shield icon with checkmark as browser tab favicon (inline data URI)',
-    '<strong>Service Worker</strong> — network-first caching for offline usage of the app',
-    '<strong>Web App Manifest</strong> — manifest for app name, icon, and standalone mode',
-  ]}},
-  { v: 'v2.2.2', de: { title: 'UX-Verbesserungen & Changelog-Übersetzung', items: [
-    '<strong>Changelog zweisprachig</strong> — Changelog wird jetzt dynamisch gerendert und wechselt beim Sprachwechsel komplett zwischen Deutsch und Englisch',
-    '<strong>Buttons verschoben</strong> — „Vorschau generieren" und „Neue Trans-ID" von Schritt 3 nach Schritt 2 verschoben, wo die Parameter konfiguriert werden',
-    '<strong>Testkarten verschoben</strong> — Testkartentabellen (Non-3DS & 3-D Secure 2.x) von Schritt 2 nach Schritt 3 verschoben, direkt über dem Submit-Button',
-    '<strong>Schritt 3 zugeklappt</strong> — Box ist beim ersten Besuch zugeklappt mit Hinweistext; klappt automatisch auf nach Vorschau-Generierung',
-    'Button-Höhen vereinheitlicht — Inline-Style beim Submit-Button entfernt',
-  ]}, en: { title: 'UX Improvements & Changelog Translation', items: [
-    '<strong>Bilingual changelog</strong> — changelog is now dynamically rendered and fully switches between German and English when changing the language',
-    '<strong>Buttons moved</strong> — "Generate Preview" and "New Trans-ID" moved from Step 3 to Step 2, where parameters are configured',
-    '<strong>Test cards moved</strong> — test card tables (Non-3DS & 3-D Secure 2.x) moved from Step 2 to Step 3, right above the submit button',
-    '<strong>Step 3 collapsed</strong> — box is collapsed on first visit with a hint message; auto-expands after preview generation',
-    'Button heights unified — removed inline style override on the submit button',
-  ]}},
-  { v: 'v2.2', de: { title: 'PaySSL Template-Support & URL-Parameter-Übersicht', items: [
-    '<strong>Template für payssl.aspx</strong> — Template-Parameter wird jetzt auch beim Kreditkartenformular (<code>payssl.aspx</code>) unterstützt; bei PaySSL wird der Parameter verschlüsselt im Data-String übergeben, bei HPP weiterhin unverschlüsselt als URL-Parameter',
-    '<strong>URL-Parameter-Box</strong> — neue Übersicht in Schritt 3 zeigt alle unverschlüsselten Query-Parameter (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>, <code>Language</code>, <code>URLBack</code>, <code>Template</code>) auf einen Blick',
-    'Erster Debug-Block umbenannt in „Verschlüsselte Parameter (Data-String)" zur klareren Abgrenzung',
-  ]}, en: { title: 'PaySSL Template Support & URL Parameter Overview', items: [
-    '<strong>Template for payssl.aspx</strong> — the Template parameter is now supported for the credit card form (<code>payssl.aspx</code>) as well; for PaySSL the parameter is passed encrypted inside the Data string, for HPP it remains unencrypted as a URL parameter',
-    '<strong>URL parameter box</strong> — new overview in Step 3 displays all unencrypted query-string parameters (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>, <code>Language</code>, <code>URLBack</code>, <code>Template</code>) at a glance',
-    'First debug block renamed to "Encrypted Parameters (Data String)" for clearer distinction',
-  ]}},
-  { v: 'v2.1.1', de: { title: 'Template-Parameter', items: [
-    '<strong>Template-Parameter</strong> — neues Dropdown in den Erweiterten Einstellungen zum Steuern des Layouts der Zahlungsseite; Optionen: <code>ct_paymentpagelogos_v1</code>, <code>ct_paymentpagedropdown_v1</code>, <code>ct_paymentpagedropdown_v2</code> oder leer (Standard)',
-    'Template wird unverschlüsselt an die URL angehängt, nur für <code>paymentPage.aspx</code> (HPP)',
-  ]}, en: { title: 'Template Parameter', items: [
-    '<strong>Template parameter</strong> — new dropdown in Advanced Settings to control the payment page layout; options: <code>ct_paymentpagelogos_v1</code>, <code>ct_paymentpagedropdown_v1</code>, <code>ct_paymentpagedropdown_v2</code> or empty (default)',
-    'Template is appended unencrypted to the URL, only for <code>paymentPage.aspx</code> (HPP)',
-  ]}},
-  { v: 'v2.1', de: { title: 'Response-Log & Callback-Verbesserungen', items: [
-    '<strong>Response-Log</strong> — speichert die letzten 50 entschlüsselten Responses im Browser; aufklappbare Einträge mit Status-Badge (OK/FAILED), TransID, MerchantID und kopierbarem Payload',
-    '<strong>„Aktuell"-Badge</strong> — kennzeichnet die zuletzt entschlüsselte Response im Ergebnisbereich',
-    '<strong>Auto-Aufklappen</strong> — Response-Entschlüsseler klappt bei Callback-Redirect automatisch auf',
-    '<strong>OrderDesc-Default</strong> geändert auf <code>Test:0000</code> (Simulation: Erfolg)',
-    'Profilname wird beim Laden eines Profils nicht mehr ins Namensfeld geschrieben',
-    'Bugfix Callback-Receiver: <code>:has()</code>-Selektor durch kompatibles <code>.closest()</code> ersetzt; Timing-Problem bei der Auto-Entschlüsselung behoben; <code>checkCallbackParams()</code> in try-catch eingefasst',
-    '„Alles löschen" löscht jetzt auch den Response-Log',
-  ]}, en: { title: 'Response Log & Callback Improvements', items: [
-    '<strong>Response log</strong> — stores the last 50 decrypted responses in the browser; expandable entries with status badge (OK/FAILED), TransID, MerchantID and copyable payload',
-    '<strong>"Current" badge</strong> — marks the most recently decrypted response in the result area',
-    '<strong>Auto-expand</strong> — the Response Decryptor card automatically opens on callback redirect',
-    '<strong>OrderDesc default</strong> changed to <code>Test:0000</code> (Simulation: success)',
-    'Profile name is no longer written back into the name field when loading a profile',
-    'Bugfix callback receiver: replaced <code>:has()</code> selector with compatible <code>.closest()</code>; fixed timing issue on auto-decrypt; wrapped <code>checkCallbackParams()</code> in try-catch',
-    '"Clear all data" now also clears the response log',
-  ]}},
-  { v: 'v2.0.5', de: { title: 'Callback-Empfänger & UX-Verbesserungen', items: [
-    '<strong>Callback-Empfänger</strong> — Toggle in den Redirect-URLs setzt URLSuccess, URLFailure und URLBack auf diese Seite; bei Rückkehr von Computop wird die Antwort automatisch entschlüsselt — kein externer Dienst mehr nötig',
-    '<strong>Mehrere Credential-Profile</strong> — benannte, verschlüsselte Profile mit Dropdown-Wähler; Migration vom alten Einzelprofil automatisch',
-    '<strong>Alles löschen</strong> — Button im Footer entfernt alle gespeicherten Daten (Profile, Log, Einstellungen) auf einmal',
-    '<strong>Profil-Name-Feld</strong> wird nach dem Speichern automatisch geleert',
-    '<strong>Laden-Icon</strong> korrigiert — Pfeil zeigt nun nach oben (Upload-Semantik)',
-    'Seitenbeschreibung aktualisiert: HPP ausgeschrieben als <em>Hosted Payment Page</em>',
-    'Environment-Selector entfernt — beide Optionen zeigten auf dieselbe URL',
-    'Credential-Felder: 2-spaltig (MerchantID + Blowfish) + vollbreite HMAC-Zeile',
-  ]}, en: { title: 'Callback Receiver & UX Improvements', items: [
-    '<strong>Callback receiver</strong> — toggle in the Redirect URLs section sets URLSuccess, URLFailure and URLBack to the tool\'s own URL; on return from Computop the response is auto-decrypted — no external service required',
-    '<strong>Multiple credential profiles</strong> — named, AES-GCM encrypted profiles with a dropdown selector; automatic migration from the old single-credential storage',
-    '<strong>Clear all data</strong> — button in the footer removes all stored data (profiles, request log, settings) in one step',
-    '<strong>Profile name field</strong> is cleared automatically after saving',
-    '<strong>Load icon</strong> corrected — arrow now points upward (upload semantics)',
-    'Page subtitle updated: HPP spelled out as <em>Hosted Payment Page</em>',
-    'Environment selector removed — both options pointed to the same URL',
-    'Credential field layout: 2-column row (MerchantID + Blowfish) + full-width HMAC row',
-  ]}},
-  { v: 'v2.0', de: { title: 'Kreditkartenformular (payssl.aspx)', items: [
-    '<strong>Integrationsmethoden-Wähler</strong> — Segmented Control in Schritt 2 zum Umschalten zwischen <em>Hosted Payment Page</em> (<code>paymentPage.aspx</code>) und <em>Kreditkartenformular</em> (<code>payssl.aspx</code>)',
-    'Info-Box erklärt den Unterschied der gewählten Methode; Submit-Button-Text passt sich automatisch an',
-    '<strong>Erweiterte Einstellungen</strong> blendet sich bei payssl.aspx aus — PayTypes wird dort nicht unterstützt',
-  ]}, en: { title: 'Credit Card Form (payssl.aspx)', items: [
-    '<strong>Integration method selector</strong> — segmented control in Step 2 to switch between <em>Hosted Payment Page</em> (<code>paymentPage.aspx</code>) and <em>Credit Card Form</em> (<code>payssl.aspx</code>)',
-    'Info box explains the difference of the selected method; submit button text updates automatically',
-    '<strong>Advanced Settings</strong> section hides when payssl.aspx is selected — PayTypes is not supported there',
-  ]}},
-  { v: 'v1.9.1', de: { title: 'Tooltip-Dokumentation & UX-Verbesserungen', items: [
-    '<strong>Inline-Tooltips</strong> — <code>?</code>-Icon neben allen 15 Parametern mit kurzer Erklärung; viewport-aware positioniert (kein Abschneiden am Rand)',
-    '<strong>Kartennummern formatiert</strong> — 3DS-2.x-Testkartennummern jetzt mit Leerzeichen wie die Non-3DS-Karten (z.B. <code>4000 0199 6619 9434</code>)',
-    '<strong>Dokumentationslink</strong> — Link zur Computop-Dokumentation in beiden Testkartentabellen (Non-3DS & 3DS) als Quellenangabe',
-    '<strong>Template-Parameter entfernt</strong> — war nicht notwendig; bei gebuchter Corporate PaymentPage lädt Computop das Layout automatisch',
-  ]}, en: { title: 'Tooltip Documentation & UX Improvements', items: [
-    '<strong>Inline tooltips</strong> — <code>?</code> icon next to all 15 parameters with a short explanation; viewport-aware positioning (never clipped at the edge)',
-    '<strong>Formatted card numbers</strong> — 3DS 2.x test card numbers now use spaces like the Non-3DS cards (e.g. <code>4000 0199 6619 9434</code>)',
-    '<strong>Documentation link</strong> — link to the Computop documentation added to both test card tables (Non-3DS & 3DS) as a source reference',
-    '<strong>Template parameter removed</strong> — was unnecessary; if Corporate PaymentPage is booked, Computop loads the layout automatically',
-  ]}},
-  { v: 'v1.9', de: { title: '3-D Secure Testkartennummern', items: [
-    'Zweite Testkartentabelle <strong>(3-D Secure 2.x)</strong> in den Zahlungsparametern hinzugefügt',
-    'Abgedeckte Szenarien: Frictionless – Authentifiziert, Challenge (OTP: <code>1234</code>), Nicht authentifiziert',
-    'Karten für Visa, MasterCard und Amex — farbcodiert nach Szenario',
-  ]}, en: { title: '3-D Secure Test Card Numbers', items: [
-    'Added second test card table <strong>(3-D Secure 2.x)</strong> in the payment parameters section',
-    'Scenarios covered: Frictionless – Authenticated, Challenge (OTP: <code>1234</code>), Not authenticated',
-    'Cards for Visa, MasterCard and Amex — colour-coded by scenario',
-  ]}},
-  { v: 'v1.8.1', de: { title: 'Bugfix: MAC-Berechnung', items: [
-    'MAC-String-Format korrigiert: <code>*TransID*MerchantID*Amount*Currency</code> — führendes <code>*</code> für leere PayID war bisher fehlend',
-    'Ohne diesen Fix lehnte Computop jeden Request mit <strong>„MAC INVALID"</strong> ab',
-    'Technische Erklärung im Credentials-Bereich entsprechend aktualisiert',
-  ]}, en: { title: 'Bugfix: MAC Calculation', items: [
-    'Fixed MAC string format: <code>*TransID*MerchantID*Amount*Currency</code> — the leading <code>*</code> for empty PayID was missing',
-    'Without this fix Computop rejected every request with <strong>"MAC INVALID"</strong>',
-    'Updated the technical explainer in the Credentials section accordingly',
-  ]}},
-  { v: 'v1.8', de: { title: 'Testkartennummern & Simulationsmodi', items: [
-    '<strong>OrderDesc als Dropdown</strong> — vorgefertigte Optionen für Erfolg (<code>Test:0000</code>), Ablehnung (<code>Test:0305</code>) und eigene Eingabe',
-    '<strong>Testkartentabelle</strong> (Non-3DS) in den Zahlungsparametern — Visa, MasterCard, Amex jeweils mit Erfolg und Ablehnung',
-    'Kartennummer per Klick in die Zwischenablage kopieren',
-    'Tabelle und Dropdown vollständig übersetzt (DE / EN)',
-  ]}, en: { title: 'Test Cards & Simulation Modes', items: [
-    '<strong>OrderDesc dropdown</strong> with presets for success (<code>Test:0000</code>), decline (<code>Test:0305</code>) and custom input',
-    '<strong>Test card table</strong> (Non-3DS) in the payment form — Visa, MasterCard, Amex with success and decline card numbers',
-    'Card numbers are click-to-copy',
-    'Table and dropdown fully translated (DE / EN)',
-  ]}},
-  { v: 'v1.7', de: { title: 'Response-Entschlüsseler', items: [
-    'Neuer Bereich <strong>„Response-Entschlüsseler"</strong> — entschlüsselt Computop-Callback-URLs direkt im Browser',
-    'Vollständige Callback-URL einfügen: <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert',
-    'Alternativ <code>Data</code>-Hex und <code>Len</code> manuell eingeben',
-    'Farbcodierte Darstellung der entschlüsselten Parameter — <code>Status</code> grün/rot/orange je nach Wert, <code>MAC</code> lila',
-    'Blowfish-<code>decrypt</code>-Funktion zur bestehenden ECB-Implementierung hinzugefügt',
-  ]}, en: { title: 'Response Decryptor', items: [
-    'Added <strong>Response Decryptor</strong> section — decrypts Computop callback URLs directly in the browser',
-    'Paste the full callback URL: <code>MerchantID</code>, <code>Len</code> and <code>Data</code> are extracted automatically',
-    'Alternative manual mode: enter <code>Data</code> (hex) and <code>Len</code> directly',
-    'Color-coded output — <code>Status</code> green/red/orange by value, <code>MAC</code> purple',
-    'Added Blowfish <code>decrypt</code> function alongside the existing ECB encrypt implementation',
-  ]}},
-  { v: 'v1.6', de: { title: 'Mehrsprachigkeit (DE / EN)', items: [
-    '<strong>Sprach-Schalter</strong> im Header (neben dem Dark-/Light-Mode-Toggle): wechselt die gesamte Benutzeroberfläche zwischen Deutsch und Englisch',
-    'Vollständige <strong>EN-Übersetzung</strong> aller UI-Texte — Labels, Buttons, Hinweise, Fehlermeldungen, Toasts und Bestätigungsdialoge',
-    'Sprachpräferenz wird in <code>localStorage</code> gespeichert und beim nächsten Besuch automatisch wiederhergestellt',
-    'i18n-System via <code>TRANSLATIONS</code>-Objekt und <code>t(key)</code>-Funktion — kein externes Framework nötig',
-  ]}, en: { title: 'Multilingual UI (DE / EN)', items: [
-    '<strong>Language toggle</strong> in the header (next to the theme toggle): switches the entire UI between German and English',
-    'Full <strong>English translation</strong> of all UI text — labels, buttons, hints, error messages, toasts and confirmation dialogs',
-    'Language preference saved in <code>localStorage</code> and restored automatically on the next visit',
-    'Lightweight i18n system using a <code>TRANSLATIONS</code> object and a <code>t(key)</code> helper — no external framework',
-  ]}},
-  { v: 'v1.5', de: { title: 'Technische Erläuterung der URL-Generierung', items: [
-    'Ausführliche <strong>3-Schritt-Erklärung</strong> im Credentials-Bereich hinzugefügt: MAC-Berechnung, Payload-Verschlüsselung und URL-Zusammensetzung',
-    'Rolle des <strong>HMAC-Passworts</strong> erläutert — HMAC-SHA256-Signatur über <code>TransID * MerchantID * Amount * Currency</code> zur Sicherstellung der Anfrageintegrität',
-    'Rolle des <strong>Blowfish-Passworts</strong> erläutert — ECB-Verschlüsselung des vollständigen Payloads inkl. MAC, hex-kodiert als <code>Data</code>-Parameter',
-    'Visuelle <strong>URL-Anatomie</strong> mit farbcodierten Parametern (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>) und Legende',
-  ]}, en: { title: 'Technical Explanation of URL Generation', items: [
-    'Added detailed <strong>3-step explanation</strong> in the Credentials section: MAC calculation, payload encryption and URL composition',
-    'Role of the <strong>HMAC password</strong> explained — HMAC-SHA256 signature over <code>TransID * MerchantID * Amount * Currency</code> to ensure request integrity',
-    'Role of the <strong>Blowfish password</strong> explained — ECB encryption of the full payload including MAC, hex-encoded as the <code>Data</code> parameter',
-    'Visual <strong>URL anatomy</strong> with colour-coded parameters (<code>MerchantID</code>, <code>Len</code>, <code>Data</code>) and legend',
-  ]}},
-  { v: 'v1.4', de: { title: 'Security Disclaimer', items: [
-    'Sicherheitshinweis zu produktiven Credentials direkt auf der Startseite hinzugefügt',
-    'Nutzer wird explizit auf seine <strong>Eigenverantwortung</strong> beim Umgang mit API-Zugangsdaten hingewiesen',
-    '<strong>Download-Button</strong> zur lokalen Ausführung der Seite — empfohlene Alternative zur öffentlichen URL',
-  ]}, en: { title: 'Security Disclaimer', items: [
-    'Security disclaimer regarding productive credentials added prominently to the start page',
-    'User is explicitly informed of their <strong>responsibility</strong> for the safe handling of API credentials',
-    '<strong>Download button</strong> for local execution — recommended alternative to using the public URL',
-  ]}},
-  { v: 'v1.3', de: { title: 'Zahlarten', items: [
-    '<strong>„Alle freigeschalteten Zahlarten"</strong> als Standard — Weglassen des <code>PayTypes</code>-Parameters zeigt alle für den Merchant-Account konfigurierten Zahlarten an',
-    'Bestehende Optionen <code>CC</code>, <code>VISA</code>, <code>MasterCard</code> und <code>AMEX</code> im Selector präzisiert',
-  ]}, en: { title: 'Payment Methods', items: [
-    'Added <strong>"All enabled payment methods"</strong> as the default — omitting the <code>PayTypes</code> parameter causes Computop to display every method configured for the merchant account',
-    'Clarified existing <code>CC</code>, <code>VISA</code>, <code>MasterCard</code> and <code>AMEX</code> options in the selector',
-  ]}},
-  { v: 'v1.2', de: { title: 'Icons', items: [
-    'Alle Emoji durch <strong>professionelle inline SVGs</strong> (Lucide Icon Set) ersetzt',
-    'Vollständig selbst-enthalten — kein CDN, funktioniert offline',
-    'Spinning Loader-Animation auf dem Generieren-Button während der Verarbeitung',
-  ]}, en: { title: 'Icons', items: [
-    'Replaced all emoji with <strong>professional inline SVGs</strong> (Lucide icon set)',
-    'Fully self-contained — no CDN required, works offline',
-    'Spinning loader animation on the generate button while processing',
-  ]}},
-  { v: 'v1.1', de: { title: 'Dark / Light Mode', items: [
-    '<strong>Dark/Light Mode Toggle</strong> (fixierter Button oben rechts)',
-    '<strong>Auto-Modus</strong> folgt <code>prefers-color-scheme</code> und reagiert auf Live-Änderungen; zeigt <code>auto</code>-Badge',
-    'Manuelle Präferenz wird in <code>localStorage</code> gespeichert und beim nächsten Besuch wiederhergestellt',
-    'Flash-freier Load via Inline-Script im <code>&lt;head&gt;</code>',
-    'Vollständige Light-Mode-Farbpalette mit angepassten Gradienten und Code-Farben',
-  ]}, en: { title: 'Dark / Light Mode', items: [
-    '<strong>Dark / Light Mode toggle</strong> (fixed button in the top-right corner)',
-    '<strong>Auto mode</strong> follows <code>prefers-color-scheme</code> and reacts to live system changes; displays <code>auto</code> badge',
-    'Manual preference saved in <code>localStorage</code> and restored on next visit',
-    'Flash-free load via inline script in <code>&lt;head&gt;</code>',
-    'Full Light Mode colour palette with adjusted gradients and code colours',
-  ]}},
-  { v: 'v1.0', de: { title: 'Initial Release', items: [
-    'Blowfish ECB Verschlüsselung des <code>Data</code>-Parameters',
-    'HMAC-SHA256 MAC-Berechnung',
-    '<strong>Verschlüsselte Credential-Speicherung</strong> (AES-GCM) in <code>localStorage</code> mit PBKDF2-Schlüsselableitung',
-    '<strong>Request-Log</strong> in <code>localStorage</code> (letzte 50 Einträge, aufklappbar, kopierbar)',
-    '<strong>Neuer-Tab-Redirect</strong> — Computop HPP öffnet in neuem Tab',
-    'Parameter-Vorschau mit farbcodierter Klartext-Anzeige',
-  ]}, en: { title: 'Initial Release', items: [
-    'Blowfish ECB encryption of the <code>Data</code> parameter',
-    'HMAC-SHA256 MAC calculation',
-    '<strong>Encrypted credential storage</strong> (AES-GCM) in <code>localStorage</code> with PBKDF2 key derivation',
-    '<strong>Request log</strong> in <code>localStorage</code> (last 50 entries, expandable, copyable)',
-    '<strong>New tab redirect</strong> — Computop HPP opens in a new tab',
-    'Parameter preview with color-coded plain-text display',
-  ]}},
-];
-
 function renderChangelog() {
-  const el = document.getElementById('changelog-content');
-  if (!el) return;
-  el.innerHTML = CHANGELOG.map((entry, i) => {
-    const lang = entry[currentLang] || entry.de;
-    const isLast = i === CHANGELOG.length - 1;
-    const style = isLast ? ' style="border-bottom:none;margin-bottom:0;padding-bottom:0"' : '';
-    return `<div class="cl-entry"${style}>
-      <div class="cl-header">
-        <span class="cl-version">${entry.v}</span>
-        <span class="cl-title">${lang.title}</span>
-      </div>
-      <ul class="cl-list">${lang.items.map(li => `<li>${li}</li>`).join('')}</ul>
-    </div>`;
-  }).join('');
+  const container = document.getElementById('changelog-content');
+  if (!container || typeof CHANGELOG === 'undefined') return;
+  clearElement(container);
+
+  CHANGELOG.forEach(entry => {
+    const content = entry[currentLang] || entry.de;
+    const section = appendTextElement(container, 'section', 'cl-entry', '');
+    const header = appendTextElement(section, 'div', 'cl-header', '');
+    appendTextElement(header, 'span', 'cl-version', entry.v);
+    appendTextElement(header, 'span', 'cl-title', content.title);
+    const list = appendTextElement(section, 'ul', 'cl-list', '');
+    content.items.forEach(item => {
+      const listItem = document.createElement('li');
+      listItem.innerHTML = item;
+      list.appendChild(listItem);
+    });
+  });
 }
 
+// ══════════════════════════════════════════════════════════════
 function applyLang() {
   document.title = t('page_title');
   const setText  = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t(key); };
@@ -1865,7 +1992,35 @@ function applyLang() {
   const setTip   = (id, key) => { const el = document.getElementById(id); if (el) el.dataset.tip = t(key); };
   const setAttr  = (id, attr, key) => { const el = document.getElementById(id); if (el) el.setAttribute(attr, t(key)); };
 
-  setText('subtitle', 'subtitle');
+  setText('header-feature-hpp', 'header_feature_hpp');
+  setText('header-feature-ccf', 'header_feature_ccf');
+  setText('header-feature-pbl', 'header_feature_pbl');
+  setText('header-feature-blowfish', 'header_feature_blowfish');
+  setText('header-feature-hmac', 'header_feature_hmac');
+  setText('app-intro-title', 'app_intro_title');
+  setText('app-intro-text', 'app_intro_text');
+  setText('app-intro-create-title', 'app_intro_create_title');
+  setText('app-intro-create-text', 'app_intro_create_text');
+  setText('app-intro-inspect-title', 'app_intro_inspect_title');
+  setText('app-intro-inspect-text', 'app_intro_inspect_text');
+  setText('app-intro-response-title', 'app_intro_response_title');
+  setText('app-intro-response-text', 'app_intro_response_text');
+  setText('app-intro-local', 'app_intro_local');
+  setText('nav-creds', 'nav_creds');
+  setText('nav-payment', 'nav_payment');
+  setText('nav-preview', 'nav_preview');
+  setText('nav-log', 'nav_log');
+  setText('nav-response', 'nav_response');
+  setText('nav-resp-log', 'nav_resp_log');
+  setText('nav-changelog', 'nav_changelog');
+  setText('changelog-title', 'changelog_title');
+  setText('changelog-subtitle', 'changelog_subtitle');
+  setText('request-log-view-title', 'request_log_view_title');
+  setText('request-log-view-subtitle', 'request_log_view_subtitle');
+  setText('response-view-title', 'response_view_title');
+  setText('response-view-subtitle', 'response_view_subtitle');
+  setText('response-log-view-title', 'response_log_view_title');
+  setText('response-log-view-subtitle', 'response_log_view_subtitle');
   setText('info-title', 'info_title');
   setHtml('info-body', 'info_body');
   setText('sec-title', 'sec_title');
@@ -1899,12 +2054,15 @@ function applyLang() {
   setText('l-amount', 'l_amount'); setText('l-currency', 'l_currency'); setText('l-language', 'l_language');
   setText('l-transid', 'l_transid'); setText('h-transid', 'h_transid');
   setText('l-refnr', 'l_refnr'); setText('h-refnr', 'h_refnr');
+  setText('l-expiration', 'l_expiration'); setText('h-expiration', 'h_expiration');
   setText('l-orderdesc', 'l_orderdesc'); setText('h-orderdesc', 'h_orderdesc');
   setTip('tip-amount',   'tip_amount');
   setTip('tip-currency', 'tip_currency');
   setTip('tip-language', 'tip_language');
   setTip('tip-transid',  'tip_transid');
   setTip('tip-refnr',    'tip_refnr');
+  setAttr('btn-new-refnr', 'title', 'btn_new_refnr_title');
+  setTip('tip-expiration','tip_expiration');
   setTip('tip-orderdesc','tip_orderdesc');
   setText('opt-od-default', 'opt_od_default');
   setText('opt-od-sim-ok',  'opt_od_sim_ok');
@@ -1940,7 +2098,7 @@ function applyLang() {
   setTip('tip-paytypes', 'tip_paytypes');
   setText('method-hpp-label', 'method_hpp_label');
   setText('method-ccf-label', 'method_ccf_label');
-  setMethod(currentMethod); // Info-Box + Submit-Button in aktiver Sprache aktualisieren
+  setText('method-pbl-label', 'method_pbl_label');
 
   setText('ct-preview', 'ct_preview');
   setText('btn-preview-text', 'btn_preview');
@@ -1948,10 +2106,12 @@ function applyLang() {
   setHtml('preview-empty-text', 'preview_empty');
   setText('debug-plain-label', 'debug_plain_label');
   setText('debug-urlparams-label', 'debug_urlparams_label');
+  setText('debug-pbl-outer-label', 'debug_pbl_outer_label');
   setText('debug-url-label', 'debug_url_label');
-  setText('copy-plain-text', 'btn_copy'); setText('copy-urlparams-text', 'btn_copy'); setText('copy-url-text', 'btn_copy');
+  setText('copy-plain-text', 'btn_copy'); setText('copy-urlparams-text', 'btn_copy'); setText('copy-pbl-outer-text', 'btn_copy'); setText('copy-url-text', 'btn_copy');
   setText('btn-submit-text', 'btn_submit');
   setText('btn-submit-hint', 'btn_submit_hint');
+  setMethod(currentMethod); // Active method text must win after generic preview labels.
 
   setText('ct-log', 'ct_log');
   setText('log-subtitle', 'log_subtitle');
@@ -1973,6 +2133,10 @@ function applyLang() {
 
   setText('footer-name-text', 'footer_name');
   setText('btn-clear-all-text', 'btn_clear_all');
+  setText('clear-all-modal-title', 'clear_all_modal_title');
+  setText('clear-all-modal-text', 'clear_all_modal_text');
+  setText('clear-all-cancel', 'clear_all_modal_cancel');
+  setText('clear-all-confirm', 'clear_all_modal_confirm');
 
   // Lang toggle indicator
   const de = document.getElementById('lang-de');
@@ -1986,9 +2150,9 @@ function applyLang() {
   }
 
   // Re-render dynamic content (contain translated strings)
-  renderChangelog();
   renderLog();
   renderResponseLog();
+  renderChangelog();
   _updateCredStatus();
 }
 
@@ -2296,15 +2460,20 @@ function togglePwd(id, btn) {
 }
 
 function showToast(msg, type = 'info') {
-  const t = document.getElementById('toast');
+  const toast = document.getElementById('toast');
   const icons = {
     success: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>',
     error:   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>',
     info:    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
   };
-  t.innerHTML = `<span class="icon icon-md">${icons[type] || icons.info}</span> ${msg}`;
-  t.className = 'show ' + type;
-  setTimeout(() => t.className = '', 3200);
+  clearElement(toast);
+  const iconEl = document.createElement('span');
+  iconEl.className = 'icon icon-md';
+  iconEl.innerHTML = icons[type] || icons.info;
+  toast.appendChild(iconEl);
+  toast.appendChild(document.createTextNode(' ' + String(msg ?? '')));
+  toast.className = 'show ' + type;
+  setTimeout(() => toast.className = '', 3200);
 }
 
 function copyText(id) {
@@ -2371,6 +2540,47 @@ function generateTransId() {
   document.getElementById('transId').value = `TID-${ts}-${rand}`;
 }
 
+function getUsedPayByLinkRefs() {
+  try {
+    const refs = JSON.parse(localStorage.getItem(PBL_REFS_LS_KEY) || '[]');
+    return Array.isArray(refs) ? refs.filter(ref => typeof ref === 'string') : [];
+  } catch(e) {
+    return [];
+  }
+}
+
+function isPayByLinkRefUsed(refNr) {
+  return getUsedPayByLinkRefs().includes(refNr);
+}
+
+function createPayByLinkRef() {
+  const used = new Set(getUsedPayByLinkRefs());
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const randomPart = crypto.randomUUID
+      ? crypto.randomUUID().replace(/-/g, '').slice(0, 20).toUpperCase()
+      : Array.from(crypto.getRandomValues(new Uint8Array(10)), byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase();
+    const candidate = `PBL-${randomPart}`;
+    if (!used.has(candidate)) return candidate;
+  }
+  throw new Error(t('pbl_ref_generation_error'));
+}
+
+function generatePayByLinkRef() {
+  const input = document.getElementById('refNr');
+  if (!input) return '';
+  const refNr = createPayByLinkRef();
+  input.value = refNr;
+  return refNr;
+}
+
+function reservePayByLinkRef(refNr) {
+  const refs = getUsedPayByLinkRefs();
+  if (refs.includes(refNr)) return false;
+  refs.push(refNr);
+  localStorage.setItem(PBL_REFS_LS_KEY, JSON.stringify(refs.slice(-5000)));
+  return true;
+}
+
 // ══════════════════════════════════════════════════════════════
 // AMOUNT HELPER
 // ══════════════════════════════════════════════════════════════
@@ -2378,6 +2588,37 @@ function amountToCents(amountStr) {
   const val = parseFloat(amountStr);
   if (isNaN(val)) return null;
   return Math.round(val * 100);
+}
+
+function initPayByLinkDefaults() {
+  const input = document.getElementById('expirationDate');
+  if (!input || input.value) return;
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  expires.setSeconds(0, 0);
+  const local = new Date(expires.getTime() - expires.getTimezoneOffset() * 60000);
+  input.value = local.toISOString().slice(0, 16);
+}
+
+function paramsToString(params) {
+  return Object.entries(params).map(([key, value]) => `${key}=${value}`).join('&');
+}
+
+function buildPayByLinkRequest(merchantId, blowfishKey, innerParams, outerOptions = {}) {
+  const innerPlain = paramsToString(innerParams);
+  const innerLen = innerPlain.length;
+  const innerData = Blowfish.encrypt(blowfishKey, innerPlain);
+  const outerParams = { MerchantID: merchantId, Len: String(innerLen), Data: innerData };
+
+  if (outerOptions.language) outerParams.Language = outerOptions.language;
+  if (outerOptions.template) outerParams.Template = outerOptions.template;
+  if (outerOptions.urlBack) outerParams.URLBack = outerOptions.urlBack;
+
+  const outerPlain = paramsToString(outerParams);
+  const outerLen = outerPlain.length;
+  const outerData = Blowfish.encrypt(blowfishKey, outerPlain);
+  const finalUrl = `https://www.computop-paygate.com/PayByLink.aspx?action=create&MerchantID=${encodeURIComponent(merchantId)}&Len=${outerLen}&Data=${outerData}`;
+
+  return { innerPlain, innerLen, innerData, outerParams, outerPlain, outerLen, outerData, finalUrl };
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -2393,7 +2634,11 @@ async function buildAndPreview() {
     const blowfishKey = document.getElementById('blowfishKey').value;
     const hmacKey     = document.getElementById('hmacKey').value;
     const transId     = document.getElementById('transId').value.trim();
-    const refNr       = document.getElementById('refNr').value.trim();
+    let refNr         = document.getElementById('refNr').value.trim();
+    const expirationRaw = document.getElementById('expirationDate').value.trim();
+    const expirationDate = expirationRaw
+      ? expirationRaw.replace('T', ' ') + (expirationRaw.length === 16 ? ':00' : '')
+      : '';
     const amountRaw   = document.getElementById('amount').value;
     const currency    = document.getElementById('currency').value;
     const urlSuccess  = document.getElementById('urlSuccess').value.trim();
@@ -2412,6 +2657,11 @@ async function buildAndPreview() {
     if (!hmacKey) { showToast(t('val_hmac'), 'error'); return; }
     if (!urlSuccess) { showToast(t('val_url_success'), 'error'); return; }
     if (!urlFailure) { showToast(t('val_url_failure'), 'error'); return; }
+    if (currentMethod === 'pbl' && (!refNr || isPayByLinkRefUsed(refNr))) {
+      refNr = generatePayByLinkRef();
+    }
+    if (currentMethod === 'pbl' && !refNr) { showToast(t('val_refnr_pbl'), 'error'); return; }
+    if (currentMethod === 'pbl' && !expirationDate) { showToast(t('val_expiration'), 'error'); return; }
 
     const amount = amountToCents(amountRaw);
     if (!amount || amount < 1) { showToast(t('val_amount'), 'error'); return; }
@@ -2425,16 +2675,21 @@ async function buildAndPreview() {
     const params = {};
     params['MerchantID']  = merchantId;
     params['TransID']     = transId;
+    if (currentMethod === 'pbl') params['MsgVer'] = '2.0';
+    if (refNr) params['RefNr'] = refNr;
     params['Amount']      = String(amount);
     params['Currency']    = currency;
     params['URLSuccess']  = urlSuccess;
     params['URLFailure']  = urlFailure;
     if (urlNotify) params['URLNotify'] = urlNotify;
     params['OrderDesc']   = orderDesc || 'Testzahlung';
-    params['Response']    = 'encrypt';
+    if (currentMethod !== 'pbl') params['Response'] = 'encrypt';
     params['MAC']         = mac;
-    if (payTypes && currentMethod === 'hpp') params['PayTypes'] = payTypes;
-    if (refNr) params['RefNr'] = refNr;
+    if (payTypes && currentMethod !== 'ccf') params['PayTypes'] = payTypes;
+    if (currentMethod === 'pbl') {
+      params['Language'] = language;
+      params['ExpirationDate'] = expirationDate;
+    }
 
     const tmplSel = document.getElementById('template')?.value || '';
     const tmpl = tmplSel === '__custom__'
@@ -2444,25 +2699,28 @@ async function buildAndPreview() {
     // payssl.aspx: Template muss verschlüsselt im Data-String stehen
     if (tmpl && currentMethod === 'ccf') params['Template'] = tmpl;
 
-    const plainStr = Object.entries(params)
-      .map(([k, v]) => `${k}=${v}`)
-      .join('&');
-
-    const len = plainStr.length;
-
-    // Encrypt with Blowfish ECB
-    const dataHex = Blowfish.encrypt(blowfishKey, plainStr);
-
-    // Build final URL
-    const base = currentMethod === 'ccf'
-      ? 'https://www.computop-paygate.com/payssl.aspx'
-      : 'https://www.computop-paygate.com/paymentPage.aspx';
     const urlBack = document.getElementById('urlBack').value.trim();
+    let plainStr = paramsToString(params);
+    let len = plainStr.length;
+    let dataHex = Blowfish.encrypt(blowfishKey, plainStr);
+    let pblRequest = null;
+    let finalUrl;
 
-    let finalUrl = `${base}?MerchantID=${encodeURIComponent(merchantId)}&Len=${len}&Data=${dataHex}&Language=${language}`;
-    if (urlBack) finalUrl += `&URLBack=${encodeURIComponent(urlBack)}`;
-    // paymentPage.aspx: Template wird unverschlüsselt an die URL angehängt
-    if (tmpl && currentMethod === 'hpp') finalUrl += `&Template=${encodeURIComponent(tmpl)}`;
+    if (currentMethod === 'pbl') {
+      pblRequest = buildPayByLinkRequest(merchantId, blowfishKey, params, { language, template: tmpl, urlBack });
+      plainStr = pblRequest.innerPlain;
+      len = pblRequest.outerLen;
+      dataHex = pblRequest.outerData;
+      finalUrl = pblRequest.finalUrl;
+      if (!reservePayByLinkRef(refNr)) throw new Error(t('pbl_ref_generation_error'));
+    } else {
+      const base = currentMethod === 'ccf'
+        ? 'https://www.computop-paygate.com/payssl.aspx'
+        : 'https://www.computop-paygate.com/paymentPage.aspx';
+      finalUrl = `${base}?MerchantID=${encodeURIComponent(merchantId)}&Len=${len}&Data=${dataHex}&Language=${language}`;
+      if (urlBack) finalUrl += `&URLBack=${encodeURIComponent(urlBack)}`;
+      if (tmpl && currentMethod === 'hpp') finalUrl += `&Template=${encodeURIComponent(tmpl)}`;
+    }
 
     // Show debug — expand card if collapsed
     document.getElementById('card-preview').classList.remove('collapsed');
@@ -2472,28 +2730,43 @@ async function buildAndPreview() {
 
     // URL-Parameter (unverschlüsselt) sammeln
     const urlParams = {};
+    if (currentMethod === 'pbl') urlParams['action'] = 'create';
     urlParams['MerchantID'] = merchantId;
     urlParams['Len'] = String(len);
     urlParams['Data'] = dataHex;
-    urlParams['Language'] = language;
-    if (urlBack) urlParams['URLBack'] = urlBack;
-    if (tmpl && currentMethod === 'hpp') urlParams['Template'] = tmpl;
+    if (currentMethod !== 'pbl') {
+      urlParams['Language'] = language;
+      if (urlBack) urlParams['URLBack'] = urlBack;
+      if (tmpl && currentMethod === 'hpp') urlParams['Template'] = tmpl;
+    }
 
-    const coloredUrlParams = Object.entries(urlParams).map(([k, v]) => {
-      const displayVal = (k === 'Data' && v.length > 80) ? v.substring(0, 80) + '…' : v;
-      return `<span class="key">${k}</span>=<span class="val">${displayVal}</span>`;
-    }).join('\n');
     const urlParamsRaw = Object.entries(urlParams).map(([k, v]) => `${k}=${v}`).join('&');
-    document.getElementById('url-params').innerHTML = coloredUrlParams;
-    document.getElementById('url-params').dataset.raw = urlParamsRaw;
+    const urlParamsEl = document.getElementById('url-params');
+    renderParamLines(
+      urlParamsEl,
+      Object.entries(urlParams).map(([k, v]) => [k, k === 'Data' && v.length > 80 ? v.substring(0, 80) + '…' : v]),
+      () => 'val'
+    );
+    urlParamsEl.dataset.raw = urlParamsRaw;
 
     // Color-coded plain params
-    const coloredPlain = Object.entries(params).map(([k, v]) => {
-      const isSecret = k === 'MAC';
-      return `<span class="key">${k}</span>=<span class="${isSecret?'enc':'val'}">${v}</span>`;
-    }).join('\n');
-    document.getElementById('plain-params').innerHTML = coloredPlain;
-    document.getElementById('plain-params').dataset.raw = plainStr;
+    const plainParamsEl = document.getElementById('plain-params');
+    renderParamLines(plainParamsEl, Object.entries(params), k => k === 'MAC' ? 'enc' : 'val');
+    plainParamsEl.dataset.raw = plainStr;
+
+    const pblOuterSection = document.getElementById('pbl-outer-section');
+    const pblOuterEl = document.getElementById('pbl-outer-params');
+    pblOuterSection.style.display = pblRequest ? 'block' : 'none';
+    if (pblRequest) {
+      renderParamLines(
+        pblOuterEl,
+        Object.entries(pblRequest.outerParams).map(([k, v]) => [k, k === 'Data' && v.length > 80 ? v.substring(0, 80) + '…' : v]),
+        () => 'val'
+      );
+      pblOuterEl.dataset.raw = pblRequest.outerPlain;
+    } else {
+      pblOuterEl.dataset.raw = '';
+    }
 
     // URL preview (truncated for display)
     const urlDisplay = finalUrl.length > 500
@@ -2506,8 +2779,8 @@ async function buildAndPreview() {
     document.getElementById('btn-submit').dataset.url = finalUrl;
 
     // Save to request log
-    _saveLogEntry({ merchantId, transId, amount, currency, url: finalUrl });
-    renderLog();
+    await _saveLogEntry({ merchantId, transId, amount, currency, url: finalUrl });
+    await renderLog();
 
     showToast(`${t('toast_preview_done')}${len} · Data=${dataHex.length/2} Bytes`, 'success');
 
@@ -2653,10 +2926,18 @@ function _renderProfileSelect(selectedId) {
   const select = document.getElementById('profile-select');
   if (!select) return;
   const profiles = _getProfiles();
-  select.innerHTML = '<option value="">' + t('profile_placeholder') + '</option>' +
-    profiles.map(p =>
-      `<option value="${p.id}"${p.id === selectedId ? ' selected' : ''}>${p.name}</option>`
-    ).join('');
+  clearElement(select);
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = t('profile_placeholder');
+  select.appendChild(placeholder);
+  profiles.forEach(profile => {
+    const option = document.createElement('option');
+    option.value = profile.id;
+    option.textContent = profile.name;
+    option.selected = profile.id === selectedId;
+    select.appendChild(option);
+  });
   _updateCredStatus();
 }
 
@@ -2702,58 +2983,251 @@ function _updateCredStatus() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// REQUEST LOG — localStorage
+// REQUEST & RESPONSE LOGS — IndexedDB with localStorage fallback
 // ══════════════════════════════════════════════════════════════
 const LOG_LS_KEY = 'computop_request_log';
-const LOG_MAX    = 50;
+const RESP_LOG_LS_KEY = 'computop_response_log';
+const LOG_DB_NAME = 'computop_tester';
+const LOG_DB_VERSION = 1;
+const LOG_REQUEST_STORE = 'requestLogs';
+const LOG_RESPONSE_STORE = 'responseLogs';
+const LOG_MAX = 250;
+let logStoragePromise = null;
+let requestLogCache = [];
+let responseLogCache = [];
 
-function _saveLogEntry(entry) {
-  const raw = localStorage.getItem(LOG_LS_KEY);
-  const log = raw ? JSON.parse(raw) : [];
-  log.unshift({ ...entry, timestamp: new Date().toISOString() });
-  if (log.length > LOG_MAX) log.length = LOG_MAX;
-  localStorage.setItem(LOG_LS_KEY, JSON.stringify(log));
+function _readLocalLog(key) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || '[]');
+    return Array.isArray(value) ? value : [];
+  } catch (error) {
+    console.warn(`Invalid local log data in ${key}:`, error);
+    return [];
+  }
 }
 
-function renderLog() {
-  const container = document.getElementById('log-list');
-  if (!container) return;
-  const raw = localStorage.getItem(LOG_LS_KEY);
-  const log = raw ? JSON.parse(raw) : [];
+function _openLogDatabase() {
+  return new Promise((resolve, reject) => {
+    if (!window.indexedDB) {
+      reject(new Error('IndexedDB is unavailable'));
+      return;
+    }
+    const request = indexedDB.open(LOG_DB_NAME, LOG_DB_VERSION);
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(LOG_REQUEST_STORE)) {
+        db.createObjectStore(LOG_REQUEST_STORE, { keyPath: 'id', autoIncrement: true });
+      }
+      if (!db.objectStoreNames.contains(LOG_RESPONSE_STORE)) {
+        db.createObjectStore(LOG_RESPONSE_STORE, { keyPath: 'id', autoIncrement: true });
+      }
+    };
+    request.onsuccess = () => {
+      const db = request.result;
+      db.onversionchange = () => db.close();
+      resolve(db);
+    };
+    request.onerror = () => reject(request.error || new Error('IndexedDB could not be opened'));
+    request.onblocked = () => reject(new Error('IndexedDB upgrade is blocked'));
+  });
+}
 
-  const badge = document.getElementById('log-count-badge');
-  if (badge) badge.textContent = log.length ? `${log.length} ${t('log_entries')}` : '';
+function _transactionComplete(transaction) {
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error || new Error('IndexedDB transaction failed'));
+    transaction.onabort = () => reject(transaction.error || new Error('IndexedDB transaction aborted'));
+  });
+}
 
-  if (log.length === 0) {
-    container.innerHTML = `<p style="color:var(--muted);font-size:13px;padding:6px 0">${t('log_empty')}</p>`;
+async function _migrateLocalLogs(db) {
+  const migrations = [
+    [LOG_REQUEST_STORE, LOG_LS_KEY, _readLocalLog(LOG_LS_KEY)],
+    [LOG_RESPONSE_STORE, RESP_LOG_LS_KEY, _readLocalLog(RESP_LOG_LS_KEY)],
+  ].filter(([, , entries]) => entries.length > 0);
+  if (!migrations.length) return;
+
+  const transaction = db.transaction(migrations.map(([store]) => store), 'readwrite');
+  migrations.forEach(([storeName, , entries]) => {
+    const store = transaction.objectStore(storeName);
+    entries.slice(0, LOG_MAX).reverse().forEach(entry => {
+      const record = { ...entry };
+      delete record.id;
+      store.add(record);
+    });
+  });
+  await _transactionComplete(transaction);
+  migrations.forEach(([, key]) => localStorage.removeItem(key));
+}
+
+function initLogStorage() {
+  if (!logStoragePromise) {
+    logStoragePromise = _openLogDatabase()
+      .then(async db => {
+        try {
+          await _migrateLocalLogs(db);
+          return db;
+        } catch (error) {
+          db.close();
+          throw error;
+        }
+      })
+      .catch(error => {
+        console.warn('IndexedDB log storage unavailable; using localStorage fallback:', error);
+        return null;
+      });
+  }
+  return logStoragePromise;
+}
+
+async function _getLogEntries(storeName, localKey) {
+  const db = await initLogStorage();
+  if (!db) return _readLocalLog(localKey).slice(0, LOG_MAX);
+  return new Promise((resolve, reject) => {
+    const request = db.transaction(storeName, 'readonly').objectStore(storeName).getAll();
+    request.onsuccess = () => resolve(request.result
+      .sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')))
+      .slice(0, LOG_MAX));
+    request.onerror = () => reject(request.error || new Error('Logs could not be read'));
+  }).catch(error => {
+    console.warn('IndexedDB log read failed:', error);
+    db.close();
+    logStoragePromise = Promise.resolve(null);
+    return _readLocalLog(localKey).slice(0, LOG_MAX);
+  });
+}
+
+async function _addLogEntry(storeName, localKey, entry) {
+  const db = await initLogStorage();
+  if (!db) {
+    const entries = _readLocalLog(localKey);
+    entries.unshift(entry);
+    localStorage.setItem(localKey, JSON.stringify(entries.slice(0, LOG_MAX)));
     return;
   }
 
-  container.innerHTML = log.map((e, i) => {
-    const ts  = new Date(e.timestamp).toLocaleString('de-DE');
+  try {
+    const transaction = db.transaction(storeName, 'readwrite');
+    const store = transaction.objectStore(storeName);
+    store.add(entry);
+    const allRequest = store.getAll();
+    allRequest.onsuccess = () => {
+      allRequest.result
+        .sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')))
+        .slice(LOG_MAX)
+        .forEach(oldEntry => store.delete(oldEntry.id));
+    };
+    await _transactionComplete(transaction);
+  } catch (error) {
+    console.warn('IndexedDB log write failed; using localStorage fallback:', error);
+    db.close();
+    logStoragePromise = Promise.resolve(null);
+    const entries = _readLocalLog(localKey);
+    entries.unshift(entry);
+    localStorage.setItem(localKey, JSON.stringify(entries.slice(0, LOG_MAX)));
+  }
+}
+
+async function _clearLogStore(storeName, localKey) {
+  localStorage.removeItem(localKey);
+  const db = await initLogStorage();
+  if (!db) return;
+  try {
+    const transaction = db.transaction(storeName, 'readwrite');
+    transaction.objectStore(storeName).clear();
+    await _transactionComplete(transaction);
+  } catch (error) {
+    console.warn('IndexedDB log clear failed:', error);
+  }
+}
+
+function _logValueClass(key, value) {
+  if (key === 'Data' || key === 'MAC') return 'enc';
+  if (key === 'Len' || key === 'Amount') return 'number';
+  if (key === 'Status') {
+    if (value === 'OK') return 'status-ok';
+    if (value === 'FAILED') return 'status-fail';
+  }
+  return 'val';
+}
+
+function _renderRequestLogDetail(target, rawUrl) {
+  clearElement(target);
+  try {
+    const url = new URL(rawUrl);
+    appendTextElement(target, 'span', 'endpoint', `${url.origin}${url.pathname}`);
+    const entries = Array.from(url.searchParams.entries());
+    entries.forEach(([key, value]) => {
+      target.appendChild(document.createTextNode('\n'));
+      appendTextElement(target, 'span', 'key', key);
+      target.appendChild(document.createTextNode('='));
+      appendTextElement(target, 'span', _logValueClass(key, value), value);
+    });
+  } catch (_) {
+    target.textContent = rawUrl || '';
+  }
+}
+
+function _renderResponseLogDetail(target, plain) {
+  const entries = String(plain || '').split('&').map(pair => {
+    const index = pair.indexOf('=');
+    return index > 0 ? [pair.substring(0, index), pair.substring(index + 1)] : null;
+  }).filter(Boolean);
+  renderParamLines(target, entries, _logValueClass);
+}
+
+async function _saveLogEntry(entry) {
+  await _addLogEntry(LOG_REQUEST_STORE, LOG_LS_KEY, {
+    ...entry,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+async function renderLog() {
+  const container = document.getElementById('log-list');
+  if (!container) return;
+  requestLogCache = await _getLogEntries(LOG_REQUEST_STORE, LOG_LS_KEY);
+
+  const badge = document.getElementById('log-count-badge');
+  if (badge) badge.textContent = requestLogCache.length ? `${requestLogCache.length} ${t('log_entries')}` : '';
+
+  if (requestLogCache.length === 0) {
+    clearElement(container);
+    const empty = appendTextElement(container, 'p', '', t('log_empty'));
+    empty.style.cssText = 'color:var(--muted);font-size:13px;padding:6px 0';
+    return;
+  }
+
+  clearElement(container);
+  requestLogCache.forEach((e, i) => {
+    const ts = new Date(e.timestamp).toLocaleString(currentLang === 'en' ? 'en-US' : 'de-DE');
     const amt = ((e.amount || 0) / 100).toFixed(2);
-    const safeUrl = (e.url || '').replace(/&/g, '&amp;');
-    return `
-      <div class="log-entry" onclick="toggleLogDetail(${i})">
-        <div class="log-meta">
-          <span class="log-ts">${ts}</span>
-          <span class="log-badge">${e.currency || '–'} ${amt}</span>
-          <span class="log-merchant">${e.merchantId || '–'}</span>
-          <span class="log-status-dot"></span>
-        </div>
-        <div class="log-tid">TransID: <span style="color:var(--accent2)">${e.transId || '–'}</span></div>
-        <div class="log-detail" id="log-detail-${i}" style="display:none">
-          <pre>${safeUrl}</pre>
-          <button class="copy-btn" onclick="event.stopPropagation();_copyLogUrl(${i})" style="display:inline-flex;align-items:center;gap:4px"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> ${t('log_copy_url')}</button>
-        </div>
-      </div>`;
-  }).join('');
+    const entry = appendTextElement(container, 'div', 'log-entry', '');
+    entry.addEventListener('click', () => toggleLogDetail(i));
+    const meta = appendTextElement(entry, 'div', 'log-meta', '');
+    appendTextElement(meta, 'span', 'log-ts', ts);
+    appendTextElement(meta, 'span', 'log-badge', `${e.currency || '–'} ${amt}`);
+    appendTextElement(meta, 'span', 'log-merchant', e.merchantId || '–');
+    appendTextElement(meta, 'span', 'log-status-dot', '');
+    const transId = appendTextElement(entry, 'div', 'log-tid', 'TransID: ');
+    const transIdValue = appendTextElement(transId, 'span', '', e.transId || '–');
+    transIdValue.style.color = 'var(--accent2)';
+    const detail = appendTextElement(entry, 'div', 'log-detail', '');
+    detail.id = `log-detail-${i}`;
+    detail.style.display = 'none';
+    const pre = appendTextElement(detail, 'pre', '', '');
+    _renderRequestLogDetail(pre, e.url || '');
+    const copy = appendTextElement(detail, 'button', 'copy-btn', t('log_copy_url'));
+    copy.style.cssText = 'display:inline-flex;align-items:center;gap:4px';
+    copy.addEventListener('click', event => {
+      event.stopPropagation();
+      _copyLogUrl(i);
+    });
+  });
 }
 
 function _copyLogUrl(i) {
-  const raw = localStorage.getItem(LOG_LS_KEY);
-  const log = raw ? JSON.parse(raw) : [];
-  if (log[i]) navigator.clipboard.writeText(log[i].url || '')
+  if (requestLogCache[i]) navigator.clipboard.writeText(requestLogCache[i].url || '')
     .then(() => showToast(t('toast_url_copied'), 'success'));
 }
 
@@ -2762,17 +3236,12 @@ function toggleLogDetail(i) {
   if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
-function clearLog() {
+async function clearLog() {
   if (!confirm(t('confirm_log_del'))) return;
-  localStorage.removeItem(LOG_LS_KEY);
-  renderLog();
+  await _clearLogStore(LOG_REQUEST_STORE, LOG_LS_KEY);
+  await renderLog();
   showToast(t('toast_log_cleared'), 'info');
 }
-
-// ══════════════════════════════════════════════════════════════
-// RESPONSE LOG
-// ══════════════════════════════════════════════════════════════
-const RESP_LOG_LS_KEY = 'computop_response_log';
 
 function _parsePlainParams(plain) {
   const result = {};
@@ -2783,7 +3252,7 @@ function _parsePlainParams(plain) {
   return result;
 }
 
-function _saveRespLogEntry(plain) {
+async function _saveRespLogEntry(plain) {
   const params = _parsePlainParams(plain);
   const entry  = {
     timestamp:  new Date().toISOString(),
@@ -2792,49 +3261,55 @@ function _saveRespLogEntry(plain) {
     merchantId: params['MerchantID'] || params['mid']     || '',
     plain
   };
-  const raw = localStorage.getItem(RESP_LOG_LS_KEY);
-  const log = raw ? JSON.parse(raw) : [];
-  log.unshift(entry);
-  if (log.length > 50) log.length = 50;
-  localStorage.setItem(RESP_LOG_LS_KEY, JSON.stringify(log));
+  await _addLogEntry(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY, entry);
 }
 
-function renderResponseLog() {
+async function renderResponseLog() {
   const container = document.getElementById('resp-log-list');
   if (!container) return;
-  const raw = localStorage.getItem(RESP_LOG_LS_KEY);
-  const log = raw ? JSON.parse(raw) : [];
+  responseLogCache = await _getLogEntries(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY);
 
   const badge = document.getElementById('resp-log-count-badge');
-  if (badge) badge.textContent = log.length ? `${log.length} ${t('resp_log_entries')}` : '';
+  if (badge) badge.textContent = responseLogCache.length ? `${responseLogCache.length} ${t('resp_log_entries')}` : '';
 
-  if (log.length === 0) {
-    container.innerHTML = `<p style="color:var(--muted);font-size:13px;padding:6px 0">${t('resp_log_empty')}</p>`;
+  if (responseLogCache.length === 0) {
+    clearElement(container);
+    const empty = appendTextElement(container, 'p', '', t('resp_log_empty'));
+    empty.style.cssText = 'color:var(--muted);font-size:13px;padding:6px 0';
     return;
   }
 
-  container.innerHTML = log.map((e, i) => {
-    const ts     = new Date(e.timestamp).toLocaleString('de-DE');
+  clearElement(container);
+  responseLogCache.forEach((e, i) => {
+    const ts     = new Date(e.timestamp).toLocaleString(currentLang === 'en' ? 'en-US' : 'de-DE');
     const status = e.status || '–';
     const dotCls = status === 'OK'     ? 'rlog-status-ok'
                  : status === 'FAILED' ? 'rlog-status-fail'
                  : 'rlog-status-other';
-    const safePlain = (e.plain || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
-    return `
-      <div class="log-entry" onclick="toggleRespLogDetail(${i})">
-        <div class="log-meta">
-          <span class="log-ts">${ts}</span>
-          <span class="log-badge" style="${status === 'OK' ? 'background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25);color:var(--success)' : status === 'FAILED' ? 'background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:var(--danger)' : ''}">${status}</span>
-          <span class="log-merchant">${e.merchantId || '–'}</span>
-          <span class="log-status-dot ${dotCls}"></span>
-        </div>
-        <div class="log-tid">TransID: <span style="color:var(--accent2)">${e.transId || '–'}</span></div>
-        <div class="log-detail" id="resp-log-detail-${i}" style="display:none">
-          <pre>${safePlain}</pre>
-          <button class="copy-btn" onclick="event.stopPropagation();_copyRespLogEntry(${i})" style="display:inline-flex;align-items:center;gap:4px"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> ${t('resp_log_copy')}</button>
-        </div>
-      </div>`;
-  }).join('');
+    const entry = appendTextElement(container, 'div', 'log-entry', '');
+    entry.addEventListener('click', () => toggleRespLogDetail(i));
+    const meta = appendTextElement(entry, 'div', 'log-meta', '');
+    appendTextElement(meta, 'span', 'log-ts', ts);
+    const statusBadge = appendTextElement(meta, 'span', 'log-badge', status);
+    if (status === 'OK') statusBadge.style.cssText = 'background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25);color:var(--success)';
+    if (status === 'FAILED') statusBadge.style.cssText = 'background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:var(--danger)';
+    appendTextElement(meta, 'span', 'log-merchant', e.merchantId || '–');
+    appendTextElement(meta, 'span', `log-status-dot ${dotCls}`, '');
+    const transId = appendTextElement(entry, 'div', 'log-tid', 'TransID: ');
+    const transIdValue = appendTextElement(transId, 'span', '', e.transId || '–');
+    transIdValue.style.color = 'var(--accent2)';
+    const detail = appendTextElement(entry, 'div', 'log-detail', '');
+    detail.id = `resp-log-detail-${i}`;
+    detail.style.display = 'none';
+    const pre = appendTextElement(detail, 'pre', '', '');
+    _renderResponseLogDetail(pre, e.plain || '');
+    const copy = appendTextElement(detail, 'button', 'copy-btn', t('resp_log_copy'));
+    copy.style.cssText = 'display:inline-flex;align-items:center;gap:4px';
+    copy.addEventListener('click', event => {
+      event.stopPropagation();
+      _copyRespLogEntry(i);
+    });
+  });
 }
 
 function toggleRespLogDetail(i) {
@@ -2843,24 +3318,47 @@ function toggleRespLogDetail(i) {
 }
 
 function _copyRespLogEntry(i) {
-  const raw = localStorage.getItem(RESP_LOG_LS_KEY);
-  const log = raw ? JSON.parse(raw) : [];
-  if (log[i]) navigator.clipboard.writeText(log[i].plain || '')
+  if (responseLogCache[i]) navigator.clipboard.writeText(responseLogCache[i].plain || '')
     .then(() => showToast(t('toast_copied'), 'success'));
 }
 
-function clearResponseLog() {
+async function clearResponseLog() {
   if (!confirm(t('confirm_resp_log_del'))) return;
-  localStorage.removeItem(RESP_LOG_LS_KEY);
-  renderResponseLog();
+  await _clearLogStore(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY);
+  await renderResponseLog();
   showToast(t('toast_resp_log_cleared'), 'info');
 }
 
 function clearAllStorage() {
-  if (!confirm(t('confirm_clear_all'))) return;
+  openClearAllModal();
+}
+
+function openClearAllModal() {
+  const modal = document.getElementById('clear-all-modal');
+  if (!modal) return;
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+  document.getElementById('clear-all-cancel')?.focus();
+}
+
+function closeClearAllModal() {
+  const modal = document.getElementById('clear-all-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  document.getElementById('btn-clear-all')?.focus();
+}
+
+async function confirmClearAllStorage() {
+  closeClearAllModal();
+  await Promise.all([
+    _clearLogStore(LOG_REQUEST_STORE, LOG_LS_KEY),
+    _clearLogStore(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY),
+  ]);
   [
     PROFILES_LS_KEY, LAST_PROFILE_KEY, CRED_LS_KEY,
-    LOG_LS_KEY, RESP_LOG_LS_KEY, THEME_LS_KEY, LANG_LS_KEY, CALLBACK_RECEIVER_KEY
+    LOG_LS_KEY, RESP_LOG_LS_KEY, THEME_LS_KEY, LANG_LS_KEY, CALLBACK_RECEIVER_KEY,
+    PBL_REFS_LS_KEY
   ].forEach(k => localStorage.removeItem(k));
   showToast(t('toast_clear_all'), 'info');
   setTimeout(() => location.reload(), 800);
@@ -2869,7 +3367,7 @@ function clearAllStorage() {
 // ══════════════════════════════════════════════════════════════
 // RESPONSE DECRYPTOR
 // ══════════════════════════════════════════════════════════════
-function decryptResponse() {
+async function decryptResponse() {
   const callbackUrl = document.getElementById('resp-url').value.trim();
   let dataHex = document.getElementById('resp-data').value.trim();
   let lenVal  = parseInt(document.getElementById('resp-len').value) || 0;
@@ -2897,26 +3395,25 @@ function decryptResponse() {
     const plain = Blowfish.decrypt(blowfishKey, dataHex, lenVal || undefined);
 
     // Parse key=value pairs
-    const colored = plain.split('&').map(pair => {
+    const responseEntries = plain.split('&').map(pair => {
       const eqIdx = pair.indexOf('=');
-      if (eqIdx < 0) return '';
+      if (eqIdx < 0) return null;
       const k = pair.substring(0, eqIdx);
       const v = pair.substring(eqIdx + 1);
-      if (!k) return '';
-      if (k === 'MAC') {
-        return `<span class="key">${k}</span>=<span class="enc">${v}</span>`;
-      }
-      if (k === 'Status') {
-        const style = v === 'OK'     ? 'color:var(--success)'
-                    : v === 'FAILED' ? 'color:var(--danger)'
-                    : 'color:var(--warning)';
-        return `<span class="key">${k}</span>=<span style="${style};font-weight:600">${v}</span>`;
-      }
-      return `<span class="key">${k}</span>=<span class="val">${v}</span>`;
-    }).filter(Boolean).join('\n');
+      return k ? [k, v] : null;
+    }).filter(Boolean);
 
-    document.getElementById('resp-plain').innerHTML = colored;
-    document.getElementById('resp-plain').dataset.raw = plain;
+    const responseEl = document.getElementById('resp-plain');
+    renderParamLines(responseEl, responseEntries, k => k === 'MAC' ? 'enc' : 'val');
+    Array.from(responseEl.querySelectorAll('.key')).forEach(keyEl => {
+      if (keyEl.textContent !== 'Status') return;
+      const statusEl = keyEl.nextElementSibling;
+      if (!statusEl) return;
+      const value = statusEl.textContent;
+      statusEl.style.color = value === 'OK' ? 'var(--success)' : value === 'FAILED' ? 'var(--danger)' : 'var(--warning)';
+      statusEl.style.fontWeight = '600';
+    });
+    responseEl.dataset.raw = plain;
     document.getElementById('resp-result-section').style.display = 'block';
     document.getElementById('resp-result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -2925,8 +3422,8 @@ function decryptResponse() {
     if (newBadge) newBadge.style.display = 'inline-flex';
 
     // Save to response log + refresh
-    _saveRespLogEntry(plain);
-    renderResponseLog();
+    await _saveRespLogEntry(plain);
+    await renderResponseLog();
 
     showToast(t('resp_success'), 'success');
   } catch(e) {
@@ -3046,7 +3543,7 @@ function checkCallbackParams() {
     // Clean URL without reload
     window.history.replaceState({}, '', _callbackBaseUrl());
 
-    // Expand + scroll to response decryptor card
+    // Open the dedicated response decryptor view
     const respCard = document.getElementById('card-response');
     if (respCard) respCard.classList.remove('collapsed');
 
@@ -3055,10 +3552,7 @@ function checkCallbackParams() {
     const respUrlEl = document.getElementById('resp-url');
     if (respUrlEl) respUrlEl.value = fakeUrl;
 
-    // Scroll to response decryptor section (.closest() — no :has() needed)
-    const anchor = document.getElementById('resp-url');
-    const respSection = anchor ? (anchor.closest('.card') || anchor) : null;
-    if (respSection) respSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('nav-response')?.click();
 
     showToast(t('toast_callback_received'), 'success');
 
@@ -3082,16 +3576,53 @@ function checkCallbackParams() {
 // INIT
 // ══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
+  initStandaloneViews();
   initTheme();
   initLang();
   generateTransId();
+  initPayByLinkDefaults();
   loadCredentials();
-  renderLog();
-  renderResponseLog();
+  initLogStorage().then(() => {
+    renderLog();
+    renderResponseLog();
+  });
   _updateCredStatus();
   initParamTips();
+  initClearAllModal();
+  initNavigation();
   initCallbackReceiver();
 });
+
+function initStandaloneViews() {
+  const placements = {
+    'card-log': 'request-log-view',
+    'card-response': 'response-view',
+    'card-resp-log': 'response-log-view',
+  };
+  Object.entries(placements).forEach(([cardId, viewId]) => {
+    const card = document.getElementById(cardId);
+    const view = document.getElementById(viewId);
+    if (!card || !view) return;
+    card.classList.remove('collapsed');
+    view.appendChild(card);
+  });
+}
+
+function initClearAllModal() {
+  const modal = document.getElementById('clear-all-modal');
+  const cancel = document.getElementById('clear-all-cancel');
+  const confirmButton = document.getElementById('clear-all-confirm');
+  if (!modal || !cancel || !confirmButton) return;
+
+  cancel.addEventListener('click', closeClearAllModal);
+  confirmButton.addEventListener('click', confirmClearAllStorage);
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeClearAllModal();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeClearAllModal();
+  });
+}
 
 function initParamTips() {
   const tip = document.createElement('div');
@@ -3132,6 +3663,86 @@ function initParamTips() {
     btn.addEventListener('focus',      () => show(btn));
     btn.addEventListener('blur',       hide);
   });
+}
+
+function initNavigation() {
+  const targetLinks = Array.from(document.querySelectorAll('[data-nav-target]'));
+  const viewLinks = Array.from(document.querySelectorAll('[data-nav-view]'));
+  const paymentWorkflowView = document.getElementById('payment-workflow-view');
+  const views = {
+    'request-log': document.getElementById('request-log-view'),
+    response: document.getElementById('response-view'),
+    'response-log': document.getElementById('response-log-view'),
+    changelog: document.getElementById('changelog-view'),
+  };
+  const targets = targetLinks
+    .map(link => document.getElementById(link.dataset.navTarget))
+    .filter(Boolean);
+
+  function setActiveLink(activeLink) {
+    [...targetLinks, ...viewLinks].forEach(link => {
+      link.classList.toggle('nav-active', link === activeLink);
+    });
+    if (activeLink && window.matchMedia('(max-width: 1180px)').matches) {
+      activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }
+
+  function showPaymentWorkflowView(updateHistory = true) {
+    paymentWorkflowView.hidden = false;
+    Object.values(views).forEach(view => { if (view) view.hidden = true; });
+    if (updateHistory && location.hash !== '#payment-workflow') history.pushState({}, '', '#payment-workflow');
+  }
+
+  function showStandaloneView(viewName, updateHistory = true) {
+    const activeView = views[viewName];
+    if (!activeView) return;
+    paymentWorkflowView.hidden = true;
+    Object.entries(views).forEach(([name, view]) => { if (view) view.hidden = name !== viewName; });
+    setActiveLink(viewLinks.find(link => link.dataset.navView === viewName));
+    if (updateHistory && location.hash !== `#${viewName}`) history.pushState({}, '', `#${viewName}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  targetLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const target = document.getElementById(link.dataset.navTarget);
+      if (!target) return;
+      showPaymentWorkflowView();
+      setActiveLink(link);
+      requestAnimationFrame(() => {
+        target.classList.remove('collapsed');
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  });
+
+  viewLinks.forEach(link => {
+    link.addEventListener('click', () => showStandaloneView(link.dataset.navView));
+  });
+
+  function applyLocationView() {
+    const viewName = location.hash.slice(1);
+    if (views[viewName]) showStandaloneView(viewName, false);
+    else showPaymentWorkflowView(false);
+  }
+  window.addEventListener('popstate', applyLocationView);
+  applyLocationView();
+
+  if (!('IntersectionObserver' in window)) return;
+  const observer = new IntersectionObserver(entries => {
+    const visible = entries
+      .filter(entry => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (!visible) return;
+    if (!paymentWorkflowView.hidden) {
+      setActiveLink(targetLinks.find(link => link.dataset.navTarget === visible.target.id));
+    }
+  }, {
+    rootMargin: '-90px 0px -55% 0px',
+    threshold: [0.05, 0.2, 0.5]
+  });
+  targets.forEach(target => observer.observe(target));
 }
 
 // ── PWA Service Worker Registration ──
