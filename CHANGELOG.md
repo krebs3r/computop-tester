@@ -2,6 +2,15 @@
 
 All notable changes to Computop Paygate Payment Tester are documented here.
 
+### v2.9.0 — PWA Payment Return
+- Added a secure callback relay from the external Computop browser tab to an already open installed PWA
+- Kept `noopener` isolation for the payment window and transferred callbacks through `BroadcastChannel` with a storage fallback
+- Added acknowledgement handling so the callback tab only closes after the PWA has received the response
+- Added manifest scope and launch-handler hints for browsers that can reuse an existing installed app window
+- Added PWA-specific payment guidance while preserving the existing browser workflow
+- Added the glass shield logo to every standalone application view
+- Displayed the compact GitHub repository address in the footer and updated the Computop documentation target
+
 ### v2.8.0 — Main Page Introduction
 - Added a concise bilingual introduction explaining the purpose of the Payment Tester
 - Summarised request creation, encryption inspection and response analysis in three responsive feature panels

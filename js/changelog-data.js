@@ -1,6 +1,21 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v2.9.0', de: { title: 'PWA-Zahlungsrückkehr', items: [
+    '<strong>Rückgabe an die PWA</strong> — Der externe Computop-Tab überträgt den Callback an eine bereits geöffnete installierte App',
+    '<strong>Sicherer Zahlungs-Tab</strong> — <code>noopener</code> bleibt aktiv; die Übergabe erfolgt über BroadcastChannel mit Storage-Fallback',
+    '<strong>Bestätigtes Schließen</strong> — Der Callback-Tab schließt sich erst, nachdem die PWA den Response übernommen hat',
+    '<strong>Launch Handler</strong> — Manifest-Hinweise erlauben unterstützten Browsern, ein vorhandenes App-Fenster wiederzuverwenden',
+    '<strong>Einheitliche Seitenköpfe</strong> — Das Glass-Schild erscheint nun auch auf Request-Log, Response-Ansichten und Changelog',
+    '<strong>Aktualisierter Footer</strong> — Die kompakte GitHub-Adresse ist sichtbar und das Computop-Dokumentationsziel wurde erneuert',
+  ]}, en: { title: 'PWA Payment Return', items: [
+    '<strong>Return to the PWA</strong> — The external Computop tab transfers the callback to an already open installed app',
+    '<strong>Secure payment tab</strong> — <code>noopener</code> remains enabled; transfer uses BroadcastChannel with a storage fallback',
+    '<strong>Confirmed closing</strong> — The callback tab only closes after the PWA has accepted the response',
+    '<strong>Launch handler</strong> — Manifest hints let supported browsers reuse an existing app window',
+    '<strong>Consistent page headers</strong> — The glass shield now also appears on request log, response and changelog views',
+    '<strong>Updated footer</strong> — The compact GitHub address is visible and the Computop documentation target has been updated',
+  ]}},
   { v: 'v2.8.0', de: { title: 'Einleitung auf der Hauptseite', items: [
     '<strong>Klare Einführung</strong> — Ein kurzer zweisprachiger Text erklärt Zweck und Zielgruppe des Payment Testers',
     '<strong>Drei Kernbereiche</strong> — Request-Erstellung, Verschlüsselungsprüfung und Response-Analyse werden kompakt beschrieben',

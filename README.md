@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Computop Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-2.8.0-blueviolet)
+![Version](https://img.shields.io/badge/version-2.9.0-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -85,6 +85,12 @@ Pages.
 When the callback receiver is enabled, successful and failed redirect URLs are
 set to the tester itself. Returning callback parameters automatically open the
 Response Decryption view.
+
+When installed as a PWA, the external Computop payment page still opens in the
+browser because it is outside the app's origin and scope. After the redirect,
+the callback is transferred back to the already open PWA. The browser tab only
+closes after the app confirms that it received the response. Browser support
+for focusing the existing PWA window varies by platform.
 
 ## Data and Security
 

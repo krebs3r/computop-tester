@@ -45,7 +45,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "2.8.0",
+      "softwareVersion": "2.9.0",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -1083,6 +1083,12 @@
     }
     .standalone-view[hidden] { display: none; }
     .standalone-view-header { margin-bottom: 28px; }
+    .standalone-header-layout {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .standalone-header-copy { min-width: 0; }
     .standalone-view-header h1 {
       margin-bottom: 10px;
     }
@@ -1097,6 +1103,9 @@
     .standalone-view > .card { margin-bottom: 0; }
     .standalone-view > .card > .card-header { display: none; }
     .standalone-view > .card > .card-body { display: block; }
+    @media (max-width: 640px) {
+      .standalone-header-layout { align-items: flex-start; gap: 14px; }
+    }
     #app-view > #card-log,
     #app-view > #card-response,
     #app-view > #card-resp-log { display: none; }
@@ -1179,6 +1188,7 @@
     .footer-links a {
       display: inline-flex; align-items: center; gap: 5px;
       font-size: 12px; color: var(--muted); text-decoration: none;
+      overflow-wrap: anywhere;
       transition: color .15s;
     }
     .footer-links a:hover { color: var(--accent2); }
@@ -1771,33 +1781,61 @@
 
 <main class="standalone-view" id="request-log-view" hidden>
   <div class="standalone-view-header">
-    <div class="badge">Computop Paygate</div>
-    <h1 id="request-log-view-title">Request-Log</h1>
-    <p id="request-log-view-subtitle">Letzte 250 generierten Requests (lokal gespeichert)</p>
+    <div class="standalone-header-layout">
+      <div class="app-header-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="standalone-header-copy">
+        <div class="badge">Computop Paygate</div>
+        <h1 id="request-log-view-title">Request-Log</h1>
+        <p id="request-log-view-subtitle">Letzte 250 generierten Requests (lokal gespeichert)</p>
+      </div>
+    </div>
   </div>
 </main>
 
 <main class="standalone-view" id="response-view" hidden>
   <div class="standalone-view-header">
-    <div class="badge">Computop Paygate</div>
-    <h1 id="response-view-title">Response-Entschlüsselung</h1>
-    <p id="response-view-subtitle">Computop-Callback sicher entschlüsseln</p>
+    <div class="standalone-header-layout">
+      <div class="app-header-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="standalone-header-copy">
+        <div class="badge">Computop Paygate</div>
+        <h1 id="response-view-title">Response-Entschlüsselung</h1>
+        <p id="response-view-subtitle">Computop-Callback sicher entschlüsseln</p>
+      </div>
+    </div>
   </div>
 </main>
 
 <main class="standalone-view" id="response-log-view" hidden>
   <div class="standalone-view-header">
-    <div class="badge">Computop Paygate</div>
-    <h1 id="response-log-view-title">Response-Log</h1>
-    <p id="response-log-view-subtitle">Letzte 250 entschlüsselten Responses (lokal gespeichert)</p>
+    <div class="standalone-header-layout">
+      <div class="app-header-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="standalone-header-copy">
+        <div class="badge">Computop Paygate</div>
+        <h1 id="response-log-view-title">Response-Log</h1>
+        <p id="response-log-view-subtitle">Letzte 250 entschlüsselten Responses (lokal gespeichert)</p>
+      </div>
+    </div>
   </div>
 </main>
 
 <main class="standalone-view" id="changelog-view" hidden>
   <div class="standalone-view-header">
-    <div class="badge">Computop Paygate</div>
-    <h1 id="changelog-title">Changelog</h1>
-    <p id="changelog-subtitle">Vollständige Versionshistorie und Änderungen</p>
+    <div class="standalone-header-layout">
+      <div class="app-header-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="standalone-header-copy">
+        <div class="badge">Computop Paygate</div>
+        <h1 id="changelog-title">Changelog</h1>
+        <p id="changelog-subtitle">Vollständige Versionshistorie und Änderungen</p>
+      </div>
+    </div>
   </div>
   <div class="changelog-content" id="changelog-content"></div>
 </main>
@@ -1808,7 +1846,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v2.8.0</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v2.9.0</span>
     </span>
     <span class="footer-links">
       <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
@@ -1817,9 +1855,9 @@
       </button>
       <a href="https://github.com/krebs3r/computop-tester" target="_blank" rel="noopener">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S9 17.44 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-        GitHub
+        github.com/krebs3r/computop-tester
       </a>
-      <a href="https://developer.computop.com/display/DE/Hosted+Payment+Page" target="_blank" rel="noopener">
+      <a href="https://developer.computop.com/#all-updates" target="_blank" rel="noopener">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
         Computop Docs
       </a>
@@ -1957,7 +1995,13 @@ function setMethod(method) {
   const submitKey = method === 'hpp' ? 'btn_submit' : `btn_submit_${method}`;
   const submitHintKey = method === 'hpp' ? 'btn_submit_hint' : `btn_submit_hint_${method}`;
   if (submitText) submitText.textContent = t(submitKey);
-  if (submitHint) submitHint.textContent = t(submitHintKey);
+  if (submitHint) submitHint.textContent = isStandaloneApp() && method !== 'pbl'
+    ? t('btn_submit_hint_pwa')
+    : t(submitHintKey);
+}
+
+function isStandaloneApp() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 }
 
 function t(key) {
@@ -2799,6 +2843,9 @@ async function buildAndPreview() {
 function submitPayment() {
   const url = document.getElementById('btn-submit').dataset.url;
   if (!url) { showToast(t('toast_no_url'), 'error'); return; }
+  if (isStandaloneApp() && currentMethod !== 'pbl') {
+    localStorage.setItem(PAYMENT_PENDING_KEY, JSON.stringify({ createdAt: Date.now() }));
+  }
   showToast(t('toast_submit'), 'info');
   window.open(url, '_blank', 'noopener,noreferrer');
 }
@@ -3358,7 +3405,7 @@ async function confirmClearAllStorage() {
   [
     PROFILES_LS_KEY, LAST_PROFILE_KEY, CRED_LS_KEY,
     LOG_LS_KEY, RESP_LOG_LS_KEY, THEME_LS_KEY, LANG_LS_KEY, CALLBACK_RECEIVER_KEY,
-    PBL_REFS_LS_KEY
+    PBL_REFS_LS_KEY, PAYMENT_PENDING_KEY, CALLBACK_RELAY_KEY, CALLBACK_RELAY_ACK_KEY
   ].forEach(k => localStorage.removeItem(k));
   showToast(t('toast_clear_all'), 'info');
   setTimeout(() => location.reload(), 800);
@@ -3493,6 +3540,13 @@ function toggleTheme() {
 // CALLBACK RECEIVER
 // ══════════════════════════════════════════════════════════════
 const CALLBACK_RECEIVER_KEY = 'computop_callback_receiver';
+const PAYMENT_PENDING_KEY = 'computop_payment_pending';
+const CALLBACK_RELAY_KEY = 'computop_callback_relay';
+const CALLBACK_RELAY_ACK_KEY = 'computop_callback_relay_ack';
+const CALLBACK_RELAY_CHANNEL = 'computop_callback_channel';
+const CALLBACK_RELAY_MAX_AGE = 30 * 60 * 1000;
+let callbackRelayChannel = null;
+const acceptedCallbackIds = new Set();
 
 function _callbackBaseUrl() {
   return window.location.origin + window.location.pathname;
@@ -3529,28 +3583,122 @@ function initCallbackReceiver() {
   const toggle  = document.getElementById('cb-receiver-toggle');
   if (toggle) toggle.checked = enabled;
   if (enabled) _applyCallbackReceiver(true);
+  initCallbackRelay();
   checkCallbackParams();
 }
 
-function checkCallbackParams() {
+function _callbackPayloadFromUrl(urlString) {
+  const url = new URL(urlString, window.location.href);
+  const data = url.searchParams.get('Data') || url.searchParams.get('data');
+  const len = url.searchParams.get('Len') || url.searchParams.get('len');
+  if (!data || !len) return null;
+  return {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    url: url.href,
+    createdAt: Date.now(),
+  };
+}
+
+function _publishCallback(payload) {
   try {
-    if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return;
-    const params = new URLSearchParams(window.location.search);
+    localStorage.setItem(CALLBACK_RELAY_KEY, JSON.stringify(payload));
+    callbackRelayChannel?.postMessage({ type: 'callback', payload });
+  } catch (e) {
+    console.warn('Callback relay publish failed:', e);
+  }
+}
+
+function _acknowledgeCallback(payload) {
+  try {
+    localStorage.setItem(CALLBACK_RELAY_ACK_KEY, payload.id);
+  } catch (e) {
+    console.warn('Callback relay acknowledgement failed:', e);
+  }
+  callbackRelayChannel?.postMessage({ type: 'ack', id: payload.id });
+}
+
+function _finishCallbackRelay(id) {
+  if (id !== window.__callbackRelayId) return;
+  window.__callbackRelayCompleted = true;
+  localStorage.removeItem(CALLBACK_RELAY_ACK_KEY);
+  showToast(t('toast_callback_transferred'), 'success');
+  setTimeout(() => window.close(), 700);
+}
+
+function _acceptRelayedCallback(payload) {
+  if (!payload || !payload.url || Date.now() - payload.createdAt > CALLBACK_RELAY_MAX_AGE) return false;
+  if (acceptedCallbackIds.has(payload.id)) return false;
+  const pendingRaw = localStorage.getItem(PAYMENT_PENDING_KEY);
+  if (!pendingRaw) return false;
+  try {
+    const pending = JSON.parse(pendingRaw);
+    if (!pending.createdAt || payload.createdAt < pending.createdAt) return false;
+  } catch (e) {
+    return false;
+  }
+  if (!handleCallbackUrl(payload.url, false)) return false;
+  acceptedCallbackIds.add(payload.id);
+  _acknowledgeCallback(payload);
+  localStorage.removeItem(PAYMENT_PENDING_KEY);
+  localStorage.removeItem(CALLBACK_RELAY_KEY);
+  window.focus();
+  return true;
+}
+
+function initCallbackRelay() {
+  if ('BroadcastChannel' in window) {
+    callbackRelayChannel = new BroadcastChannel(CALLBACK_RELAY_CHANNEL);
+    callbackRelayChannel.addEventListener('message', event => {
+      if (event.data?.type === 'callback') _acceptRelayedCallback(event.data.payload);
+      if (event.data?.type === 'ack') _finishCallbackRelay(event.data.id);
+    });
+  }
+
+  window.addEventListener('storage', event => {
+    if (event.key === CALLBACK_RELAY_ACK_KEY && event.newValue) {
+      _finishCallbackRelay(event.newValue);
+      return;
+    }
+    if (event.key !== CALLBACK_RELAY_KEY || !event.newValue) return;
+    try { _acceptRelayedCallback(JSON.parse(event.newValue)); } catch (e) { console.warn('Callback relay parse failed:', e); }
+  });
+
+  try {
+    const pending = localStorage.getItem(PAYMENT_PENDING_KEY);
+    const relayed = localStorage.getItem(CALLBACK_RELAY_KEY);
+    if (pending && relayed) _acceptRelayedCallback(JSON.parse(relayed));
+  } catch (e) {
+    console.warn('Stored callback relay failed:', e);
+  }
+
+  if ('launchQueue' in window) {
+    window.launchQueue.setConsumer(launchParams => {
+      if (launchParams.targetURL && handleCallbackUrl(launchParams.targetURL, false)) {
+        localStorage.removeItem(PAYMENT_PENDING_KEY);
+      }
+    });
+  }
+}
+
+function handleCallbackUrl(urlString, cleanCurrentUrl = false) {
+  try {
+    if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return false;
+    const callbackUrl = new URL(urlString, window.location.href);
+    const params = callbackUrl.searchParams;
     const data   = params.get('Data') || params.get('data');
     const len    = params.get('Len')  || params.get('len');
-    if (!data || !len) return;
+    if (!data || !len) return false;
 
     // Clean URL without reload
-    window.history.replaceState({}, '', _callbackBaseUrl());
+    if (cleanCurrentUrl) window.history.replaceState({}, '', _callbackBaseUrl());
 
     // Open the dedicated response decryptor view
     const respCard = document.getElementById('card-response');
     if (respCard) respCard.classList.remove('collapsed');
 
-    // Build a reconstructed callback URL string for the decryptor
-    const fakeUrl = `${_callbackBaseUrl()}?Data=${encodeURIComponent(data)}&Len=${encodeURIComponent(len)}`;
+    // Preserve the complete callback URL for decryption and inspection
     const respUrlEl = document.getElementById('resp-url');
-    if (respUrlEl) respUrlEl.value = fakeUrl;
+    if (respUrlEl) respUrlEl.value = callbackUrl.href;
 
     document.getElementById('nav-response')?.click();
 
@@ -3567,9 +3715,30 @@ function checkCallbackParams() {
       // If key never appears, the user can click Decrypt manually
     }
     setTimeout(() => _tryDecrypt(10), 300);
+    return true;
   } catch(e) {
-    console.warn('checkCallbackParams error:', e);
+    console.warn('handleCallbackUrl error:', e);
+    return false;
   }
+}
+
+function checkCallbackParams() {
+  const payload = _callbackPayloadFromUrl(window.location.href);
+  if (!payload) return;
+
+  const pending = localStorage.getItem(PAYMENT_PENDING_KEY);
+  const receiverEnabled = localStorage.getItem(CALLBACK_RECEIVER_KEY) === '1';
+  if (pending && receiverEnabled && isStandaloneApp() === false) {
+    window.__callbackRelayId = payload.id;
+    window.__callbackRelayCompleted = false;
+    _publishCallback(payload);
+    setTimeout(() => {
+      if (!window.__callbackRelayCompleted) handleCallbackUrl(window.location.href, true);
+    }, 1800);
+    return;
+  }
+
+  handleCallbackUrl(window.location.href, true);
 }
 
 // ══════════════════════════════════════════════════════════════

@@ -18,7 +18,7 @@
  * the cached version is used as a fallback.
  */
 
-const CACHE_NAME = 'computop-tester-v2.8.0';
+const CACHE_NAME = 'computop-tester-v2.9.0';
 const ASSETS = [
   './',
   './index.html',

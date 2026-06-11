@@ -4,8 +4,13 @@
   "name": "Computop Paygate – Payment Tester",
   "short_name": "Computop Tester",
   "description": "Create, inspect and decrypt Computop Paygate payment requests locally in your browser.",
+  "id": "./",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "launch_handler": {
+    "client_mode": ["focus-existing", "navigate-existing"]
+  },
   "background_color": "#080b10",
   "theme_color": "#3d7eff",
   "icons": [
