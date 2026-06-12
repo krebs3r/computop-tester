@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.0.0-blueviolet)
+![Version](https://img.shields.io/badge/version-3.0.1-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -28,6 +28,8 @@ step.
 - Local REST API V1/V2 request builder without sending requests from the browser
 - cURL, PowerShell, Postman Collection and raw HTTP output formats
 - Optional REST API key storage in encrypted local credential profiles
+- REST request generation without credentials, using safe authentication placeholders by default
+- Bilingual inline explanations for REST version, payment type, environment, authentication and output format
 - Automatic locally unique Pay By Link reference numbers
 - Configurable redirect URLs, payment methods and templates
 - Callback receiver for returning directly to the tester
@@ -74,8 +76,8 @@ cards use self-contained inline SVG icons and require no external icon library.
 
 1. Download and extract the repository ZIP or clone the repository.
 2. Open `index.html` directly in a modern browser.
-3. Enter your Paygate Merchant ID, Blowfish password and HMAC password.
-4. Configure the payment parameters in the Payment Workflow.
+3. For Classic, enter your Paygate Merchant ID, Blowfish password and HMAC password. For REST, this step is optional.
+4. Configure the payment parameters in the Payment Workflow and choose Classic or REST.
 5. Generate the preview and inspect `MAC`, `Len`, `Data` and the final URL.
 6. Open the selected Paygate endpoint from the preview.
 
@@ -95,6 +97,12 @@ Pages.
 The REST builder is part of the **Payment Workflow**. Select **REST API** as the
 interface, then choose the API version, payment type, target environment,
 authentication method and output format.
+
+**Step 1 is optional in REST mode.** The JSON payload and executable templates
+can be generated without entering a Merchant ID or API key. The navigation
+badge changes to `OPTIONAL`, Classic credential fields are visually subdued,
+and generated commands use safe placeholders. Real REST credentials are only
+needed when explicitly embedding authentication values into the output.
 
 - V1 generates requests for the shared `/api/v1/payments` endpoint.
 - V2 uses dedicated endpoints for checkout sessions, hosted card payments and

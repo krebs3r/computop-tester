@@ -2,6 +2,19 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.0.1 — Optional REST Credentials
+- Clarified that Step 1 credentials are required for Classic Paygate but optional when building REST requests
+- Changed the Step 1 navigation badge from Payment Workflow to Optional while REST is selected
+- Added integration-specific guidance explaining when Classic and REST credentials are needed
+- Grouped Classic credentials and optional REST authentication into clearly labelled visual sections
+- Removed the Merchant ID required marker in REST mode and documented safe placeholder generation
+- Updated the Help view and README to describe credential-free REST request generation
+- Added bilingual inline tooltips for REST API version, payment type, environment, authentication and output format
+- Increased transparency and backdrop depth across navigation, footer, workflow, Help and Changelog glass surfaces
+- Added slim transparent glass scrollbars with dedicated dark, light and hover treatments
+- Added immediate validation for REST credential opt-in: missing values disable the option again and guide users to Step 1
+- Replaced the native browser confirmation for deleting credential profiles with a bilingual in-app confirmation dialog
+
 ### v3.0.0 — REST Request Builder
 - Added Classic Paygate and REST API selection inside the Payment Workflow
 - Added REST API V1 and V2 request generation for Hosted Payment Page, Card Form and Pay By Link

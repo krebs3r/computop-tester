@@ -1,6 +1,31 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.0.1', de: { title: 'Optionale REST-Credentials', items: [
+    '<strong>Klare Pflichtzuordnung</strong> — Schritt 1 ist für Classic Paygate erforderlich, für das Zusammenbauen von REST-Requests dagegen optional',
+    '<strong>Dynamisches Navbar-Badge</strong> — Bei ausgewählter REST API zeigt Schritt 1 nun <code>Optional</code> statt <code>Payment Workflow</code>',
+    '<strong>Kontextabhängiger Hinweis</strong> — Der Credential-Bereich erklärt passend zur gewählten Schnittstelle, welche Zugangsdaten tatsächlich benötigt werden',
+    '<strong>Visuelle Gruppierung</strong> — Classic-Credentials und optionale REST-Authentifizierung sind als getrennte Bereiche gekennzeichnet und gewichtet',
+    '<strong>Sichere Platzhalter</strong> — Merchant ID und REST API-Key sind nur für eine ausdrücklich eingebettete echte Authentifizierung nötig',
+    '<strong>Aktualisierte Hilfe</strong> — Hilfeseite und README dokumentieren die credential-freie REST-Request-Erstellung',
+    '<strong>REST-Tooltips</strong> — Fragezeichen erklären API-Version, Zahlungsart, Zielumgebung, Authentifizierung und Ausgabeformat direkt am jeweiligen Feld',
+    '<strong>Transparenteres Glass-Design</strong> — Navbar, Footer, Workflow-, Hilfe- und Changelog-Flächen zeigen den Hintergrund deutlicher bei gleichzeitig stärkerem Blur',
+    '<strong>Glass-Scrollbar</strong> — Sichtbare Scrollbars verwenden eine schmale transparente Spur sowie einen blau-violetten Glass-Thumb für Dark und Light Mode',
+    '<strong>Frühe Credential-Prüfung</strong> — Die REST-Opt-in-Checkbox deaktiviert sich bei fehlenden Zugangsdaten wieder, öffnet Schritt 1 und fokussiert das erste fehlende Feld',
+    '<strong>Profil-Löschdialog</strong> — Credential-Profile werden über einen zweisprachigen App-Dialog statt einer nativen Browsermeldung bestätigt',
+  ]}, en: { title: 'Optional REST Credentials', items: [
+    '<strong>Clear requirements</strong> — Step 1 is required for Classic Paygate but optional when assembling REST requests',
+    '<strong>Dynamic navbar badge</strong> — When REST API is selected, Step 1 now displays <code>Optional</code> instead of <code>Payment Workflow</code>',
+    '<strong>Context-specific guidance</strong> — The credential section explains which authentication data is actually needed for the selected interface',
+    '<strong>Visual grouping</strong> — Classic credentials and optional REST authentication are labelled and visually weighted as separate sections',
+    '<strong>Safe placeholders</strong> — Merchant ID and REST API key are only required when explicitly embedding real authentication into output',
+    '<strong>Updated guidance</strong> — The Help view and README document credential-free REST request generation',
+    '<strong>REST tooltips</strong> — Inline question marks explain API version, payment type, target environment, authentication and output format',
+    '<strong>More transparent glass design</strong> — Navigation, footer, workflow, Help and Changelog surfaces reveal more of the background while using stronger blur',
+    '<strong>Glass scrollbar</strong> — Visible scrollbars use a slim transparent track and a blue-violet glass thumb in dark and light mode',
+    '<strong>Immediate credential validation</strong> — The REST opt-in checkbox switches off again when credentials are missing, opens Step 1 and focuses the first missing field',
+    '<strong>Profile deletion dialog</strong> — Deleting credential profiles now uses a bilingual in-app confirmation instead of a native browser prompt',
+  ]}},
   { v: 'v3.0.0', de: { title: 'REST Request Builder', items: [
     '<strong>Eine Payment-Strecke</strong> — Classic Paygate und REST API sind im bestehenden Payment Workflow auswählbar',
     '<strong>REST V1 und V2</strong> — Hosted Payment Page, Card Form und Pay By Link erzeugen versionsspezifische JSON-Requests und Endpunkte',
