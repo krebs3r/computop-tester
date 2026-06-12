@@ -1,5 +1,5 @@
 /**
- * ── Service Worker – Computop Paygate Payment Tester ──
+ * ── Service Worker – Paygate Payment Tester ──
  *
  * [DE]
  * Diese Datei ist der Service Worker für die Progressive Web App (PWA).
@@ -18,7 +18,7 @@
  * the cached version is used as a fallback.
  */
 
-const CACHE_NAME = 'computop-tester-v2.9.0';
+const CACHE_NAME = 'computop-tester-v3.0.0';
 const ASSETS = [
   './',
   './index.html',
@@ -27,6 +27,7 @@ const ASSETS = [
   './og-image.png',
   './js/i18n.js',
   './js/changelog-data.js',
+  './js/help-data.js',
   './icons/app-icon.svg',
   './icons/apple-touch-icon.png',
   './icons/icon-192.png',

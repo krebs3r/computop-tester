@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Computop Paygate – Payment Tester</title>
-  <meta name="description" content="Create, inspect and decrypt Computop Paygate payment requests locally for Hosted Payment Page, PaySSL and Pay By Link.">
+  <title>Paygate – Payment Tester</title>
+  <meta name="description" content="Create, inspect and decrypt Paygate payment requests locally for Hosted Payment Page, PaySSL and Pay By Link.">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://krebs3r.github.io/computop-tester/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_US">
-  <meta property="og:site_name" content="Computop Paygate Payment Tester">
-  <meta property="og:title" content="Computop Paygate – Payment Tester">
+  <meta property="og:site_name" content="Paygate Payment Tester">
+  <meta property="og:title" content="Paygate – Payment Tester">
   <meta property="og:description" content="Create, inspect and decrypt payment requests locally. No backend, directly in your browser.">
   <meta property="og:url" content="https://krebs3r.github.io/computop-tester/">
   <meta property="og:image" content="https://krebs3r.github.io/computop-tester/og-image.png">
@@ -18,19 +18,19 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Computop Paygate Payment Tester with shield logo and supported payment integrations">
+  <meta property="og:image:alt" content="Paygate Payment Tester with shield logo and supported payment integrations">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Computop Paygate – Payment Tester">
+  <meta name="twitter:title" content="Paygate – Payment Tester">
   <meta name="twitter:description" content="Create, inspect and decrypt payment requests locally. No backend, directly in your browser.">
   <meta name="twitter:image" content="https://krebs3r.github.io/computop-tester/og-image.png">
-  <meta name="twitter:image:alt" content="Computop Paygate Payment Tester with shield logo and supported payment integrations">
+  <meta name="twitter:image:alt" content="Paygate Payment Tester with shield logo and supported payment integrations">
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#3d7eff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Computop Tester">
+  <meta name="apple-mobile-web-app-title" content="Paygate Tester">
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,13 +39,13 @@
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "Computop Paygate Payment Tester",
-      "description": "Create, inspect and decrypt Computop Paygate payment requests locally for Hosted Payment Page, PaySSL and Pay By Link.",
+      "name": "Paygate Payment Tester",
+      "description": "Create, inspect and decrypt Paygate payment requests locally for Hosted Payment Page, PaySSL and Pay By Link.",
       "url": "https://krebs3r.github.io/computop-tester/",
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "2.9.0",
+      "softwareVersion": "3.0.0",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -175,7 +175,7 @@
       min-height: 58px;
       transform: translateX(-50%);
       display: grid;
-      grid-template-columns: max-content max-content minmax(max-content, 1fr);
+      grid-template-columns: max-content max-content max-content minmax(max-content, 1fr);
       align-items: center;
       gap: 12px;
       padding: 8px 10px;
@@ -185,11 +185,54 @@
       border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 18px;
       box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      overscroll-behavior-x: contain;
+      scroll-behavior: smooth;
+      scroll-padding-inline: 44px;
     }
+    .glass-nav::-webkit-scrollbar { display: none; }
     html.light .glass-nav {
       background: rgba(255, 255, 255, 0.68);
       border-color: rgba(255, 255, 255, 0.82);
       box-shadow: 0 14px 40px rgba(67, 84, 112, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+    .nav-scroll-control {
+      position: fixed;
+      top: 0;
+      z-index: 102;
+      width: 34px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      color: var(--text);
+      background: linear-gradient(90deg, rgba(20,25,34,.96), rgba(20,25,34,.78));
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 12px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-2px) scale(.92);
+      transition: opacity .18s, transform .18s, background .18s;
+    }
+    .nav-scroll-control.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+    .nav-scroll-control:hover { background: rgba(61,126,255,.26); }
+    .nav-scroll-left { left: max(18px, calc(50% - 696px)); }
+    .nav-scroll-right { right: max(18px, calc(50% - 696px)); background: linear-gradient(270deg, rgba(20,25,34,.96), rgba(20,25,34,.78)); }
+    html.light .nav-scroll-control {
+      color: #1e3a8a;
+      background: rgba(255,255,255,.9);
+      border-color: rgba(37,99,235,.18);
+      box-shadow: 0 8px 22px rgba(67,84,112,.18), inset 0 1px 0 rgba(255,255,255,.9);
     }
     .nav-group { display: flex; align-items: center; gap: 4px; min-width: 0; }
     .nav-group-left { justify-content: flex-start; }
@@ -199,6 +242,12 @@
       border-left: 1px solid rgba(255, 255, 255, 0.12);
     }
     .nav-group-right { justify-content: flex-end; }
+    .nav-group-support {
+      justify-content: flex-start;
+      padding-left: 12px;
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    html.light .nav-group-support { border-left-color: rgba(37, 99, 235, 0.14); }
     .nav-link,
     .glass-nav .lang-toggle,
     .glass-nav .theme-toggle {
@@ -324,21 +373,19 @@
     @media (max-width: 1180px) {
       .glass-nav {
         display: flex;
-        overflow-x: auto;
         justify-content: flex-start;
-        scrollbar-width: none;
         scroll-snap-type: x proximity;
-        overscroll-behavior-x: contain;
         -webkit-overflow-scrolling: touch;
         touch-action: pan-x;
       }
-      .glass-nav::-webkit-scrollbar { display: none; }
       .nav-group { flex: 0 0 auto; scroll-snap-align: start; }
       .nav-group-center { padding-left: 0; border-left: 0; }
+      .nav-group-support { padding-left: 0; border-left: 0; }
       .nav-group + .nav-group::before { display: none; }
     }
 
     @media (max-width: 640px) {
+      .nav-scroll-control { display: none; }
       .glass-nav {
         top: max(8px, env(safe-area-inset-top));
         left: max(8px, env(safe-area-inset-left));
@@ -366,7 +413,25 @@
         scroll-snap-align: center;
       }
     }
-
+    .nav-link[data-nav-group]::after {
+      display: block; width: fit-content; margin: 3px auto 0; padding: 0 6px; border-radius: 999px;
+      font-family: var(--mono); font-size: 8px; line-height: 15px;
+      font-weight: 600; letter-spacing: .03em; text-transform: uppercase;
+    }
+    .nav-link[data-nav-group] { flex-direction: column; gap: 0; line-height: 1.15; }
+    .nav-link[data-nav-group="workflow"]::after {
+      content: 'Payment Workflow';
+      border: 1px solid rgba(34,197,94,.3); background: rgba(34,197,94,.1); color: #22c55e;
+    }
+    .nav-link[data-nav-group="classic"]::after {
+      content: 'Classic';
+      border: 1px solid rgba(61,126,255,.22); background: rgba(61,126,255,.1); color: var(--accent2);
+    }
+    .nav-link[data-nav-group="guide"]::after {
+      content: 'Guide';
+      border: 1px solid rgba(139,92,246,.28); background: rgba(139,92,246,.1); color: #a78bfa;
+    }
+    html.light .nav-link[data-nav-group="guide"]::after { color: #7c3aed; }
     @media (hover: none) and (pointer: coarse) {
       button, .btn, .method-btn, .copy-btn, .toggle-vis, .param-tip, summary { touch-action: manipulation; }
       input, select, textarea { font-size: 16px; }
@@ -502,6 +567,7 @@
       cursor: pointer; user-select: none;
     }
     .card-header:hover { background: rgba(255,255,255,0.03); }
+    .card.collapsed .card-header { border-bottom-color: transparent; }
     .card-icon {
       width: 28px; height: 28px; border-radius: 7px;
       background: rgba(61,126,255,0.15); border: 1px solid rgba(61,126,255,0.2);
@@ -554,6 +620,28 @@
     }
     .method-info-icon { flex-shrink: 0; margin-top: 1px; color: var(--accent2); }
     .method-info strong { color: var(--accent2); font-weight: 500; }
+    .integration-label { font-size: 10px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin: 0 0 7px; }
+    .rest-panel { margin-bottom: 20px; padding: 16px; border: 1px solid var(--border); border-radius: 10px; background: rgba(61,126,255,.035); }
+    .rest-warning { margin-top: 12px; border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.07); }
+    .rest-secret-row {
+      margin-top: 14px; display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px; border: 1px solid rgba(239,68,68,.28); border-radius: 10px;
+      background: rgba(239,68,68,.07); color: var(--muted2); line-height: 1.5;
+      cursor: pointer; transition: background .18s, border-color .18s, box-shadow .18s;
+    }
+    .rest-secret-row:hover { background: rgba(239,68,68,.11); border-color: rgba(239,68,68,.42); }
+    .rest-secret-row:has(input:checked) {
+      background: linear-gradient(135deg, rgba(239,68,68,.2), rgba(220,38,38,.12));
+      border-color: rgba(239,68,68,.62); box-shadow: 0 6px 20px rgba(239,68,68,.14);
+    }
+    .rest-secret-row input { width: 18px; height: 18px; margin-top: 1px; flex: 0 0 18px; accent-color: #ef4444; }
+    .rest-secret-content { display: flex; flex-direction: column; gap: 3px; }
+    .rest-secret-title { color: #f87171; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .rest-secret-description { color: var(--muted2); font-size: 11px; letter-spacing: 0; text-transform: none; font-weight: 400; }
+    html.light .rest-secret-title { color: #dc2626; }
+    html.light .rest-secret-row { background: rgba(239,68,68,.045); }
+    .rest-tool-help { margin: 12px 0; }
+    .rest-tool-help code { color: var(--accent2); }
     html.light .method-btn.method-active { box-shadow: 0 2px 10px rgba(37,99,235,0.25); }
     @media (max-width: 900px) {
       .method-ctrl { flex-direction: column; }
@@ -611,6 +699,7 @@
     }
     select option { background: #141922; }
     textarea { resize: vertical; min-height: 60px; font-size: 12px; line-height: 1.5; }
+    #resp-url { min-height: 120px; }
 
     .input-group { position: relative; }
     .input-group input { padding-right: 40px; }
@@ -758,6 +847,24 @@
     pre span.number { color: #fbbf24; }
     pre span.status-ok { color: var(--success); font-weight: 600; }
     pre span.status-fail { color: var(--danger); font-weight: 600; }
+    pre span.syntax-key { color: #2563eb; }
+    pre span.syntax-string { color: #15803d; }
+    pre span.syntax-number { color: #b45309; }
+    pre span.syntax-literal { color: #7c3aed; font-weight: 500; }
+    pre span.syntax-command { color: #0369a1; font-weight: 600; }
+    pre span.syntax-option { color: #7c3aed; }
+    pre span.syntax-variable { color: #b45309; }
+    pre span.syntax-url { color: #0891b2; text-decoration: underline; text-decoration-color: rgba(8,145,178,.35); }
+    pre span.syntax-header { color: #2563eb; font-weight: 500; }
+    html:not(.light) pre span.syntax-key { color: #7db7ff; }
+    html:not(.light) pre span.syntax-string { color: #91d7ad; }
+    html:not(.light) pre span.syntax-number { color: #fbbf24; }
+    html:not(.light) pre span.syntax-literal { color: #c4a7e7; }
+    html:not(.light) pre span.syntax-command { color: #67e8f9; }
+    html:not(.light) pre span.syntax-option { color: #c4a7e7; }
+    html:not(.light) pre span.syntax-variable { color: #fbbf24; }
+    html:not(.light) pre span.syntax-url { color: #67e8f9; text-decoration-color: rgba(103,232,249,.35); }
+    html:not(.light) pre span.syntax-header { color: #7db7ff; }
 
     /* ── INFO BOXES ── */
     .info-box {
@@ -868,7 +975,7 @@
     /* ── TECHNICAL EXPLAINER ── */
     .tech-explainer {
       background: rgba(61,126,255,0.04); border: 1px solid rgba(61,126,255,0.14);
-      border-radius: 10px; padding: 18px 20px;
+      border-radius: 10px; padding: 18px 20px; margin-bottom: 20px;
     }
     .te-title {
       display: flex; align-items: center; gap: 7px;
@@ -1120,6 +1227,88 @@
     }
     html.light .cl-list code { background: rgba(37,99,235,0.07); border-color: rgba(37,99,235,0.18); }
 
+    /* ── HELP PAGE ── */
+    .help-content { display: grid; gap: 18px; }
+    .help-jump { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2px; }
+    .help-jump a {
+      color: var(--muted2); text-decoration: none; font-size: 11px; font-weight: 600;
+      padding: 7px 11px; border-radius: 999px; border: 1px solid var(--border);
+      background: rgba(255,255,255,.035); transition: color .18s, border-color .18s, background .18s;
+    }
+    .help-jump a:hover { color: var(--accent2); border-color: var(--border2); background: rgba(61,126,255,.08); }
+    .help-section {
+      scroll-margin-top: 106px; padding: 24px; border: 1px solid var(--border);
+      border-radius: 16px; background: var(--card); box-shadow: 0 12px 30px rgba(0,0,0,.12);
+    }
+    .help-priority { border-color: rgba(61,126,255,.25); background: linear-gradient(145deg, rgba(61,126,255,.075), var(--card) 36%); }
+    .help-section-heading { margin-bottom: 18px; }
+    .help-section-heading h2 { font-family: var(--display); font-size: 22px; margin: 3px 0 5px; }
+    .help-section-heading p { color: var(--muted2); font-size: 13px; }
+    .help-kicker { color: var(--accent2); font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+    .help-comparison, .help-version-grid, .help-privacy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .help-option, .help-version-grid article, .help-privacy-grid article {
+      padding: 18px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface);
+    }
+    .help-option.recommended { border-color: rgba(61,126,255,.25); box-shadow: inset 0 1px 0 rgba(255,255,255,.04); }
+    .help-option-title { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+    .help-option h3, .help-privacy-grid h3 { font-family: var(--display); font-size: 15px; }
+    .help-option h4 { margin: 14px 0 5px; color: var(--text); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; }
+    .help-option p, .help-version-grid p, .help-privacy-grid p { color: var(--muted2); font-size: 12px; line-height: 1.65; }
+    .help-option ul { padding-left: 18px; display: grid; gap: 4px; color: var(--muted2); font-size: 12px; }
+    .help-type-badge {
+      display: inline-flex; width: fit-content; padding: 2px 8px; border-radius: 999px;
+      font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    }
+    .help-type-badge.classic { color: var(--accent2); border: 1px solid rgba(61,126,255,.24); background: rgba(61,126,255,.1); }
+    .help-type-badge.rest { color: #22c55e; border: 1px solid rgba(34,197,94,.28); background: rgba(34,197,94,.1); }
+    .help-type-badge.pending { color: var(--warning); border: 1px solid rgba(245,158,11,.28); background: rgba(245,158,11,.09); }
+    .help-callout, .help-warning, .help-placeholder {
+      margin-top: 14px; padding: 13px 15px; border-radius: 10px; font-size: 12px; line-height: 1.6;
+      color: var(--muted2); background: rgba(61,126,255,.055); border: 1px solid rgba(61,126,255,.17);
+    }
+    .help-callout strong, .help-warning strong, .help-placeholder strong { color: var(--accent2); }
+    .help-warning { background: rgba(239,68,68,.055); border-color: rgba(239,68,68,.2); }
+    .help-warning strong { color: #f87171; }
+    .help-placeholder { border-style: dashed; background: rgba(245,158,11,.045); border-color: rgba(245,158,11,.24); }
+    .help-placeholder strong { color: var(--warning); }
+    .help-version-grid { margin-top: 14px; }
+    .help-version-grid article > span { display: block; color: var(--accent2); font-family: var(--mono); font-size: 11px; font-weight: 600; margin-bottom: 5px; }
+    .help-steps { list-style: none; counter-reset: help-step; display: grid; gap: 10px; }
+    .help-steps li {
+      counter-increment: help-step; display: grid; grid-template-columns: 32px minmax(150px, .38fr) 1fr;
+      align-items: start; gap: 12px; padding: 13px 15px; border: 1px solid var(--border); border-radius: 11px; background: var(--surface);
+    }
+    .help-steps li::before {
+      content: counter(help-step); width: 26px; height: 26px; display: grid; place-items: center;
+      border-radius: 50%; color: var(--accent2); background: rgba(61,126,255,.12); border: 1px solid rgba(61,126,255,.22);
+      font-family: var(--mono); font-size: 11px; font-weight: 600;
+    }
+    .help-steps strong { font-size: 12px; color: var(--text); }
+    .help-steps span { color: var(--muted2); font-size: 12px; line-height: 1.6; }
+    .help-resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .help-resource-grid.compact { grid-template-columns: repeat(2, 1fr); }
+    .help-resource {
+      position: relative; min-height: 128px; display: flex; flex-direction: column; align-items: flex-start; gap: 7px;
+      padding: 16px; color: inherit; text-decoration: none; border: 1px solid var(--border);
+      border-radius: 12px; background: var(--surface); transition: transform .18s, border-color .18s, background .18s;
+    }
+    a.help-resource:hover { transform: translateY(-2px); border-color: var(--border2); background: rgba(61,126,255,.065); }
+    .help-resource-icon {
+      width: 38px; height: 38px; display: grid; place-items: center; margin-bottom: 5px;
+      color: var(--accent2); border: 1px solid rgba(61,126,255,.2); border-radius: 11px;
+      background: rgba(61,126,255,.09); transition: transform .18s, background .18s, border-color .18s;
+    }
+    .help-resource-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    a.help-resource:hover .help-resource-icon { transform: translateY(-1px) scale(1.04); border-color: rgba(61,126,255,.32); background: rgba(61,126,255,.14); }
+    .help-resource strong { color: var(--text); font-size: 13px; }
+    .help-resource small { color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .help-resource.placeholder { border-style: dashed; }
+    @media (max-width: 760px) {
+      .help-comparison, .help-version-grid, .help-privacy-grid, .help-resource-grid, .help-resource-grid.compact { grid-template-columns: 1fr; }
+      .help-steps li { grid-template-columns: 32px 1fr; }
+      .help-steps li span { grid-column: 2; }
+    }
+
     /* ── TEST CARD TABLE ── */
     .tc-details { margin-top: 10px; }
     .tc-details summary {
@@ -1198,14 +1387,17 @@
 
 <nav class="glass-nav" aria-label="Hauptnavigation">
   <div class="nav-group nav-group-left">
-    <button class="nav-link" data-nav-target="card-creds" id="nav-creds" type="button">Schritt 1 - Credentials</button>
-    <button class="nav-link" data-nav-target="card-payment" id="nav-payment" type="button">Schritt 2 - Zahlungsparameter</button>
-    <button class="nav-link" data-nav-target="card-preview" id="nav-preview" type="button">Schritt 3 - Vorschau &amp; Ausführen</button>
+    <button class="nav-link" data-nav-target="card-creds" data-nav-group="workflow" id="nav-creds" type="button">Schritt 1 - Credentials</button>
+    <button class="nav-link" data-nav-target="card-payment" data-nav-group="workflow" id="nav-payment" type="button">Schritt 2 - Zahlungsparameter</button>
+    <button class="nav-link" data-nav-target="card-preview" data-nav-group="workflow" id="nav-preview" type="button">Schritt 3 - Vorschau &amp; Ausführen</button>
   </div>
   <div class="nav-group nav-group-center">
-    <button class="nav-link" data-nav-view="request-log" id="nav-log" type="button">Request-Log</button>
-    <button class="nav-link" data-nav-view="response" id="nav-response" type="button">Response-Entschlüsselung</button>
-    <button class="nav-link" data-nav-view="response-log" id="nav-resp-log" type="button">Response-Log</button>
+    <button class="nav-link" data-nav-view="request-log" data-nav-group="classic" id="nav-log" type="button">Request-Log</button>
+    <button class="nav-link" data-nav-view="response" data-nav-group="classic" id="nav-response" type="button">Response-Entschlüsselung</button>
+    <button class="nav-link" data-nav-view="response-log" data-nav-group="classic" id="nav-resp-log" type="button">Response-Log</button>
+  </div>
+  <div class="nav-group nav-group-support">
+    <button class="nav-link" data-nav-view="help" data-nav-group="guide" id="nav-help" type="button">Hilfe</button>
   </div>
   <div class="nav-group nav-group-right">
     <button class="nav-link" data-nav-view="changelog" id="nav-changelog" type="button">Changelog</button>
@@ -1221,6 +1413,12 @@
     </button>
   </div>
 </nav>
+<button class="nav-scroll-control nav-scroll-left" id="nav-scroll-left" type="button" aria-label="Navigation nach links scrollen" title="Navigation nach links scrollen">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+</button>
+<button class="nav-scroll-control nav-scroll-right" id="nav-scroll-right" type="button" aria-label="Navigation nach rechts scrollen" title="Navigation nach rechts scrollen">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+</button>
 
 <main class="wrapper" id="payment-workflow-view" data-view="payment-workflow">
 
@@ -1234,7 +1432,7 @@
         </svg>
       </div>
       <div class="app-header-copy">
-        <div class="badge"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Computop Paygate</div>
+        <div class="badge"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Paygate</div>
         <h1>Payment Tester</h1>
         <div class="subtitle" id="subtitle">
           <span class="header-feature" id="header-feature-hpp">Hosted Payment Page</span>
@@ -1242,6 +1440,9 @@
           <span class="header-feature" id="header-feature-pbl">Pay By Link</span>
           <span class="header-feature" id="header-feature-blowfish">Blowfish ECB</span>
           <span class="header-feature" id="header-feature-hmac">HMAC-SHA256</span>
+          <span class="header-feature" id="header-feature-rest-versions">REST API V1/V2</span>
+          <span class="header-feature" id="header-feature-rest-json">JSON Builder</span>
+          <span class="header-feature" id="header-feature-rest-tools">cURL · PowerShell · Postman</span>
         </div>
       </div>
     </div>
@@ -1249,7 +1450,7 @@
 
   <section class="app-intro" aria-labelledby="app-intro-title">
     <h2 id="app-intro-title">Was ist der Payment Tester?</h2>
-    <p id="app-intro-text">Der Payment Tester unterstützt Entwickler und technische Teams dabei, Computop-Paygate-Integrationen direkt im Browser vorzubereiten und nachzuvollziehen.</p>
+    <p id="app-intro-text">Der Payment Tester unterstützt Entwickler und technische Teams dabei, Paygate-Integrationen direkt im Browser vorzubereiten und nachzuvollziehen.</p>
     <div class="app-intro-grid">
       <div class="app-intro-item">
         <strong id="app-intro-create-title">Zahlungsrequests erstellen</strong>
@@ -1261,7 +1462,7 @@
       </div>
       <div class="app-intro-item">
         <strong id="app-intro-response-title">Responses analysieren</strong>
-        <span id="app-intro-response-text">Computop-Callbacks entschlüsseln und Request- sowie Response-Verläufe lokal nachvollziehen.</span>
+        <span id="app-intro-response-text">Paygate-Callbacks entschlüsseln und Request- sowie Response-Verläufe lokal nachvollziehen.</span>
       </div>
     </div>
     <div class="app-intro-local">
@@ -1272,7 +1473,7 @@
 
   <!-- Info Box -->
   <div class="info-box" style="margin-bottom:16px">
-    <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="info-title">Hinweis:</span></strong> <span id="info-body">Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zu Computop.
+    <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="info-title">Hinweis:</span></strong> <span id="info-body">Diese Seite läuft vollständig im Browser. Alle Daten bleiben lokal – keine Server-Kommunikation außer dem finalen Redirect zum Paygate.
     Im Testmodus bitte nur <strong>kleine Beträge (0,11–2,00 EUR)</strong> verwenden, da Kreditkartenauthorisierungen auch im Test real sind.</span>
   </div>
 
@@ -1327,6 +1528,15 @@
           </div>
         </div>
       </div>
+      <div class="field-grid full" style="margin-top:14px">
+        <div class="field">
+          <label><span id="l-rest-api-key">REST API-Key</span> <span class="hint" id="h-rest-api-key">(optional, für REST-Ausgaben)</span></label>
+          <div class="input-group">
+            <input type="password" id="restApiKey" placeholder="••••••••••••••••" autocomplete="off">
+            <button class="toggle-vis" onclick="togglePwd('restApiKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+          </div>
+        </div>
+      </div>
 
       <div class="divider"></div>
 
@@ -1344,12 +1554,10 @@
           <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" onclick="loadProfile()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></span> <span id="btn-load-text">Laden</span></button>
           <button class="btn btn-danger-ghost" style="padding:8px 14px;font-size:12px" onclick="deleteProfile()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-delete-text">Löschen</span></button>
         </div>
-        <div class="profile-hint" id="cred-save-text">Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert. Mehrere Profile möglich.</div>
+        <div class="profile-hint" id="cred-save-text">Classic- und REST-Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert. Der lokale Schutz ersetzt keinen Passwortmanager.</div>
       </div>
 
-      <div class="divider"></div>
-
-      <div class="tech-explainer">
+      <div class="tech-explainer" id="classic-tech-explainer">
 
         <div class="te-title">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
@@ -1418,8 +1626,18 @@
     </div>
     <div class="card-body">
 
-      <!-- ── INTEGRATION METHOD SELECTOR ── -->
+      <div class="integration-label" id="integration-label">Schnittstelle</div>
       <div class="method-ctrl">
+        <button class="method-btn method-active" id="integration-classic" onclick="setIntegration('classic')">
+          <span>Classic Paygate</span><span class="method-endpoint">Data / Len / MAC</span>
+        </button>
+        <button class="method-btn" id="integration-rest" onclick="setIntegration('rest')">
+          <span>REST API</span><span class="method-endpoint">JSON Builder</span>
+        </button>
+      </div>
+
+      <!-- ── INTEGRATION METHOD SELECTOR ── -->
+      <div class="method-ctrl" id="classic-method-controls">
         <button class="method-btn method-active" id="method-hpp" onclick="setMethod('hpp')">
           <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span>
           <span id="method-hpp-label">Hosted Payment Page</span>
@@ -1435,6 +1653,61 @@
           <span id="method-pbl-label">Pay By Link</span>
           <span class="method-endpoint">PayByLink.aspx</span>
         </button>
+      </div>
+
+      <div class="rest-panel" id="rest-controls" style="display:none">
+        <div class="field-grid three">
+          <div class="field">
+            <label id="l-rest-version">REST API-Version</label>
+            <select id="rest-version" onchange="updateRestControls()">
+              <option value="v1" selected>V1</option>
+              <option value="v2">V2</option>
+            </select>
+          </div>
+          <div class="field">
+            <label id="l-rest-method">REST-Zahlungsart</label>
+            <select id="rest-method" onchange="updateRestControls()">
+              <option value="hostedPaymentPage">Hosted Payment Page</option>
+              <option value="cardForm">Card Form</option>
+              <option value="payByLink">Pay By Link</option>
+            </select>
+          </div>
+          <div class="field">
+            <label id="l-rest-environment">Zielumgebung</label>
+            <select id="rest-environment">
+              <option value="production" selected>Production</option>
+              <option value="test">Test</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-grid" style="margin-top:14px">
+          <div class="field">
+            <label id="l-rest-auth">Authentifizierung</label>
+            <select id="rest-auth">
+              <option value="basic" selected>HTTP Basic Auth</option>
+              <option value="oauth2">OAuth2 Client Credentials</option>
+            </select>
+          </div>
+          <div class="field">
+            <label id="l-rest-tool">Ausgabeformat</label>
+            <select id="rest-tool">
+              <option value="curl" selected>cURL (Bash / Postman-Import)</option>
+              <option value="powershell">PowerShell</option>
+              <option value="postman">Postman Collection v2.1</option>
+              <option value="http">Raw HTTP</option>
+            </select>
+          </div>
+        </div>
+        <label class="rest-secret-row">
+          <input type="checkbox" id="rest-include-credentials">
+          <span class="rest-secret-content" id="rest-include-credentials-text">
+            <span class="rest-secret-title">Credentials in die Ausgabe einsetzen</span>
+            <span class="rest-secret-description">Standardmäßig werden sichere Platzhalter erzeugt. Nur für unmittelbare lokale Verwendung aktivieren; Zwischenablage und Shell-History können Secrets speichern.</span>
+          </span>
+        </label>
+        <div class="info-box rest-warning" id="rest-v2-warning" style="display:none">
+          REST V2 verwendet eigene Endpunkte und Feldnamen. Die Ausgabe wird deshalb unabhängig vom V1-Schema erzeugt.
+        </div>
       </div>
 
       <div class="method-info">
@@ -1491,7 +1764,6 @@
           </div>
         </div>
       </div>
-
       <div class="field-grid full collapsible hidden" id="pbl-fields" style="margin-top:14px">
         <div class="field">
           <label><span id="l-expiration">Ablaufdatum</span> <span class="required">*</span> <span class="hint" id="h-expiration">(ExpirationDate)</span><button class="param-tip" id="tip-expiration" tabindex="-1">?</button></label>
@@ -1502,7 +1774,7 @@
       <div class="field" style="margin-top:14px">
         <label><span id="l-orderdesc">Bestellbeschreibung</span> <span class="hint" id="h-orderdesc">(OrderDesc)</span><button class="param-tip" id="tip-orderdesc" tabindex="-1">?</button></label>
         <select id="orderDesc" onchange="onOrderDescChange(this)">
-          <option id="opt-od-default" value="Testzahlung via Computop Paygate">Testzahlung via Computop Paygate</option>
+          <option id="opt-od-default" value="Testzahlung via Paygate">Testzahlung via Paygate</option>
           <option id="opt-od-sim-ok"  value="Test:0000" selected>Simulation: Erfolg (Test:0000)</option>
           <option id="opt-od-sim-dec" value="Test:0305">Simulation: Abgelehnt – Acquirer/Issuer (Test:0305)</option>
           <option id="opt-od-custom"  value="__custom__">Eigene Eingabe …</option>
@@ -1596,9 +1868,8 @@
     </div>
     <div class="card-body">
 
-      <div id="preview-empty-hint" class="info-box" style="text-align:center;padding:20px 15px;color:var(--muted)">
-        <span class="icon icon-md" style="margin-bottom:6px;display:block"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
-        <span id="preview-empty-text">Noch keine Vorschau generiert. Klicke in Schritt 2 auf <strong>„Vorschau generieren"</strong>, um die verschlüsselten Parameter und die vollständige URL hier anzuzeigen.</span>
+      <div id="preview-empty-hint" class="info-box">
+        <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="preview-empty-title">Hinweis:</span></strong> <span id="preview-empty-text">Noch keine Vorschau generiert. Klicke in Schritt 2 auf <strong>„Vorschau generieren"</strong>, um die Request-Daten und die ausführbare Ausgabe hier anzuzeigen.</span>
       </div>
 
       <div class="debug-section" id="debug-section" style="display:none">
@@ -1636,7 +1907,7 @@
         <div style="margin-bottom:12px">
           <div class="debug-block">
             <div class="debug-label">
-              <span id="debug-url-label">Vollständige GET-URL (Computop Paygate)</span>
+              <span id="debug-url-label">Vollständige GET-URL (Paygate)</span>
               <button class="copy-btn" onclick="copyText('full-url')"><span id="copy-url-text">Kopieren</span></button>
             </div>
             <pre id="full-url">–</pre>
@@ -1681,9 +1952,24 @@
           <button class="btn btn-primary" onclick="submitPayment()" id="btn-submit">
             <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span> <span id="btn-submit-text">Zur Hosted Payment Page</span> <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
           </button>
-          <span style="font-size:12px;color:var(--muted)" id="btn-submit-hint">Öffnet Computop in neuem Tab</span>
+          <span style="font-size:12px;color:var(--muted)" id="btn-submit-hint">Öffnet das Paygate in einem neuen Tab</span>
         </div>
 
+      </div>
+
+      <div class="debug-section" id="rest-debug-section" style="display:none">
+        <div class="info-box rest-tool-help" id="rest-tool-help"></div>
+        <div class="info-box" id="rest-test-data-help" style="margin-bottom:12px">
+          <strong>Paygate-Testdaten:</strong> Bei Hosted Payment Page und Card Form werden Testkartennummern erst im Paygate-Formular eingegeben, nicht in diesem JSON-Request. Beispiele: Visa <code>4111111111111111</code>, Mastercard <code>5555555555554444</code>, CVC <code>123</code>. <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener">Offizielle Testkarten öffnen</a>.
+        </div>
+        <div class="debug-block" style="margin-bottom:12px">
+          <div class="debug-label"><span id="rest-json-label">REST JSON-Payload</span><button class="copy-btn" onclick="copyText('rest-json-output')">Kopieren</button></div>
+          <pre id="rest-json-output">–</pre>
+        </div>
+        <div class="debug-block">
+          <div class="debug-label"><span id="rest-code-label">Ausführbarer Request</span><button class="copy-btn" onclick="copyText('rest-code-output')">Kopieren</button></div>
+          <pre id="rest-code-output">–</pre>
+        </div>
       </div>
 
     </div>
@@ -1716,7 +2002,7 @@
     <div class="card-body">
 
       <div class="info-box" style="margin-bottom:16px">
-        <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="resp-info-title">Hinweis:</span></strong> <span id="resp-info-body">Füge die vollständige Callback-URL von Computop ein (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert und mit dem Blowfish-Passwort aus Schritt&nbsp;1 entschlüsselt.</span>
+        <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="resp-info-title">Hinweis:</span></strong> <span id="resp-info-body">Füge die vollständige Callback-URL des Paygate ein (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert und mit dem Blowfish-Passwort aus Schritt&nbsp;1 entschlüsselt.</span>
       </div>
 
       <div class="field" style="margin-bottom:14px">
@@ -1786,7 +2072,7 @@
         <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="standalone-header-copy">
-        <div class="badge">Computop Paygate</div>
+        <div class="badge">Classic Paygate</div>
         <h1 id="request-log-view-title">Request-Log</h1>
         <p id="request-log-view-subtitle">Letzte 250 generierten Requests (lokal gespeichert)</p>
       </div>
@@ -1801,9 +2087,9 @@
         <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="standalone-header-copy">
-        <div class="badge">Computop Paygate</div>
+        <div class="badge">Classic Paygate</div>
         <h1 id="response-view-title">Response-Entschlüsselung</h1>
-        <p id="response-view-subtitle">Computop-Callback sicher entschlüsseln</p>
+        <p id="response-view-subtitle">Paygate-Callback sicher entschlüsseln</p>
       </div>
     </div>
   </div>
@@ -1816,7 +2102,7 @@
         <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="standalone-header-copy">
-        <div class="badge">Computop Paygate</div>
+        <div class="badge">Classic Paygate</div>
         <h1 id="response-log-view-title">Response-Log</h1>
         <p id="response-log-view-subtitle">Letzte 250 entschlüsselten Responses (lokal gespeichert)</p>
       </div>
@@ -1831,7 +2117,7 @@
         <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="standalone-header-copy">
-        <div class="badge">Computop Paygate</div>
+        <div class="badge">Paygate</div>
         <h1 id="changelog-title">Changelog</h1>
         <p id="changelog-subtitle">Vollständige Versionshistorie und Änderungen</p>
       </div>
@@ -1840,13 +2126,29 @@
   <div class="changelog-content" id="changelog-content"></div>
 </main>
 
+<main class="standalone-view" id="help-view" hidden>
+  <div class="standalone-view-header">
+    <div class="standalone-header-layout">
+      <div class="app-header-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="standalone-header-copy">
+        <div class="badge">Paygate</div>
+        <h1 id="help-title">Hilfe &amp; Dokumentation</h1>
+        <p id="help-subtitle">Integration wählen, App bedienen und sicher testen</p>
+      </div>
+    </div>
+  </div>
+  <div class="help-content" id="help-content"></div>
+</main>
+
 <!-- Footer -->
 <footer id="app-footer">
   <div class="footer-inner">
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span id="footer-name-text">Computop Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v2.9.0</span>
+      <span id="footer-name-text">Paygate Payment Tester</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v3.0.0</span>
     </span>
     <span class="footer-links">
       <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
@@ -1859,7 +2161,7 @@
       </a>
       <a href="https://developer.computop.com/#all-updates" target="_blank" rel="noopener">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-        Computop Docs
+        Paygate Docs
       </a>
     </span>
   </div>
@@ -1887,6 +2189,7 @@
 ═══════════════════════════════════════════════════════════ -->
 <script src="js/i18n.js"></script>
 <script src="js/changelog-data.js"></script>
+<script src="js/help-data.js"></script>
 <script>
 // ══════════════════════════════════════════════════════════════
 // INLINE SVG ICON SYSTEM — no external dependency
@@ -1947,8 +2250,9 @@ const LANG_LS_KEY = 'computop_lang';
 let currentLang = 'de';
 
 // ══════════════════════════════════════════════════════════════
-// INTEGRATION METHOD — hpp | ccf | pbl
+// INTEGRATION METHOD — Classic Paygate or REST request builder
 // ══════════════════════════════════════════════════════════════
+let currentIntegration = 'classic';
 let currentMethod = 'hpp';
 const PBL_REFS_LS_KEY = 'computop_paybylink_refs';
 
@@ -2000,6 +2304,66 @@ function setMethod(method) {
     : t(submitHintKey);
 }
 
+function setIntegration(integration) {
+  currentIntegration = integration;
+  const isRest = integration === 'rest';
+  document.getElementById('integration-classic')?.classList.toggle('method-active', !isRest);
+  document.getElementById('integration-rest')?.classList.toggle('method-active', isRest);
+  const classicControls = document.getElementById('classic-method-controls');
+  const classicExplainer = document.getElementById('classic-tech-explainer');
+  const restControls = document.getElementById('rest-controls');
+  if (classicExplainer && classicControls && classicExplainer.nextElementSibling !== classicControls) {
+    classicControls.parentNode.insertBefore(classicExplainer, classicControls);
+  }
+  if (classicExplainer) classicExplainer.style.display = isRest ? 'none' : 'block';
+  if (classicControls) classicControls.style.display = isRest ? 'none' : 'flex';
+  if (restControls) restControls.style.display = isRest ? 'block' : 'none';
+  const callbackRow = document.getElementById('cb-receiver-row');
+  if (callbackRow) callbackRow.style.display = isRest ? 'none' : '';
+  const submitButton = document.getElementById('btn-submit');
+  if (submitButton?.parentElement) submitButton.parentElement.style.display = isRest ? 'none' : 'flex';
+  showPreviewEmptyState();
+  if (isRest) updateRestControls(); else setMethod(currentMethod);
+}
+
+function showPreviewEmptyState() {
+  const emptyHint = document.getElementById('preview-empty-hint');
+  const classicOutput = document.getElementById('debug-section');
+  const restOutput = document.getElementById('rest-debug-section');
+  if (emptyHint) emptyHint.style.display = 'block';
+  if (classicOutput) classicOutput.style.display = 'none';
+  if (restOutput) restOutput.style.display = 'none';
+}
+
+function updateRestControls() {
+  const version = document.getElementById('rest-version')?.value || 'v1';
+  const method = document.getElementById('rest-method')?.value || 'hostedPaymentPage';
+  const methodSelect = document.getElementById('rest-method');
+  if (methodSelect && version === 'v2') {
+    methodSelect.options[0].textContent = 'Hosted Payment Page (Checkout Session)';
+    methodSelect.options[1].textContent = 'Hosted Card Form';
+    methodSelect.options[2].textContent = 'Payment Link';
+  } else if (methodSelect) {
+    methodSelect.options[0].textContent = 'Hosted Payment Page';
+    methodSelect.options[1].textContent = 'Card Form';
+    methodSelect.options[2].textContent = 'Pay By Link';
+  }
+  const warning = document.getElementById('rest-v2-warning');
+  if (warning) warning.style.display = version === 'v2' ? 'block' : 'none';
+  const pblFields = document.getElementById('pbl-fields');
+  if (pblFields) pblFields.classList.toggle('hidden', method !== 'payByLink');
+  const paytypesRow = document.getElementById('paytypes-row');
+  if (paytypesRow) paytypesRow.classList.toggle('hidden', method === 'cardForm');
+  const infoEl = document.getElementById('method-info-text');
+  if (infoEl) infoEl.innerHTML = currentLang === 'en'
+    ? (version === 'v1'
+      ? '<strong>REST API V1</strong> — Swagger-based JSON request builder. Requests are generated locally and never sent.'
+      : '<strong>REST API V2</strong> — Uses the official V2 endpoints and schemas for checkout sessions, hosted card forms and payment links.')
+    : (version === 'v1'
+      ? '<strong>REST API V1</strong> — Swagger-basierter JSON-Request-Builder. Der Request wird ausschließlich lokal erzeugt und nicht versendet.'
+      : '<strong>REST API V2</strong> — Verwendet die offiziellen V2-Endpunkte und Schemas für Checkout Session, Hosted Card Form und Payment Link.');
+}
+
 function isStandaloneApp() {
   return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 }
@@ -2028,6 +2392,19 @@ function renderChangelog() {
   });
 }
 
+function renderHelp() {
+  const container = document.getElementById('help-content');
+  if (!container || typeof HELP_CONTENT === 'undefined') return;
+  container.innerHTML = HELP_CONTENT[currentLang] || HELP_CONTENT.de;
+  container.querySelectorAll('.help-jump a[href^="#"]').forEach(link => {
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      const target = container.querySelector(link.getAttribute('href'));
+      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
 // ══════════════════════════════════════════════════════════════
 function applyLang() {
   document.title = t('page_title');
@@ -2041,6 +2418,9 @@ function applyLang() {
   setText('header-feature-pbl', 'header_feature_pbl');
   setText('header-feature-blowfish', 'header_feature_blowfish');
   setText('header-feature-hmac', 'header_feature_hmac');
+  setText('header-feature-rest-versions', 'header_feature_rest_versions');
+  setText('header-feature-rest-json', 'header_feature_rest_json');
+  setText('header-feature-rest-tools', 'header_feature_rest_tools');
   setText('app-intro-title', 'app_intro_title');
   setText('app-intro-text', 'app_intro_text');
   setText('app-intro-create-title', 'app_intro_create_title');
@@ -2056,7 +2436,10 @@ function applyLang() {
   setText('nav-log', 'nav_log');
   setText('nav-response', 'nav_response');
   setText('nav-resp-log', 'nav_resp_log');
+  setText('nav-help', 'nav_help');
   setText('nav-changelog', 'nav_changelog');
+  setText('help-title', 'help_title');
+  setText('help-subtitle', 'help_subtitle');
   setText('changelog-title', 'changelog_title');
   setText('changelog-subtitle', 'changelog_subtitle');
   setText('request-log-view-title', 'request_log_view_title');
@@ -2076,6 +2459,8 @@ function applyLang() {
   setText('ct-creds', 'ct_creds');
   setText('l-mid', 'l_mid'); setText('l-bfpw', 'l_bfpw'); setText('h-bfpw', 'h_bfpw');
   setText('l-hmacpw', 'l_hmacpw'); setText('h-hmacpw', 'h_hmacpw');
+  setText('l-rest-api-key', currentLang === 'en' ? 'REST API Key' : 'REST API-Key');
+  setText('h-rest-api-key', currentLang === 'en' ? '(optional, for REST output)' : '(optional, für REST-Ausgaben)');
   setTip('tip-mid',     'tip_mid');
   setTip('tip-bfpw',    'tip_bfpw');
   setTip('tip-hmacpw',  'tip_hmacpw');
@@ -2095,6 +2480,21 @@ function applyLang() {
   setText('te-leg-mid', 'te_leg_mid'); setText('te-leg-len', 'te_leg_len'); setText('te-leg-data', 'te_leg_data');
 
   setText('ct-payment', 'ct_payment');
+  setText('integration-label', currentLang === 'en' ? 'Interface' : 'Schnittstelle');
+  setText('l-rest-version', currentLang === 'en' ? 'REST API Version' : 'REST API-Version');
+  setText('l-rest-method', currentLang === 'en' ? 'REST Payment Type' : 'REST-Zahlungsart');
+  setText('l-rest-environment', currentLang === 'en' ? 'Target Environment' : 'Zielumgebung');
+  setText('l-rest-auth', currentLang === 'en' ? 'Authentication' : 'Authentifizierung');
+  setText('l-rest-tool', currentLang === 'en' ? 'Output Format' : 'Ausgabeformat');
+  setHtml('rest-include-credentials-text', currentLang === 'en'
+    ? '<span class="rest-secret-title">Insert credentials into output</span><span class="rest-secret-description">Secure placeholders are generated by default. Enable only for immediate local use; clipboard and shell history may retain secrets.</span>'
+    : '<span class="rest-secret-title">Credentials in die Ausgabe einsetzen</span><span class="rest-secret-description">Standardmäßig werden sichere Platzhalter erzeugt. Nur für unmittelbare lokale Verwendung aktivieren; Zwischenablage und Shell-History können Secrets speichern.</span>');
+  setText('rest-v2-warning', currentLang === 'en'
+    ? 'REST V2 uses separate endpoints and field names. Its output is therefore generated independently from the V1 schema.'
+    : 'REST V2 verwendet eigene Endpunkte und Feldnamen. Die Ausgabe wird deshalb unabhängig vom V1-Schema erzeugt.');
+  setHtml('rest-test-data-help', currentLang === 'en'
+    ? '<strong>Paygate test data:</strong> With Hosted Payment Page and Card Form, test card numbers are entered on the Paygate form, not in this JSON request. Examples: Visa <code>4111111111111111</code>, Mastercard <code>5555555555554444</code>, CVC <code>123</code>. <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener">Open official test cards</a>.'
+    : '<strong>Paygate-Testdaten:</strong> Bei Hosted Payment Page und Card Form werden Testkartennummern erst im Paygate-Formular eingegeben, nicht in diesem JSON-Request. Beispiele: Visa <code>4111111111111111</code>, Mastercard <code>5555555555554444</code>, CVC <code>123</code>. <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener">Offizielle Testkarten öffnen</a>.');
   setText('l-amount', 'l_amount'); setText('l-currency', 'l_currency'); setText('l-language', 'l_language');
   setText('l-transid', 'l_transid'); setText('h-transid', 'h_transid');
   setText('l-refnr', 'l_refnr'); setText('h-refnr', 'h_refnr');
@@ -2147,6 +2547,7 @@ function applyLang() {
   setText('ct-preview', 'ct_preview');
   setText('btn-preview-text', 'btn_preview');
   setText('btn-newtid-text', 'btn_newtid');
+  setText('preview-empty-title', 'info_title');
   setHtml('preview-empty-text', 'preview_empty');
   setText('debug-plain-label', 'debug_plain_label');
   setText('debug-urlparams-label', 'debug_urlparams_label');
@@ -2155,7 +2556,8 @@ function applyLang() {
   setText('copy-plain-text', 'btn_copy'); setText('copy-urlparams-text', 'btn_copy'); setText('copy-pbl-outer-text', 'btn_copy'); setText('copy-url-text', 'btn_copy');
   setText('btn-submit-text', 'btn_submit');
   setText('btn-submit-hint', 'btn_submit_hint');
-  setMethod(currentMethod); // Active method text must win after generic preview labels.
+  if (currentIntegration === 'rest') updateRestControls();
+  else setMethod(currentMethod); // Active method text must win after generic preview labels.
 
   setText('ct-log', 'ct_log');
   setText('log-subtitle', 'log_subtitle');
@@ -2197,6 +2599,7 @@ function applyLang() {
   renderLog();
   renderResponseLog();
   renderChangelog();
+  renderHelp();
   _updateCredStatus();
 }
 
@@ -2668,7 +3071,306 @@ function buildPayByLinkRequest(merchantId, blowfishKey, innerParams, outerOption
 // ══════════════════════════════════════════════════════════════
 // BUILD PARAMETER STRING + PREVIEW
 // ══════════════════════════════════════════════════════════════
+function buildRestPayload() {
+  const amount = amountToCents(document.getElementById('amount').value);
+  if (!amount || amount < 1) throw new Error(t('val_amount'));
+  const transactionId = document.getElementById('transId').value.trim();
+  const referenceNumber = document.getElementById('refNr').value.trim();
+  const method = document.getElementById('rest-method').value;
+  const orderDescSelect = document.getElementById('orderDesc').value;
+  const orderDescription = orderDescSelect === '__custom__'
+    ? document.getElementById('orderDescCustom').value.trim()
+    : orderDescSelect;
+  const urlSuccess = document.getElementById('urlSuccess').value.trim();
+  const urlFailure = document.getElementById('urlFailure').value.trim();
+  const urlNotify = document.getElementById('urlNotify').value.trim();
+  const urlCancel = document.getElementById('urlBack').value.trim();
+  if (!urlSuccess) throw new Error(t('val_url_success'));
+  if (!urlFailure) throw new Error(t('val_url_failure'));
+
+  const version = document.getElementById('rest-version').value;
+  const methodConfig = {};
+  const payType = document.getElementById('payTypes').value;
+  const templateSelect = document.getElementById('template').value;
+  const template = templateSelect === '__custom__'
+    ? document.getElementById('template-custom').value.trim()
+    : templateSelect;
+  if (method !== 'cardForm' && payType) methodConfig.payTypes = [payType];
+  if (template) methodConfig.template = template;
+
+  if (version === 'v2') {
+    const payload = {
+      transId: transactionId,
+      amount: {
+        currency: document.getElementById('currency').value,
+        value: amount
+      },
+      language: document.getElementById('language').value,
+      partialPayment: false,
+      captureMethod: { type: 'AUTOMATIC' },
+      order: {
+        merchantReference: referenceNumber || transactionId,
+        description: orderDescription || 'Test payment'
+      },
+      urls: {
+        return: urlSuccess,
+        cancel: urlCancel || urlFailure,
+        webhook: urlNotify || urlFailure
+      },
+      channel: method === 'payByLink' ? 'PAYBYLINK' : 'ECOM',
+      metadata: {
+        userData: referenceNumber || transactionId
+      }
+    };
+    if (referenceNumber) payload.refNr = referenceNumber;
+    if (template) payload.template = { name: template };
+    const cardPayTypes = { CC: 'CARD', VISA: 'VISA', MasterCard: 'MASTERCARD', AMEX: 'AMEX' };
+    if (method === 'cardForm') {
+      payload.paymentMethods = {
+        integrationType: 'HOSTED',
+        type: 'CARD',
+        card: {}
+      };
+      if (payType && payType !== 'CC') payload.paymentMethods.card.subType = [cardPayTypes[payType] || payType.toUpperCase()];
+      if (template) payload.paymentMethods.card.template = { name: template };
+      delete payload.template;
+    } else if (payType) {
+      const genericType = cardPayTypes[payType] || payType.toUpperCase();
+      payload.allowedPaymentMethods = [method === 'payByLink' && genericType === 'CARD' ? 'CARDS' : genericType];
+    }
+    if (method === 'payByLink') payload.serviceType = 'LINK';
+    if (method === 'payByLink') {
+      const expiration = document.getElementById('expirationDate').value;
+      if (!expiration) throw new Error(t('val_expiration'));
+      payload.expirationTime = new Date(expiration).toISOString();
+    }
+    return payload;
+  }
+
+  const payload = {
+    transactionId,
+    amount: {
+      currency: document.getElementById('currency').value,
+      value: amount
+    },
+    language: document.getElementById('language').value,
+    urls: {
+      success: urlSuccess,
+      failure: urlFailure
+    },
+    order: {
+      id: referenceNumber || transactionId,
+      description: [orderDescription || 'Test payment']
+    },
+    payment: {
+      method,
+      [method]: methodConfig
+    },
+    metadata: {
+      userData: referenceNumber || transactionId
+    }
+  };
+  if (referenceNumber) payload.referenceNumber = referenceNumber;
+  if (urlNotify) payload.urls.notify = urlNotify;
+  if (urlCancel) payload.urls.cancel = urlCancel;
+  if (method === 'payByLink') {
+    const expiration = document.getElementById('expirationDate').value;
+    if (!expiration) throw new Error(t('val_expiration'));
+    payload.expirationTime = new Date(expiration).toISOString();
+  }
+  return payload;
+}
+
+function restBaseUrl() {
+  const host = document.getElementById('rest-environment').value === 'test'
+    ? 'https://test.computop-paygate.com'
+    : 'https://www.computop-paygate.com';
+  return `${host}/api/${document.getElementById('rest-version').value}`;
+}
+
+function restPaymentUrl() {
+  const base = restBaseUrl();
+  if (document.getElementById('rest-version').value !== 'v2') return `${base}/payments`;
+  const method = document.getElementById('rest-method').value;
+  if (method === 'hostedPaymentPage') return `${base}/payments/sessions`;
+  if (method === 'payByLink') return `${base}/payments/links`;
+  return `${base}/payments`;
+}
+
+function restCredentials() {
+  const include = document.getElementById('rest-include-credentials').checked;
+  return {
+    include,
+    merchantId: include ? document.getElementById('merchantId').value.trim() : '{{merchantId}}',
+    apiKey: include ? document.getElementById('restApiKey').value : '{{apiKey}}'
+  };
+}
+
+function buildCurlRequest(url, json, auth, credentials, idempotencyKey) {
+  const body = json.replace(/'/g, "'\\''");
+  const idempotencyHeader = url.includes('/api/v2/') ? ` \\
+  --header 'Idempotency-Key: ${idempotencyKey}'` : '';
+  if (auth === 'basic') {
+    return `curl --request POST \\
+  --url '${url}' \\
+  --user '${credentials.merchantId}:${credentials.apiKey}' \\
+  --header 'Content-Type: application/json'${idempotencyHeader} \\
+  --data '${body}'`;
+  }
+  const tokenUrl = `${new URL(url).origin}/authorization/oauth/token`;
+  return `ACCESS_TOKEN=$(curl --silent --request POST \\
+  --url '${tokenUrl}' \\
+  --header 'Content-Type: application/x-www-form-urlencoded' \\
+  --data-urlencode 'grant_type=client_credentials' \\
+  --data-urlencode 'client_id=${credentials.merchantId}' \\
+  --data-urlencode 'client_secret=${credentials.apiKey}' | jq -r '.access_token')
+
+curl --request POST \\
+  --url '${url}' \\
+  --header "Authorization: Bearer $ACCESS_TOKEN" \\
+  --header 'Content-Type: application/json'${idempotencyHeader} \\
+  --data '${body}'`;
+}
+
+function buildPowerShellRequest(url, json, auth, credentials, idempotencyKey) {
+  const body = `$body = @'\n${json}\n'@`;
+  const extraHeader = url.includes('/api/v2/') ? `; 'Idempotency-Key' = '${idempotencyKey}'` : '';
+  if (auth === 'basic') {
+    return `$pair = '${credentials.merchantId}:${credentials.apiKey}'\n$basic = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($pair))\n${body}\nInvoke-RestMethod -Method Post -Uri '${url}' -Headers @{ Authorization = "Basic $basic"${extraHeader} } -ContentType 'application/json' -Body $body`;
+  }
+  const tokenUrl = `${new URL(url).origin}/authorization/oauth/token`;
+  return `$token = Invoke-RestMethod -Method Post -Uri '${tokenUrl}' -ContentType 'application/x-www-form-urlencoded' -Body @{ grant_type='client_credentials'; client_id='${credentials.merchantId}'; client_secret='${credentials.apiKey}' }\n${body}\nInvoke-RestMethod -Method Post -Uri '${url}' -Headers @{ Authorization = "Bearer $($token.access_token)"${extraHeader} } -ContentType 'application/json' -Body $body`;
+}
+
+function buildPostmanCollection(url, payload, auth, credentials, idempotencyKey) {
+  const parsed = new URL(url);
+  const paymentsIndex = parsed.pathname.indexOf('/payments');
+  const apiBasePath = paymentsIndex >= 0 ? parsed.pathname.slice(0, paymentsIndex) : parsed.pathname;
+  const endpointPath = paymentsIndex >= 0 ? parsed.pathname.slice(paymentsIndex) : parsed.pathname;
+  const collection = {
+    info: { name: 'Paygate REST Payment Request', schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json' },
+    variable: [
+      { key: 'baseUrl', value: `${parsed.protocol}//${parsed.host}${apiBasePath}` },
+      { key: 'merchantId', value: credentials.merchantId },
+      { key: 'apiKey', value: credentials.apiKey },
+      { key: 'accessToken', value: '{{accessToken}}' }
+    ],
+    item: [{
+      name: 'Create payment',
+      request: {
+        method: 'POST',
+        header: [
+          { key: 'Content-Type', value: 'application/json' },
+          ...(url.includes('/api/v2/') ? [{ key: 'Idempotency-Key', value: idempotencyKey }] : [])
+        ],
+        body: { mode: 'raw', raw: JSON.stringify(payload, null, 2), options: { raw: { language: 'json' } } },
+        url: { raw: `{{baseUrl}}${endpointPath}` },
+        auth: auth === 'basic'
+          ? { type: 'basic', basic: [{ key: 'username', value: '{{merchantId}}', type: 'string' }, { key: 'password', value: '{{apiKey}}', type: 'string' }] }
+          : { type: 'bearer', bearer: [{ key: 'token', value: '{{accessToken}}', type: 'string' }] }
+      }
+    }]
+  };
+  return JSON.stringify(collection, null, 2);
+}
+
+function buildRawHttpRequest(url, json, auth, credentials, idempotencyKey) {
+  const parsed = new URL(url);
+  const authorization = auth === 'basic'
+    ? `Basic ${credentials.include ? btoa(`${credentials.merchantId}:${credentials.apiKey}`) : '{{base64MerchantIdAndApiKey}}'}`
+    : 'Bearer {{accessToken}}';
+  const idempotencyHeader = url.includes('/api/v2/') ? `\nIdempotency-Key: ${idempotencyKey}` : '';
+  return `POST ${parsed.pathname} HTTP/1.1\nHost: ${parsed.host}\nAuthorization: ${authorization}\nContent-Type: application/json${idempotencyHeader}\nContent-Length: ${new TextEncoder().encode(json).length}\n\n${json}`;
+}
+
+function renderSyntaxTokens(element, source, pattern, classify) {
+  clearElement(element);
+  let cursor = 0;
+  for (const match of source.matchAll(pattern)) {
+    if (match.index > cursor) element.appendChild(document.createTextNode(source.slice(cursor, match.index)));
+    const token = match[0];
+    const className = classify(token, match);
+    if (className) appendTextElement(element, 'span', className, token);
+    else element.appendChild(document.createTextNode(token));
+    cursor = match.index + token.length;
+  }
+  if (cursor < source.length) element.appendChild(document.createTextNode(source.slice(cursor)));
+  element.dataset.raw = source;
+}
+
+function renderJsonSyntax(element, json) {
+  const pattern = /("(?:\\.|[^"\\])*")(?=\s*:)|("(?:\\.|[^"\\])*")|-?\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b|\b(?:true|false|null)\b/g;
+  renderSyntaxTokens(element, json, pattern, (token, match) => {
+    if (match[1]) return 'syntax-key';
+    if (match[2]) return 'syntax-string';
+    if (/^(true|false|null)$/.test(token)) return 'syntax-literal';
+    return 'syntax-number';
+  });
+}
+
+function renderCommandSyntax(element, source, tool) {
+  if (tool === 'postman') {
+    renderJsonSyntax(element, source);
+    return;
+  }
+  const pattern = /https?:\/\/[^\s'"}]+|\{\{[^}]+\}\}|\$\([^\n]+?\)|\$[A-Za-z_][\w.]*(?:\.[\w]+)*|--[\w-]+|-[A-Z][A-Za-z]*|'(?:[^']|'')*'|"(?:\\.|[^"\\])*"|\b(?:curl|jq|Invoke-RestMethod|POST|GET|PUT|PATCH|DELETE|HTTP\/1\.1)\b|^(?:Host|Authorization|Content-Type|Content-Length)(?=:)/gm;
+  renderSyntaxTokens(element, source, pattern, token => {
+    if (/^https?:\/\//.test(token)) return 'syntax-url';
+    if (/^\{\{/.test(token) || /^\$/.test(token)) return 'syntax-variable';
+    if (/^--/.test(token) || /^-[A-Z]/.test(token)) return 'syntax-option';
+    if (/^['"]/.test(token)) return 'syntax-string';
+    if (/^(Host|Authorization|Content-Type|Content-Length)$/.test(token)) return 'syntax-header';
+    return 'syntax-command';
+  });
+}
+
+function buildRestPreview() {
+  try {
+    const payload = buildRestPayload();
+    const json = JSON.stringify(payload, null, 2);
+    const url = restPaymentUrl();
+    const auth = document.getElementById('rest-auth').value;
+    const credentials = restCredentials();
+    if (credentials.include && (!credentials.merchantId || !credentials.apiKey)) {
+      throw new Error('Merchant ID und REST API-Key werden für die eingebettete Ausgabe benötigt.');
+    }
+    const tool = document.getElementById('rest-tool').value;
+    const builders = {
+      curl: () => buildCurlRequest(url, json, auth, credentials, payload.transId || payload.transactionId),
+      powershell: () => buildPowerShellRequest(url, json, auth, credentials, payload.transId || payload.transactionId),
+      postman: () => buildPostmanCollection(url, payload, auth, credentials, payload.transId || payload.transactionId),
+      http: () => buildRawHttpRequest(url, json, auth, credentials, payload.transId || payload.transactionId)
+    };
+    const help = currentLang === 'en' ? {
+      curl: 'Run in a terminal or import into Postman using <code>Import → Raw text</code>. The OAuth2 variant also requires <code>jq</code>.',
+      powershell: 'Run in a PowerShell session. The JSON body is passed as a here-string so quotation marks remain unchanged.',
+      postman: 'Save with the <code>.postman_collection.json</code> extension or paste into <code>Import → Raw text</code>. Variables can then be maintained in a private environment.',
+      http: 'For REST clients and IDE files such as <code>.http</code>. Replace placeholders before execution.'
+    } : {
+      curl: 'Im Terminal ausführen oder in Postman über <code>Import → Raw text</code> importieren. Für OAuth2 benötigt diese Variante zusätzlich <code>jq</code>.',
+      powershell: 'In einer PowerShell-Sitzung ausführen. Der JSON-Body wird als Here-String übergeben, damit Anführungszeichen unverändert bleiben.',
+      postman: 'Als Datei mit Endung <code>.postman_collection.json</code> speichern oder in Postman über <code>Import → Raw text</code> einfügen. Variablen können anschließend in einer privaten Environment gepflegt werden.',
+      http: 'Für REST-Clients und IDE-Dateien wie <code>.http</code>. Platzhalter vor der Ausführung ersetzen.'
+    };
+    renderJsonSyntax(document.getElementById('rest-json-output'), json);
+    renderCommandSyntax(document.getElementById('rest-code-output'), builders[tool](), tool);
+    document.getElementById('rest-tool-help').innerHTML = help[tool];
+    document.getElementById('card-preview').classList.remove('collapsed');
+    document.getElementById('preview-empty-hint').style.display = 'none';
+    document.getElementById('debug-section').style.display = 'none';
+    document.getElementById('rest-debug-section').style.display = 'block';
+    document.getElementById('rest-debug-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    showToast(currentLang === 'en' ? 'REST request generated locally — nothing was sent.' : 'REST-Request lokal erzeugt – es wurde nichts gesendet.', 'success');
+  } catch (error) {
+    showToast(t('toast_err') + error.message, 'error');
+  }
+}
+
 async function buildAndPreview() {
+  if (currentIntegration === 'rest') {
+    buildRestPreview();
+    return;
+  }
   const btn = document.getElementById('btn-preview');
   btn.disabled = true;
   btn.innerHTML = '<span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="spin-icon"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg></span> ' + t('btn_preview_loading');
@@ -2711,7 +3413,7 @@ async function buildAndPreview() {
     if (!amount || amount < 1) { showToast(t('val_amount'), 'error'); return; }
 
     // Build MAC message: PayID*TransID*MerchantID*Amount*Currency
-    // PayID is empty for the initial request → leading asterisk required (see Computop docs)
+    // PayID is empty for the initial request → leading asterisk required (see Paygate docs)
     const macMsg = `*${transId}*${merchantId}*${amount}*${currency}`;
     const mac = await hmacSha256(hmacKey, macMsg);
 
@@ -2908,6 +3610,7 @@ function _readFormCredentials() {
     merchantId:  document.getElementById('merchantId').value,
     blowfishKey: document.getElementById('blowfishKey').value,
     hmacKey:     document.getElementById('hmacKey').value,
+    restApiKey:  document.getElementById('restApiKey').value,
   };
 }
 
@@ -2915,6 +3618,7 @@ function _fillFormCredentials(data) {
   if (data.merchantId)  document.getElementById('merchantId').value  = data.merchantId;
   if (data.blowfishKey) document.getElementById('blowfishKey').value = data.blowfishKey;
   if (data.hmacKey)     document.getElementById('hmacKey').value     = data.hmacKey;
+  if (data.restApiKey)  document.getElementById('restApiKey').value  = data.restApiKey;
 }
 
 async function saveProfile() {
@@ -3750,6 +4454,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLang();
   generateTransId();
   initPayByLinkDefaults();
+  setIntegration(currentIntegration);
   loadCredentials();
   initLogStorage().then(() => {
     renderLog();
@@ -3842,19 +4547,81 @@ function initNavigation() {
     'request-log': document.getElementById('request-log-view'),
     response: document.getElementById('response-view'),
     'response-log': document.getElementById('response-log-view'),
+    help: document.getElementById('help-view'),
     changelog: document.getElementById('changelog-view'),
   };
   const targets = targetLinks
     .map(link => document.getElementById(link.dataset.navTarget))
     .filter(Boolean);
+  const glassNav = document.querySelector('.glass-nav');
+  const navScrollLeft = document.getElementById('nav-scroll-left');
+  const navScrollRight = document.getElementById('nav-scroll-right');
+  let navigationLockTarget = null;
+  let navigationLockTimer = 0;
+  let scrollUpdatePending = false;
 
   function setActiveLink(activeLink) {
     [...targetLinks, ...viewLinks].forEach(link => {
       link.classList.toggle('nav-active', link === activeLink);
     });
-    if (activeLink && window.matchMedia('(max-width: 1180px)').matches) {
+    if (activeLink && glassNav && glassNav.scrollWidth > glassNav.clientWidth + 2) {
       activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
+  }
+
+  function updateNavScrollControls() {
+    if (!glassNav || !navScrollLeft || !navScrollRight) return;
+    const navRect = glassNav.getBoundingClientRect();
+    const controlTop = navRect.top + (navRect.height - navScrollLeft.offsetHeight) / 2;
+    navScrollLeft.style.top = `${controlTop}px`;
+    navScrollRight.style.top = `${controlTop}px`;
+    const hasOverflow = glassNav.scrollWidth > glassNav.clientWidth + 2;
+    const atStart = glassNav.scrollLeft <= 2;
+    const atEnd = glassNav.scrollLeft + glassNav.clientWidth >= glassNav.scrollWidth - 2;
+    navScrollLeft.classList.toggle('visible', hasOverflow && !atStart);
+    navScrollRight.classList.toggle('visible', hasOverflow && !atEnd);
+  }
+
+  function scrollNavigation(direction) {
+    if (!glassNav) return;
+    glassNav.scrollBy({ left: direction * Math.max(260, glassNav.clientWidth * .62), behavior: 'smooth' });
+  }
+
+  navScrollLeft?.addEventListener('click', () => scrollNavigation(-1));
+  navScrollRight?.addEventListener('click', () => scrollNavigation(1));
+  glassNav?.addEventListener('scroll', updateNavScrollControls, { passive: true });
+  glassNav?.addEventListener('wheel', event => {
+    if (glassNav.scrollWidth <= glassNav.clientWidth + 2 || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    event.preventDefault();
+    glassNav.scrollBy({ left: event.deltaY, behavior: 'auto' });
+  }, { passive: false });
+
+  function activeWorkflowLinkAtScrollPosition() {
+    const activationLine = (glassNav?.getBoundingClientRect().bottom || 90) + 16;
+    let activeTarget = targets[0];
+    targets.forEach(target => {
+      if (target.getBoundingClientRect().top <= activationLine) activeTarget = target;
+    });
+    return targetLinks.find(link => link.dataset.navTarget === activeTarget?.id);
+  }
+
+  function updateWorkflowNavigation() {
+    scrollUpdatePending = false;
+    if (paymentWorkflowView.hidden || navigationLockTarget) return;
+    setActiveLink(activeWorkflowLinkAtScrollPosition());
+  }
+
+  function scheduleWorkflowNavigationUpdate() {
+    if (scrollUpdatePending) return;
+    scrollUpdatePending = true;
+    requestAnimationFrame(updateWorkflowNavigation);
+  }
+
+  function releaseNavigationLock() {
+    if (!navigationLockTarget) return;
+    navigationLockTarget = null;
+    clearTimeout(navigationLockTimer);
+    scheduleWorkflowNavigationUpdate();
   }
 
   function showPaymentWorkflowView(updateHistory = true) {
@@ -3878,10 +4645,13 @@ function initNavigation() {
       const target = document.getElementById(link.dataset.navTarget);
       if (!target) return;
       showPaymentWorkflowView();
+      navigationLockTarget = target.id;
+      clearTimeout(navigationLockTimer);
+      navigationLockTimer = window.setTimeout(releaseNavigationLock, 1200);
       setActiveLink(link);
       requestAnimationFrame(() => {
         target.classList.remove('collapsed');
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }));
       });
     });
   });
@@ -3897,21 +4667,17 @@ function initNavigation() {
   }
   window.addEventListener('popstate', applyLocationView);
   applyLocationView();
-
-  if (!('IntersectionObserver' in window)) return;
-  const observer = new IntersectionObserver(entries => {
-    const visible = entries
-      .filter(entry => entry.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!visible) return;
-    if (!paymentWorkflowView.hidden) {
-      setActiveLink(targetLinks.find(link => link.dataset.navTarget === visible.target.id));
-    }
-  }, {
-    rootMargin: '-90px 0px -55% 0px',
-    threshold: [0.05, 0.2, 0.5]
+  window.addEventListener('scroll', scheduleWorkflowNavigationUpdate, { passive: true });
+  window.addEventListener('resize', () => {
+    scheduleWorkflowNavigationUpdate();
+    updateNavScrollControls();
   });
-  targets.forEach(target => observer.observe(target));
+  if ('ResizeObserver' in window && glassNav) {
+    new ResizeObserver(updateNavScrollControls).observe(glassNav);
+  }
+  if ('onscrollend' in window) window.addEventListener('scrollend', releaseNavigationLock);
+  scheduleWorkflowNavigationUpdate();
+  requestAnimationFrame(updateNavScrollControls);
 }
 
 // ── PWA Service Worker Registration ──

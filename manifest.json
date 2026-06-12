@@ -1,9 +1,9 @@
 {
   "_info_de": "Web App Manifest – Diese Datei ermöglicht es dem Browser, die App als installierbare Progressive Web App (PWA) zu erkennen. Sie definiert den App-Namen, das Icon, die Farben und den Anzeigemodus (standalone = ohne Browser-Leiste). Ohne diese Datei zeigt der Browser keinen Installieren-Button an.",
   "_info_en": "Web App Manifest – This file allows the browser to recognize the app as an installable Progressive Web App (PWA). It defines the app name, icon, colors, and display mode (standalone = without browser bar). Without this file, the browser will not show an install button.",
-  "name": "Computop Paygate – Payment Tester",
-  "short_name": "Computop Tester",
-  "description": "Create, inspect and decrypt Computop Paygate payment requests locally in your browser.",
+  "name": "Paygate – Payment Tester",
+  "short_name": "Paygate Tester",
+  "description": "Create, inspect and decrypt Paygate payment requests locally in your browser.",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",

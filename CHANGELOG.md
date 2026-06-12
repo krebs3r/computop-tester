@@ -1,15 +1,42 @@
 # Changelog
 
-All notable changes to Computop Paygate Payment Tester are documented here.
+All notable changes to Paygate Payment Tester are documented here.
+
+### v3.0.0 — REST Request Builder
+- Added Classic Paygate and REST API selection inside the Payment Workflow
+- Added REST API V1 and V2 request generation for Hosted Payment Page, Card Form and Pay By Link
+- Added version-specific V1/V2 payloads and endpoints, including V2 checkout sessions, hosted card payments and payment links
+- Added V2 fields such as `transId`, string-based `order.description`, hosted card configuration and `Idempotency-Key`
+- Added Basic Auth and OAuth2 Client Credentials output templates for production and test environments
+- Added cURL, PowerShell, Postman Collection v2.1 and raw HTTP formats with execution guidance
+- Added syntax highlighting to generated JSON and executable request output
+- Added official test-card guidance while keeping card data outside generated REST payloads
+- Added optional REST API key storage to encrypted local credential profiles
+- Kept REST generation local with no browser-side request submission and safe placeholders by default
+- Added an explicit opt-in before credentials are embedded into copied output
+- Moved the Classic GET-URL explanation into the Classic integration flow and hid it in REST mode
+- Added green Payment Workflow and blue Classic navigation badges to clarify feature ownership
+- Added REST API, JSON Builder and external-tool feature pills below the main title
+- Clarified REST version labels and removed outdated recommendation or schema-check wording
+- Standardised visible product naming to Paygate across the interface, manifest and documentation
+- Updated the footer, application metadata, PWA cache and documentation to version 3.0.0
+- Stabilised workflow navigation highlighting during smooth scrolling and hid card-header dividers while cards are collapsed
+- Restored a bilingual waiting message in Step 3 whenever switching between Classic and REST clears the current preview
+- Added automatic desktop navbar overflow controls with glass arrow buttons and mouse-wheel horizontal scrolling
+- Added a bilingual Help view with Classic/REST decision guidance, app instructions, official documentation, test resources, error codes and privacy notes
+- Added a violet Guide badge below the Help navigation item
+- Kept Payment Workflow, Classic and Guide navigation badges in their green, blue and violet group colours while their navigation item is active
+- Refined the Step 3 waiting state to match the standard inline information style with a clean icon-and-text baseline
+- Added themed inline SVG icons for the Help page's test guide, test cards, error-code and Paygate-status resources
 
 ### v2.9.0 — PWA Payment Return
-- Added a secure callback relay from the external Computop browser tab to an already open installed PWA
+- Added a secure callback relay from the external Paygate browser tab to an already open installed PWA
 - Kept `noopener` isolation for the payment window and transferred callbacks through `BroadcastChannel` with a storage fallback
 - Added acknowledgement handling so the callback tab only closes after the PWA has received the response
 - Added manifest scope and launch-handler hints for browsers that can reuse an existing installed app window
 - Added PWA-specific payment guidance while preserving the existing browser workflow
 - Added the glass shield logo to every standalone application view
-- Displayed the compact GitHub repository address in the footer and updated the Computop documentation target
+- Displayed the compact GitHub repository address in the footer and updated the Paygate documentation target
 
 ### v2.8.0 — Main Page Introduction
 - Added a concise bilingual introduction explaining the purpose of the Payment Tester
@@ -24,7 +51,7 @@ All notable changes to Computop Paygate Payment Tester are documented here.
 
 ### v2.7.8 — Inline Alignment Polish
 - Corrected the text baseline of information-box labels and their icons
-- Centered the Computop badge icon, dot and text on one consistent line
+- Centered the Paygate badge icon, dot and text on one consistent line
 - Applied the information-label fix to both the Payment Workflow and Response Decryption views
 
 ### v2.7.7 — Glass Header Icon & Feature Pills
@@ -77,7 +104,7 @@ All notable changes to Computop Paygate Payment Tester are documented here.
 
 ### v2.6.1 — Unique Pay By Link References
 - Automatically generates a RefNr whenever Pay By Link is selected
-- Uses cryptographically secure random values within Computop's 30-character limit
+- Uses cryptographically secure random values within Paygate's 30-character limit
 - Keeps a local registry of up to 5,000 used references to prevent reuse in the same browser
 - Generates and reserves a fresh reference for every new Pay By Link preview
 - Added a manual regenerate button and bilingual UI messages
@@ -169,7 +196,7 @@ All notable changes to Computop Paygate Payment Tester are documented here.
 - Bugfix callback receiver: replaced `:has()` selector with compatible `.closest()`; fixed timing issue on auto-decrypt; wrapped `checkCallbackParams()` in try-catch
 
 ### v2.0.5 — Callback Receiver & UX Improvements
-- **Callback receiver** — toggle in the Redirect URLs section sets URLSuccess, URLFailure and URLBack to the tool's own URL; on return from Computop the response is auto-decrypted — no external service required
+- **Callback receiver** — toggle in the Redirect URLs section sets URLSuccess, URLFailure and URLBack to the tool's own URL; on return from Paygate the response is auto-decrypted — no external service required
 - **Multiple credential profiles** — named, AES-GCM encrypted profiles with a dropdown selector; automatic migration from the old single-credential storage
 - **Clear all data** — button in the footer removes all stored data (profiles, request log, settings) in one step
 - **Profile name field** is cleared automatically after saving
@@ -186,8 +213,8 @@ All notable changes to Computop Paygate Payment Tester are documented here.
 ### v1.9.1 — Tooltip Documentation & UX Improvements
 - **Inline tooltips** — `?` icon next to all 15 parameters with a short explanation; viewport-aware positioning (never clipped at the edge)
 - **Formatted card numbers** — 3DS 2.x test card numbers now use spaces like the Non-3DS cards (e.g. `4000 0199 6619 9434`)
-- **Documentation link** — link to the Computop documentation added to both test card tables (Non-3DS & 3DS) as a source reference
-- **Template parameter removed** — was unnecessary; if Corporate PaymentPage is booked, Computop loads the layout automatically
+- **Documentation link** — link to the Paygate documentation added to both test card tables (Non-3DS & 3DS) as a source reference
+- **Template parameter removed** — was unnecessary; if Corporate PaymentPage is booked, Paygate loads the layout automatically
 
 ### v1.9 — 3-D Secure Test Card Numbers
 - Added second test card table **(3-D Secure 2.x)** in the payment parameters section
@@ -196,7 +223,7 @@ All notable changes to Computop Paygate Payment Tester are documented here.
 
 ### v1.8.1 — Bugfix: MAC Calculation
 - Fixed MAC string format: `*TransID*MerchantID*Amount*Currency` — the leading `*` for empty PayID was missing
-- Without this fix Computop rejected every request with **"MAC INVALID"**
+- Without this fix Paygate rejected every request with **"MAC INVALID"**
 - Updated the technical explainer in the Credentials section accordingly
 
 ### v1.8 — Test Cards & Simulation Modes
@@ -206,7 +233,7 @@ All notable changes to Computop Paygate Payment Tester are documented here.
 - Table and dropdown fully translated (DE / EN)
 
 ### v1.7 — Response Decryptor
-- Added **Response Decryptor** section — decrypts Computop callback URLs directly in the browser
+- Added **Response Decryptor** section — decrypts Paygate callback URLs directly in the browser
 - Paste the full callback URL: `MerchantID`, `Len` and `Data` are extracted automatically via `URLSearchParams`
 - Alternative manual mode: enter `Data` (hex) and `Len` directly
 - Color-coded output — `Status` green/red/orange by value, `MAC` purple, all other parameters teal
@@ -230,7 +257,7 @@ All notable changes to Computop Paygate Payment Tester are documented here.
 - **Download button** for local execution — recommended alternative to using the public URL
 
 ### v1.3 — Payment Methods
-- Added **"All enabled payment methods"** as the default `PayTypes` option — omitting the parameter causes Computop to display every method configured for the merchant account
+- Added **"All enabled payment methods"** as the default `PayTypes` option — omitting the parameter causes Paygate to display every method configured for the merchant account
 - Clarified existing `CC`, `VISA`, `MasterCard` and `AMEX` options in the selector
 
 ### v1.2 — Icons
@@ -250,5 +277,5 @@ All notable changes to Computop Paygate Payment Tester are documented here.
 - HMAC-SHA256 MAC calculation
 - **Encrypted credential storage** (AES-GCM) in `localStorage` with PBKDF2 key derivation
 - **Request log** persisted in `localStorage` (last 50 entries, expandable, copyable)
-- **New tab redirect** — Computop HPP opens in a new tab instead of replacing the current page
+- **New tab redirect** — Paygate HPP opens in a new tab instead of replacing the current page
 - Parameter preview with color-coded plain-text display
