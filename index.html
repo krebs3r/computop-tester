@@ -45,19 +45,36 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.0.1",
+      "softwareVersion": "3.0.2",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
     }
   </script>
-  <!-- Apply theme before render to avoid flash -->
+  <!-- Apply design and colour mode before render to avoid flash -->
   <script>
     (function() {
-      const saved = localStorage.getItem('computop_theme');
+      const html = document.documentElement;
+      const allowedDesigns = ['original', 'nexi'];
+      const designParams = new URLSearchParams(window.location.search);
+      const hasRequestedDesign = designParams.has('design');
+      const requestedDesign = designParams.get('design');
+      let savedDesign = null;
+      let saved = null;
+      try {
+        savedDesign = localStorage.getItem('computop_design');
+        saved = localStorage.getItem('computop_theme');
+      } catch (_) {}
+      const design = hasRequestedDesign
+        ? (allowedDesigns.includes(requestedDesign) ? requestedDesign : 'original')
+        : (allowedDesigns.includes(savedDesign) ? savedDesign : 'original');
+      html.dataset.design = design;
+      if (allowedDesigns.includes(requestedDesign)) {
+        try { localStorage.setItem('computop_design', design); } catch (_) {}
+      }
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const mode = saved || (prefersDark ? 'dark' : 'light');
-      if (mode === 'light') document.documentElement.classList.add('light');
+      if (mode === 'light') html.classList.add('light');
     })();
   </script>
   <style>
@@ -493,7 +510,7 @@
       .btn-row .btn { flex: 1 1 100%; }
       .profile-row { flex-wrap: wrap; }
       .profile-row select { flex: 1 1 100%; min-width: 0; }
-      .footer-links { width: 100%; gap: 8px 14px; justify-content: space-between; }
+      .footer-links { width: 100%; gap: 8px 14px; justify-content: flex-start; flex-wrap: wrap; }
     }
 
     /* ── HEADER ── */
@@ -1406,6 +1423,7 @@
     footer {
       position: relative; z-index: 1;
       width: min(1400px, calc(100% - 28px));
+      font-family: var(--sans);
       background: rgba(20, 25, 34, 0.46);
       -webkit-backdrop-filter: blur(22px) saturate(155%);
       backdrop-filter: blur(22px) saturate(155%);
@@ -1434,20 +1452,486 @@
     }
     .footer-version {
       display: inline-flex; align-items: center; gap: 7px;
-      font-family: var(--mono); font-size: 12px; color: var(--muted);
+      font-family: inherit; font-size: 12px; color: var(--muted);
     }
     .footer-ver-badge {
       background: rgba(61,126,255,0.12); border: 1px solid rgba(61,126,255,0.22);
       color: var(--accent2); font-size: 11px; padding: 1px 8px; border-radius: 20px;
     }
+    .footer-preview-notice {
+      display: none;
+    }
     .footer-links { display: flex; align-items: center; gap: 18px; }
     .footer-links a {
       display: inline-flex; align-items: center; gap: 5px;
+      font-family: inherit;
       font-size: 12px; color: var(--muted); text-decoration: none;
-      overflow-wrap: anywhere;
+      overflow-wrap: normal;
+      white-space: nowrap;
       transition: color .15s;
     }
     .footer-links a:hover { color: var(--accent2); }
+
+    /* ── NEXI PREVIEW DESIGN ──
+       Official Nexi brand assets are documented in THIRD_PARTY_NOTICES.md. */
+    @font-face {
+      font-family: 'Nexi Sans Pro';
+      src: url('assets/nexi/fonts/NexiSansPro-Regular.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+    .footer-ver-badge,
+    .footer-links .btn {
+      font-family: inherit;
+    }
+    @font-face {
+      font-family: 'Nexi Sans Pro';
+      src: url('assets/nexi/fonts/NexiSansPro-SemiBold.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+    }
+    .brand-logo { display: none; }
+
+    html[data-design="nexi"] {
+      --bg: #071d49;
+      --surface: #10285a;
+      --card: #122b61;
+      --border: rgba(255,255,255,.16);
+      --border2: rgba(43,212,217,.52);
+      --accent: #2d32aa;
+      --accent2: #2bd4d9;
+      --success: #04a880;
+      --warning: #ffb547;
+      --danger: #ff6065;
+      --text: #ffffff;
+      --muted: #9aabd0;
+      --muted2: #d9e2f5;
+      --sans: 'Nexi Sans Pro', Inter, Arial, sans-serif;
+      --display: 'Nexi Sans Pro', Inter, Arial, sans-serif;
+      scrollbar-color: rgba(43,212,217,.48) rgba(255,255,255,.06);
+    }
+    html.light[data-design="nexi"] {
+      --bg: #eef0f4;
+      --surface: #ffffff;
+      --card: #ffffff;
+      --border: #dfe1e5;
+      --border2: #2d32aa;
+      --accent: #2d32aa;
+      --accent2: #207db5;
+      --success: #04a880;
+      --warning: #a65d00;
+      --danger: #d9424d;
+      --text: #17213a;
+      --muted: #747678;
+      --muted2: #424a5f;
+      scrollbar-color: rgba(45,50,170,.42) rgba(116,118,120,.10);
+    }
+    html[data-design="nexi"] body {
+      background: linear-gradient(145deg, #2d32aa 0%, #252b92 52%, #071d49 100%);
+      background-attachment: fixed;
+    }
+    html.light[data-design="nexi"] body {
+      background: linear-gradient(145deg, #f0f0f0 0%, #ffffff 58%, #e7e8ee 100%);
+      background-attachment: fixed;
+    }
+    html[data-design="nexi"] body::before {
+      background-image: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    html[data-design="nexi"] body::after {
+      content: none;
+    }
+    html[data-design="nexi"] .glass-nav,
+    html[data-design="nexi"] footer {
+      background: rgba(7,29,73,.88);
+      border-color: rgba(255,255,255,.20);
+      box-shadow: 0 16px 38px rgba(7,29,73,.28);
+    }
+    html.light[data-design="nexi"] .glass-nav,
+    html.light[data-design="nexi"] footer {
+      background: rgba(255,255,255,.92);
+      border-color: rgba(45,50,170,.14);
+      box-shadow: 0 16px 36px rgba(45,50,170,.12);
+    }
+    html[data-design="nexi"] .card,
+    html[data-design="nexi"] .app-intro,
+    html[data-design="nexi"] .help-section {
+      background: rgba(7,29,73,.78);
+      border-color: rgba(255,255,255,.18);
+      box-shadow: 0 16px 38px rgba(7,29,73,.22);
+      backdrop-filter: blur(16px) saturate(120%);
+    }
+    html.light[data-design="nexi"] .card,
+    html.light[data-design="nexi"] .app-intro,
+    html.light[data-design="nexi"] .help-section {
+      background: rgba(255,255,255,.94);
+      border-color: rgba(45,50,170,.12);
+      box-shadow: 0 14px 34px rgba(45,50,170,.10);
+    }
+    html[data-design="nexi"] h1 {
+      color: #ffffff;
+      background: none;
+      -webkit-background-clip: initial;
+      -webkit-text-fill-color: currentColor;
+      background-clip: initial;
+      font-weight: 600;
+      letter-spacing: -.015em;
+    }
+    html.light[data-design="nexi"] h1 { color: #2d32aa; }
+    html[data-design="nexi"] header,
+    html[data-design="nexi"] .standalone-view-header {
+      position: relative;
+      min-height: 236px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 20px;
+      background: #071d49;
+      box-shadow: 0 16px 38px rgba(7,29,73,.22);
+    }
+    html.light[data-design="nexi"] header,
+    html.light[data-design="nexi"] .standalone-view-header {
+      border-color: rgba(45,50,170,.12);
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 14px 34px rgba(45,50,170,.10);
+    }
+    html[data-design="nexi"] header::after,
+    html[data-design="nexi"] .standalone-view-header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle 30px at calc(100% - 150px) 50%, rgba(0,180,157,.80) 0 29.5px, transparent 30px),
+        radial-gradient(circle 90px at calc(100% - 60px) 50%, #2d32aa 0 89.5px, transparent 90px);
+    }
+    html[data-design="nexi"] header::before,
+    html[data-design="nexi"] .standalone-view-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='82' viewBox='0 0 190 82'%3E%3Cg transform='rotate(-24 95 41)'%3E%3Ctext x='95' y='45' fill='white' fill-opacity='.065' font-family='Arial,sans-serif' font-size='11' font-weight='600' letter-spacing='1.4' text-anchor='middle'%3EUNOFFICIAL PREVIEW%3C/text%3E%3C/g%3E%3C/svg%3E");
+      background-position: center;
+      background-repeat: repeat;
+      pointer-events: none;
+      user-select: none;
+    }
+    html.light[data-design="nexi"] header::before,
+    html.light[data-design="nexi"] .standalone-view-header::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='82' viewBox='0 0 190 82'%3E%3Cg transform='rotate(-24 95 41)'%3E%3Ctext x='95' y='45' fill='%232d32aa' fill-opacity='.11' font-family='Arial,sans-serif' font-size='11' font-weight='600' letter-spacing='1.4' text-anchor='middle'%3EUNOFFICIAL PREVIEW%3C/text%3E%3C/g%3E%3C/svg%3E");
+    }
+    html[data-design="nexi"] .app-header-layout,
+    html[data-design="nexi"] .standalone-header-layout {
+      position: relative;
+      z-index: 1;
+      gap: 40px;
+      min-height: 234px;
+      padding: 28px 230px 28px 28px;
+    }
+    html[data-design="nexi"] .brand-header-icon {
+      width: 120px;
+      height: auto;
+      flex-basis: 120px;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+    html.light[data-design="nexi"] .brand-header-icon {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+    html[data-design="nexi"] .brand-header-icon > svg { display: none; }
+    html[data-design="nexi"] .brand-logo {
+      display: block;
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+    }
+    html[data-design="nexi"] .brand-logo-color { display: none; }
+    html.light[data-design="nexi"] .brand-logo-white { display: none; }
+    html.light[data-design="nexi"] .brand-logo-color { display: block; }
+    html[data-design="nexi"] .badge::before {
+      background: #65eee0;
+      box-shadow: 0 0 0 3px rgba(0,180,157,.16), 0 0 10px rgba(43,212,217,.72);
+    }
+    html.light[data-design="nexi"] .badge::before {
+      background: #2d32aa;
+      box-shadow: none;
+    }
+    html[data-design="nexi"] .badge,
+    html[data-design="nexi"] .card-icon,
+    html[data-design="nexi"] .footer-ver-badge {
+      background: rgba(43,212,217,.12);
+      border-color: rgba(43,212,217,.30);
+      color: #2bd4d9;
+    }
+    html.light[data-design="nexi"] .badge,
+    html.light[data-design="nexi"] .card-icon,
+    html.light[data-design="nexi"] .footer-ver-badge {
+      background: rgba(45,50,170,.08);
+      border-color: rgba(45,50,170,.20);
+      color: #2d32aa;
+    }
+    html[data-design="nexi"] .footer-preview-notice {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border: 1px solid rgba(43,212,217,.30);
+      border-radius: 999px;
+      background: rgba(43,212,217,.10);
+      color: #65eee0;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      line-height: 1.3;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    html[data-design="nexi"] .footer-preview-notice::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    html.light[data-design="nexi"] .footer-preview-notice {
+      border-color: rgba(45,50,170,.24);
+      background: rgba(45,50,170,.07);
+      color: #2d32aa;
+    }
+    /* Nexi UI chips: Nexi Blue remains dominant; Teal is the single supporting colour. */
+    html[data-design="nexi"] .header-feature,
+    html[data-design="nexi"] .help-jump a,
+    html[data-design="nexi"] .help-type-badge.classic,
+    html[data-design="nexi"] .log-badge,
+    html[data-design="nexi"] .method-btn,
+    html[data-design="nexi"] .theme-toggle,
+    html[data-design="nexi"] .lang-toggle {
+      color: #ffffff;
+      background: rgba(255,255,255,.09);
+      border-color: rgba(223,229,255,.34);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    html.light[data-design="nexi"] .header-feature,
+    html.light[data-design="nexi"] .help-jump a,
+    html.light[data-design="nexi"] .help-type-badge.classic,
+    html.light[data-design="nexi"] .log-badge,
+    html.light[data-design="nexi"] .method-btn,
+    html.light[data-design="nexi"] .theme-toggle,
+    html.light[data-design="nexi"] .lang-toggle {
+      color: #2d32aa;
+      background: rgba(45,50,170,.07);
+      border-color: rgba(45,50,170,.20);
+      box-shadow: none;
+    }
+    html[data-design="nexi"] .method-btn.method-active,
+    html.light[data-design="nexi"] .method-btn.method-active {
+      color: #fff;
+      background: #2d32aa;
+      box-shadow: inset 0 0 0 2px #2d32aa, 0 3px 12px rgba(7,29,73,.24);
+    }
+    html[data-design="nexi"] .method-btn.method-active .method-endpoint,
+    html.light[data-design="nexi"] .method-btn.method-active .method-endpoint {
+      color: #fff;
+      opacity: .88;
+    }
+    html[data-design="nexi"] .method-btn:not(.method-active):hover {
+      color: #fff;
+      background: rgba(255,255,255,.16);
+      border-color: rgba(255,255,255,.46);
+    }
+    html[data-design="nexi"] .help-jump a:hover,
+    html[data-design="nexi"] .header-feature:hover {
+      color: #fff;
+      background: rgba(255,255,255,.16);
+      border-color: rgba(255,255,255,.46);
+    }
+    html.light[data-design="nexi"] .method-btn:not(.method-active):hover {
+      color: #2d32aa;
+      background: rgba(45,50,170,.13);
+    }
+    html[data-design="nexi"] .nav-link[data-nav-group="classic"]::after,
+    html[data-design="nexi"] .nav-link[data-nav-group="guide"]::after,
+    html[data-design="nexi"] .nav-link[data-nav-group="optional"]::after {
+      color: #dfe5ff;
+      background: rgba(45,50,170,.30);
+      border-color: rgba(133,141,255,.38);
+    }
+    html.light[data-design="nexi"] .nav-link[data-nav-group="classic"]::after,
+    html.light[data-design="nexi"] .nav-link[data-nav-group="guide"]::after,
+    html.light[data-design="nexi"] .nav-link[data-nav-group="optional"]::after {
+      color: #2d32aa;
+      background: rgba(45,50,170,.08);
+      border-color: rgba(45,50,170,.22);
+    }
+    html[data-design="nexi"] .nav-link[data-nav-group="workflow"]::after,
+    html[data-design="nexi"] .help-type-badge.rest,
+    html[data-design="nexi"] .cb-receiver-active-badge,
+    html[data-design="nexi"] .resp-new-badge {
+      color: #65eee0;
+      background: rgba(0,180,157,.18);
+      border-color: rgba(43,212,217,.38);
+    }
+    html.light[data-design="nexi"] .nav-link[data-nav-group="workflow"]::after,
+    html.light[data-design="nexi"] .help-type-badge.rest,
+    html.light[data-design="nexi"] .cb-receiver-active-badge,
+    html.light[data-design="nexi"] .resp-new-badge {
+      color: #047a61;
+      background: rgba(4,168,128,.10);
+      border-color: rgba(4,168,128,.28);
+    }
+    html[data-design="nexi"] .help-type-badge.pending {
+      color: #dfe5ff;
+      background: rgba(45,50,170,.30);
+      border-color: rgba(133,141,255,.38);
+    }
+    html.light[data-design="nexi"] .help-type-badge.pending {
+      color: #2d32aa;
+      background: rgba(45,50,170,.08);
+      border-color: rgba(45,50,170,.22);
+    }
+    html[data-design="nexi"] .btn-download {
+      color: #dfe5ff;
+      background: rgba(45,50,170,.30);
+      border-color: rgba(133,141,255,.38);
+    }
+    html[data-design="nexi"] .btn-download:hover {
+      background: rgba(45,50,170,.44);
+      border-color: rgba(133,141,255,.55);
+    }
+    html.light[data-design="nexi"] .btn-download {
+      color: #2d32aa;
+      background: rgba(45,50,170,.08);
+      border-color: rgba(45,50,170,.22);
+    }
+    html.light[data-design="nexi"] .btn-download:hover {
+      background: rgba(45,50,170,.14);
+      border-color: rgba(45,50,170,.34);
+    }
+    html[data-design="nexi"] .log-badge.status-ok {
+      color: #65eee0 !important;
+      background: rgba(0,180,157,.18) !important;
+      border-color: rgba(43,212,217,.38) !important;
+    }
+    html.light[data-design="nexi"] .log-badge.status-ok {
+      color: #047a61 !important;
+      background: rgba(4,168,128,.10) !important;
+      border-color: rgba(4,168,128,.28) !important;
+    }
+    html[data-design="nexi"] .log-badge.status-failed {
+      color: #ff9ca0 !important;
+      background: rgba(255,96,101,.14) !important;
+      border-color: rgba(255,96,101,.34) !important;
+    }
+    html.light[data-design="nexi"] .log-badge.status-failed {
+      color: #b42335 !important;
+      background: rgba(255,96,101,.09) !important;
+      border-color: rgba(180,35,53,.26) !important;
+    }
+    html[data-design="nexi"] .credential-mode-notice.rest-mode,
+    html[data-design="nexi"] .credential-group.is-emphasized {
+      background: rgba(0,180,157,.10);
+      border-color: rgba(43,212,217,.28);
+    }
+    html[data-design="nexi"] .credential-mode-notice.rest-mode .icon,
+    html[data-design="nexi"] .credential-group.is-emphasized .credential-group-title strong {
+      color: #65eee0;
+    }
+    html.light[data-design="nexi"] .credential-mode-notice.rest-mode,
+    html.light[data-design="nexi"] .credential-group.is-emphasized {
+      background: rgba(4,168,128,.07);
+      border-color: rgba(4,168,128,.22);
+    }
+    html.light[data-design="nexi"] .credential-mode-notice.rest-mode .icon,
+    html.light[data-design="nexi"] .credential-group.is-emphasized .credential-group-title strong {
+      color: #047a61;
+    }
+    html[data-design="nexi"] .btn-primary {
+      background: #2d32aa;
+      box-shadow: 0 8px 22px rgba(7,29,73,.26);
+    }
+    html[data-design="nexi"] .btn-primary:hover {
+      background: #383dc0;
+      box-shadow: 0 10px 26px rgba(7,29,73,.34);
+    }
+    html[data-design="nexi"] ::-webkit-scrollbar-thumb {
+      background: #2d32aa padding-box;
+      box-shadow: none;
+    }
+    html[data-design="nexi"] ::-webkit-scrollbar-thumb:hover { background: #2bd4d9 padding-box; }
+    @media (max-width: 900px) {
+      html[data-design="nexi"] header,
+      html[data-design="nexi"] .standalone-view-header {
+        min-height: 210px;
+      }
+      html[data-design="nexi"] header::after,
+      html[data-design="nexi"] .standalone-view-header::after {
+        background:
+          radial-gradient(circle 25px at calc(100% - 125px) 50%, rgba(0,180,157,.80) 0 24.5px, transparent 25px),
+          radial-gradient(circle 75px at calc(100% - 50px) 50%, #2d32aa 0 74.5px, transparent 75px);
+      }
+      html[data-design="nexi"] .app-header-layout,
+      html[data-design="nexi"] .standalone-header-layout {
+        min-height: 208px;
+        padding-right: 190px;
+      }
+    }
+    @media (max-width: 640px) {
+      html[data-design="nexi"] body,
+      html.light[data-design="nexi"] body {
+        background: linear-gradient(145deg, var(--bg) 0%, var(--surface) 100%);
+        background-attachment: fixed;
+      }
+      html[data-design="nexi"] .app-header-layout,
+      html[data-design="nexi"] .standalone-header-layout {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 34px;
+        min-height: 0;
+        padding: 24px 24px 150px;
+      }
+      html[data-design="nexi"] header,
+      html[data-design="nexi"] .standalone-view-header {
+        min-height: 0;
+        border-radius: 18px;
+      }
+      html[data-design="nexi"] header::after,
+      html[data-design="nexi"] .standalone-view-header::after {
+        background:
+          radial-gradient(circle 25px at calc(100% - 98px) calc(100% - 98px), rgba(0,180,157,.80) 0 24.5px, transparent 25px),
+          radial-gradient(circle 75px at calc(100% - 45px) calc(100% - 45px), #2d32aa 0 74.5px, transparent 75px);
+      }
+      html[data-design="nexi"] .brand-header-icon {
+        width: 104px;
+        height: auto;
+        flex-basis: auto;
+        padding: 0;
+      }
+      html[data-design="nexi"] .brand-logo { width: 104px; }
+    }
+    @media (max-width: 420px) {
+      html[data-design="nexi"] .app-header-layout,
+      html[data-design="nexi"] .standalone-header-layout {
+        padding: 22px 22px 128px;
+      }
+      html[data-design="nexi"] header::after,
+      html[data-design="nexi"] .standalone-view-header::after {
+        background:
+          radial-gradient(circle 21px at calc(100% - 82px) calc(100% - 82px), rgba(0,180,157,.80) 0 20.5px, transparent 21px),
+          radial-gradient(circle 63px at calc(100% - 38px) calc(100% - 38px), #2d32aa 0 62.5px, transparent 63px);
+      }
+    }
   </style>
 </head>
 <body>
@@ -1492,11 +1976,13 @@
   <!-- Header -->
   <header>
     <div class="app-header-layout">
-      <div class="app-header-icon" aria-hidden="true">
+      <div class="app-header-icon brand-header-icon" aria-hidden="true">
         <svg viewBox="0 0 64 64" fill="none">
           <path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
+        <img class="brand-logo brand-logo-color" src="assets/nexi/logos/nexi-color.png" alt="">
+        <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="app-header-copy">
         <div class="badge"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Paygate</div>
@@ -1590,14 +2076,14 @@
           <label><span id="l-bfpw">Blowfish Passwort</span> <span class="required">*</span> <span class="hint" id="h-bfpw">(für Data-Verschlüsselung)</span><button class="param-tip" id="tip-bfpw" tabindex="-1">?</button></label>
           <div class="input-group">
             <input type="password" id="blowfishKey" placeholder="••••••••••••••••" autocomplete="off" id="bf-pwd">
-            <button class="toggle-vis" onclick="togglePwd('blowfishKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+            <button class="toggle-vis" onclick="togglePwd('blowfishKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
         <div class="field">
           <label><span id="l-hmacpw">HMAC Passwort</span> <span class="required">*</span> <span class="hint" id="h-hmacpw">(für MAC-Berechnung)</span><button class="param-tip" id="tip-hmacpw" tabindex="-1">?</button></label>
           <div class="input-group">
             <input type="password" id="hmacKey" placeholder="••••••••••••••••" autocomplete="off">
-            <button class="toggle-vis" onclick="togglePwd('hmacKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+            <button class="toggle-vis" onclick="togglePwd('hmacKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
       </div>
@@ -1609,7 +2095,7 @@
           <label><span id="l-rest-api-key">REST API-Key</span> <span class="hint" id="h-rest-api-key">(optional, für REST-Ausgaben)</span></label>
           <div class="input-group">
             <input type="password" id="restApiKey" placeholder="••••••••••••••••" autocomplete="off">
-            <button class="toggle-vis" onclick="togglePwd('restApiKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+            <button class="toggle-vis" onclick="togglePwd('restApiKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
       </div>
@@ -2145,8 +2631,10 @@
 <main class="standalone-view" id="request-log-view" hidden>
   <div class="standalone-view-header">
     <div class="standalone-header-layout">
-      <div class="app-header-icon" aria-hidden="true">
+      <div class="app-header-icon brand-header-icon" aria-hidden="true">
         <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <img class="brand-logo brand-logo-color" src="assets/nexi/logos/nexi-color.png" alt="">
+        <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
         <div class="badge">Classic Paygate</div>
@@ -2160,8 +2648,10 @@
 <main class="standalone-view" id="response-view" hidden>
   <div class="standalone-view-header">
     <div class="standalone-header-layout">
-      <div class="app-header-icon" aria-hidden="true">
+      <div class="app-header-icon brand-header-icon" aria-hidden="true">
         <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <img class="brand-logo brand-logo-color" src="assets/nexi/logos/nexi-color.png" alt="">
+        <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
         <div class="badge">Classic Paygate</div>
@@ -2175,8 +2665,10 @@
 <main class="standalone-view" id="response-log-view" hidden>
   <div class="standalone-view-header">
     <div class="standalone-header-layout">
-      <div class="app-header-icon" aria-hidden="true">
+      <div class="app-header-icon brand-header-icon" aria-hidden="true">
         <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <img class="brand-logo brand-logo-color" src="assets/nexi/logos/nexi-color.png" alt="">
+        <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
         <div class="badge">Classic Paygate</div>
@@ -2190,8 +2682,10 @@
 <main class="standalone-view" id="changelog-view" hidden>
   <div class="standalone-view-header">
     <div class="standalone-header-layout">
-      <div class="app-header-icon" aria-hidden="true">
+      <div class="app-header-icon brand-header-icon" aria-hidden="true">
         <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <img class="brand-logo brand-logo-color" src="assets/nexi/logos/nexi-color.png" alt="">
+        <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
         <div class="badge">Paygate</div>
@@ -2206,8 +2700,10 @@
 <main class="standalone-view" id="help-view" hidden>
   <div class="standalone-view-header">
     <div class="standalone-header-layout">
-      <div class="app-header-icon" aria-hidden="true">
+      <div class="app-header-icon brand-header-icon" aria-hidden="true">
         <svg viewBox="0 0 64 64" fill="none"><path d="M32 7 51 15v20c0 10-7 18-19 23C20 53 13 45 13 35V15z" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 33 7 7 14-17" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <img class="brand-logo brand-logo-color" src="assets/nexi/logos/nexi-color.png" alt="">
+        <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
         <div class="badge">Paygate</div>
@@ -2225,7 +2721,8 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v3.0.1</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v3.0.2</span>
+      <span class="footer-preview-notice">Unofficial preview</span>
     </span>
     <span class="footer-links">
       <button class="btn btn-danger-ghost" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
@@ -2239,6 +2736,10 @@
       <a href="https://developer.computop.com/#all-updates" target="_blank" rel="noopener">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
         Paygate Docs
+      </a>
+      <a href="https://github.com/krebs3r/computop-tester/blob/main/THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/></svg>
+        Third-party notices
       </a>
     </span>
   </div>
@@ -2288,7 +2789,7 @@
 const ICONS = {
   'shield':         '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
   'key-round':      '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>',
-  'eye':            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
+  'eye':            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>',
   'eye-off':        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>',
   'lock':           '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
   'save':           '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>',
@@ -3040,7 +3541,7 @@ function toggleCard(id) {
 
 function togglePwd(id, btn) {
   const el = document.getElementById(id);
-  const eyeIcon     = '<span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>';
+  const eyeIcon     = '<span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></span>';
   const eyeOffIcon  = '<span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg></span>';
   if (el.type === 'password') {
     el.type = 'text';
@@ -4220,8 +4721,14 @@ async function renderResponseLog() {
     const meta = appendTextElement(entry, 'div', 'log-meta', '');
     appendTextElement(meta, 'span', 'log-ts', ts);
     const statusBadge = appendTextElement(meta, 'span', 'log-badge', status);
-    if (status === 'OK') statusBadge.style.cssText = 'background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25);color:var(--success)';
-    if (status === 'FAILED') statusBadge.style.cssText = 'background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:var(--danger)';
+    if (status === 'OK') {
+      statusBadge.classList.add('status-ok');
+      statusBadge.style.cssText = 'background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25);color:var(--success)';
+    }
+    if (status === 'FAILED') {
+      statusBadge.classList.add('status-failed');
+      statusBadge.style.cssText = 'background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:var(--danger)';
+    }
     appendTextElement(meta, 'span', 'log-merchant', e.merchantId || '–');
     appendTextElement(meta, 'span', `log-status-dot ${dotCls}`, '');
     const transId = appendTextElement(entry, 'div', 'log-tid', 'TransID: ');
@@ -4286,7 +4793,7 @@ async function confirmClearAllStorage() {
   ]);
   [
     PROFILES_LS_KEY, LAST_PROFILE_KEY, CRED_LS_KEY,
-    LOG_LS_KEY, RESP_LOG_LS_KEY, THEME_LS_KEY, LANG_LS_KEY, CALLBACK_RECEIVER_KEY,
+    LOG_LS_KEY, RESP_LOG_LS_KEY, DESIGN_LS_KEY, THEME_LS_KEY, LANG_LS_KEY, CALLBACK_RECEIVER_KEY,
     PBL_REFS_LS_KEY, PAYMENT_PENDING_KEY, CALLBACK_RELAY_KEY, CALLBACK_RELAY_ACK_KEY
   ].forEach(k => localStorage.removeItem(k));
   showToast(t('toast_clear_all'), 'info');
@@ -4366,9 +4873,33 @@ function copyRespPlain() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// THEME MANAGEMENT — Auto (prefers-color-scheme) + Manual Toggle
+// DESIGN + THEME MANAGEMENT
 // ══════════════════════════════════════════════════════════════
+const DESIGN_LS_KEY = 'computop_design';
 const THEME_LS_KEY = 'computop_theme';
+const SUPPORTED_DESIGNS = new Set(['original', 'nexi']);
+
+function initDesign() {
+  const params = new URLSearchParams(window.location.search);
+  const hasRequested = params.has('design');
+  const requested = params.get('design');
+  const saved = localStorage.getItem(DESIGN_LS_KEY);
+  const design = hasRequested
+    ? (SUPPORTED_DESIGNS.has(requested) ? requested : 'original')
+    : (SUPPORTED_DESIGNS.has(saved) ? saved : 'original');
+
+  document.documentElement.dataset.design = design;
+  if (SUPPORTED_DESIGNS.has(requested)) localStorage.setItem(DESIGN_LS_KEY, design);
+  _updateBrowserThemeColor();
+}
+
+function _updateBrowserThemeColor() {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) return;
+  const isNexi = document.documentElement.dataset.design === 'nexi';
+  const isLight = document.documentElement.classList.contains('light');
+  meta.content = isNexi ? (isLight ? '#f0f0f0' : '#2d32aa') : (isLight ? '#f0f4f9' : '#3d7eff');
+}
 
 function _applyTheme(mode, isAuto) {
   const html   = document.documentElement;
@@ -4389,6 +4920,7 @@ function _applyTheme(mode, isAuto) {
   }
   if (label) label.textContent = mode === 'light' ? 'Light' : 'Dark';
   if (badge) badge.style.display = isAuto ? 'inline' : 'none';
+  _updateBrowserThemeColor();
 }
 
 function initTheme() {
@@ -4628,6 +5160,7 @@ function checkCallbackParams() {
 // ══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   initStandaloneViews();
+  initDesign();
   initTheme();
   initLang();
   generateTransId();

@@ -2,6 +2,9 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.0.2 — Minor Design Adjustments
+- Refined the visual presentation and supporting interface details
+
 ### v3.0.1 — Optional REST Credentials
 - Clarified that Step 1 credentials are required for Classic Paygate but optional when building REST requests
 - Changed the Step 1 navigation badge from Payment Workflow to Optional while REST is selected

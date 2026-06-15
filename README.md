@@ -3,11 +3,15 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.0.1-blueviolet)
+![Version](https://img.shields.io/badge/version-3.0.2-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
 **[Open the live app](https://krebs3r.github.io/computop-tester/)**
+
+> This is an independent development tool and is not currently an officially
+> approved product of Computop or Nexi Group. The optional Nexi presentation is
+> an unofficial technical preview.
 
 ## Overview
 
@@ -154,6 +158,16 @@ for focusing the existing PWA window varies by platform.
 | Request/response logs | Plain records in `IndexedDB`, with `localStorage` fallback |
 | Language/theme/settings | `localStorage` |
 
+## Preview Designs
+
+The existing presentation remains the default. An unofficial Nexi preview can
+be enabled explicitly with `?design=nexi`; `?design=original` restores the
+default presentation. Light, dark, and automatic system appearance continue to
+work independently from the selected design.
+
+Nexi trademarks, logos, fonts, and other brand assets are not covered by this
+project's MIT License. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 The credential encryption key is derived from an application-owned static
 passphrase. This protects against casual inspection of `localStorage`, but it
 is not equivalent to encryption with a user-owned master password and does not
@@ -171,9 +185,11 @@ js/i18n.js                 German and English translations
 js/changelog-data.js       Bilingual in-app release history
 js/help-data.js            Bilingual Help view content and resource links
 icons/                     Browser, Apple Touch and PWA icons
+assets/nexi/               Official Nexi preview fonts and logos
 service-worker.js          PWA network-first cache
 manifest.json              Web app manifest
 og-image.png               Open Graph and social sharing preview
+THIRD_PARTY_NOTICES.md      Brand-asset sources and license exclusions
 VERSION                    Canonical application version
 CHANGELOG.md               Complete release history
 ```
@@ -185,4 +201,5 @@ application's **Changelog** view.
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
+Original source code: MIT, see [LICENSE](LICENSE). Third-party trademarks and
+brand assets are excluded; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

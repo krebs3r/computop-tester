@@ -1,6 +1,11 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.0.2', de: { title: 'Kleinere Design-Anpassungen', items: [
+    '<strong>Visuelle Verfeinerungen</strong> — Darstellung und unterstützende Oberflächendetails wurden behutsam angepasst',
+  ]}, en: { title: 'Minor Design Adjustments', items: [
+    '<strong>Visual refinements</strong> — Refined the presentation and supporting interface details',
+  ]}},
   { v: 'v3.0.1', de: { title: 'Optionale REST-Credentials', items: [
     '<strong>Klare Pflichtzuordnung</strong> — Schritt 1 ist für Classic Paygate erforderlich, für das Zusammenbauen von REST-Requests dagegen optional',
     '<strong>Dynamisches Navbar-Badge</strong> — Bei ausgewählter REST API zeigt Schritt 1 nun <code>Optional</code> statt <code>Payment Workflow</code>',
