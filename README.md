@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.0.2-blueviolet)
+![Version](https://img.shields.io/badge/version-3.1.0-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -30,6 +30,8 @@ step.
 - HPP, PaySSL and Pay By Link integration modes
 - Pay By Link request generation with documented two-stage encryption
 - Local REST API V1/V2 request builder without sending requests from the browser
+- Transaction-status inquiries through REST V1 and Classic `inquire.aspx` / `inquire24.aspx`
+- Use-case selector prepared for additional workflows such as MIT/CIT after documentation review
 - cURL, PowerShell, Postman Collection and raw HTTP output formats
 - Optional REST API key storage in encrypted local credential profiles
 - REST request generation without credentials, using safe authentication placeholders by default
@@ -58,7 +60,7 @@ The fixed glass navigation keeps the main tools available from every view:
 | View | Purpose | URL hash |
 |---|---|---|
 | Payment Workflow | Classic Paygate requests and local REST API request generation | `#payment-workflow` |
-| Request Log | Generated Classic Paygate requests | `#request-log` |
+| Request Log | Generated Classic requests and REST status inquiries | `#request-log` |
 | Response Decryption | Classic callback URL or manual Data/Len decryption | `#response` |
 | Response Log | Previously decrypted Classic responses | `#response-log` |
 | Help | Integration guidance, usage, official documentation, test resources and privacy notes | `#help` |
@@ -80,10 +82,12 @@ cards use self-contained inline SVG icons and require no external icon library.
 
 1. Download and extract the repository ZIP or clone the repository.
 2. Open `index.html` directly in a modern browser.
-3. For Classic, enter your Paygate Merchant ID, Blowfish password and HMAC password. For REST, this step is optional.
-4. Configure the payment parameters in the Payment Workflow and choose Classic or REST.
-5. Generate the preview and inspect `MAC`, `Len`, `Data` and the final URL.
-6. Open the selected Paygate endpoint from the preview.
+3. For Classic payments, enter Merchant ID, Blowfish password and HMAC password. Classic status inquiries do not require the HMAC password. For REST, this step is optional.
+4. In Step 2 choose Classic or REST, then select payment creation or transaction-status inquiry.
+5. Configure the fields and generate the preview.
+6. Inspect and copy the generated request. Classic payment pages and Classic
+   status inquiries can also be opened directly from the preview; REST requests
+   remain copy-only.
 
 For Pay By Link, the tester generates a locally unique reference number and a
 default expiration date. The preview exposes both the inner HPP payload and the outer Pay By Link payload.
@@ -95,6 +99,11 @@ opened from the preview.
 No local HTTP server is required. Service-worker and installation features are
 available only when the app is served through HTTP/HTTPS, including GitHub
 Pages.
+
+The internal callback receiver also requires HTTP/HTTPS. Browsers do not allow
+an external Paygate page to redirect reliably to a local `file://` URL. Use the
+GitHub Pages deployment or serve the directory through a local HTTP server when
+testing automatic callback returns.
 
 ## REST Request Builder
 
@@ -109,6 +118,8 @@ and generated commands use safe placeholders. Real REST credentials are only
 needed when explicitly embedding authentication values into the output.
 
 - V1 generates requests for the shared `/api/v1/payments` endpoint.
+- V1 status inquiries generate `GET /api/v1/payments/{paymentId}` or
+  `GET /api/v1/payments/transactions/{transactionId}` without a request body.
 - V2 uses dedicated endpoints for checkout sessions, hosted card payments and
   payment links, with the corresponding V2 payload shape and an
   `Idempotency-Key` header.
@@ -139,6 +150,11 @@ reference.
 When the callback receiver is enabled, successful and failed redirect URLs are
 set to the tester itself. Returning callback parameters automatically open the
 Response Decryption view.
+
+On HTTP/HTTPS deployments, the internal callback receiver is enabled by default
+for new users. `URLNotify` remains empty because it requires a reachable
+server-to-server endpoint. The optional httpbingo.org preset is an external
+public demo service and must only be used with synthetic test data.
 
 When installed as a PWA, the external Paygate payment page still opens in the
 browser because it is outside the app's origin and scope. After the redirect,

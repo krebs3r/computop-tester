@@ -1,6 +1,37 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.1.0', de: { title: 'Transaktionsstatusabfragen', items: [
+    '<strong>Neue Use-Case-Auswahl</strong> — Schritt 2 heißt nun Request konfigurieren und trennt Zahlungserstellung und Transaktionsstatus klar voneinander',
+    '<strong>Classic-Statusabfrage</strong> — <code>inquire.aspx</code> und <code>inquire24.aspx</code> erzeugen verschlüsselte Abfragen über PayID oder Transaction ID',
+    '<strong>REST-V1-Statusabfrage</strong> — Der aktuelle Zahlungsstatus kann über Payment ID oder Transaction ID als GET-Request vorbereitet werden',
+    '<strong>Mehrere Ausgabeformate</strong> — Body-lose GET-Requests stehen für cURL, PowerShell, Postman Collection und Raw HTTP bereit',
+    '<strong>Passende Credential-Hinweise</strong> — Classic-Statusabfragen benötigen Merchant ID und Blowfish-Passwort, jedoch kein HMAC-Passwort',
+    '<strong>Statusvorschau und Ausführung</strong> — Verschlüsselte Parameter, finale URL und eine direkte Classic-Ausführung werden in Schritt 3 angeboten',
+    '<strong>Vorbereitung für MIT/CIT</strong> — Die Oberfläche zeigt den kommenden Use Case bereits an, ohne noch nicht geprüfte Request-Logik zu aktivieren',
+    '<strong>Schnittstellen-Badges im Request-Log</strong> — Classic- und REST-Anfragen sind sofort unterscheidbar; bestehende Einträge werden anhand ihrer URL erkannt',
+    '<strong>Präzisere Status-Logs</strong> — Statusabfragen kennzeichnen PayID beziehungsweise Transaction ID passend zum gewählten Suchweg',
+    '<strong>Datenschutzfreundliche Callback-Defaults</strong> — Öffentliche Dienste wurden aus den voreingestellten Redirect-URLs entfernt',
+    '<strong>Interner Callback-Empfänger</strong> — Bei HTTP/HTTPS ist der lokale Empfänger für neue Nutzer standardmäßig aktiv',
+    '<strong>Optionale externe Demo</strong> — httpbingo.org kann bewusst eingesetzt werden und weist klar auf externe Verarbeitung und synthetische Testdaten hin',
+    '<strong>Klare file://-Erklärung</strong> — Die Oberfläche erklärt direkt, warum automatische Callback-Rückgaben eine HTTP/HTTPS-Bereitstellung benötigen',
+    '<strong>Neutrale Beispiel-URLs</strong> — Platzhalter verwenden die reservierte Domain <code>example.com</code> mit übersetzten Pfaden',
+  ]}, en: { title: 'Transaction Status Inquiries', items: [
+    '<strong>New use-case selector</strong> — Step 2 is now Configure Request and clearly separates payment creation from transaction-status inquiries',
+    '<strong>Classic status inquiries</strong> — <code>inquire.aspx</code> and <code>inquire24.aspx</code> generate encrypted inquiries by PayID or Transaction ID',
+    '<strong>REST V1 status inquiries</strong> — Current payment status can be prepared as a GET request using Payment ID or Transaction ID',
+    '<strong>Multiple output formats</strong> — Body-less GET requests are available for cURL, PowerShell, Postman Collection and raw HTTP',
+    '<strong>Context-specific credentials</strong> — Classic status inquiries require Merchant ID and Blowfish password but no HMAC password',
+    '<strong>Status preview and execution</strong> — Step 3 provides encrypted parameters, the final URL and direct Classic execution',
+    '<strong>MIT/CIT preparation</strong> — The interface exposes the future use case without enabling request logic that has not yet been reviewed',
+    '<strong>Interface badges in Request Log</strong> — Classic and REST requests are immediately distinguishable, including existing entries detected by URL',
+    '<strong>Clearer status logs</strong> — Status inquiries label PayID or Transaction ID according to the selected lookup method',
+    '<strong>Privacy-conscious callback defaults</strong> — Public services were removed from the default redirect URLs',
+    '<strong>Internal callback receiver</strong> — On HTTP/HTTPS deployments, the local receiver is enabled by default for new users',
+    '<strong>Optional external demo</strong> — httpbingo.org can be selected deliberately with clear external-processing and synthetic-data guidance',
+    '<strong>Clear file:// guidance</strong> — The interface explains why automatic callback returns require an HTTP/HTTPS deployment',
+    '<strong>Neutral example URLs</strong> — Placeholders use the reserved <code>example.com</code> domain with translated paths',
+  ]}},
   { v: 'v3.0.2', de: { title: 'Kleinere Design-Anpassungen', items: [
     '<strong>Visuelle Verfeinerungen</strong> — Darstellung und unterstützende Oberflächendetails wurden behutsam angepasst',
   ]}, en: { title: 'Minor Design Adjustments', items: [

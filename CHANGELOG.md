@@ -2,6 +2,22 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.1.0 — Transaction Status Inquiries
+- Renamed Step 2 to Request Configuration and added a dedicated use-case selector
+- Added transaction-status inquiries for Classic Paygate through `inquire.aspx` and `inquire24.aspx`
+- Added REST API V1 status inquiries by Payment ID or Transaction ID
+- Added body-less GET output for cURL, PowerShell, Postman Collection and raw HTTP
+- Added context-specific credential requirements for Classic status inquiries without HMAC
+- Added a dedicated Classic status preview with encrypted parameters, final URL and direct execution
+- Prepared the interface for future MIT/CIT workflows without enabling undocumented request logic
+- Added Classic and REST interface badges to the Request Log, including detection for existing entries
+- Improved Request Log entries for status inquiries with PayID or Transaction ID labels
+- Removed public callback services from the default redirect URLs
+- Enabled the internal callback receiver by default on HTTP/HTTPS deployments
+- Added an optional httpbingo.org demo preset with explicit external-service and synthetic-data guidance
+- Added clear guidance when the callback receiver is unavailable through `file://`
+- Replaced localised sample-shop domains with translated paths on the reserved `example.com` domain
+
 ### v3.0.2 — Minor Design Adjustments
 - Refined the visual presentation and supporting interface details
 

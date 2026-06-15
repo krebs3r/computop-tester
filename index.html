@@ -45,7 +45,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.0.2",
+      "softwareVersion": "3.1.0",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -679,6 +679,9 @@
     .method-info-icon { flex-shrink: 0; margin-top: 1px; color: var(--accent2); }
     .method-info strong { color: var(--accent2); font-weight: 500; }
     .integration-label { font-size: 10px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin: 0 0 7px; }
+    .method-btn[disabled] { cursor: not-allowed; opacity: .48; }
+    .method-btn[disabled]:hover { transform: none; }
+    .method-status { margin-top: 14px; }
     .rest-panel { margin-bottom: 20px; padding: 16px; border: 1px solid var(--border); border-radius: 10px; background: rgba(61,126,255,.035); }
     .rest-warning { margin-top: 12px; border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.07); }
     .rest-secret-row {
@@ -819,6 +822,7 @@
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: all; }
     #toast.success { border-color: rgba(34,197,94,0.4); }
     #toast.error { border-color: rgba(239,68,68,0.4); }
+    #toast.warning { border-color: rgba(245,158,11,.5); }
 
     /* ── APP MODAL ── */
     .app-modal {
@@ -1155,6 +1159,20 @@
       color: var(--accent2); font-family: var(--mono); font-size: 11px;
       padding: 2px 8px; border-radius: 20px;
     }
+    .log-interface-badge {
+      font-family: var(--mono); font-size: 10px; font-weight: 600;
+      letter-spacing: .04em; padding: 2px 8px; border-radius: 20px;
+      text-transform: uppercase;
+    }
+    .log-interface-classic {
+      color: var(--accent2); background: rgba(61,126,255,.10);
+      border: 1px solid rgba(61,126,255,.24);
+    }
+    .log-interface-rest {
+      color: #c4a7e7; background: rgba(139,92,246,.12);
+      border: 1px solid rgba(167,139,250,.28);
+    }
+    html.light .log-interface-rest { color: #6d28d9; background: rgba(124,58,237,.07); border-color: rgba(124,58,237,.22); }
     .log-merchant { font-size: 12px; color: var(--muted2); }
     .log-tid { font-family: var(--mono); font-size: 12px; color: var(--text); }
     .log-detail { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
@@ -1229,6 +1247,19 @@
     .cb-receiver-switch input:checked + .cb-receiver-knob { background:var(--accent2); }
     .cb-receiver-switch input:checked + .cb-receiver-knob::before { transform:translateX(16px); }
     .cb-receiver-row .cb-receiver-hint { font-size:11px; color:var(--muted); }
+    .cb-receiver-row.is-unavailable {
+      border-color: rgba(245,158,11,.26); background: rgba(245,158,11,.07);
+    }
+    .cb-receiver-row.is-unavailable .cb-receiver-hint { color: var(--warning); }
+    .cb-receiver-row.is-unavailable .cb-receiver-label { cursor: not-allowed; }
+    .callback-demo-row {
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      margin-top:10px; padding:10px 14px; border-radius:8px;
+      background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.24);
+    }
+    .callback-demo-copy { flex:1 1 380px; font-size:11px; color:var(--muted2); line-height:1.55; }
+    .callback-demo-copy strong { color:var(--warning); font-weight:600; }
+    .callback-demo-row .btn { padding:8px 14px; font-size:11px; }
     .cb-receiver-active-badge { display:none; font-family:var(--mono); font-size:10px; padding:1px 7px; border-radius:10px; background:rgba(61,126,255,0.15); border:1px solid rgba(61,126,255,0.3); color:var(--accent2); }
     #cb-receiver-toggle:checked ~ .cb-receiver-active-badge,
     .cb-receiver-switch input:checked ~ .cb-receiver-active-badge { display:inline; }
@@ -1540,9 +1571,15 @@
       background-attachment: fixed;
     }
     html[data-design="nexi"] body::before {
-      background-image: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='82' viewBox='0 0 190 82'%3E%3Cg transform='rotate(-24 95 41)'%3E%3Ctext x='95' y='45' fill='white' fill-opacity='.055' font-family='Arial,sans-serif' font-size='11' font-weight='600' letter-spacing='1.4' text-anchor='middle'%3EUNOFFICIAL PREVIEW%3C/text%3E%3C/g%3E%3C/svg%3E");
+      background-position: center top;
+      background-repeat: repeat;
+      background-size: 190px 82px;
       -webkit-mask-image: none;
       mask-image: none;
+    }
+    html.light[data-design="nexi"] body::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='82' viewBox='0 0 190 82'%3E%3Cg transform='rotate(-24 95 41)'%3E%3Ctext x='95' y='45' fill='%232d32aa' fill-opacity='.085' font-family='Arial,sans-serif' font-size='11' font-weight='600' letter-spacing='1.4' text-anchor='middle'%3EUNOFFICIAL PREVIEW%3C/text%3E%3C/g%3E%3C/svg%3E");
     }
     html[data-design="nexi"] body::after {
       content: none;
@@ -1741,6 +1778,18 @@
       border-color: rgba(45,50,170,.20);
       box-shadow: none;
     }
+    html[data-design="nexi"] .log-interface-classic {
+      color: #ffffff; background: rgba(255,255,255,.09); border-color: rgba(223,229,255,.34);
+    }
+    html.light[data-design="nexi"] .log-interface-classic {
+      color: #2d32aa; background: rgba(45,50,170,.07); border-color: rgba(45,50,170,.20);
+    }
+    html[data-design="nexi"] .log-interface-rest {
+      color: #65eee0; background: rgba(0,180,157,.16); border-color: rgba(43,212,217,.34);
+    }
+    html.light[data-design="nexi"] .log-interface-rest {
+      color: #047a61; background: rgba(4,168,128,.09); border-color: rgba(4,168,128,.26);
+    }
     html[data-design="nexi"] .method-btn.method-active,
     html.light[data-design="nexi"] .method-btn.method-active {
       color: #fff;
@@ -1751,6 +1800,10 @@
     html.light[data-design="nexi"] .method-btn.method-active .method-endpoint {
       color: #fff;
       opacity: .88;
+    }
+    html[data-design="nexi"] .method-btn.method-active > span,
+    html.light[data-design="nexi"] .method-btn.method-active > span {
+      color: #fff;
     }
     html[data-design="nexi"] .method-btn:not(.method-active):hover {
       color: #fff;
@@ -1945,7 +1998,7 @@
 <nav class="glass-nav" aria-label="Hauptnavigation">
   <div class="nav-group nav-group-left">
     <button class="nav-link" data-nav-target="card-creds" data-nav-group="workflow" id="nav-creds" type="button">Schritt 1 - Credentials</button>
-    <button class="nav-link" data-nav-target="card-payment" data-nav-group="workflow" id="nav-payment" type="button">Schritt 2 - Zahlungsparameter</button>
+    <button class="nav-link" data-nav-target="card-payment" data-nav-group="workflow" id="nav-payment" type="button">Schritt 2 - Request konfigurieren</button>
     <button class="nav-link" data-nav-target="card-preview" data-nav-group="workflow" id="nav-preview" type="button">Schritt 3 - Vorschau &amp; Ausführen</button>
   </div>
   <div class="nav-group nav-group-center">
@@ -2081,12 +2134,12 @@
         <div class="field">
           <label><span id="l-bfpw">Blowfish Passwort</span> <span class="required">*</span> <span class="hint" id="h-bfpw">(für Data-Verschlüsselung)</span><button class="param-tip" id="tip-bfpw" tabindex="-1">?</button></label>
           <div class="input-group">
-            <input type="password" id="blowfishKey" placeholder="••••••••••••••••" autocomplete="off" id="bf-pwd">
+            <input type="password" id="blowfishKey" placeholder="••••••••••••••••" autocomplete="off">
             <button class="toggle-vis" onclick="togglePwd('blowfishKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
           </div>
         </div>
         <div class="field">
-          <label><span id="l-hmacpw">HMAC Passwort</span> <span class="required">*</span> <span class="hint" id="h-hmacpw">(für MAC-Berechnung)</span><button class="param-tip" id="tip-hmacpw" tabindex="-1">?</button></label>
+          <label><span id="l-hmacpw">HMAC Passwort</span> <span class="required" id="hmac-required">*</span> <span class="hint" id="h-hmacpw">(für MAC-Berechnung)</span><button class="param-tip" id="tip-hmacpw" tabindex="-1">?</button></label>
           <div class="input-group">
             <input type="password" id="hmacKey" placeholder="••••••••••••••••" autocomplete="off">
             <button class="toggle-vis" onclick="togglePwd('hmacKey', this)" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
@@ -2186,11 +2239,11 @@
     </div>
   </div>
 
-  <!-- ── STEP 2: PAYMENT PARAMS ── -->
+  <!-- ── STEP 2: REQUEST CONFIGURATION ── -->
   <div class="card" id="card-payment">
     <div class="card-header" onclick="toggleCard('card-payment')">
       <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span></div>
-      <span class="card-title" id="ct-payment">Schritt 2 — Zahlungsparameter</span>
+      <span class="card-title" id="ct-payment">Schritt 2 — Request konfigurieren</span>
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
@@ -2203,6 +2256,40 @@
         <button class="method-btn" id="integration-rest" onclick="setIntegration('rest')">
           <span>REST API</span><span class="method-endpoint">JSON Builder</span>
         </button>
+      </div>
+
+      <div class="integration-label method-status" id="use-case-label">Use Case</div>
+      <div class="method-ctrl" id="use-case-controls">
+        <button class="method-btn method-active" id="use-case-create" onclick="setUseCase('create-payment')">
+          <span id="use-case-create-label">Zahlung erstellen</span><span class="method-endpoint">Payment</span>
+        </button>
+        <button class="method-btn" id="use-case-status" onclick="setUseCase('payment-status')">
+          <span id="use-case-status-label">Transaktionsstatus abfragen</span><span class="method-endpoint">Status</span>
+        </button>
+        <button class="method-btn" id="use-case-mit-cit" type="button" disabled>
+          <span id="use-case-mit-cit-label">MIT / CIT</span><span class="method-endpoint" id="use-case-mit-cit-state">In Vorbereitung</span>
+        </button>
+      </div>
+
+      <div class="rest-panel" id="status-controls" style="display:none">
+        <div class="field-grid">
+          <div class="field">
+            <label><span id="l-status-lookup">Abfrage über</span></label>
+            <select id="status-lookup" onchange="updateUseCaseUI()">
+              <option value="paymentId" id="status-lookup-payment-option">Payment ID / PayID</option>
+              <option value="transactionId" id="status-lookup-transaction-option">Transaction ID</option>
+            </select>
+          </div>
+          <div class="field" id="status-payment-id-field">
+            <label><span id="l-status-payment-id">Payment ID / PayID</span> <span class="required">*</span></label>
+            <input type="text" id="status-payment-id" placeholder="0123456789abcdef0123456789abcdef" maxlength="64">
+          </div>
+          <div class="field" id="status-transaction-id-field">
+            <label><span id="l-status-transaction-id">Transaction ID</span> <span class="required">*</span></label>
+            <input type="text" id="status-transaction-id" placeholder="TID-12345" maxlength="64">
+          </div>
+        </div>
+        <div class="info-box rest-warning" id="status-use-case-info" style="margin-top:12px"></div>
       </div>
 
       <!-- ── INTEGRATION METHOD SELECTOR ── -->
@@ -2233,7 +2320,7 @@
               <option value="v2">V2</option>
             </select>
           </div>
-          <div class="field">
+          <div class="field" id="rest-method-field">
             <label><span id="l-rest-method">REST-Zahlungsart</span><button class="param-tip" id="tip-rest-method" tabindex="-1">?</button></label>
             <select id="rest-method" onchange="updateRestControls()">
               <option value="hostedPaymentPage">Hosted Payment Page</option>
@@ -2283,6 +2370,8 @@
         <span class="method-info-icon icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
         <span id="method-info-text"></span>
       </div>
+
+      <div id="create-payment-fields">
 
       <div class="field-grid three">
         <div class="field">
@@ -2356,19 +2445,19 @@
       <div class="url-fields">
         <div class="field">
           <label><span id="l-urls">URLSuccess</span> <span class="required">*</span> <span class="hint" id="h-urls">(nach erfolgreicher Zahlung)</span><button class="param-tip" id="tip-urls" tabindex="-1">?</button></label>
-          <input type="url" id="urlSuccess" placeholder="https://meineshop.de/success" value="https://httpbin.org/get?status=success">
+          <input type="url" id="urlSuccess" placeholder="https://example.com/erfolg">
         </div>
         <div class="field">
           <label><span id="l-urlf">URLFailure</span> <span class="required">*</span> <span class="hint" id="h-urlf">(nach fehlgeschlagener Zahlung)</span><button class="param-tip" id="tip-urlf" tabindex="-1">?</button></label>
-          <input type="url" id="urlFailure" placeholder="https://meineshop.de/failure" value="https://httpbin.org/get?status=failure">
+          <input type="url" id="urlFailure" placeholder="https://example.com/fehler">
         </div>
         <div class="field">
           <label><span id="l-urln">URLNotify</span> <span class="hint" id="h-urln">(Server-zu-Server Benachrichtigung)</span><button class="param-tip" id="tip-urln" tabindex="-1">?</button></label>
-          <input type="url" id="urlNotify" placeholder="https://meineshop.de/notify" value="https://httpbin.org/post?status=notify">
+          <input type="url" id="urlNotify" placeholder="https://example.com/benachrichtigung">
         </div>
         <div class="field">
           <label><span id="l-urlb">URLBack</span> <span class="hint" id="h-urlb">(Abbrechen-Button, unverschlüsselt)</span><button class="param-tip" id="tip-urlb" tabindex="-1">?</button></label>
-          <input type="url" id="urlBack" placeholder="https://meineshop.de/warenkorb" value="https://httpbin.org/get?status=back">
+          <input type="url" id="urlBack" placeholder="https://example.com/warenkorb">
         </div>
       </div>
 
@@ -2381,6 +2470,11 @@
           <span id="cb-receiver-text">Dieses Tool als Callback-Empfänger aktivieren</span>
         </label>
         <span class="cb-receiver-hint" id="cb-receiver-hint">(setzt URLSuccess, URLFailure &amp; URLBack auf diese Seite — kein externer Dienst nötig)</span>
+      </div>
+
+      <div class="callback-demo-row" id="callback-demo-row">
+        <div class="callback-demo-copy" id="callback-demo-copy"><strong>Externe Demo-Option:</strong> httpbingo.org nur mit synthetischen Testdaten verwenden. Requests werden an einen externen öffentlichen Dienst übertragen.</div>
+        <button class="btn btn-ghost" id="btn-httpbingo-demo" type="button" onclick="applyHttpbingoDemo()">httpbingo.org einsetzen</button>
       </div>
 
       <div id="advanced-section" class="collapsible">
@@ -2415,12 +2509,13 @@
         </div>
       </div>
       </div><!-- /advanced-section -->
+      </div><!-- /create-payment-fields -->
 
       <div class="btn-row">
         <button class="btn btn-primary" onclick="buildAndPreview()" id="btn-preview">
           <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> <span id="btn-preview-text">Vorschau generieren</span>
         </button>
-        <button class="btn btn-ghost" onclick="generateTransId()">
+        <button class="btn btn-ghost" id="btn-newtid" onclick="generateTransId()">
           <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span> <span id="btn-newtid-text">Neue Trans-ID</span>
         </button>
       </div>
@@ -2483,7 +2578,7 @@
           </div>
         </div>
 
-        <details class="tc-details">
+        <details class="tc-details payment-preview-only">
           <summary id="tc-summary">Testkartennummern (Non-3DS)</summary>
           <div style="padding:6px 0 2px">
             <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-note">Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure</p>
@@ -2500,7 +2595,7 @@
           </div>
         </details>
 
-        <details class="tc-details">
+        <details class="tc-details payment-preview-only">
           <summary id="tc-3ds-summary">Testkartennummern (3-D Secure 2.x)</summary>
           <div style="padding:6px 0 2px">
             <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-3ds-note">Ablauf: beliebig · CVC: beliebig · Nur im Test-Modus mit 3DS-Konfiguration · Challenge-OTP: <strong>1234</strong></p>
@@ -2517,11 +2612,20 @@
           </div>
         </details>
 
-        <div class="btn-row">
+        <div class="btn-row payment-preview-only">
           <button class="btn btn-primary" onclick="submitPayment()" id="btn-submit">
             <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span> <span id="btn-submit-text">Zur Hosted Payment Page</span> <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
           </button>
           <span style="font-size:12px;color:var(--muted)" id="btn-submit-hint">Öffnet das Paygate in einem neuen Tab</span>
+        </div>
+
+        <div class="btn-row" id="classic-status-submit-row" style="display:none">
+          <button class="btn btn-primary" onclick="submitClassicStatus()" id="btn-status-submit">
+            <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span>
+            <span id="btn-status-submit-text">Statusabfrage öffnen</span>
+            <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
+          </button>
+          <span style="font-size:12px;color:var(--muted)" id="btn-status-submit-hint">Öffnet die rohe Server-to-Server-Antwort in einem neuen Tab</span>
         </div>
 
       </div>
@@ -2531,7 +2635,7 @@
         <div class="info-box" id="rest-test-data-help" style="margin-bottom:12px">
           <strong>Paygate-Testdaten:</strong> Bei Hosted Payment Page und Card Form werden Testkartennummern erst im Paygate-Formular eingegeben, nicht in diesem JSON-Request. Beispiele: Visa <code>4111111111111111</code>, Mastercard <code>5555555555554444</code>, CVC <code>123</code>. <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener">Offizielle Testkarten öffnen</a>.
         </div>
-        <div class="debug-block" style="margin-bottom:12px">
+        <div class="debug-block" id="rest-json-block" style="margin-bottom:12px">
           <div class="debug-label"><span id="rest-json-label">REST JSON-Payload</span><button class="copy-btn" onclick="copyText('rest-json-output')">Kopieren</button></div>
           <pre id="rest-json-output">–</pre>
         </div>
@@ -2576,7 +2680,7 @@
 
       <div class="field" style="margin-bottom:14px">
         <label><span id="l-resp-url">Callback-URL</span> <span class="hint" id="h-resp-url">(URLSuccess / URLFailure / URLNotify)</span></label>
-        <textarea id="resp-url" placeholder="https://meineshop.de/success?MerchantID=...&Len=...&Data=..."></textarea>
+        <textarea id="resp-url" placeholder="https://example.com/erfolg?MerchantID=...&Len=...&Data=..."></textarea>
       </div>
 
       <div class="sep-label" id="sep-resp-manual">Oder manuell</div>
@@ -2727,7 +2831,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v3.0.2</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v3.1.0</span>
       <span class="footer-preview-notice">Unofficial preview</span>
     </span>
     <span class="footer-links">
@@ -2852,6 +2956,7 @@ let currentLang = 'de';
 // ══════════════════════════════════════════════════════════════
 let currentIntegration = 'classic';
 let currentMethod = 'hpp';
+let currentUseCase = 'create-payment';
 const PBL_REFS_LS_KEY = 'computop_paybylink_refs';
 
 function onTemplateChange() {
@@ -2913,16 +3018,70 @@ function setIntegration(integration) {
   if (classicExplainer && classicControls && classicExplainer.nextElementSibling !== classicControls) {
     classicControls.parentNode.insertBefore(classicExplainer, classicControls);
   }
-  if (classicExplainer) classicExplainer.style.display = isRest ? 'none' : 'block';
-  if (classicControls) classicControls.style.display = isRest ? 'none' : 'flex';
+  const isPayment = currentUseCase === 'create-payment';
+  if (classicExplainer) classicExplainer.style.display = !isRest && isPayment ? 'block' : 'none';
+  if (classicControls) classicControls.style.display = !isRest && isPayment ? 'flex' : 'none';
   if (restControls) restControls.style.display = isRest ? 'block' : 'none';
-  const callbackRow = document.getElementById('cb-receiver-row');
-  if (callbackRow) callbackRow.style.display = isRest ? 'none' : '';
-  const submitButton = document.getElementById('btn-submit');
-  if (submitButton?.parentElement) submitButton.parentElement.style.display = isRest ? 'none' : 'flex';
   updateCredentialModeUI();
   showPreviewEmptyState();
-  if (isRest) updateRestControls(); else setMethod(currentMethod);
+  updateUseCaseUI();
+}
+
+function setUseCase(useCase) {
+  if (!['create-payment', 'payment-status'].includes(useCase)) return;
+  currentUseCase = useCase;
+  document.getElementById('use-case-create')?.classList.toggle('method-active', useCase === 'create-payment');
+  document.getElementById('use-case-status')?.classList.toggle('method-active', useCase === 'payment-status');
+  updateCredentialModeUI();
+  showPreviewEmptyState();
+  updateUseCaseUI();
+}
+
+function updateUseCaseUI() {
+  const isRest = currentIntegration === 'rest';
+  const isPayment = currentUseCase === 'create-payment';
+  const lookup = document.getElementById('status-lookup')?.value || 'paymentId';
+  const classicControls = document.getElementById('classic-method-controls');
+  const classicExplainer = document.getElementById('classic-tech-explainer');
+  const createFields = document.getElementById('create-payment-fields');
+  const statusControls = document.getElementById('status-controls');
+  const callbackRow = document.getElementById('cb-receiver-row');
+  const restMethodField = document.getElementById('rest-method-field');
+  const restPrimaryGrid = document.querySelector('#rest-controls .field-grid.three');
+  const restVersion = document.getElementById('rest-version');
+  const submitButton = document.getElementById('btn-submit');
+  const newTidButton = document.getElementById('btn-newtid');
+
+  if (classicControls) classicControls.style.display = !isRest && isPayment ? 'flex' : 'none';
+  if (classicExplainer) classicExplainer.style.display = !isRest && isPayment ? 'block' : 'none';
+  if (createFields) createFields.style.display = isPayment ? '' : 'none';
+  if (statusControls) statusControls.style.display = isPayment ? 'none' : 'block';
+  if (callbackRow) callbackRow.style.display = !isRest && isPayment ? '' : 'none';
+  if (restMethodField) restMethodField.style.display = isPayment ? '' : 'none';
+  if (restPrimaryGrid) restPrimaryGrid.style.gridTemplateColumns = isPayment ? '' : '1fr 1fr';
+  if (restVersion) {
+    if (!isPayment) restVersion.value = 'v1';
+    restVersion.disabled = !isPayment;
+  }
+  if (submitButton?.parentElement) submitButton.parentElement.style.display = !isRest && isPayment ? 'flex' : 'none';
+  if (newTidButton) newTidButton.style.display = isPayment ? 'inline-flex' : 'none';
+
+  const paymentIdField = document.getElementById('status-payment-id-field');
+  const transactionIdField = document.getElementById('status-transaction-id-field');
+  if (paymentIdField) paymentIdField.style.display = lookup === 'paymentId' ? '' : 'none';
+  if (transactionIdField) transactionIdField.style.display = lookup === 'transactionId' || (!isRest && lookup === 'paymentId') ? '' : 'none';
+
+  const infoEl = document.getElementById('method-info-text');
+  const statusInfo = document.getElementById('status-use-case-info');
+  if (!isPayment) {
+    const key = isRest
+      ? (lookup === 'paymentId' ? 'status_info_rest_payment' : 'status_info_rest_transaction')
+      : (lookup === 'paymentId' ? 'status_info_classic_payment' : 'status_info_classic_transaction');
+    if (infoEl) infoEl.innerHTML = t('method_info_status');
+    if (statusInfo) statusInfo.innerHTML = t(key);
+  }
+
+  if (isRest) updateRestControls(); else if (isPayment) setMethod(currentMethod);
 }
 
 function updateCredentialModeUI() {
@@ -2933,10 +3092,15 @@ function updateCredentialModeUI() {
   notice?.classList.toggle('rest-mode', isRest);
   const title = document.getElementById('credential-mode-title');
   const text = document.getElementById('credential-mode-text');
-  if (title) title.textContent = t(isRest ? 'cred_mode_rest_title' : 'cred_mode_classic_title');
-  if (text) text.textContent = t(isRest ? 'cred_mode_rest_text' : 'cred_mode_classic_text');
+  const classicStatus = !isRest && currentUseCase === 'payment-status';
+  if (title) title.textContent = t(isRest ? 'cred_mode_rest_title' : (classicStatus ? 'cred_mode_classic_status_title' : 'cred_mode_classic_title'));
+  if (text) text.textContent = t(isRest ? 'cred_mode_rest_text' : (classicStatus ? 'cred_mode_classic_status_text' : 'cred_mode_classic_text'));
   const required = document.getElementById('merchant-required');
   if (required) required.style.display = isRest ? 'none' : '';
+  const hmacRequired = document.getElementById('hmac-required');
+  if (hmacRequired) hmacRequired.style.display = classicStatus ? 'none' : '';
+  const hmacHint = document.getElementById('h-hmacpw');
+  if (hmacHint) hmacHint.textContent = t(classicStatus ? 'h_hmacpw_status' : 'h_hmacpw');
   const merchantHint = document.getElementById('merchant-credential-hint');
   if (merchantHint) merchantHint.textContent = t(isRest ? 'cred_mid_rest_hint' : 'cred_mid_classic_hint');
   const classicGroup = document.getElementById('classic-credential-group');
@@ -2968,12 +3132,17 @@ function showPreviewEmptyState() {
   const emptyHint = document.getElementById('preview-empty-hint');
   const classicOutput = document.getElementById('debug-section');
   const restOutput = document.getElementById('rest-debug-section');
+  const statusSubmitRow = document.getElementById('classic-status-submit-row');
+  const statusSubmitButton = document.getElementById('btn-status-submit');
   if (emptyHint) emptyHint.style.display = 'block';
   if (classicOutput) classicOutput.style.display = 'none';
   if (restOutput) restOutput.style.display = 'none';
+  if (statusSubmitRow) statusSubmitRow.style.display = 'none';
+  if (statusSubmitButton) delete statusSubmitButton.dataset.url;
 }
 
 function updateRestControls() {
+  const isPayment = currentUseCase === 'create-payment';
   const version = document.getElementById('rest-version')?.value || 'v1';
   const method = document.getElementById('rest-method')?.value || 'hostedPaymentPage';
   const methodSelect = document.getElementById('rest-method');
@@ -2987,13 +3156,13 @@ function updateRestControls() {
     methodSelect.options[2].textContent = 'Pay By Link';
   }
   const warning = document.getElementById('rest-v2-warning');
-  if (warning) warning.style.display = version === 'v2' ? 'block' : 'none';
+  if (warning) warning.style.display = isPayment && version === 'v2' ? 'block' : 'none';
   const pblFields = document.getElementById('pbl-fields');
   if (pblFields) pblFields.classList.toggle('hidden', method !== 'payByLink');
   const paytypesRow = document.getElementById('paytypes-row');
   if (paytypesRow) paytypesRow.classList.toggle('hidden', method === 'cardForm');
   const infoEl = document.getElementById('method-info-text');
-  if (infoEl) infoEl.innerHTML = currentLang === 'en'
+  if (infoEl && isPayment) infoEl.innerHTML = currentLang === 'en'
     ? (version === 'v1'
       ? '<strong>REST API V1</strong> — Swagger-based JSON request builder. Requests are generated locally and never sent.'
       : '<strong>REST API V2</strong> — Uses the official V2 endpoints and schemas for checkout sessions, hosted card forms and payment links.')
@@ -3124,6 +3293,15 @@ function applyLang() {
 
   setText('ct-payment', 'ct_payment');
   setText('integration-label', currentLang === 'en' ? 'Interface' : 'Schnittstelle');
+  setText('use-case-label', 'use_case_label');
+  setText('use-case-create-label', 'use_case_create');
+  setText('use-case-status-label', 'use_case_status');
+  setText('use-case-mit-cit-state', 'use_case_mit_cit_state');
+  setText('l-status-lookup', 'status_lookup_label');
+  setText('l-status-payment-id', 'status_payment_id_label');
+  setText('l-status-transaction-id', 'status_transaction_id_label');
+  setText('status-lookup-payment-option', 'status_payment_id_label');
+  setText('status-lookup-transaction-option', 'status_transaction_id_label');
   setText('l-rest-version', currentLang === 'en' ? 'REST API Version' : 'REST API-Version');
   setText('l-rest-method', currentLang === 'en' ? 'REST Payment Type' : 'REST-Zahlungsart');
   setText('l-rest-environment', currentLang === 'en' ? 'Target Environment' : 'Zielumgebung');
@@ -3173,8 +3351,14 @@ function applyLang() {
   setText('l-urlf', 'l_urlf'); setText('h-urlf', 'h_urlf');
   setText('l-urln', 'l_urln'); setText('h-urln', 'h_urln');
   setText('l-urlb', 'l_urlb'); setText('h-urlb', 'h_urlb');
+  setAttr('urlSuccess', 'placeholder', 'ph_url_success');
+  setAttr('urlFailure', 'placeholder', 'ph_url_failure');
+  setAttr('urlNotify', 'placeholder', 'ph_url_notify');
+  setAttr('urlBack', 'placeholder', 'ph_url_back');
   setText('cb-receiver-text', 'cb_receiver_label');
-  setText('cb-receiver-hint', 'cb_receiver_hint');
+  updateCallbackReceiverAvailabilityUI();
+  setHtml('callback-demo-copy', 'callback_demo_copy');
+  setText('btn-httpbingo-demo', 'callback_demo_button');
   setTip('tip-urls',  'tip_urls');
   setTip('tip-urlf',  'tip_urlf');
   setTip('tip-urln',  'tip_urln');
@@ -3204,8 +3388,9 @@ function applyLang() {
   setText('copy-plain-text', 'btn_copy'); setText('copy-urlparams-text', 'btn_copy'); setText('copy-pbl-outer-text', 'btn_copy'); setText('copy-url-text', 'btn_copy');
   setText('btn-submit-text', 'btn_submit');
   setText('btn-submit-hint', 'btn_submit_hint');
-  if (currentIntegration === 'rest') updateRestControls();
-  else setMethod(currentMethod); // Active method text must win after generic preview labels.
+  setText('btn-status-submit-text', 'btn_status_submit');
+  setText('btn-status-submit-hint', 'btn_status_submit_hint');
+  updateUseCaseUI(); // Context-specific labels must win after generic preview labels.
 
   setText('ct-log', 'ct_log');
   setText('log-subtitle', 'log_subtitle');
@@ -3215,6 +3400,7 @@ function applyLang() {
   setText('resp-info-title', 'resp_info_title');
   setHtml('resp-info-body', 'resp_info_body');
   setText('l-resp-url', 'l_resp_url'); setText('h-resp-url', 'h_resp_url');
+  setAttr('resp-url', 'placeholder', 'ph_resp_url');
   setText('sep-resp-manual', 'sep_resp_manual');
   setText('l-resp-data', 'l_resp_data'); setText('l-resp-len', 'l_resp_len');
   setText('btn-decrypt-text', 'btn_decrypt');
@@ -3720,6 +3906,25 @@ function buildPayByLinkRequest(merchantId, blowfishKey, innerParams, outerOption
   return { innerPlain, innerLen, innerData, outerParams, outerPlain, outerLen, outerData, finalUrl };
 }
 
+function buildClassicStatusRequest(merchantId, blowfishKey, lookup, paymentId, transactionId) {
+  const params = { MerchantID: merchantId };
+  let endpoint;
+  if (lookup === 'paymentId') {
+    params.PayID = paymentId;
+    params.TransID = transactionId;
+    endpoint = 'inquire.aspx';
+  } else {
+    params.TransID = transactionId;
+    endpoint = 'inquire24.aspx';
+  }
+  const plain = paramsToString(params);
+  const len = plain.length;
+  const data = Blowfish.encrypt(blowfishKey, plain);
+  const urlParams = { MerchantID: merchantId, Len: String(len), Data: data };
+  const finalUrl = `https://www.computop-paygate.com/${endpoint}?MerchantID=${encodeURIComponent(merchantId)}&Len=${len}&Data=${data}`;
+  return { lookup, endpoint, params, plain, len, data, urlParams, finalUrl };
+}
+
 // ══════════════════════════════════════════════════════════════
 // BUILD PARAMETER STRING + PREVIEW
 // ══════════════════════════════════════════════════════════════
@@ -3849,6 +4054,13 @@ function restPaymentUrl() {
   return `${base}/payments`;
 }
 
+function restStatusUrl(lookup, identifier) {
+  const encoded = encodeURIComponent(identifier);
+  return lookup === 'paymentId'
+    ? `${restBaseUrl()}/payments/${encoded}`
+    : `${restBaseUrl()}/payments/transactions/${encoded}`;
+}
+
 function restCredentials() {
   const include = document.getElementById('rest-include-credentials').checked;
   return {
@@ -3858,16 +4070,18 @@ function restCredentials() {
   };
 }
 
-function buildCurlRequest(url, json, auth, credentials, idempotencyKey) {
+function buildCurlRequest(url, json, auth, credentials, idempotencyKey, httpMethod = 'POST') {
+  const hasBody = httpMethod !== 'GET';
   const body = json.replace(/'/g, "'\\''");
-  const idempotencyHeader = url.includes('/api/v2/') ? ` \\
+  const idempotencyHeader = hasBody && url.includes('/api/v2/') ? ` \\
   --header 'Idempotency-Key: ${idempotencyKey}'` : '';
-  if (auth === 'basic') {
-    return `curl --request POST \\
-  --url '${url}' \\
-  --user '${credentials.merchantId}:${credentials.apiKey}' \\
+  const requestBody = hasBody ? ` \\
   --header 'Content-Type: application/json'${idempotencyHeader} \\
-  --data '${body}'`;
+  --data '${body}'` : '';
+  if (auth === 'basic') {
+    return `curl --request ${httpMethod} \\
+  --url '${url}' \\
+  --user '${credentials.merchantId}:${credentials.apiKey}'${requestBody}`;
   }
   const tokenUrl = `${new URL(url).origin}/authorization/oauth/token`;
   return `ACCESS_TOKEN=$(curl --silent --request POST \\
@@ -3877,30 +4091,32 @@ function buildCurlRequest(url, json, auth, credentials, idempotencyKey) {
   --data-urlencode 'client_id=${credentials.merchantId}' \\
   --data-urlencode 'client_secret=${credentials.apiKey}' | jq -r '.access_token')
 
-curl --request POST \\
+curl --request ${httpMethod} \\
   --url '${url}' \\
-  --header "Authorization: Bearer $ACCESS_TOKEN" \\
-  --header 'Content-Type: application/json'${idempotencyHeader} \\
-  --data '${body}'`;
+  --header "Authorization: Bearer $ACCESS_TOKEN"${requestBody}`;
 }
 
-function buildPowerShellRequest(url, json, auth, credentials, idempotencyKey) {
+function buildPowerShellRequest(url, json, auth, credentials, idempotencyKey, httpMethod = 'POST') {
+  const hasBody = httpMethod !== 'GET';
   const body = `$body = @'\n${json}\n'@`;
-  const extraHeader = url.includes('/api/v2/') ? `; 'Idempotency-Key' = '${idempotencyKey}'` : '';
+  const extraHeader = hasBody && url.includes('/api/v2/') ? `; 'Idempotency-Key' = '${idempotencyKey}'` : '';
+  const bodySetup = hasBody ? `${body}\n` : '';
+  const bodyArgs = hasBody ? " -ContentType 'application/json' -Body $body" : '';
   if (auth === 'basic') {
-    return `$pair = '${credentials.merchantId}:${credentials.apiKey}'\n$basic = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($pair))\n${body}\nInvoke-RestMethod -Method Post -Uri '${url}' -Headers @{ Authorization = "Basic $basic"${extraHeader} } -ContentType 'application/json' -Body $body`;
+    return `$pair = '${credentials.merchantId}:${credentials.apiKey}'\n$basic = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($pair))\n${bodySetup}Invoke-RestMethod -Method ${httpMethod} -Uri '${url}' -Headers @{ Authorization = "Basic $basic"${extraHeader} }${bodyArgs}`;
   }
   const tokenUrl = `${new URL(url).origin}/authorization/oauth/token`;
-  return `$token = Invoke-RestMethod -Method Post -Uri '${tokenUrl}' -ContentType 'application/x-www-form-urlencoded' -Body @{ grant_type='client_credentials'; client_id='${credentials.merchantId}'; client_secret='${credentials.apiKey}' }\n${body}\nInvoke-RestMethod -Method Post -Uri '${url}' -Headers @{ Authorization = "Bearer $($token.access_token)"${extraHeader} } -ContentType 'application/json' -Body $body`;
+  return `$token = Invoke-RestMethod -Method Post -Uri '${tokenUrl}' -ContentType 'application/x-www-form-urlencoded' -Body @{ grant_type='client_credentials'; client_id='${credentials.merchantId}'; client_secret='${credentials.apiKey}' }\n${bodySetup}Invoke-RestMethod -Method ${httpMethod} -Uri '${url}' -Headers @{ Authorization = "Bearer $($token.access_token)"${extraHeader} }${bodyArgs}`;
 }
 
-function buildPostmanCollection(url, payload, auth, credentials, idempotencyKey) {
+function buildPostmanCollection(url, payload, auth, credentials, idempotencyKey, httpMethod = 'POST') {
+  const hasBody = httpMethod !== 'GET';
   const parsed = new URL(url);
   const paymentsIndex = parsed.pathname.indexOf('/payments');
   const apiBasePath = paymentsIndex >= 0 ? parsed.pathname.slice(0, paymentsIndex) : parsed.pathname;
   const endpointPath = paymentsIndex >= 0 ? parsed.pathname.slice(paymentsIndex) : parsed.pathname;
   const collection = {
-    info: { name: 'Paygate REST Payment Request', schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json' },
+    info: { name: hasBody ? 'Paygate REST Payment Request' : 'Paygate REST Status Inquiry', schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json' },
     variable: [
       { key: 'baseUrl', value: `${parsed.protocol}//${parsed.host}${apiBasePath}` },
       { key: 'merchantId', value: credentials.merchantId },
@@ -3908,14 +4124,14 @@ function buildPostmanCollection(url, payload, auth, credentials, idempotencyKey)
       { key: 'accessToken', value: '{{accessToken}}' }
     ],
     item: [{
-      name: 'Create payment',
+      name: hasBody ? 'Create payment' : 'Get payment status',
       request: {
-        method: 'POST',
-        header: [
+        method: httpMethod,
+        header: hasBody ? [
           { key: 'Content-Type', value: 'application/json' },
           ...(url.includes('/api/v2/') ? [{ key: 'Idempotency-Key', value: idempotencyKey }] : [])
-        ],
-        body: { mode: 'raw', raw: JSON.stringify(payload, null, 2), options: { raw: { language: 'json' } } },
+        ] : [],
+        ...(hasBody ? { body: { mode: 'raw', raw: JSON.stringify(payload, null, 2), options: { raw: { language: 'json' } } } } : {}),
         url: { raw: `{{baseUrl}}${endpointPath}` },
         auth: auth === 'basic'
           ? { type: 'basic', basic: [{ key: 'username', value: '{{merchantId}}', type: 'string' }, { key: 'password', value: '{{apiKey}}', type: 'string' }] }
@@ -3926,13 +4142,15 @@ function buildPostmanCollection(url, payload, auth, credentials, idempotencyKey)
   return JSON.stringify(collection, null, 2);
 }
 
-function buildRawHttpRequest(url, json, auth, credentials, idempotencyKey) {
+function buildRawHttpRequest(url, json, auth, credentials, idempotencyKey, httpMethod = 'POST') {
+  const hasBody = httpMethod !== 'GET';
   const parsed = new URL(url);
   const authorization = auth === 'basic'
     ? `Basic ${credentials.include ? btoa(`${credentials.merchantId}:${credentials.apiKey}`) : '{{base64MerchantIdAndApiKey}}'}`
     : 'Bearer {{accessToken}}';
-  const idempotencyHeader = url.includes('/api/v2/') ? `\nIdempotency-Key: ${idempotencyKey}` : '';
-  return `POST ${parsed.pathname} HTTP/1.1\nHost: ${parsed.host}\nAuthorization: ${authorization}\nContent-Type: application/json${idempotencyHeader}\nContent-Length: ${new TextEncoder().encode(json).length}\n\n${json}`;
+  const idempotencyHeader = hasBody && url.includes('/api/v2/') ? `\nIdempotency-Key: ${idempotencyKey}` : '';
+  const bodySection = hasBody ? `\nContent-Type: application/json${idempotencyHeader}\nContent-Length: ${new TextEncoder().encode(json).length}\n\n${json}` : '';
+  return `${httpMethod} ${parsed.pathname} HTTP/1.1\nHost: ${parsed.host}\nAuthorization: ${authorization}${bodySection}`;
 }
 
 function renderSyntaxTokens(element, source, pattern, classify) {
@@ -3976,22 +4194,30 @@ function renderCommandSyntax(element, source, tool) {
   });
 }
 
-function buildRestPreview() {
+async function buildRestPreview() {
   try {
-    const payload = buildRestPayload();
-    const json = JSON.stringify(payload, null, 2);
-    const url = restPaymentUrl();
+    const isStatus = currentUseCase === 'payment-status';
+    const lookup = document.getElementById('status-lookup')?.value || 'paymentId';
+    const identifier = lookup === 'paymentId'
+      ? document.getElementById('status-payment-id')?.value.trim()
+      : document.getElementById('status-transaction-id')?.value.trim();
+    if (isStatus && !identifier) throw new Error(t(lookup === 'paymentId' ? 'val_status_payment_id' : 'val_status_transaction_id'));
+    const payload = isStatus ? null : buildRestPayload();
+    const json = payload ? JSON.stringify(payload, null, 2) : '';
+    const url = isStatus ? restStatusUrl(lookup, identifier) : restPaymentUrl();
+    const httpMethod = isStatus ? 'GET' : 'POST';
     const auth = document.getElementById('rest-auth').value;
     const credentials = restCredentials();
     if (credentials.include && (!credentials.merchantId || !credentials.apiKey)) {
       throw new Error(t('rest_credentials_required'));
     }
     const tool = document.getElementById('rest-tool').value;
+    const idempotencyKey = payload?.transId || payload?.transactionId || identifier;
     const builders = {
-      curl: () => buildCurlRequest(url, json, auth, credentials, payload.transId || payload.transactionId),
-      powershell: () => buildPowerShellRequest(url, json, auth, credentials, payload.transId || payload.transactionId),
-      postman: () => buildPostmanCollection(url, payload, auth, credentials, payload.transId || payload.transactionId),
-      http: () => buildRawHttpRequest(url, json, auth, credentials, payload.transId || payload.transactionId)
+      curl: () => buildCurlRequest(url, json, auth, credentials, idempotencyKey, httpMethod),
+      powershell: () => buildPowerShellRequest(url, json, auth, credentials, idempotencyKey, httpMethod),
+      postman: () => buildPostmanCollection(url, payload, auth, credentials, idempotencyKey, httpMethod),
+      http: () => buildRawHttpRequest(url, json, auth, credentials, idempotencyKey, httpMethod)
     };
     const help = currentLang === 'en' ? {
       curl: 'Run in a terminal or import into Postman using <code>Import → Raw text</code>. The OAuth2 variant also requires <code>jq</code>.',
@@ -4004,15 +4230,81 @@ function buildRestPreview() {
       postman: 'Als Datei mit Endung <code>.postman_collection.json</code> speichern oder in Postman über <code>Import → Raw text</code> einfügen. Variablen können anschließend in einer privaten Environment gepflegt werden.',
       http: 'Für REST-Clients und IDE-Dateien wie <code>.http</code>. Platzhalter vor der Ausführung ersetzen.'
     };
-    renderJsonSyntax(document.getElementById('rest-json-output'), json);
+    const jsonBlock = document.getElementById('rest-json-block');
+    const testDataHelp = document.getElementById('rest-test-data-help');
+    if (jsonBlock) jsonBlock.style.display = isStatus ? 'none' : 'block';
+    if (testDataHelp) testDataHelp.style.display = isStatus ? 'none' : 'block';
+    if (!isStatus) renderJsonSyntax(document.getElementById('rest-json-output'), json);
     renderCommandSyntax(document.getElementById('rest-code-output'), builders[tool](), tool);
     document.getElementById('rest-tool-help').innerHTML = help[tool];
     document.getElementById('card-preview').classList.remove('collapsed');
     document.getElementById('preview-empty-hint').style.display = 'none';
     document.getElementById('debug-section').style.display = 'none';
     document.getElementById('rest-debug-section').style.display = 'block';
+    if (isStatus) {
+      await _saveLogEntry({
+        merchantId: credentials.include ? credentials.merchantId : '',
+        transId: lookup === 'transactionId' ? identifier : '',
+        paymentId: lookup === 'paymentId' ? identifier : '',
+        useCase: 'payment-status',
+        integration: 'rest',
+        lookup,
+        url
+      });
+      await renderLog();
+    }
     document.getElementById('rest-debug-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    showToast(currentLang === 'en' ? 'REST request generated locally — nothing was sent.' : 'REST-Request lokal erzeugt – es wurde nichts gesendet.', 'success');
+    showToast(t(isStatus ? 'toast_status_preview_done' : 'toast_rest_preview_done'), 'success');
+  } catch (error) {
+    showToast(t('toast_err') + error.message, 'error');
+  }
+}
+
+async function buildClassicStatusPreview() {
+  try {
+    const merchantId = document.getElementById('merchantId').value.trim();
+    const blowfishKey = document.getElementById('blowfishKey').value;
+    const lookup = document.getElementById('status-lookup').value;
+    const paymentId = document.getElementById('status-payment-id').value.trim();
+    const transactionId = document.getElementById('status-transaction-id').value.trim();
+    if (!merchantId) throw new Error(t('val_mid'));
+    if (!blowfishKey) throw new Error(t('val_bf'));
+    if (lookup === 'paymentId' && !paymentId) throw new Error(t('val_status_payment_id'));
+    if (!transactionId) throw new Error(t('val_status_transaction_id'));
+
+    const request = buildClassicStatusRequest(merchantId, blowfishKey, lookup, paymentId, transactionId);
+    document.getElementById('card-preview').classList.remove('collapsed');
+    document.getElementById('preview-empty-hint').style.display = 'none';
+    document.getElementById('rest-debug-section').style.display = 'none';
+    document.getElementById('debug-section').style.display = 'block';
+    document.querySelectorAll('.payment-preview-only').forEach(element => { element.style.display = 'none'; });
+    const statusSubmitRow = document.getElementById('classic-status-submit-row');
+    const statusSubmitButton = document.getElementById('btn-status-submit');
+    if (statusSubmitRow) statusSubmitRow.style.display = 'flex';
+    if (statusSubmitButton) statusSubmitButton.dataset.url = request.finalUrl;
+    document.getElementById('pbl-outer-section').style.display = 'none';
+
+    const plainParamsEl = document.getElementById('plain-params');
+    renderParamLines(plainParamsEl, Object.entries(request.params), () => 'val');
+    plainParamsEl.dataset.raw = request.plain;
+    const urlParamsEl = document.getElementById('url-params');
+    renderParamLines(urlParamsEl, Object.entries(request.urlParams).map(([key, value]) => [key, key === 'Data' ? value.substring(0, 80) + '…' : value]), () => 'val');
+    urlParamsEl.dataset.raw = paramsToString(request.urlParams);
+    document.getElementById('full-url').textContent = request.finalUrl;
+    document.getElementById('full-url').dataset.raw = request.finalUrl;
+
+    await _saveLogEntry({
+      merchantId,
+      transId: transactionId,
+      paymentId,
+      useCase: 'payment-status',
+      integration: 'classic',
+      lookup,
+      url: request.finalUrl
+    });
+    await renderLog();
+    showToast(t('toast_status_preview_done'), 'success');
+    document.getElementById('debug-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   } catch (error) {
     showToast(t('toast_err') + error.message, 'error');
   }
@@ -4020,7 +4312,11 @@ function buildRestPreview() {
 
 async function buildAndPreview() {
   if (currentIntegration === 'rest') {
-    buildRestPreview();
+    await buildRestPreview();
+    return;
+  }
+  if (currentUseCase === 'payment-status') {
+    await buildClassicStatusPreview();
     return;
   }
   const btn = document.getElementById('btn-preview');
@@ -4125,6 +4421,9 @@ async function buildAndPreview() {
     const emptyHint = document.getElementById('preview-empty-hint');
     if (emptyHint) emptyHint.style.display = 'none';
     document.getElementById('debug-section').style.display = 'block';
+    document.querySelectorAll('.payment-preview-only').forEach(element => { element.style.display = ''; });
+    const statusSubmitRow = document.getElementById('classic-status-submit-row');
+    if (statusSubmitRow) statusSubmitRow.style.display = 'none';
 
     // URL-Parameter (unverschlüsselt) sammeln
     const urlParams = {};
@@ -4177,7 +4476,7 @@ async function buildAndPreview() {
     document.getElementById('btn-submit').dataset.url = finalUrl;
 
     // Save to request log
-    await _saveLogEntry({ merchantId, transId, amount, currency, url: finalUrl });
+    await _saveLogEntry({ merchantId, transId, amount, currency, integration: 'classic', url: finalUrl });
     await renderLog();
 
     showToast(`${t('toast_preview_done')}${len} · Data=${dataHex.length/2} Bytes`, 'success');
@@ -4201,6 +4500,13 @@ function submitPayment() {
     localStorage.setItem(PAYMENT_PENDING_KEY, JSON.stringify({ createdAt: Date.now() }));
   }
   showToast(t('toast_submit'), 'info');
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function submitClassicStatus() {
+  const url = document.getElementById('btn-status-submit')?.dataset.url;
+  if (!url) { showToast(t('toast_no_url'), 'error'); return; }
+  showToast(t('toast_status_submit'), 'info');
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
@@ -4638,15 +4944,20 @@ async function renderLog() {
   requestLogCache.forEach((e, i) => {
     const ts = new Date(e.timestamp).toLocaleString(currentLang === 'en' ? 'en-US' : 'de-DE');
     const amt = ((e.amount || 0) / 100).toFixed(2);
+    const isStatus = e.useCase === 'payment-status';
+    const integration = e.integration === 'rest' || /\/api\/v\d+\//i.test(e.url || '') ? 'rest' : 'classic';
     const entry = appendTextElement(container, 'div', 'log-entry', '');
     entry.addEventListener('click', () => toggleLogDetail(i));
     const meta = appendTextElement(entry, 'div', 'log-meta', '');
     appendTextElement(meta, 'span', 'log-ts', ts);
-    appendTextElement(meta, 'span', 'log-badge', `${e.currency || '–'} ${amt}`);
+    appendTextElement(meta, 'span', `log-interface-badge log-interface-${integration}`, integration);
+    appendTextElement(meta, 'span', 'log-badge', isStatus ? t('log_status_badge') : `${e.currency || '–'} ${amt}`);
     appendTextElement(meta, 'span', 'log-merchant', e.merchantId || '–');
     appendTextElement(meta, 'span', 'log-status-dot', '');
-    const transId = appendTextElement(entry, 'div', 'log-tid', 'TransID: ');
-    const transIdValue = appendTextElement(transId, 'span', '', e.transId || '–');
+    const identifierLabel = isStatus && e.lookup === 'paymentId' ? 'PayID: ' : 'TransID: ';
+    const identifierValue = isStatus && e.lookup === 'paymentId' ? e.paymentId : e.transId;
+    const transId = appendTextElement(entry, 'div', 'log-tid', identifierLabel);
+    const transIdValue = appendTextElement(transId, 'span', '', identifierValue || '–');
     transIdValue.style.color = 'var(--accent2)';
     const detail = appendTextElement(entry, 'div', 'log-detail', '');
     detail.id = `log-detail-${i}`;
@@ -4998,11 +5309,52 @@ function toggleCallbackReceiver() {
   _applyCallbackReceiver(enabled);
 }
 
+function updateCallbackReceiverAvailabilityUI() {
+  const receiverSupported = ['http:', 'https:'].includes(window.location.protocol);
+  const toggle = document.getElementById('cb-receiver-toggle');
+  const row = document.getElementById('cb-receiver-row');
+  const hint = document.getElementById('cb-receiver-hint');
+  if (toggle) {
+    toggle.disabled = !receiverSupported;
+    toggle.title = receiverSupported ? '' : t('cb_receiver_file_title');
+  }
+  row?.classList.toggle('is-unavailable', !receiverSupported);
+  if (hint) hint.textContent = t(receiverSupported ? 'cb_receiver_hint' : 'cb_receiver_file_hint');
+  return receiverSupported;
+}
+
+function applyHttpbingoDemo() {
+  const toggle = document.getElementById('cb-receiver-toggle');
+  if (toggle?.checked) {
+    toggle.checked = false;
+    localStorage.setItem(CALLBACK_RECEIVER_KEY, '0');
+    _applyCallbackReceiver(false);
+  }
+  const demoUrls = {
+    urlSuccess: 'https://httpbingo.org/get?status=success',
+    urlFailure: 'https://httpbingo.org/get?status=failure',
+    urlNotify: 'https://httpbingo.org/post?status=notify',
+    urlBack: 'https://httpbingo.org/get?status=back'
+  };
+  Object.entries(demoUrls).forEach(([id, value]) => {
+    const input = document.getElementById(id);
+    if (input) input.value = value;
+  });
+  showToast(t('toast_httpbingo_demo'), 'warning');
+}
+
 function initCallbackReceiver() {
-  const enabled = localStorage.getItem(CALLBACK_RECEIVER_KEY) === '1';
+  const storedSetting = localStorage.getItem(CALLBACK_RECEIVER_KEY);
+  const receiverSupported = updateCallbackReceiverAvailabilityUI();
+  const enabled = receiverSupported && (storedSetting === null || storedSetting === '1');
   const toggle  = document.getElementById('cb-receiver-toggle');
-  if (toggle) toggle.checked = enabled;
-  if (enabled) _applyCallbackReceiver(true);
+  if (toggle) {
+    toggle.checked = enabled;
+  }
+  if (enabled) {
+    localStorage.setItem(CALLBACK_RECEIVER_KEY, '1');
+    _applyCallbackReceiver(true);
+  }
   initCallbackRelay();
   checkCallbackParams();
 }
