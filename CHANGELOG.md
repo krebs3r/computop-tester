@@ -2,6 +2,13 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.1.1 — Status Guidance and Interface Polish
+- Added explanatory tooltips for status lookup type, Payment ID/PayID and Transaction ID
+- Clarified that `Status=OK` confirms a successful inquiry, not necessarily a successful payment
+- Added guidance for interpreting `AmountAuth`, `AmountCap`, `AmountCred` and `LastStatus`
+- Added matching SVG icons to the interface and use-case selectors
+- Added the standard `mobile-web-app-capable` metadata required by current Chromium browsers
+
 ### v3.1.0 — Transaction Status Inquiries
 - Renamed Step 2 to Request Configuration and added a dedicated use-case selector
 - Added transaction-status inquiries for Classic Paygate through `inquire.aspx` and `inquire24.aspx`

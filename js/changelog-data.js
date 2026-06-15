@@ -1,6 +1,19 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.1.1', de: { title: 'Statushinweise und UI-Feinschliff', items: [
+    '<strong>Status-Tooltips</strong> — Fragezeichen erklären Suchweg, Payment ID/PayID und Transaction ID direkt an den Eingabefeldern',
+    '<strong>Korrekte Response-Auswertung</strong> — Ein Hinweis stellt klar, dass <code>Status=OK</code> nur die erfolgreiche Verarbeitung der Abfrage bestätigt',
+    '<strong>Zahlungsstand verständlich erklärt</strong> — <code>AmountAuth</code>, <code>AmountCap</code>, <code>AmountCred</code> und <code>LastStatus</code> werden in ihrer Bedeutung eingeordnet',
+    '<strong>Neue Auswahl-Icons</strong> — Schnittstellen und Use Cases verwenden passende Inline-SVGs für eine schnellere visuelle Orientierung',
+    '<strong>Aktuelle PWA-Metadaten</strong> — Der standardisierte <code>mobile-web-app-capable</code>-Tag behebt die Chromium-Warnung zum veralteten Apple-spezifischen Meta-Tag',
+  ]}, en: { title: 'Status Guidance and Interface Polish', items: [
+    '<strong>Status tooltips</strong> — Inline question marks explain lookup type, Payment ID/PayID and Transaction ID',
+    '<strong>Correct response interpretation</strong> — Guidance clarifies that <code>Status=OK</code> only confirms successful processing of the inquiry',
+    '<strong>Clear payment-state guidance</strong> — The meaning of <code>AmountAuth</code>, <code>AmountCap</code>, <code>AmountCred</code> and <code>LastStatus</code> is explained',
+    '<strong>New selector icons</strong> — Interfaces and use cases use matching inline SVGs for faster visual orientation',
+    '<strong>Current PWA metadata</strong> — The standard <code>mobile-web-app-capable</code> tag resolves the Chromium warning about the Apple-specific legacy tag',
+  ]}},
   { v: 'v3.1.0', de: { title: 'Transaktionsstatusabfragen', items: [
     '<strong>Neue Use-Case-Auswahl</strong> — Schritt 2 heißt nun Request konfigurieren und trennt Zahlungserstellung und Transaktionsstatus klar voneinander',
     '<strong>Classic-Statusabfrage</strong> — <code>inquire.aspx</code> und <code>inquire24.aspx</code> erzeugen verschlüsselte Abfragen über PayID oder Transaction ID',
