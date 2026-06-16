@@ -1,6 +1,23 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.1.2', de: { title: 'Hilferessourcen und UI-Korrekturen', items: [
+    '<strong>Zusätzliche Hilferessourcen</strong> — Unterstützte Vorschau-Kontexte können nun passende Shop-Plugin-Dokumentation und Download-Links anzeigen',
+    '<strong>Plugin-Übersicht im Hilfe-Tab</strong> — Neue Ressourcenkarten bündeln Dokumentation, Downloads und Quellenhinweise übersichtlich an einer Stelle',
+    '<strong>Footer-Ausrichtung</strong> — Externe Links bleiben als Gruppe rechtsbündig neben der Aktion zum Löschen lokaler Daten',
+    '<strong>Lesbarere Hilfe-Navigation</strong> — Light-Mode-Kontrast und Hover-Verhalten der Hilfe-Chips wurden weiter geglättet',
+    '<strong>Stabile Header-Chips</strong> — Feature-Blasen im Header bleiben auch beim Hover im hellen Vorschau-Modus lesbar',
+    '<strong>Einheitlicher App-Name</strong> — Sichtbare Titel und Metadaten verwenden durchgehend Paygate Payment Tester',
+    '<strong>Release-Metadaten</strong> — App-Version, Changelog und Anwendungscache sind auf diese Version abgestimmt',
+  ]}, en: { title: 'Help Resources and Interface Fixes', items: [
+    '<strong>Additional help resources</strong> — Supported preview contexts can now show matching shop-plugin documentation and download links',
+    '<strong>Plugin overview in Help</strong> — New resource cards group documentation, downloads and source guidance in one place',
+    '<strong>Footer alignment</strong> — External links stay grouped and right-aligned next to the action for clearing local data',
+    '<strong>More readable Help navigation</strong> — Light-mode contrast and hover behaviour for Help chips have been smoothed out',
+    '<strong>Stable header chips</strong> — Header feature chips remain readable on hover in light-mode preview contexts',
+    '<strong>Consistent app name</strong> — Visible titles and metadata now consistently use Paygate Payment Tester',
+    '<strong>Release metadata</strong> — App version, changelog and application cache are aligned with this version',
+  ]}},
   { v: 'v3.1.1', de: { title: 'Statushinweise und UI-Feinschliff', items: [
     '<strong>Status-Tooltips</strong> — Fragezeichen erklären Suchweg, Payment ID/PayID und Transaction ID direkt an den Eingabefeldern',
     '<strong>Korrekte Response-Auswertung</strong> — Ein Hinweis stellt klar, dass <code>Status=OK</code> nur die erfolgreiche Verarbeitung der Abfrage bestätigt',
@@ -138,23 +155,23 @@ const CHANGELOG = [
     '<strong>Updated footer</strong> — The compact GitHub address is visible and the Paygate documentation target has been updated',
   ]}},
   { v: 'v2.8.0', de: { title: 'Einleitung auf der Hauptseite', items: [
-    '<strong>Klare Einführung</strong> — Ein kurzer zweisprachiger Text erklärt Zweck und Zielgruppe des Payment Testers',
+    '<strong>Klare Einführung</strong> — Ein kurzer zweisprachiger Text erklärt Zweck und Zielgruppe des Paygate Payment Testers',
     '<strong>Drei Kernbereiche</strong> — Request-Erstellung, Verschlüsselungsprüfung und Response-Analyse werden kompakt beschrieben',
     '<strong>Lokale Verarbeitung</strong> — Ein eigener Hinweis erklärt den Betrieb ohne Installation und ohne dediziertes Backend',
     '<strong>Responsive Glass-Karte</strong> — Die Einleitung fügt sich in das Design ein und stapelt ihre Inhalte auf kleinen Displays',
   ]}, en: { title: 'Main Page Introduction', items: [
-    '<strong>Clear introduction</strong> — A concise bilingual text explains the purpose and audience of the Payment Tester',
+    '<strong>Clear introduction</strong> — A concise bilingual text explains the purpose and audience of the Paygate Payment Tester',
     '<strong>Three core areas</strong> — Request creation, encryption inspection and response analysis are summarised clearly',
     '<strong>Local processing</strong> — A dedicated note explains operation without installation or a dedicated backend',
     '<strong>Responsive glass card</strong> — The introduction matches the design and stacks its content on small screens',
   ]}},
   { v: 'v2.7.9', de: { title: 'Einheitliche Seitenüberschriften', items: [
     '<strong>Keine 56px-Sondergröße</strong> — Die abweichende Überschriftengröße der separaten Ansichten wurde entfernt',
-    '<strong>Maximal 44px</strong> — Alle Seitentitel verwenden nun exakt dieselbe Skala wie Payment Tester',
+    '<strong>Maximal 44px</strong> — Alle Seitentitel verwenden nun exakt dieselbe Skala wie Paygate Payment Tester',
     '<strong>Mobile Einheitlichkeit</strong> — Skalierung und Titelabstand stimmen auch auf kleinen Bildschirmen überein',
   ]}, en: { title: 'Unified Page Headings', items: [
     '<strong>No 56px override</strong> — Removed the separate heading size used by standalone views',
-    '<strong>44px maximum</strong> — Every page title now uses the exact same scale as Payment Tester',
+    '<strong>44px maximum</strong> — Every page title now uses the exact same scale as Paygate Payment Tester',
     '<strong>Mobile consistency</strong> — Scaling and title spacing also match on small screens',
   ]}},
   { v: 'v2.7.8', de: { title: 'Feinschliff der Inline-Ausrichtung', items: [
@@ -295,7 +312,7 @@ const CHANGELOG = [
     '<strong>Smooth edges</strong> — All PNGs use 8x oversampling and Lanczos downsampling for clean antialiasing',
     '<strong>Optical centering</strong> — Shield and check mark have balanced top and bottom spacing',
     '<strong>Separate sources</strong> — Dedicated SVGs for the app icon, rounded browser icon and maskable icon',
-    '<strong>Header icon</strong> — The shield appears as a resolution-independent inline SVG to the left of the Payment Tester title',
+    '<strong>Header icon</strong> — The shield appears as a resolution-independent inline SVG to the left of the Paygate Payment Tester title',
     '<strong>Responsive presentation</strong> — The header icon becomes more compact on smaller screens',
     '<strong>Dark mode</strong> — Removed the distracting colored outer glow around the header icon',
   ]}},

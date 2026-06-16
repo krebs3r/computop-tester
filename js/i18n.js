@@ -3,7 +3,7 @@
 // Loaded as a classic script so index.html also works via file://.
 const TRANSLATIONS = {
   de: {
-    page_title: 'Paygate – Payment Tester',
+    page_title: 'Paygate Payment Tester',
     nav_creds: 'Schritt 1 - Credentials',
     nav_payment: 'Schritt 2 - Request konfigurieren',
     nav_preview: 'Schritt 3 - Vorschau & Ausführen',
@@ -30,8 +30,8 @@ const TRANSLATIONS = {
     header_feature_rest_versions: 'REST API V1/V2',
     header_feature_rest_json: 'JSON Builder',
     header_feature_rest_tools: 'cURL · PowerShell · Postman',
-    app_intro_title: 'Was ist der Payment Tester?',
-    app_intro_text: 'Der Payment Tester unterstützt Entwickler und technische Teams dabei, Paygate-Integrationen direkt im Browser vorzubereiten und nachzuvollziehen.',
+    app_intro_title: 'Was ist der Paygate Payment Tester?',
+    app_intro_text: 'Der Paygate Payment Tester unterstützt Entwickler und technische Teams dabei, Paygate-Integrationen direkt im Browser vorzubereiten und nachzuvollziehen.',
     app_intro_create_title: 'Zahlungsrequests erstellen',
     app_intro_create_text: 'Parameter für Hosted Payment Page, Kreditkartenformular und Pay By Link konfigurieren.',
     app_intro_inspect_title: 'Verschlüsselung prüfen',
@@ -260,7 +260,7 @@ const TRANSLATIONS = {
     resp_url_parse_err: 'URL konnte nicht geparst werden',
   },
   en: {
-    page_title: 'Paygate – Payment Tester',
+    page_title: 'Paygate Payment Tester',
     nav_creds: 'Step 1 - Credentials',
     nav_payment: 'Step 2 - Configure Request',
     nav_preview: 'Step 3 - Preview & Submit',
@@ -287,8 +287,8 @@ const TRANSLATIONS = {
     header_feature_rest_versions: 'REST API V1/V2',
     header_feature_rest_json: 'JSON Builder',
     header_feature_rest_tools: 'cURL · PowerShell · Postman',
-    app_intro_title: 'What is the Payment Tester?',
-    app_intro_text: 'The Payment Tester helps developers and technical teams prepare and understand Paygate integrations directly in the browser.',
+    app_intro_title: 'What is the Paygate Payment Tester?',
+    app_intro_text: 'The Paygate Payment Tester helps developers and technical teams prepare and understand Paygate integrations directly in the browser.',
     app_intro_create_title: 'Create payment requests',
     app_intro_create_text: 'Configure parameters for Hosted Payment Page, Credit Card Form and Pay By Link.',
     app_intro_inspect_title: 'Inspect encryption',

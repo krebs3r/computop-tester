@@ -2,6 +2,15 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.1.2 — Help Resources and Interface Fixes
+- Added optional shop-plugin documentation and download resources for supported branded preview contexts
+- Refined the Help view with a dedicated plugin resource layout and source guidance
+- Improved footer alignment so external links stay grouped next to the clear-all action
+- Improved light-mode readability and hover behaviour for help navigation chips
+- Kept header feature chips readable on hover in light-mode branded previews
+- Standardised the visible application name to Paygate Payment Tester
+- Kept the application cache and visible version metadata aligned with this release
+
 ### v3.1.1 — Status Guidance and Interface Polish
 - Added explanatory tooltips for status lookup type, Payment ID/PayID and Transaction ID
 - Clarified that `Status=OK` confirms a successful inquiry, not necessarily a successful payment
@@ -78,7 +87,7 @@ All notable changes to Paygate Payment Tester are documented here.
 - Displayed the compact GitHub repository address in the footer and updated the Paygate documentation target
 
 ### v2.8.0 — Main Page Introduction
-- Added a concise bilingual introduction explaining the purpose of the Payment Tester
+- Added a concise bilingual introduction explaining the purpose of the Paygate Payment Tester
 - Summarised request creation, encryption inspection and response analysis in three responsive feature panels
 - Added a clear local-processing note explaining that no installation or dedicated backend is required
 - Matched the introduction to the existing glass design and mobile layout
@@ -128,7 +137,7 @@ All notable changes to Paygate Payment Tester are documented here.
 
 ### v2.7.1 — Social Sharing Preview
 - Added a dedicated 1200×630 Open Graph image in the app's glass design
-- Uses the Payment Tester shield, supported integrations and core security features
+- Uses the Paygate Payment Tester shield, supported integrations and core security features
 - Added Open Graph, Twitter Card, canonical URL and page description metadata
 - Added the social preview image to the offline application cache
 
@@ -164,7 +173,7 @@ All notable changes to Paygate Payment Tester are documented here.
 - Re-rendered all PNG icons with 8x oversampling and Lanczos downsampling for smooth antialiased edges
 - Optically centered the shield and check mark with balanced top and bottom spacing
 - Added separate standard, rounded browser and maskable SVG source variants
-- Added the shield as a resolution-independent inline SVG at the left of the Payment Tester header
+- Added the shield as a resolution-independent inline SVG at the left of the Paygate Payment Tester header
 - Added responsive header-icon sizing for smaller screens
 - Removed the colored outer glow around the header icon in dark mode
 

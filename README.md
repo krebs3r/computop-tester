@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.1.1-blueviolet)
+![Version](https://img.shields.io/badge/version-3.1.2-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
