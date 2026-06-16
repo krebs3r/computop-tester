@@ -7,6 +7,7 @@ const CHANGELOG = [
     '<strong>Footer-Ausrichtung</strong> — Externe Links bleiben als Gruppe rechtsbündig neben der Aktion zum Löschen lokaler Daten',
     '<strong>Lesbarere Hilfe-Navigation</strong> — Light-Mode-Kontrast und Hover-Verhalten der Hilfe-Chips wurden weiter geglättet',
     '<strong>Stabile Header-Chips</strong> — Feature-Blasen im Header bleiben auch beim Hover im hellen Vorschau-Modus lesbar',
+    '<strong>Klarere Callback-Demo</strong> — Die externe Demo setzt nur sichtbare Redirect-URLs und lässt asynchrone Server-Benachrichtigungen bewusst leer',
     '<strong>Einheitlicher App-Name</strong> — Sichtbare Titel und Metadaten verwenden durchgehend Paygate Payment Tester',
     '<strong>Release-Metadaten</strong> — App-Version, Changelog und Anwendungscache sind auf diese Version abgestimmt',
   ]}, en: { title: 'Help Resources and Interface Fixes', items: [
@@ -15,6 +16,7 @@ const CHANGELOG = [
     '<strong>Footer alignment</strong> — External links stay grouped and right-aligned next to the action for clearing local data',
     '<strong>More readable Help navigation</strong> — Light-mode contrast and hover behaviour for Help chips have been smoothed out',
     '<strong>Stable header chips</strong> — Header feature chips remain readable on hover in light-mode preview contexts',
+    '<strong>Clearer callback demo</strong> — The external demo only fills visible redirect URLs and deliberately keeps asynchronous server notifications empty',
     '<strong>Consistent app name</strong> — Visible titles and metadata now consistently use Paygate Payment Tester',
     '<strong>Release metadata</strong> — App version, changelog and application cache are aligned with this version',
   ]}},
