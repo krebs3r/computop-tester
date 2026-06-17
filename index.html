@@ -46,7 +46,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.1.2",
+      "softwareVersion": "3.1.3",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -2521,7 +2521,7 @@
           <input type="url" id="urlFailure" placeholder="https://example.com/fehler">
         </div>
         <div class="field">
-          <label><span id="l-urln">URLNotify</span> <span class="hint" id="h-urln">(Server-zu-Server, nicht im Browser sichtbar)</span><button class="param-tip" id="tip-urln" tabindex="-1">?</button></label>
+          <label><span id="l-urln">URLNotify</span> <span class="required" id="urlnotify-required">*</span> <span class="hint" id="h-urln">(Pflicht für Classic, nicht im Browser sichtbar)</span><button class="param-tip" id="tip-urln" tabindex="-1">?</button></label>
           <input type="url" id="urlNotify" placeholder="https://example.com/benachrichtigung">
         </div>
         <div class="field">
@@ -2900,7 +2900,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v3.1.2</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v3.1.3</span>
       <span class="footer-preview-notice">Unofficial preview</span>
     </span>
     <span class="footer-actions">
@@ -3136,6 +3136,8 @@ function updateUseCaseUI() {
   }
   if (submitButton?.parentElement) submitButton.parentElement.style.display = !isRest && isPayment ? 'flex' : 'none';
   if (newTidButton) newTidButton.style.display = isPayment ? 'inline-flex' : 'none';
+  const urlNotifyRequired = document.getElementById('urlnotify-required');
+  if (urlNotifyRequired) urlNotifyRequired.style.display = !isRest && isPayment ? '' : 'none';
 
   const paymentIdField = document.getElementById('status-payment-id-field');
   const transactionIdField = document.getElementById('status-transaction-id-field');
@@ -4425,6 +4427,7 @@ async function buildAndPreview() {
     if (!hmacKey) { showToast(t('val_hmac'), 'error'); return; }
     if (!urlSuccess) { showToast(t('val_url_success'), 'error'); return; }
     if (!urlFailure) { showToast(t('val_url_failure'), 'error'); return; }
+    if (!urlNotify) { showToast(t('val_url_notify'), 'error'); return; }
     if (currentMethod === 'pbl' && (!refNr || isPayByLinkRefUsed(refNr))) {
       refNr = generatePayByLinkRef();
     }
@@ -5405,10 +5408,10 @@ function applyHttpbingoDemo() {
     _applyCallbackReceiver(false);
   }
   const demoUrls = {
-    urlSuccess: 'https://httpbingo.org/get?status=success',
-    urlFailure: 'https://httpbingo.org/get?status=failure',
-    urlNotify: 'https://httpbingo.org/post?status=notify',
-    urlBack: 'https://httpbingo.org/get?status=back'
+    urlSuccess: 'https://httpbingo.org/anything/paygate-success',
+    urlFailure: 'https://httpbingo.org/anything/paygate-failure',
+    urlNotify: 'https://httpbingo.org/anything/paygate-notify',
+    urlBack: 'https://httpbingo.org/anything/paygate-back'
   };
   Object.entries(demoUrls).forEach(([id, value]) => {
     const input = document.getElementById(id);

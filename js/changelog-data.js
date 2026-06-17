@@ -1,13 +1,23 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.1.3', de: { title: 'URLNotify-Validierung', items: [
+    '<strong>URLNotify ist Pflicht</strong> — Classic-Zahlungsrequests markieren URLNotify als Pflichtfeld und stoppen die Vorschau bei fehlendem Wert',
+    '<strong>Server-Notify klarer erklärt</strong> — Die App weist deutlicher darauf hin, dass asynchrone Benachrichtigungen außerhalb der Browser-App empfangen werden',
+    '<strong>Parameterfreie Demo-URLs</strong> — Externe Demo-Callbacks verwenden Pfade statt Querystrings, passend zu den Paygate-URL-Vorgaben',
+    '<strong>Patch-Metadaten</strong> — App-Version und Anwendungscache sind auf diese Patch-Version abgestimmt',
+  ]}, en: { title: 'URLNotify Validation', items: [
+    '<strong>URLNotify is required</strong> — Classic payment requests mark URLNotify as required and stop preview generation when it is missing',
+    '<strong>Clearer server notify guidance</strong> — The app explains more clearly that asynchronous notifications are received outside the browser app',
+    '<strong>Parameter-free demo URLs</strong> — External demo callbacks use paths instead of query strings to match Paygate URL requirements',
+    '<strong>Patch metadata</strong> — App version and application cache are aligned with this patch version',
+  ]}},
   { v: 'v3.1.2', de: { title: 'Hilferessourcen und UI-Korrekturen', items: [
     '<strong>Zusätzliche Hilferessourcen</strong> — Unterstützte Vorschau-Kontexte können nun passende Shop-Plugin-Dokumentation und Download-Links anzeigen',
     '<strong>Plugin-Übersicht im Hilfe-Tab</strong> — Neue Ressourcenkarten bündeln Dokumentation, Downloads und Quellenhinweise übersichtlich an einer Stelle',
     '<strong>Footer-Ausrichtung</strong> — Externe Links bleiben als Gruppe rechtsbündig neben der Aktion zum Löschen lokaler Daten',
     '<strong>Lesbarere Hilfe-Navigation</strong> — Light-Mode-Kontrast und Hover-Verhalten der Hilfe-Chips wurden weiter geglättet',
     '<strong>Stabile Header-Chips</strong> — Feature-Blasen im Header bleiben auch beim Hover im hellen Vorschau-Modus lesbar',
-    '<strong>Klarere Callback-Demo</strong> — Die externe Demo erklärt, dass asynchrone Server-Benachrichtigungen außerhalb der App empfangen werden',
     '<strong>Einheitlicher App-Name</strong> — Sichtbare Titel und Metadaten verwenden durchgehend Paygate Payment Tester',
     '<strong>Release-Metadaten</strong> — App-Version, Changelog und Anwendungscache sind auf diese Version abgestimmt',
   ]}, en: { title: 'Help Resources and Interface Fixes', items: [
@@ -16,7 +26,6 @@ const CHANGELOG = [
     '<strong>Footer alignment</strong> — External links stay grouped and right-aligned next to the action for clearing local data',
     '<strong>More readable Help navigation</strong> — Light-mode contrast and hover behaviour for Help chips have been smoothed out',
     '<strong>Stable header chips</strong> — Header feature chips remain readable on hover in light-mode preview contexts',
-    '<strong>Clearer callback demo</strong> — The external demo explains that asynchronous server notifications are received outside the app',
     '<strong>Consistent app name</strong> — Visible titles and metadata now consistently use Paygate Payment Tester',
     '<strong>Release metadata</strong> — App version, changelog and application cache are aligned with this version',
   ]}},

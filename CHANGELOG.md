@@ -2,13 +2,18 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.1.3 — URLNotify Validation
+- Marked `URLNotify` as required for Classic payment requests and validate it before preview generation
+- Clarified that asynchronous server notifications are received outside the browser app
+- Changed external demo callback URLs to parameter-free paths to match Paygate URL requirements
+- Updated the application cache and visible version metadata for this patch release
+
 ### v3.1.2 — Help Resources and Interface Fixes
 - Added optional shop-plugin documentation and download resources for supported branded preview contexts
 - Refined the Help view with a dedicated plugin resource layout and source guidance
 - Improved footer alignment so external links stay grouped next to the clear-all action
 - Improved light-mode readability and hover behaviour for help navigation chips
 - Kept header feature chips readable on hover in light-mode branded previews
-- Clarified that asynchronous server notifications in the external callback demo are received outside the app
 - Standardised the visible application name to Paygate Payment Tester
 - Kept the application cache and visible version metadata aligned with this release
 

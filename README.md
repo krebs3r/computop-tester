@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.1.2-blueviolet)
+![Version](https://img.shields.io/badge/version-3.1.3-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -152,10 +152,12 @@ set to the tester itself. Returning callback parameters automatically open the
 Response Decryption view.
 
 On HTTP/HTTPS deployments, the internal callback receiver is enabled by default
-for new users. `URLNotify` requires a reachable server-to-server endpoint and
-cannot be observed by this static browser app. The optional httpbingo.org preset
-sets an external notify URL for payload completeness, but the notify is received
-only by httpbingo.org and must be used with synthetic test data.
+for new users. `URLNotify` is required for Classic payment requests, but it needs
+a reachable server-to-server endpoint and cannot be observed by this static
+browser app. The optional httpbingo.org preset sets an external notify URL for
+payload completeness and uses parameter-free URLs as required by the Paygate
+documentation, but the notify is received only by httpbingo.org and must be used
+with synthetic test data.
 
 When installed as a PWA, the external Paygate payment page still opens in the
 browser because it is outside the app's origin and scope. After the redirect,
