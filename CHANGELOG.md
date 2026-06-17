@@ -8,7 +8,7 @@ All notable changes to Paygate Payment Tester are documented here.
 - Improved footer alignment so external links stay grouped next to the clear-all action
 - Improved light-mode readability and hover behaviour for help navigation chips
 - Kept header feature chips readable on hover in light-mode branded previews
-- Clarified that the external callback demo only covers visible redirects and keeps asynchronous server notifications empty
+- Clarified that asynchronous server notifications in the external callback demo are received outside the app
 - Standardised the visible application name to Paygate Payment Tester
 - Kept the application cache and visible version metadata aligned with this release
 

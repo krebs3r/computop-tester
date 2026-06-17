@@ -2542,7 +2542,7 @@
       </div>
 
       <div class="callback-demo-row" id="callback-demo-row">
-        <div class="callback-demo-copy" id="callback-demo-copy"><strong>Externe Demo-Option:</strong> httpbingo.org nur mit synthetischen Testdaten verwenden. Setzt sichtbare Redirect-URLs; URLNotify bleibt leer, weil serverseitige Benachrichtigungen in dieser statischen App nicht empfangen werden.</div>
+        <div class="callback-demo-copy" id="callback-demo-copy"><strong>Externe Demo-Option:</strong> httpbingo.org nur mit synthetischen Testdaten verwenden. URLSuccess, URLFailure und URLBack sind im Browser sichtbar; URLNotify wird nur extern empfangen und ist in dieser App nicht sichtbar.</div>
         <button class="btn btn-ghost" id="btn-httpbingo-demo" type="button" onclick="applyHttpbingoDemo()">httpbingo.org einsetzen</button>
       </div>
 
@@ -5407,7 +5407,7 @@ function applyHttpbingoDemo() {
   const demoUrls = {
     urlSuccess: 'https://httpbingo.org/get?status=success',
     urlFailure: 'https://httpbingo.org/get?status=failure',
-    urlNotify: '',
+    urlNotify: 'https://httpbingo.org/post?status=notify',
     urlBack: 'https://httpbingo.org/get?status=back'
   };
   Object.entries(demoUrls).forEach(([id, value]) => {

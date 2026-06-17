@@ -152,10 +152,10 @@ set to the tester itself. Returning callback parameters automatically open the
 Response Decryption view.
 
 On HTTP/HTTPS deployments, the internal callback receiver is enabled by default
-for new users. `URLNotify` remains empty because it requires a reachable
-server-to-server endpoint and cannot be observed by this static browser app.
-The optional httpbingo.org preset only fills visible redirect URLs and must be
-used with synthetic test data.
+for new users. `URLNotify` requires a reachable server-to-server endpoint and
+cannot be observed by this static browser app. The optional httpbingo.org preset
+sets an external notify URL for payload completeness, but the notify is received
+only by httpbingo.org and must be used with synthetic test data.
 
 When installed as a PWA, the external Paygate payment page still opens in the
 browser because it is outside the app's origin and scope. After the redirect,
