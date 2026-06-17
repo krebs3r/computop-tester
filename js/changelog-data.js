@@ -3,11 +3,13 @@
 const CHANGELOG = [
   { v: 'v3.1.3', de: { title: 'URLNotify-Validierung', items: [
     '<strong>URLNotify ist Pflicht</strong> — Classic-Zahlungsrequests markieren URLNotify als Pflichtfeld und stoppen die Vorschau bei fehlendem Wert',
+    '<strong>Callback-Toggle vervollständigt</strong> — Der interne Callback-Empfänger setzt URLNotify jetzt zusammen mit den Browser-Redirect-URLs',
     '<strong>Server-Notify klarer erklärt</strong> — Die App weist deutlicher darauf hin, dass asynchrone Benachrichtigungen außerhalb der Browser-App empfangen werden',
     '<strong>Parameterfreie Demo-URLs</strong> — Externe Demo-Callbacks verwenden Pfade statt Querystrings, passend zu den Paygate-URL-Vorgaben',
     '<strong>Patch-Metadaten</strong> — App-Version und Anwendungscache sind auf diese Patch-Version abgestimmt',
   ]}, en: { title: 'URLNotify Validation', items: [
     '<strong>URLNotify is required</strong> — Classic payment requests mark URLNotify as required and stop preview generation when it is missing',
+    '<strong>Callback toggle completed</strong> — The internal callback receiver now fills URLNotify together with the browser redirect URLs',
     '<strong>Clearer server notify guidance</strong> — The app explains more clearly that asynchronous notifications are received outside the browser app',
     '<strong>Parameter-free demo URLs</strong> — External demo callbacks use paths instead of query strings to match Paygate URL requirements',
     '<strong>Patch metadata</strong> — App version and application cache are aligned with this patch version',
@@ -454,7 +456,7 @@ const CHANGELOG = [
     '"Clear all data" now also clears the response log',
   ]}},
   { v: 'v2.0.5', de: { title: 'Callback-Empfänger & UX-Verbesserungen', items: [
-    '<strong>Callback-Empfänger</strong> — Toggle in den Redirect-URLs setzt URLSuccess, URLFailure und URLBack auf diese Seite; bei Rückkehr vom Paygate wird die Antwort automatisch entschlüsselt — kein externer Dienst mehr nötig',
+    '<strong>Callback-Empfänger</strong> — Toggle in den Redirect-URLs setzt URLSuccess, URLFailure, URLNotify und URLBack auf diese Seite; bei Rückkehr vom Paygate wird die Antwort automatisch entschlüsselt — kein externer Dienst mehr nötig',
     '<strong>Mehrere Credential-Profile</strong> — benannte, verschlüsselte Profile mit Dropdown-Wähler; Migration vom alten Einzelprofil automatisch',
     '<strong>Alles löschen</strong> — Button im Footer entfernt alle gespeicherten Daten (Profile, Log, Einstellungen) auf einmal',
     '<strong>Profil-Name-Feld</strong> wird nach dem Speichern automatisch geleert',
@@ -463,7 +465,7 @@ const CHANGELOG = [
     'Environment-Selector entfernt — beide Optionen zeigten auf dieselbe URL',
     'Credential-Felder: 2-spaltig (MerchantID + Blowfish) + vollbreite HMAC-Zeile',
   ]}, en: { title: 'Callback Receiver & UX Improvements', items: [
-    '<strong>Callback receiver</strong> — toggle in the Redirect URLs section sets URLSuccess, URLFailure and URLBack to the tool\'s own URL; on return from Paygate the response is auto-decrypted — no external service required',
+    '<strong>Callback receiver</strong> — toggle in the Redirect URLs section sets URLSuccess, URLFailure, URLNotify and URLBack to the tool\'s own URL; on return from Paygate the response is auto-decrypted — no external service required',
     '<strong>Multiple credential profiles</strong> — named, AES-GCM encrypted profiles with a dropdown selector; automatic migration from the old single-credential storage',
     '<strong>Clear all data</strong> — button in the footer removes all stored data (profiles, request log, settings) in one step',
     '<strong>Profile name field</strong> is cleared automatically after saving',

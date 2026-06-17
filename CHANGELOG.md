@@ -4,6 +4,7 @@ All notable changes to Paygate Payment Tester are documented here.
 
 ### v3.1.3 — URLNotify Validation
 - Marked `URLNotify` as required for Classic payment requests and validate it before preview generation
+- Updated the internal callback receiver toggle to fill `URLNotify` together with the browser redirect URLs
 - Clarified that asynchronous server notifications are received outside the browser app
 - Changed external demo callback URLs to parameter-free paths to match Paygate URL requirements
 - Updated the application cache and visible version metadata for this patch release
@@ -250,7 +251,7 @@ All notable changes to Paygate Payment Tester are documented here.
 - Bugfix callback receiver: replaced `:has()` selector with compatible `.closest()`; fixed timing issue on auto-decrypt; wrapped `checkCallbackParams()` in try-catch
 
 ### v2.0.5 — Callback Receiver & UX Improvements
-- **Callback receiver** — toggle in the Redirect URLs section sets URLSuccess, URLFailure and URLBack to the tool's own URL; on return from Paygate the response is auto-decrypted — no external service required
+- **Callback receiver** — toggle in the Redirect URLs section sets URLSuccess, URLFailure, URLNotify and URLBack to the tool's own URL; on return from Paygate the response is auto-decrypted — no external service required
 - **Multiple credential profiles** — named, AES-GCM encrypted profiles with a dropdown selector; automatic migration from the old single-credential storage
 - **Clear all data** — button in the footer removes all stored data (profiles, request log, settings) in one step
 - **Profile name field** is cleared automatically after saving

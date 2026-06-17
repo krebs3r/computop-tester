@@ -2538,7 +2538,7 @@
           </span>
           <span id="cb-receiver-text">Dieses Tool als Callback-Empfänger aktivieren</span>
         </label>
-        <span class="cb-receiver-hint" id="cb-receiver-hint">(setzt URLSuccess, URLFailure &amp; URLBack auf diese Seite — kein externer Dienst nötig)</span>
+        <span class="cb-receiver-hint" id="cb-receiver-hint">(setzt URLSuccess, URLFailure, URLNotify &amp; URLBack auf diese Seite — kein externer Dienst nötig)</span>
       </div>
 
       <div class="callback-demo-row" id="callback-demo-row">
@@ -5362,7 +5362,7 @@ function _callbackBaseUrl() {
 
 function _applyCallbackReceiver(enabled) {
   const base = _callbackBaseUrl();
-  const ids = ['urlSuccess', 'urlFailure', 'urlBack'];
+  const ids = ['urlSuccess', 'urlFailure', 'urlNotify', 'urlBack'];
   ids.forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
