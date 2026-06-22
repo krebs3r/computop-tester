@@ -1,6 +1,21 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.3.1', de: { title: 'Feinschliff an der Workflow-Navigation', items: [
+    '<strong>Identische mobile Breite</strong> — Hauptnavigation und Workflow-Inhaltsverzeichnis verwenden auf kleinen Displays dieselben Außenkanten und berücksichtigen Safe Areas',
+    '<strong>Konstanter Sticky-Abstand</strong> — Die tatsächliche Höhe der Hauptnavigation wird gemessen und das Inhaltsverzeichnis bleibt stets 14 Pixel darunter',
+    '<strong>Neuer Einstiegspunkt Übersicht</strong> — Ein eigener Punkt oberhalb von Schritt 1 führt direkt zum App-Header und zur Einleitung',
+    '<strong>Passende aktive Markierung</strong> — Im Header- und Einleitungsbereich bleibt Übersicht als aktueller Abschnitt hervorgehoben',
+    '<strong>Korrigierter Schritt-1-Sprung</strong> — Der obere Navbar-Eintrag kehrt nun zuverlässig zum tatsächlichen Anfang des Payment Workflows zurück',
+    '<strong>Patch-Metadaten</strong> — Sichtbare Version, Changelog und Offline-Cache sind auf Version 3.3.1 abgestimmt',
+  ]}, en: { title: 'Workflow Navigation Refinements', items: [
+    '<strong>Matching mobile width</strong> — Main navigation and workflow contents use identical outer edges on small screens while respecting safe areas',
+    '<strong>Constant sticky spacing</strong> — The rendered main-navigation height is measured so the workflow navigator always remains 14 pixels below it',
+    '<strong>New Overview entry</strong> — A dedicated item above Step 1 returns directly to the app header and introduction',
+    '<strong>Matching active state</strong> — Overview remains highlighted throughout the header and introductory content',
+    '<strong>Corrected Step 1 jump</strong> — The top navigation entry now reliably returns to the actual beginning of the Payment Workflow',
+    '<strong>Patch metadata</strong> — Visible version, changelog and offline cache are aligned with version 3.3.1',
+  ]}},
   { v: 'v3.3.0', de: { title: 'Workflow-Navigation und Request-Werkzeuge', items: [
     '<strong>Kontextuelle Workflow-Navigation</strong> — Eine feste Navigation beginnt auf Desktop direkt neben dem App-Header und gliedert den vollständigen Payment Workflow',
     '<strong>Kompakte Mobile-Navigation</strong> — Auf kleinen Displays wird dieselbe Struktur als platzsparende Sticky-Leiste ohne horizontalen Überlauf angeboten',

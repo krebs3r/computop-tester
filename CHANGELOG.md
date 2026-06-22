@@ -2,6 +2,14 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.3.1 — Workflow Navigation Refinements
+- Matched the mobile workflow navigator width and outer edges to the fixed main navigation across supported viewport and safe-area sizes
+- Added a constant 14-pixel gap between the main navigation and the sticky workflow navigator, calculated from the rendered navigation height
+- Added an Overview entry above Step 1 for returning directly to the application header and introductory content
+- Updated active-section tracking so Overview remains selected throughout the page introduction
+- Corrected the main Step 1 navigation action so it consistently returns to the actual beginning of the Payment Workflow
+- Updated the offline cache and all visible version metadata for this patch release
+
 ### v3.3.0 — Workflow Navigation and Request Tooling
 - Added a contextual Payment Workflow navigation beside the application header on desktop
 - Added a compact sticky workflow navigator for mobile layouts without horizontal overflow
