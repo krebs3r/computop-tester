@@ -2,6 +2,25 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.2.0 — Customer Data and Portable Logs
+- Added optional, fully editable customer master data for payment requests, including name, birth date, customer number, email and phone details
+- Added billing and shipping address fields with a switch for reusing the billing address
+- Added a synthetic test-customer generator and a dedicated action for clearing customer data
+- Added Classic customer-data mapping through Base64-encoded JSON parameters and REST V1 mapping through structured customer, billing and shipping objects
+- Kept REST V2 customer data disabled with clear guidance until its request mapping is verified
+- Added bilingual field-level help and validation for customer names, contact details, addresses and country formats
+- Added JSON export and import for both Request and Response Logs
+- Added privacy guidance before export and app-native dialogs for merge, replace and export decisions
+- Added import-format and log-type validation, entry sanitisation and content-based duplicate detection
+- Added local date and time to export filenames to avoid accidental overwrites
+- Added compact explanations below the log transfer actions and extended result notifications to five seconds
+- Restored usable callback URLs in direct `file://` mode through explicit external demo paths while preserving manually entered values
+- Improved the unavailable callback-receiver state so its disabled status and switch position are unambiguous
+- Increased the callback URL input height for easier inspection of long encrypted response URLs
+- Stabilised customer checkboxes and improved number-input and date-picker controls in dark mode
+- Improved link contrast, visited, hover and keyboard-focus states across Help resources and shop-plugin guidance
+- Refined light- and dark-mode typography and interaction states for inline source links and plugin actions
+
 ### v3.1.3 — URLNotify Validation
 - Marked `URLNotify` as required for Classic payment requests and validate it before preview generation
 - Updated the internal callback receiver toggle to fill `URLNotify` together with the browser redirect URLs

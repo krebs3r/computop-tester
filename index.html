@@ -46,7 +46,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.1.3",
+      "softwareVersion": "3.2.0",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -758,13 +758,103 @@
     }
     input::placeholder { color: var(--muted); opacity: 0.6; }
     input[type="password"] { letter-spacing: 0.1em; }
+    input[type="number"] { -moz-appearance: textfield; }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      opacity: .75;
+      filter: invert(1) brightness(1.8);
+    }
+    html.light input[type="date"]::-webkit-calendar-picker-indicator,
+    html.light input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+      opacity: .6;
+      filter: none;
+    }
     select { cursor: pointer; appearance: none; padding-right: 36px;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235c6e88' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
       background-repeat: no-repeat; background-position: right 12px center;
     }
     select option { background: #141922; }
     textarea { resize: vertical; min-height: 60px; font-size: 12px; line-height: 1.5; }
-    #resp-url { min-height: 120px; }
+    #resp-url { min-height: 180px; }
+
+    .customer-master-section {
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(59, 130, 246, 0.05);
+    }
+    .customer-master-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .customer-master-toggle {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      cursor: pointer;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    .customer-master-toggle input,
+    .customer-inline-check input {
+      flex: 0 0 auto;
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      margin: 2px 0 0;
+      padding: 0;
+      border-radius: 4px;
+      font: initial;
+    }
+    .customer-master-copy {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+      line-height: 1.45;
+    }
+    .customer-master-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .customer-master-body {
+      margin-top: 16px;
+      display: grid;
+      gap: 14px;
+    }
+    .customer-subtitle {
+      margin: 4px 0 -4px;
+      color: var(--muted2);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .customer-inline-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
     .input-group { position: relative; }
     .input-group input { padding-right: 40px; }
@@ -1150,6 +1240,33 @@
     .sep-label::before, .sep-label::after { content:''; flex:1; height:1px; background: var(--border); }
 
     /* ── REQUEST LOG ── */
+    .log-toolbar {
+      display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+      flex-wrap:wrap; margin-bottom:14px;
+    }
+    .log-action-panel { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+    .log-transfer-hint {
+      display:flex; align-items:flex-start; gap:7px; max-width:520px;
+      padding:7px 10px; border:1px solid color-mix(in srgb, var(--accent2) 24%, var(--border));
+      border-radius:10px; background:color-mix(in srgb, var(--accent2) 7%, var(--surface));
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+      text-align:left; font-size:11px; line-height:1.45; color:var(--muted2);
+    }
+    .log-transfer-hint::before {
+      content:'i'; display:inline-flex; align-items:center; justify-content:center;
+      width:15px; height:15px; margin-top:1px; flex:0 0 15px;
+      border:1px solid color-mix(in srgb, var(--accent2) 45%, transparent);
+      border-radius:50%; color:var(--accent2); font-family:var(--mono);
+      font-size:9px; font-weight:700; line-height:1;
+    }
+    .log-actions { display:flex; align-items:center; justify-content:flex-end; gap:8px; flex-wrap:wrap; }
+    .log-actions .btn { padding:6px 12px; font-size:12px; }
+    @media (max-width: 640px) {
+      .log-toolbar, .log-action-panel { align-items:stretch; }
+      .log-action-panel { width:100%; }
+      .log-actions { justify-content:flex-start; }
+      .log-transfer-hint { max-width:none; }
+    }
     .log-entry {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 8px; padding: 12px 14px; margin-bottom: 8px;
@@ -1246,16 +1363,26 @@
     .cb-receiver-label { display:inline-flex; align-items:center; gap:9px; cursor:pointer; font-size:13px; font-weight:500; user-select:none; }
     .cb-receiver-switch { position:relative; display:inline-block; width:36px; height:20px; flex-shrink:0; }
     .cb-receiver-switch input { opacity:0; width:0; height:0; position:absolute; }
-    .cb-receiver-knob { position:absolute; cursor:pointer; inset:0; background:var(--border2); border-radius:20px; transition:background 0.2s; }
-    .cb-receiver-knob::before { content:''; position:absolute; width:14px; height:14px; left:3px; top:3px; border-radius:50%; background:#fff; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.3); }
+    .cb-receiver-knob { position:absolute; cursor:pointer; inset:0; box-sizing:border-box; background:var(--border2); border-radius:20px; transition:background 0.2s; }
+    .cb-receiver-knob::before { content:''; position:absolute; width:14px; height:14px; left:3px; top:50%; transform:translateY(-50%); border-radius:50%; background:#fff; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.3); }
     .cb-receiver-switch input:checked + .cb-receiver-knob { background:var(--accent2); }
-    .cb-receiver-switch input:checked + .cb-receiver-knob::before { transform:translateX(16px); }
+    .cb-receiver-switch input:checked + .cb-receiver-knob::before { transform:translate(16px, -50%); }
     .cb-receiver-row .cb-receiver-hint { font-size:11px; color:var(--muted); }
     .cb-receiver-row.is-unavailable {
       border-color: rgba(245,158,11,.26); background: rgba(245,158,11,.07);
     }
     .cb-receiver-row.is-unavailable .cb-receiver-hint { color: var(--warning); }
     .cb-receiver-row.is-unavailable .cb-receiver-label { cursor: not-allowed; }
+    .cb-receiver-row.is-unavailable .cb-receiver-knob {
+      cursor: not-allowed;
+      background: rgba(148, 163, 184, .35);
+      border: 1px solid rgba(148, 163, 184, .35);
+    }
+    .cb-receiver-row.is-unavailable .cb-receiver-knob::before {
+      background: rgba(255, 255, 255, .78);
+      box-shadow: none;
+      transform: translateY(-50%);
+    }
     .callback-demo-row {
       display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
       margin-top:10px; padding:10px 14px; border-radius:8px;
@@ -1352,6 +1479,12 @@
       background: rgba(255,255,255,.035); transition: color .18s, border-color .18s, background .18s;
     }
     .help-jump a:hover { color: var(--accent2); border-color: var(--border2); background: rgba(61,126,255,.08); }
+    .help-jump a:focus-visible,
+    a.help-resource:focus-visible,
+    .plugin-action:focus-visible {
+      outline: 2px solid var(--accent2);
+      outline-offset: 3px;
+    }
     .nexi-plugin-jump,
     .nexi-plugin-section { display: none !important; }
     html[data-design="nexi"] .nexi-plugin-jump { display: inline-flex !important; }
@@ -1390,6 +1523,15 @@
       color: var(--muted2); background: rgba(61,126,255,.055); border: 1px solid rgba(61,126,255,.17);
     }
     .help-callout strong, .help-warning strong, .help-placeholder strong { color: var(--accent2); }
+    .help-callout a,
+    .help-callout a:visited {
+      color: var(--accent2); font-size: inherit; font-weight: 400; text-decoration: none;
+      transition: color .18s;
+    }
+    .help-callout a:hover { color: var(--text); }
+    .help-callout a:focus-visible {
+      outline: 2px solid var(--accent2); outline-offset: 3px; border-radius: 2px;
+    }
     .help-warning { background: rgba(239,68,68,.055); border-color: rgba(239,68,68,.2); }
     .help-warning strong { color: #f87171; }
     .help-placeholder { border-style: dashed; background: rgba(245,158,11,.045); border-color: rgba(245,158,11,.24); }
@@ -1443,7 +1585,7 @@
     .plugin-actions { display: flex; flex-wrap: wrap; gap: 8px; align-self: end; }
     .plugin-action {
       display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border: 1px solid var(--border);
-      border-radius: 999px; color: var(--text); text-decoration: none; font-size: 11px; font-weight: 700;
+      border-radius: 999px; color: var(--text); text-decoration: none; font-size: 11px; font-weight: 700; line-height: 1.2;
       background: rgba(255,255,255,.04); transition: transform .18s, border-color .18s, background .18s, color .18s;
     }
     .plugin-action:hover { transform: translateY(-1px); color: var(--accent2); border-color: var(--border2); background: rgba(61,126,255,.09); }
@@ -1452,6 +1594,7 @@
     .plugin-action.download:hover { color: #8ff5ec; border-color: rgba(43,212,217,.42); background: rgba(0,180,157,.16); }
     html.light .plugin-card { background: rgba(255,255,255,.70); }
     html.light .plugin-action.download { color: #047a61; border-color: rgba(4,168,128,.24); background: rgba(4,168,128,.08); }
+    html.light .plugin-action.download:hover { color: #035c4a; border-color: rgba(4,122,97,.38); background: rgba(4,168,128,.14); }
     @media (max-width: 760px) {
       .help-comparison, .help-version-grid, .help-privacy-grid, .help-resource-grid, .help-resource-grid.compact, .plugin-resource-grid { grid-template-columns: 1fr; }
       .help-steps li { grid-template-columns: 32px 1fr; }
@@ -1874,6 +2017,25 @@
       color: #fff;
       background: rgba(255,255,255,.16);
       border-color: rgba(255,255,255,.46);
+    }
+    html[data-design="nexi"]:not(.light) .nexi-plugin-section .help-callout a,
+    html[data-design="nexi"]:not(.light) .nexi-plugin-section .help-callout a:visited {
+      color: #7cebf0;
+    }
+    html[data-design="nexi"]:not(.light) .nexi-plugin-section .help-callout a:hover {
+      color: #ffffff;
+    }
+    html.light[data-design="nexi"] .nexi-plugin-section .help-callout a,
+    html.light[data-design="nexi"] .nexi-plugin-section .help-callout a:visited {
+      color: #2d32aa;
+    }
+    html.light[data-design="nexi"] .nexi-plugin-section .help-callout a:hover {
+      color: #207db5;
+    }
+    html[data-design="nexi"]:not(.light) .nexi-plugin-section .help-callout a:focus-visible {
+      outline: 2px solid #7cebf0;
+      outline-offset: 3px;
+      border-radius: 2px;
     }
     html.light[data-design="nexi"] .header-feature:hover {
       color: #2d32aa;
@@ -2509,6 +2671,145 @@
         <input type="text" id="orderDescCustom" placeholder="Eigene Beschreibung" maxlength="127" style="margin-top:8px;display:none">
       </div>
 
+      <div class="customer-master-section" id="customer-master-section">
+        <div class="customer-master-head">
+          <label class="customer-master-toggle">
+            <input type="checkbox" id="customer-enabled" onchange="toggleCustomerMasterData()">
+            <span>
+              <span id="customer-master-title">Kundendaten mitsenden</span><button class="param-tip" id="tip-customer-master" tabindex="-1" type="button">?</button>
+              <span class="customer-master-copy" id="customer-master-copy">Optional für 3-D Secure, Risiko- und Stammdaten-Tests. Der Generator füllt nur synthetische Testdaten ein.</span>
+            </span>
+          </label>
+          <div class="customer-master-actions">
+            <button class="btn btn-ghost" type="button" onclick="generateTestCustomer()"><span id="btn-generate-customer">Testkunden generieren</span></button>
+            <button class="btn btn-ghost" type="button" onclick="clearCustomerMasterData()"><span id="btn-clear-customer">Kundendaten leeren</span></button>
+          </div>
+        </div>
+        <div class="customer-master-body hidden" id="customer-master-body">
+          <div class="customer-subtitle" id="customer-person-title">Kunde</div>
+          <div class="field-grid three">
+            <div class="field">
+              <label><span id="l-cust-salutation">Anrede</span><button class="param-tip" id="tip-cust-salutation" tabindex="-1">?</button></label>
+              <select id="cust-salutation">
+                <option value="">—</option>
+                <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Miss">Miss</option>
+              </select>
+            </div>
+            <div class="field">
+              <label><span id="l-cust-first-name">Vorname</span> <span class="required">*</span><button class="param-tip" id="tip-cust-name" tabindex="-1">?</button></label>
+              <input type="text" id="cust-first-name" maxlength="50" placeholder="Max">
+            </div>
+            <div class="field">
+              <label><span id="l-cust-last-name">Nachname</span> <span class="required">*</span><button class="param-tip" id="tip-cust-last-name" tabindex="-1">?</button></label>
+              <input type="text" id="cust-last-name" maxlength="50" placeholder="Mustermann">
+            </div>
+          </div>
+          <div class="field-grid three">
+            <div class="field">
+              <label><span id="l-cust-birth-date">Geburtsdatum</span> <span class="hint">(YYYY-MM-DD)</span><button class="param-tip" id="tip-cust-birth-date" tabindex="-1">?</button></label>
+              <input type="date" id="cust-birth-date">
+            </div>
+            <div class="field">
+              <label><span id="l-cust-number">Kundennummer</span><button class="param-tip" id="tip-cust-number" tabindex="-1">?</button></label>
+              <input type="text" id="cust-number" maxlength="30" placeholder="CUST-10001">
+            </div>
+            <div class="field">
+              <label><span id="l-cust-email">E-Mail</span><button class="param-tip" id="tip-cust-email" tabindex="-1">?</button></label>
+              <input type="email" id="cust-email" maxlength="256" placeholder="max.mustermann@example.test">
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label><span id="l-cust-phone-country">Telefon-Ländercode</span><button class="param-tip" id="tip-cust-phone" tabindex="-1">?</button></label>
+              <input type="text" id="cust-phone-country" maxlength="3" placeholder="49">
+            </div>
+            <div class="field">
+              <label><span id="l-cust-phone-number">Telefonnummer</span><button class="param-tip" id="tip-cust-phone-number" tabindex="-1">?</button></label>
+              <input type="text" id="cust-phone-number" maxlength="15" placeholder="3012345678">
+            </div>
+          </div>
+
+          <div class="customer-subtitle" id="customer-billing-title">Rechnungsadresse</div>
+          <div class="field-grid">
+            <div class="field">
+              <label><span id="l-bill-street">Straße</span><button class="param-tip" id="tip-bill-street" tabindex="-1">?</button></label>
+              <input type="text" id="bill-street" maxlength="50" placeholder="Musterstraße">
+            </div>
+            <div class="field">
+              <label><span id="l-bill-street-number">Hausnummer</span><button class="param-tip" id="tip-bill-street-number" tabindex="-1">?</button></label>
+              <input type="text" id="bill-street-number" maxlength="10" placeholder="12">
+            </div>
+          </div>
+          <div class="field-grid three">
+            <div class="field">
+              <label><span id="l-bill-postal-code">PLZ</span><button class="param-tip" id="tip-bill-postal-code" tabindex="-1">?</button></label>
+              <input type="text" id="bill-postal-code" maxlength="16" placeholder="10115">
+            </div>
+            <div class="field">
+              <label><span id="l-bill-city">Stadt</span><button class="param-tip" id="tip-bill-city" tabindex="-1">?</button></label>
+              <input type="text" id="bill-city" maxlength="50" placeholder="Berlin">
+            </div>
+            <div class="field">
+              <label><span id="l-bill-country">Land</span><button class="param-tip" id="tip-bill-country" tabindex="-1">?</button></label>
+              <select id="bill-country">
+                <option value="DE|DEU" selected>Deutschland (DE)</option>
+                <option value="AT|AUT">Österreich (AT)</option>
+                <option value="CH|CHE">Schweiz (CH)</option>
+                <option value="FR|FRA">Frankreich (FR)</option>
+                <option value="NL|NLD">Niederlande (NL)</option>
+                <option value="GB|GBR">Vereinigtes Königreich (GB)</option>
+                <option value="US|USA">USA (US)</option>
+              </select>
+            </div>
+          </div>
+
+          <label class="customer-inline-check">
+            <input type="checkbox" id="shipping-same" checked onchange="toggleShippingAddress()">
+            <span id="l-shipping-same">Lieferadresse entspricht Rechnungsadresse</span>
+          </label>
+          <div class="collapsible hidden" id="shipping-address-fields">
+            <div class="customer-subtitle" id="customer-shipping-title">Lieferadresse</div>
+            <div class="field-grid">
+              <div class="field">
+                <label><span id="l-ship-street">Straße</span><button class="param-tip" id="tip-ship-street" tabindex="-1">?</button></label>
+                <input type="text" id="ship-street" maxlength="50" placeholder="Musterstraße">
+              </div>
+              <div class="field">
+                <label><span id="l-ship-street-number">Hausnummer</span><button class="param-tip" id="tip-ship-street-number" tabindex="-1">?</button></label>
+                <input type="text" id="ship-street-number" maxlength="10" placeholder="12">
+              </div>
+            </div>
+            <div class="field-grid three">
+              <div class="field">
+                <label><span id="l-ship-postal-code">PLZ</span><button class="param-tip" id="tip-ship-postal-code" tabindex="-1">?</button></label>
+                <input type="text" id="ship-postal-code" maxlength="16" placeholder="10115">
+              </div>
+              <div class="field">
+                <label><span id="l-ship-city">Stadt</span><button class="param-tip" id="tip-ship-city" tabindex="-1">?</button></label>
+                <input type="text" id="ship-city" maxlength="50" placeholder="Berlin">
+              </div>
+              <div class="field">
+                <label><span id="l-ship-country">Land</span><button class="param-tip" id="tip-ship-country" tabindex="-1">?</button></label>
+                <select id="ship-country">
+                  <option value="DE|DEU" selected>Deutschland (DE)</option>
+                  <option value="AT|AUT">Österreich (AT)</option>
+                  <option value="CH|CHE">Schweiz (CH)</option>
+                  <option value="FR|FRA">Frankreich (FR)</option>
+                  <option value="NL|NLD">Niederlande (NL)</option>
+                  <option value="GB|GBR">Vereinigtes Königreich (GB)</option>
+                  <option value="US|USA">USA (US)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="info-box rest-warning" id="customer-v2-warning" style="display:none">
+            Kundendaten werden aktuell nur für Classic und REST V1 erzeugt. REST V2 bleibt unverändert, bis das Mapping verifiziert ist.
+          </div>
+        </div>
+      </div>
+
       <div class="sep-label" id="sep-redirect">Redirect-URLs</div>
 
       <div class="url-fields">
@@ -2726,9 +3027,17 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="log-toolbar">
         <span id="log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 250 generierten Requests (lokal gespeichert)</span>
-        <button class="btn btn-danger-ghost" style="padding:6px 12px;font-size:12px" onclick="clearLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-log-clear-text">Log leeren</span></button>
+        <div class="log-action-panel">
+          <div class="log-actions">
+            <button class="btn btn-ghost" onclick="exportLog('request')"><span id="btn-log-export-text">Exportieren</span></button>
+            <button class="btn btn-ghost" onclick="openLogImport('request')"><span id="btn-log-import-text">Importieren</span></button>
+            <button class="btn btn-danger-ghost" onclick="clearLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-log-clear-text">Log leeren</span></button>
+            <input type="file" id="request-log-import-file" accept="application/json,.json" hidden onchange="handleLogImportFile('request', this)">
+          </div>
+          <span class="log-transfer-hint" id="log-transfer-hint">Export speichert das Log als JSON-Datei. Import führt eine zuvor exportierte Datei mit dem Log zusammen oder ersetzt es.</span>
+        </div>
       </div>
       <div id="log-list"></div>
     </div>
@@ -2797,9 +3106,17 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="log-toolbar">
         <span id="resp-log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 250 entschlüsselten Responses (lokal gespeichert)</span>
-        <button class="btn btn-danger-ghost" style="padding:6px 12px;font-size:12px" onclick="clearResponseLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-resp-log-clear-text">Log leeren</span></button>
+        <div class="log-action-panel">
+          <div class="log-actions">
+            <button class="btn btn-ghost" onclick="exportLog('response')"><span id="btn-resp-log-export-text">Exportieren</span></button>
+            <button class="btn btn-ghost" onclick="openLogImport('response')"><span id="btn-resp-log-import-text">Importieren</span></button>
+            <button class="btn btn-danger-ghost" onclick="clearResponseLog()"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-resp-log-clear-text">Log leeren</span></button>
+            <input type="file" id="response-log-import-file" accept="application/json,.json" hidden onchange="handleLogImportFile('response', this)">
+          </div>
+          <span class="log-transfer-hint" id="resp-log-transfer-hint">Export speichert das Log als JSON-Datei. Import führt eine zuvor exportierte Datei mit dem Log zusammen oder ersetzt es.</span>
+        </div>
       </div>
       <div id="resp-log-list"></div>
     </div>
@@ -2900,7 +3217,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v3.1.3</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v3.2.0</span>
       <span class="footer-preview-notice">Unofficial preview</span>
     </span>
     <span class="footer-actions">
@@ -2950,6 +3267,21 @@
     <div class="app-modal-actions">
       <button class="btn btn-secondary" id="profile-delete-cancel" type="button">Abbrechen</button>
       <button class="btn btn-danger" id="profile-delete-confirm" type="button">Profil löschen</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="log-action-modal" role="dialog" aria-modal="true" aria-labelledby="log-action-modal-title" aria-describedby="log-action-modal-text">
+  <div class="app-modal-panel" role="document">
+    <div class="app-modal-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+    </div>
+    <h2 class="app-modal-title" id="log-action-modal-title">Log exportieren?</h2>
+    <p class="app-modal-text" id="log-action-modal-text">Log-Exporte können sensible Daten enthalten.</p>
+    <div class="app-modal-actions">
+      <button class="btn btn-secondary" id="log-action-cancel" type="button">Abbrechen</button>
+      <button class="btn btn-secondary" id="log-action-secondary" type="button" style="display:none">Zusammenführen</button>
+      <button class="btn btn-primary" id="log-action-confirm" type="button">Exportieren</button>
     </div>
   </div>
 </div>
@@ -3230,6 +3562,7 @@ function updateRestControls() {
   }
   const warning = document.getElementById('rest-v2-warning');
   if (warning) warning.style.display = isPayment && version === 'v2' ? 'block' : 'none';
+  updateCustomerCompatibilityUI();
   const pblFields = document.getElementById('pbl-fields');
   if (pblFields) pblFields.classList.toggle('hidden', method !== 'payByLink');
   const paytypesRow = document.getElementById('paytypes-row');
@@ -3422,6 +3755,45 @@ function applyLang() {
   setText('tc-3ds-h-brand', 'tc_3ds_h_brand'); setText('tc-3ds-h-number', 'tc_3ds_h_number'); setText('tc-3ds-h-scenario', 'tc_3ds_h_scenario');
   renderTestCards();
   renderTestCards3DS();
+  setText('customer-master-title', 'customer_master_title');
+  setText('customer-master-copy', 'customer_master_copy');
+  setText('customer-person-title', 'customer_person_title');
+  setText('customer-billing-title', 'customer_billing_title');
+  setText('customer-shipping-title', 'customer_shipping_title');
+  setText('btn-generate-customer', 'btn_generate_customer');
+  setText('btn-clear-customer', 'btn_clear_customer');
+  setText('l-cust-salutation', 'l_cust_salutation');
+  setText('l-cust-first-name', 'l_cust_first_name');
+  setText('l-cust-last-name', 'l_cust_last_name');
+  setText('l-cust-birth-date', 'l_cust_birth_date');
+  setText('l-cust-number', 'l_cust_number');
+  setText('l-cust-email', 'l_cust_email');
+  setText('l-cust-phone-country', 'l_cust_phone_country');
+  setText('l-cust-phone-number', 'l_cust_phone_number');
+  setText('l-bill-street', 'l_bill_street'); setText('l-ship-street', 'l_bill_street');
+  setText('l-bill-street-number', 'l_bill_street_number'); setText('l-ship-street-number', 'l_bill_street_number');
+  setText('l-bill-postal-code', 'l_bill_postal_code'); setText('l-ship-postal-code', 'l_bill_postal_code');
+  setText('l-bill-city', 'l_bill_city'); setText('l-ship-city', 'l_bill_city');
+  setText('l-bill-country', 'l_bill_country'); setText('l-ship-country', 'l_bill_country');
+  setText('l-shipping-same', 'l_shipping_same');
+  setText('customer-v2-warning', 'customer_v2_warning');
+  setTip('tip-customer-master', 'tip_customer_master');
+  setTip('tip-cust-salutation', 'tip_cust_salutation');
+  setTip('tip-cust-name', 'tip_cust_name');
+  setTip('tip-cust-last-name', 'tip_cust_name');
+  setTip('tip-cust-birth-date', 'tip_cust_birth_date');
+  setTip('tip-cust-number', 'tip_cust_number');
+  setTip('tip-cust-email', 'tip_cust_email');
+  setTip('tip-cust-phone', 'tip_cust_phone');
+  setTip('tip-cust-phone-number', 'tip_cust_phone');
+  ['bill', 'ship'].forEach(prefix => {
+    setTip(`tip-${prefix}-street`, 'tip_customer_address');
+    setTip(`tip-${prefix}-street-number`, 'tip_customer_address');
+    setTip(`tip-${prefix}-postal-code`, 'tip_customer_address');
+    setTip(`tip-${prefix}-city`, 'tip_customer_address');
+    setTip(`tip-${prefix}-country`, 'tip_customer_country');
+  });
+  populateCustomerCountryOptions();
   setText('sep-redirect', 'sep_redirect');
   setText('l-urls', 'l_urls'); setText('h-urls', 'h_urls');
   setText('l-urlf', 'l_urlf'); setText('h-urlf', 'h_urlf');
@@ -3471,6 +3843,9 @@ function applyLang() {
   setText('ct-log', 'ct_log');
   setText('log-subtitle', 'log_subtitle');
   setText('btn-log-clear-text', 'btn_log_clear');
+  setText('btn-log-export-text', 'btn_log_export');
+  setText('btn-log-import-text', 'btn_log_import');
+  setText('log-transfer-hint', 'log_transfer_hint');
 
   setText('ct-response', 'ct_response');
   setText('resp-info-title', 'resp_info_title');
@@ -3486,6 +3861,9 @@ function applyLang() {
   setText('ct-resp-log', 'ct_resp_log');
   setText('resp-log-subtitle', 'resp_log_subtitle');
   setText('btn-resp-log-clear-text', 'btn_resp_log_clear');
+  setText('btn-resp-log-export-text', 'btn_log_export');
+  setText('btn-resp-log-import-text', 'btn_log_import');
+  setText('resp-log-transfer-hint', 'log_transfer_hint');
 
   setText('footer-name-text', 'footer_name');
   setText('btn-clear-all-text', 'btn_clear_all');
@@ -3496,6 +3874,7 @@ function applyLang() {
   setText('profile-delete-modal-title', 'profile_delete_modal_title');
   setText('profile-delete-cancel', 'profile_delete_modal_cancel');
   setText('profile-delete-confirm', 'profile_delete_modal_confirm');
+  setText('log-action-cancel', 'clear_all_modal_cancel');
   updateProfileDeleteModalText();
 
   // Lang toggle indicator
@@ -3834,7 +4213,7 @@ function showToast(msg, type = 'info') {
   toast.appendChild(iconEl);
   toast.appendChild(document.createTextNode(' ' + String(msg ?? '')));
   toast.className = 'show ' + type;
-  setTimeout(() => toast.className = '', 3200);
+  setTimeout(() => toast.className = '', 5000);
 }
 
 function copyText(id) {
@@ -4004,6 +4383,273 @@ function buildClassicStatusRequest(merchantId, blowfishKey, lookup, paymentId, t
 // ══════════════════════════════════════════════════════════════
 // BUILD PARAMETER STRING + PREVIEW
 // ══════════════════════════════════════════════════════════════
+const CUSTOMER_COUNTRIES = [
+  { a2: 'DE', a3: 'DEU', de: 'Deutschland (DE)', en: 'Germany (DE)' },
+  { a2: 'AT', a3: 'AUT', de: 'Österreich (AT)', en: 'Austria (AT)' },
+  { a2: 'CH', a3: 'CHE', de: 'Schweiz (CH)', en: 'Switzerland (CH)' },
+  { a2: 'FR', a3: 'FRA', de: 'Frankreich (FR)', en: 'France (FR)' },
+  { a2: 'NL', a3: 'NLD', de: 'Niederlande (NL)', en: 'Netherlands (NL)' },
+  { a2: 'GB', a3: 'GBR', de: 'Vereinigtes Königreich (GB)', en: 'United Kingdom (GB)' },
+  { a2: 'US', a3: 'USA', de: 'USA (US)', en: 'USA (US)' }
+];
+
+const TEST_CUSTOMERS = [
+  { salutation: 'Mr', firstName: 'Max', lastName: 'Mustermann', birthDate: '1985-04-12', street: 'Musterstrasse', streetNumber: '12', postalCode: '10115', city: 'Berlin', country: 'DE|DEU', phoneCountry: '49', phone: '3012345678' },
+  { salutation: 'Mrs', firstName: 'Erika', lastName: 'Musterfrau', birthDate: '1990-09-23', street: 'Hauptstrasse', streetNumber: '48', postalCode: '80331', city: 'Muenchen', country: 'DE|DEU', phoneCountry: '49', phone: '8912345678' },
+  { salutation: 'Miss', firstName: 'Anna', lastName: 'Schmidt', birthDate: '1994-01-18', street: 'Ringstrasse', streetNumber: '7', postalCode: '1010', city: 'Wien', country: 'AT|AUT', phoneCountry: '43', phone: '112345678' },
+  { salutation: 'Mr', firstName: 'John', lastName: 'Doe', birthDate: '1988-06-05', street: 'Park Avenue', streetNumber: '270', postalCode: '10017', city: 'New York', country: 'US|USA', phoneCountry: '1', phone: '2125550199' }
+];
+
+function populateCustomerCountryOptions() {
+  ['bill-country', 'ship-country'].forEach(id => {
+    const select = document.getElementById(id);
+    if (!select) return;
+    const current = select.value || 'DE|DEU';
+    select.innerHTML = CUSTOMER_COUNTRIES
+      .map(country => `<option value="${country.a2}|${country.a3}">${country[currentLang] || country.de}</option>`)
+      .join('');
+    select.value = CUSTOMER_COUNTRIES.some(country => `${country.a2}|${country.a3}` === current) ? current : 'DE|DEU';
+  });
+}
+
+function toggleCustomerMasterData() {
+  const enabled = document.getElementById('customer-enabled')?.checked;
+  document.getElementById('customer-master-body')?.classList.toggle('hidden', !enabled);
+  updateCustomerCompatibilityUI();
+}
+
+function toggleShippingAddress() {
+  const same = document.getElementById('shipping-same')?.checked !== false;
+  document.getElementById('shipping-address-fields')?.classList.toggle('hidden', same);
+}
+
+function updateCustomerCompatibilityUI() {
+  const warning = document.getElementById('customer-v2-warning');
+  if (!warning) return;
+  const enabled = document.getElementById('customer-enabled')?.checked;
+  const isRestV2 = currentIntegration === 'rest' && document.getElementById('rest-version')?.value === 'v2';
+  warning.style.display = enabled && isRestV2 ? 'block' : 'none';
+}
+
+function setCustomerField(id, value) {
+  const element = document.getElementById(id);
+  if (element) element.value = value || '';
+}
+
+function generateTestCustomer() {
+  const sample = TEST_CUSTOMERS[Math.floor(Math.random() * TEST_CUSTOMERS.length)];
+  const suffix = String(Math.floor(10000 + Math.random() * 90000));
+  const localPart = `${sample.firstName}.${sample.lastName}.${suffix}`.toLowerCase().replace(/[^a-z0-9.]+/g, '.');
+  document.getElementById('customer-enabled').checked = true;
+  toggleCustomerMasterData();
+  setCustomerField('cust-salutation', sample.salutation);
+  setCustomerField('cust-first-name', sample.firstName);
+  setCustomerField('cust-last-name', sample.lastName);
+  setCustomerField('cust-birth-date', sample.birthDate);
+  setCustomerField('cust-number', `CUST-${suffix}`);
+  setCustomerField('cust-email', `${localPart}@example.test`);
+  setCustomerField('cust-phone-country', sample.phoneCountry);
+  setCustomerField('cust-phone-number', sample.phone);
+  setCustomerField('bill-street', sample.street);
+  setCustomerField('bill-street-number', sample.streetNumber);
+  setCustomerField('bill-postal-code', sample.postalCode);
+  setCustomerField('bill-city', sample.city);
+  setCustomerField('bill-country', sample.country);
+  document.getElementById('shipping-same').checked = true;
+  toggleShippingAddress();
+  ['ship-street', 'ship-street-number', 'ship-postal-code', 'ship-city'].forEach(id => setCustomerField(id, ''));
+  setCustomerField('ship-country', sample.country);
+  showToast(t('toast_customer_generated'), 'success');
+}
+
+function clearCustomerMasterData() {
+  [
+    'cust-salutation', 'cust-first-name', 'cust-last-name', 'cust-birth-date', 'cust-number', 'cust-email',
+    'cust-phone-country', 'cust-phone-number', 'bill-street', 'bill-street-number', 'bill-postal-code',
+    'bill-city', 'ship-street', 'ship-street-number', 'ship-postal-code', 'ship-city'
+  ].forEach(id => setCustomerField(id, ''));
+  setCustomerField('bill-country', 'DE|DEU');
+  setCustomerField('ship-country', 'DE|DEU');
+  const enabled = document.getElementById('customer-enabled');
+  if (enabled) enabled.checked = false;
+  const same = document.getElementById('shipping-same');
+  if (same) same.checked = true;
+  toggleCustomerMasterData();
+  toggleShippingAddress();
+  showToast(t('toast_customer_cleared'), 'info');
+}
+
+function splitCustomerCountry(value) {
+  const [a2 = '', a3 = ''] = (value || '').split('|');
+  return { a2, a3 };
+}
+
+function customerAddressFromFields(prefix) {
+  const country = splitCustomerCountry(document.getElementById(`${prefix}-country`)?.value);
+  return {
+    street: document.getElementById(`${prefix}-street`)?.value.trim() || '',
+    streetNumber: document.getElementById(`${prefix}-street-number`)?.value.trim() || '',
+    postalCode: document.getElementById(`${prefix}-postal-code`)?.value.trim() || '',
+    city: document.getElementById(`${prefix}-city`)?.value.trim() || '',
+    countryA2: country.a2,
+    countryA3: country.a3
+  };
+}
+
+function isAddressStarted(address) {
+  return Boolean(address.street || address.streetNumber || address.postalCode || address.city);
+}
+
+function validateCustomerAddress(address) {
+  if (!isAddressStarted(address)) return;
+  if (!address.street || !address.postalCode || !address.city || !address.countryA2 || !address.countryA3) {
+    throw new Error(t('val_customer_address'));
+  }
+}
+
+function collectCustomerMasterData() {
+  if (!document.getElementById('customer-enabled')?.checked) return null;
+  const firstName = document.getElementById('cust-first-name')?.value.trim() || '';
+  const lastName = document.getElementById('cust-last-name')?.value.trim() || '';
+  const email = document.getElementById('cust-email')?.value.trim() || '';
+  const phoneCountry = document.getElementById('cust-phone-country')?.value.trim() || '';
+  const phoneNumber = document.getElementById('cust-phone-number')?.value.trim() || '';
+  if (!firstName || !lastName) throw new Error(t('val_customer_name'));
+  if (!email && (!phoneCountry || !phoneNumber)) throw new Error(t('val_customer_contact'));
+
+  const billingAddress = customerAddressFromFields('bill');
+  const shippingSameAsBilling = document.getElementById('shipping-same')?.checked !== false;
+  const shippingAddress = shippingSameAsBilling ? billingAddress : customerAddressFromFields('ship');
+  validateCustomerAddress(billingAddress);
+  validateCustomerAddress(shippingAddress);
+
+  return {
+    customerNumber: document.getElementById('cust-number')?.value.trim() || '',
+    consumer: {
+      salutation: document.getElementById('cust-salutation')?.value || '',
+      firstName,
+      lastName,
+      birthDate: document.getElementById('cust-birth-date')?.value || ''
+    },
+    contact: {
+      email,
+      phone: phoneCountry && phoneNumber ? { countryCode: phoneCountry, subscriberNumber: phoneNumber } : null
+    },
+    billingAddress,
+    shippingAddress,
+    shippingSameAsBilling
+  };
+}
+
+function pruneEmpty(value) {
+  if (Array.isArray(value)) {
+    const items = value.map(pruneEmpty).filter(item => item !== undefined);
+    return items.length ? items : undefined;
+  }
+  if (value && typeof value === 'object') {
+    const result = {};
+    Object.entries(value).forEach(([key, nested]) => {
+      const clean = pruneEmpty(nested);
+      if (clean !== undefined) result[key] = clean;
+    });
+    return Object.keys(result).length ? result : undefined;
+  }
+  if (value === '' || value === null || value === undefined) return undefined;
+  return value;
+}
+
+function restAddressFromCustomer(data, address) {
+  return pruneEmpty({
+    consumer: {
+      salutation: data.consumer.salutation,
+      firstName: data.consumer.firstName,
+      lastName: data.consumer.lastName,
+      birthDate: data.consumer.birthDate
+    },
+    addressInfo: {
+      addressLine1: {
+        street: address.street,
+        streetNumber: address.streetNumber
+      },
+      postalCode: address.postalCode,
+      city: address.city,
+      country: {
+        A2: address.countryA2,
+        A3: address.countryA3
+      }
+    },
+    contactInfo: {
+      email: data.contact.email,
+      phone: data.contact.phone ? `${data.contact.phone.countryCode}${data.contact.phone.subscriberNumber}` : ''
+    }
+  });
+}
+
+function applyCustomerDataToRestPayload(payload, data, version) {
+  if (!data) return;
+  if (version === 'v2') throw new Error(t('val_customer_rest_v2'));
+  payload.customerInfo = pruneEmpty({
+    customerNumber: data.customerNumber,
+    consumer: {
+      salutation: data.consumer.salutation,
+      firstName: data.consumer.firstName,
+      lastName: data.consumer.lastName,
+      birthdate: data.consumer.birthDate
+    },
+    email: data.contact.email,
+    phone: data.contact.phone
+  });
+  const billing = restAddressFromCustomer(data, data.billingAddress);
+  const shipping = restAddressFromCustomer(data, data.shippingAddress);
+  if (billing) payload.billing = billing;
+  if (shipping && (!data.shippingSameAsBilling || isAddressStarted(data.shippingAddress))) payload.shipping = shipping;
+}
+
+function base64EncodeUtf8(value) {
+  const bytes = new TextEncoder().encode(value);
+  let binary = '';
+  bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+  return btoa(binary);
+}
+
+function classicAddressFromCustomer(address) {
+  if (!isAddressStarted(address)) return null;
+  return pruneEmpty({
+    city: address.city,
+    country: { countryA3: address.countryA3 },
+    addressLine1: {
+      street: address.street,
+      streetNumber: address.streetNumber
+    },
+    postalCode: address.postalCode
+  });
+}
+
+function applyCustomerDataToClassicParams(params, data) {
+  if (!data) return;
+  params['MsgVer'] = '2.0';
+  const customerJson = pruneEmpty({
+    customerNumber: data.customerNumber,
+    consumer: {
+      salutation: data.consumer.salutation,
+      firstName: data.consumer.firstName,
+      lastName: data.consumer.lastName,
+      birthDate: data.consumer.birthDate
+    },
+    email: data.contact.email,
+    phone: data.contact.phone
+  });
+  const billingAddress = classicAddressFromCustomer(data.billingAddress);
+  const shippingAddress = classicAddressFromCustomer(data.shippingAddress);
+  if (customerJson) {
+    const encoded = base64EncodeUtf8(JSON.stringify(customerJson));
+    params['billToCustomer'] = encoded;
+    if (!data.shippingSameAsBilling) params['shipToCustomer'] = encoded;
+  }
+  if (billingAddress) params['billingAddress'] = base64EncodeUtf8(JSON.stringify(billingAddress));
+  if (shippingAddress && !data.shippingSameAsBilling) params['shippingAddress'] = base64EncodeUtf8(JSON.stringify(shippingAddress));
+}
+
 function buildRestPayload() {
   const amount = amountToCents(document.getElementById('amount').value);
   if (!amount || amount < 1) throw new Error(t('val_amount'));
@@ -4022,6 +4668,7 @@ function buildRestPayload() {
   if (!urlFailure) throw new Error(t('val_url_failure'));
 
   const version = document.getElementById('rest-version').value;
+  const customerData = collectCustomerMasterData();
   const methodConfig = {};
   const payType = document.getElementById('payTypes').value;
   const templateSelect = document.getElementById('template').value;
@@ -4077,6 +4724,7 @@ function buildRestPayload() {
       if (!expiration) throw new Error(t('val_expiration'));
       payload.expirationTime = new Date(expiration).toISOString();
     }
+    applyCustomerDataToRestPayload(payload, customerData, version);
     return payload;
   }
 
@@ -4106,6 +4754,7 @@ function buildRestPayload() {
   if (referenceNumber) payload.referenceNumber = referenceNumber;
   if (urlNotify) payload.urls.notify = urlNotify;
   if (urlCancel) payload.urls.cancel = urlCancel;
+  applyCustomerDataToRestPayload(payload, customerData, version);
   if (method === 'payByLink') {
     const expiration = document.getElementById('expirationDate').value;
     if (!expiration) throw new Error(t('val_expiration'));
@@ -4436,6 +5085,7 @@ async function buildAndPreview() {
 
     const amount = amountToCents(amountRaw);
     if (!amount || amount < 1) { showToast(t('val_amount'), 'error'); return; }
+    const customerData = collectCustomerMasterData();
 
     // Build MAC message: PayID*TransID*MerchantID*Amount*Currency
     // PayID is empty for the initial request → leading asterisk required (see Paygate docs)
@@ -4461,6 +5111,7 @@ async function buildAndPreview() {
       params['Language'] = language;
       params['ExpirationDate'] = expirationDate;
     }
+    applyCustomerDataToClassicParams(params, customerData);
 
     const tmplSel = document.getElementById('template')?.value || '';
     const tmpl = tmplSel === '__custom__'
@@ -4960,6 +5611,269 @@ async function _clearLogStore(storeName, localKey) {
   }
 }
 
+async function _writeLogEntries(storeName, localKey, entries) {
+  const sorted = entries
+    .map(entry => {
+      const record = { ...entry };
+      delete record.id;
+      return record;
+    })
+    .sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')))
+    .slice(0, LOG_MAX);
+  localStorage.setItem(localKey, JSON.stringify(sorted));
+  const db = await initLogStorage();
+  if (!db) return;
+  try {
+    const transaction = db.transaction(storeName, 'readwrite');
+    const store = transaction.objectStore(storeName);
+    store.clear();
+    sorted.forEach(entry => store.add(entry));
+    await _transactionComplete(transaction);
+    localStorage.removeItem(localKey);
+  } catch (error) {
+    console.warn('IndexedDB log import failed; using localStorage fallback:', error);
+    db.close();
+    logStoragePromise = Promise.resolve(null);
+  }
+}
+
+const LOG_EXPORT_FORMAT = 'paygate-payment-tester-log';
+const LOG_EXPORT_VERSION = 1;
+let logActionModalResolver = null;
+
+function _logConfig(kind) {
+  if (kind === 'response') {
+    return {
+      exportType: 'response-log',
+      storeName: LOG_RESPONSE_STORE,
+      localKey: RESP_LOG_LS_KEY,
+      inputId: 'response-log-import-file',
+      render: renderResponseLog,
+      filenamePart: 'response-log',
+    };
+  }
+  return {
+    exportType: 'request-log',
+    storeName: LOG_REQUEST_STORE,
+    localKey: LOG_LS_KEY,
+    inputId: 'request-log-import-file',
+    render: renderLog,
+    filenamePart: 'request-log',
+  };
+}
+
+function _appVersion() {
+  return (document.getElementById('footer-ver-badge')?.textContent || '').replace(/^v/i, '') || 'unknown';
+}
+
+function _safeLogString(value, maxLength = 20000) {
+  if (value === null || value === undefined) return '';
+  return String(value).slice(0, maxLength);
+}
+
+function _safeLogTimestamp(value) {
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
+}
+
+function _sanitizeLogEntry(kind, entry) {
+  if (!entry || typeof entry !== 'object') return null;
+  if (kind === 'response') {
+    const plain = _safeLogString(entry.plain);
+    if (!plain) return null;
+    return {
+      timestamp: _safeLogTimestamp(entry.timestamp),
+      status: _safeLogString(entry.status, 50),
+      transId: _safeLogString(entry.transId, 120),
+      merchantId: _safeLogString(entry.merchantId, 120),
+      plain,
+    };
+  }
+  const url = _safeLogString(entry.url);
+  if (!url) return null;
+  return {
+    timestamp: _safeLogTimestamp(entry.timestamp),
+    merchantId: _safeLogString(entry.merchantId, 120),
+    transId: _safeLogString(entry.transId, 120),
+    paymentId: _safeLogString(entry.paymentId, 120),
+    useCase: _safeLogString(entry.useCase, 60),
+    integration: _safeLogString(entry.integration, 30),
+    lookup: _safeLogString(entry.lookup, 30),
+    amount: Number.isFinite(Number(entry.amount)) ? Number(entry.amount) : 0,
+    currency: _safeLogString(entry.currency, 12),
+    url,
+  };
+}
+
+function _logEntryKey(kind, entry) {
+  return kind === 'response'
+    ? ['response', entry.plain, entry.transId, entry.status, entry.merchantId].join('\u001f')
+    : ['request', entry.url, entry.transId, entry.paymentId, entry.useCase, entry.integration, entry.lookup, entry.amount, entry.currency, entry.merchantId].join('\u001f');
+}
+
+function _dedupeLogEntries(kind, entries) {
+  const seen = new Set();
+  const result = [];
+  entries
+    .filter(Boolean)
+    .sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')))
+    .forEach(entry => {
+      const key = _logEntryKey(kind, entry);
+      if (seen.has(key)) return;
+      seen.add(key);
+      result.push(entry);
+    });
+  return result.slice(0, LOG_MAX);
+}
+
+function _downloadTextFile(filename, text) {
+  const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function _localTimestampForFilename(date = new Date()) {
+  const pad = value => String(value).padStart(2, '0');
+  return [
+    date.getFullYear(),
+    pad(date.getMonth() + 1),
+    pad(date.getDate())
+  ].join('') + '-' + [
+    pad(date.getHours()),
+    pad(date.getMinutes()),
+    pad(date.getSeconds())
+  ].join('');
+}
+
+async function exportLog(kind) {
+  const config = _logConfig(kind);
+  const entries = (await _getLogEntries(config.storeName, config.localKey))
+    .map(entry => _sanitizeLogEntry(kind, entry))
+    .filter(Boolean);
+  if (!entries.length) {
+    showToast(t('toast_log_export_empty'), 'info');
+    return;
+  }
+  if (!await openLogActionModal({
+    mode: 'export',
+    title: t('log_export_modal_title'),
+    text: t('log_export_modal_text'),
+    confirmText: t('log_export_modal_confirm'),
+  })) return;
+  const exportDate = new Date();
+  const exportedAt = exportDate.toISOString();
+  const timestampPart = _localTimestampForFilename(exportDate);
+  const payload = {
+    format: LOG_EXPORT_FORMAT,
+    version: LOG_EXPORT_VERSION,
+    appVersion: _appVersion(),
+    type: config.exportType,
+    exportedAt,
+    entries,
+  };
+  _downloadTextFile(
+    `paygate-payment-tester-${config.filenamePart}-${timestampPart}.json`,
+    JSON.stringify(payload, null, 2)
+  );
+}
+
+function openLogImport(kind) {
+  const input = document.getElementById(_logConfig(kind).inputId);
+  if (input) input.click();
+}
+
+function _parseLogImport(text) {
+  try {
+    return JSON.parse(text);
+  } catch (_) {
+    throw new Error(t('err_log_import_json'));
+  }
+}
+
+async function handleLogImportFile(kind, input) {
+  const file = input?.files?.[0];
+  if (input) input.value = '';
+  if (!file) return;
+  try {
+    const config = _logConfig(kind);
+    const payload = _parseLogImport(await file.text());
+    if (payload?.format !== LOG_EXPORT_FORMAT) throw new Error(t('err_log_import_format'));
+    if (payload?.type !== config.exportType) throw new Error(t('err_log_import_type'));
+    const imported = Array.isArray(payload.entries)
+      ? payload.entries.map(entry => _sanitizeLogEntry(kind, entry)).filter(Boolean)
+      : [];
+    if (!imported.length) throw new Error(t('err_log_import_empty'));
+    const action = await openLogActionModal({
+      mode: 'import',
+      title: t('log_import_modal_title'),
+      text: t('log_import_modal_text'),
+      confirmText: t('log_import_modal_replace'),
+      secondaryText: t('log_import_modal_merge'),
+    });
+    if (!action) return;
+    const replacing = action === 'confirm';
+    const existing = replacing ? [] : await _getLogEntries(config.storeName, config.localKey);
+    const existingKeys = new Set(existing
+      .map(entry => _sanitizeLogEntry(kind, entry))
+      .filter(Boolean)
+      .map(entry => _logEntryKey(kind, entry)));
+    const importedUnique = _dedupeLogEntries(kind, imported);
+    const newEntries = replacing
+      ? importedUnique
+      : importedUnique.filter(entry => !existingKeys.has(_logEntryKey(kind, entry)));
+    if (!replacing && newEntries.length === 0) {
+      showToast(t('toast_log_import_no_new'), 'info');
+      return;
+    }
+    const merged = _dedupeLogEntries(kind, [...newEntries, ...existing]);
+    await _writeLogEntries(config.storeName, config.localKey, merged);
+    await config.render();
+    showToast(`${t('toast_log_imported')}${newEntries.length} ${kind === 'response' ? t('resp_log_entries') : t('log_entries')}`, 'success');
+  } catch (error) {
+    showToast(t('toast_log_import_error') + error.message, 'error');
+  }
+}
+
+function openLogActionModal({ mode, title, text, confirmText, secondaryText = '' }) {
+  const modal = document.getElementById('log-action-modal');
+  const titleEl = document.getElementById('log-action-modal-title');
+  const textEl = document.getElementById('log-action-modal-text');
+  const cancel = document.getElementById('log-action-cancel');
+  const secondary = document.getElementById('log-action-secondary');
+  const confirmButton = document.getElementById('log-action-confirm');
+  if (!modal || !titleEl || !textEl || !cancel || !secondary || !confirmButton) {
+    return Promise.resolve(window.confirm(text || title));
+  }
+  titleEl.textContent = title;
+  textEl.textContent = text;
+  confirmButton.textContent = confirmText;
+  secondary.textContent = secondaryText;
+  secondary.style.display = mode === 'import' ? '' : 'none';
+  modal.dataset.mode = mode;
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+  confirmButton.focus();
+  return new Promise(resolve => {
+    logActionModalResolver = resolve;
+  });
+}
+
+function closeLogActionModal(result = null) {
+  const modal = document.getElementById('log-action-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  const resolver = logActionModalResolver;
+  logActionModalResolver = null;
+  if (resolver) resolver(result);
+}
+
 function _logValueClass(key, value) {
   if (key === 'Data' || key === 'MAC') return 'enc';
   if (key === 'Len' || key === 'Amount') return 'number';
@@ -5353,6 +6267,12 @@ const CALLBACK_RELAY_KEY = 'computop_callback_relay';
 const CALLBACK_RELAY_ACK_KEY = 'computop_callback_relay_ack';
 const CALLBACK_RELAY_CHANNEL = 'computop_callback_channel';
 const CALLBACK_RELAY_MAX_AGE = 30 * 60 * 1000;
+const EXTERNAL_DEMO_CALLBACK_URLS = {
+  urlSuccess: 'https://httpbingo.org/anything/paygate-success',
+  urlFailure: 'https://httpbingo.org/anything/paygate-failure',
+  urlNotify: 'https://httpbingo.org/anything/paygate-notify',
+  urlBack: 'https://httpbingo.org/anything/paygate-back'
+};
 let callbackRelayChannel = null;
 const acceptedCallbackIds = new Set();
 
@@ -5393,11 +6313,21 @@ function updateCallbackReceiverAvailabilityUI() {
   const hint = document.getElementById('cb-receiver-hint');
   if (toggle) {
     toggle.disabled = !receiverSupported;
+    if (!receiverSupported) toggle.checked = false;
     toggle.title = receiverSupported ? '' : t('cb_receiver_file_title');
   }
   row?.classList.toggle('is-unavailable', !receiverSupported);
   if (hint) hint.textContent = t(receiverSupported ? 'cb_receiver_hint' : 'cb_receiver_file_hint');
   return receiverSupported;
+}
+
+function applyExternalDemoCallbackUrls({ preserveExisting = false } = {}) {
+  Object.entries(EXTERNAL_DEMO_CALLBACK_URLS).forEach(([id, value]) => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    if (preserveExisting && input.value.trim()) return;
+    input.value = value;
+  });
 }
 
 function applyHttpbingoDemo() {
@@ -5407,16 +6337,7 @@ function applyHttpbingoDemo() {
     localStorage.setItem(CALLBACK_RECEIVER_KEY, '0');
     _applyCallbackReceiver(false);
   }
-  const demoUrls = {
-    urlSuccess: 'https://httpbingo.org/anything/paygate-success',
-    urlFailure: 'https://httpbingo.org/anything/paygate-failure',
-    urlNotify: 'https://httpbingo.org/anything/paygate-notify',
-    urlBack: 'https://httpbingo.org/anything/paygate-back'
-  };
-  Object.entries(demoUrls).forEach(([id, value]) => {
-    const input = document.getElementById(id);
-    if (input) input.value = value;
-  });
+  applyExternalDemoCallbackUrls();
   showToast(t('toast_httpbingo_demo'), 'warning');
 }
 
@@ -5431,6 +6352,9 @@ function initCallbackReceiver() {
   if (enabled) {
     localStorage.setItem(CALLBACK_RECEIVER_KEY, '1');
     _applyCallbackReceiver(true);
+  } else if (!receiverSupported) {
+    localStorage.setItem(CALLBACK_RECEIVER_KEY, '0');
+    applyExternalDemoCallbackUrls({ preserveExisting: true });
   }
   initCallbackRelay();
   checkCallbackParams();
@@ -5610,6 +6534,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initParamTips();
   initClearAllModal();
   initProfileDeleteModal();
+  initLogActionModal();
   initNavigation();
   initCallbackReceiver();
 });
@@ -5658,6 +6583,24 @@ function initProfileDeleteModal() {
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && modal.classList.contains('open')) closeProfileDeleteModal();
+  });
+}
+
+function initLogActionModal() {
+  const modal = document.getElementById('log-action-modal');
+  const cancel = document.getElementById('log-action-cancel');
+  const secondary = document.getElementById('log-action-secondary');
+  const confirmButton = document.getElementById('log-action-confirm');
+  if (!modal || !cancel || !secondary || !confirmButton) return;
+
+  cancel.addEventListener('click', () => closeLogActionModal(null));
+  secondary.addEventListener('click', () => closeLogActionModal('secondary'));
+  confirmButton.addEventListener('click', () => closeLogActionModal('confirm'));
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeLogActionModal(null);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeLogActionModal(null);
   });
 }
 
