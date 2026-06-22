@@ -1,6 +1,21 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.3.2', de: { title: 'Responsiver Footer-Feinschliff', items: [
+    '<strong>Containerabhängiges Layout</strong> — Der Footer reagiert auf seine tatsächlich verfügbare Breite statt ausschließlich auf die Breite des Browserfensters',
+    '<strong>Sichere Link-Kürzung</strong> — Lange Footer-Links werden vor einem möglichen Überlauf automatisch mit Auslassungspunkten gekürzt',
+    '<strong>Geordneter Umbruch</strong> — Bei begrenztem Platz verteilt sich der Footer kontrolliert auf mehrere Zeilen',
+    '<strong>Klare schmale Ansicht</strong> — Auf sehr schmalen Flächen stehen Links und Aktionen jeweils in einer eigenen Zeile',
+    '<strong>Einheitliches Verhalten</strong> — Original- und Vorschau-Design verwenden dieselbe robuste responsive Struktur',
+    '<strong>Patch-Metadaten</strong> — Sichtbare Version, Changelog und Offline-Cache sind auf Version 3.3.2 abgestimmt',
+  ]}, en: { title: 'Responsive Footer Refinements', items: [
+    '<strong>Container-aware layout</strong> — The footer responds to its actual available width instead of relying only on the browser viewport',
+    '<strong>Safe link truncation</strong> — Long footer links are shortened with an ellipsis before they can overflow the layout',
+    '<strong>Structured wrapping</strong> — Constrained widths use a controlled multi-row footer layout',
+    '<strong>Clear narrow layout</strong> — Very narrow surfaces place each link and action on its own row',
+    '<strong>Consistent behaviour</strong> — Original and preview designs use the same robust responsive structure',
+    '<strong>Patch metadata</strong> — Visible version, changelog and offline cache are aligned with version 3.3.2',
+  ]}},
   { v: 'v3.3.1', de: { title: 'Feinschliff an der Workflow-Navigation', items: [
     '<strong>Identische mobile Breite</strong> — Hauptnavigation und Workflow-Inhaltsverzeichnis verwenden auf kleinen Displays dieselben Außenkanten und berücksichtigen Safe Areas',
     '<strong>Konstanter Sticky-Abstand</strong> — Die tatsächliche Höhe der Hauptnavigation wird gemessen und das Inhaltsverzeichnis bleibt stets 14 Pixel darunter',

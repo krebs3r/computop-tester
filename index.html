@@ -46,7 +46,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.3.1",
+      "softwareVersion": "3.3.2",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -1882,6 +1882,7 @@
     footer {
       position: relative; z-index: 1;
       width: min(1400px, calc(100% - 28px));
+      container: app-footer / inline-size;
       font-family: var(--sans);
       background: rgba(20, 25, 34, 0.46);
       -webkit-backdrop-filter: blur(22px) saturate(155%);
@@ -1901,7 +1902,7 @@
       width: 100%; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 42.5rem) {
       footer {
         width: calc(100% - max(16px, env(safe-area-inset-left) + env(safe-area-inset-right)));
         border-radius: 15px;
@@ -1963,14 +1964,19 @@
     .footer-third-party-link {
       display: none !important;
     }
-    .footer-links { display: flex; align-items: center; justify-content: flex-end; gap: 18px; min-width: 0; }
+    .footer-links { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px 18px; min-width: 0; }
     .footer-links a {
-      display: inline-flex; align-items: center; gap: 5px;
+      display: inline-flex; align-items: center; gap: 5px; min-width: 0;
       font-family: inherit;
       font-size: 12px; color: var(--muted); text-decoration: none;
-      overflow-wrap: normal;
       white-space: nowrap;
       transition: color .15s;
+    }
+    .footer-link-label {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .footer-links a:hover { color: var(--accent2); }
     .footer-clear-action {
@@ -1978,6 +1984,78 @@
     }
     .footer-log-data-action {
       flex: 0 0 auto; padding: 5px 11px; font-size: 11px;
+    }
+    @container app-footer (max-width: 46rem) {
+      .footer-inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+        gap: 14px;
+      }
+      .footer-version {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 7px;
+      }
+      #footer-name-text {
+        min-width: 0;
+        white-space: nowrap;
+      }
+      .footer-preview-notice {
+        grid-column: 2 / 4;
+        justify-self: end;
+        margin-top: 2px;
+      }
+      .footer-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 14px 10px;
+        margin-left: 0;
+      }
+      .footer-links {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: center;
+        justify-content: stretch;
+        gap: 9px 14px;
+      }
+      .footer-links a {
+        min-width: 0;
+        justify-content: flex-start;
+        line-height: 1.35;
+      }
+      .footer-links a:first-child { grid-column: 1 / -1; }
+      .footer-log-data-action,
+      .footer-clear-action {
+        width: 100%;
+        min-width: 0;
+        min-height: 42px;
+        justify-content: center;
+        margin-left: 0;
+      }
+    }
+    @container app-footer (max-width: 30rem) {
+      .footer-version {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+      }
+      .footer-actions,
+      .footer-links {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .footer-links a,
+      .footer-links a:first-child {
+        grid-column: 1;
+        width: 100%;
+      }
+      .footer-log-data-action,
+      .footer-clear-action {
+        grid-column: 1;
+      }
     }
 
     /* ── NEXI PREVIEW DESIGN ──
@@ -3535,7 +3613,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v3.3.1</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v3.3.2</span>
       <button class="footer-preview-notice" id="footer-design-toggle" type="button" onclick="toggleDesign()">
         <span id="footer-design-toggle-text">Original Design</span>
       </button>
@@ -3544,15 +3622,15 @@
       <span class="footer-links">
         <a href="https://github.com/krebs3r/computop-tester" target="_blank" rel="noopener">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S9 17.44 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-          github.com/krebs3r/computop-tester
+          <span class="footer-link-label">github.com/krebs3r/computop-tester</span>
         </a>
         <a href="https://developer.computop.com/#all-updates" target="_blank" rel="noopener">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-          Paygate Docs
+          <span class="footer-link-label">Paygate Docs</span>
         </a>
         <a class="footer-third-party-link" href="https://github.com/krebs3r/computop-tester/blob/main/THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/></svg>
-          Third-party notices
+          <span class="footer-link-label">Third-party notices</span>
         </a>
       </span>
       <button class="btn btn-ghost footer-log-data-action" type="button" onclick="openLogDataModal()" id="btn-log-data">

@@ -2,6 +2,14 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.3.2 — Responsive Footer Refinements
+- Reworked the footer to respond to its own available width instead of relying only on viewport breakpoints
+- Added automatic truncation for long footer links before they can overflow the layout
+- Added a structured multi-row footer layout for constrained widths
+- Stacked every footer link and action on its own row on very narrow screens
+- Kept the responsive behaviour consistent across the original and preview designs
+- Updated the offline cache and all visible version metadata for this patch release
+
 ### v3.3.1 — Workflow Navigation Refinements
 - Matched the mobile workflow navigator width and outer edges to the fixed main navigation across supported viewport and safe-area sizes
 - Added a constant 14-pixel gap between the main navigation and the sticky workflow navigator, calculated from the rendered navigation height
