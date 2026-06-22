@@ -2,6 +2,26 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.3.0 — Workflow Navigation and Request Tooling
+- Added a contextual Payment Workflow navigation beside the application header on desktop
+- Added a compact sticky workflow navigator for mobile layouts without horizontal overflow
+- Added direct links to credentials, profiles, interface selection, integration options, payment data, customer data, callbacks, advanced settings and request previews
+- Added automatic active-section tracking while scrolling, dynamic entries for payment and status use cases and automatic expansion of collapsed targets
+- Grouped redirect and callback URLs into a dedicated subsection and collapsed advanced settings by default
+- Corrected disabled customer-data sections so they remain hidden until explicitly enabled
+- Added a combined Request and Response Log backup from the footer while retaining the existing individual log actions
+- Added atomic combined imports, legacy single-log compatibility, sanitisation and content-based duplicate detection
+- Added a status-inquiry selector that reuses Payment IDs and Transaction IDs from locally stored Request and Response Logs while keeping manual entry available
+- Added a dedicated PowerShell-compatible cURL format using `curl.exe`, PowerShell line continuations and JSON here-strings
+- Kept a clearly labelled Bash cURL format and expanded the output guidance for each shell
+- Improved generated PowerShell requests so complete nested API responses are rendered as JSON
+- Normalised REST billing and shipping phone numbers to the API-required `(+countryCode)subscriberNumber` format and added validation for incomplete values
+- Added an unobtrusive footer control for switching between the original and preview designs
+- Added combined log management to the footer without storing credentials or application settings in backups
+- Improved non-selectable decorative header and footer controls and refined footer labels
+- Added a more transparent glass treatment for the contextual navigation in the original design
+- Updated the offline application cache and all visible version metadata for this release
+
 ### v3.2.0 — Customer Data and Portable Logs
 - Added optional, fully editable customer master data for payment requests, including name, birth date, customer number, email and phone details
 - Added billing and shipping address fields with a switch for reusing the billing address

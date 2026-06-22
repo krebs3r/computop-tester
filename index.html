@@ -46,7 +46,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.2.0",
+      "softwareVersion": "3.3.0",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -424,6 +424,204 @@
 
     .card { scroll-margin-top: 96px; }
 
+    /* ── WORKFLOW NAVIGATION ── */
+    #payment-workflow-view { max-width: 1240px; }
+    #payment-workflow-view > header,
+    #payment-workflow-view > .app-intro,
+    #payment-workflow-view > .info-box,
+    #payment-workflow-view > .card {
+      width: min(100%, 960px);
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .workflow-shell {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 960px);
+      align-items: start;
+      gap: 24px;
+    }
+    .workflow-nav {
+      position: sticky;
+      top: 92px;
+      z-index: 30;
+      max-height: calc(100vh - 112px);
+      overflow-y: auto;
+      padding: 12px;
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.04);
+      -webkit-backdrop-filter: blur(18px) saturate(135%);
+      backdrop-filter: blur(18px) saturate(135%);
+      scrollbar-width: thin;
+    }
+    html[data-design="original"] .workflow-nav {
+      background: rgba(13, 20, 32, .34);
+      border-color: rgba(255, 255, 255, .14);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, .18), inset 0 1px 0 rgba(255, 255, 255, .08);
+      -webkit-backdrop-filter: blur(25px) saturate(165%);
+      backdrop-filter: blur(25px) saturate(165%);
+    }
+    html.light[data-design="original"] .workflow-nav {
+      background: rgba(255, 255, 255, .36);
+      border-color: rgba(255, 255, 255, .72);
+      box-shadow: 0 16px 38px rgba(67, 84, 112, .13), inset 0 1px 0 rgba(255, 255, 255, .86);
+    }
+    .workflow-nav-title {
+      display: block;
+      padding: 3px 8px 10px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .workflow-nav-list { display: flex; flex-direction: column; gap: 3px; }
+    .workflow-nav-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 7px 9px;
+      color: var(--muted2);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-family: var(--sans);
+      font-size: 12px;
+      line-height: 1.25;
+      text-align: left;
+      cursor: pointer;
+      transition: color .16s, background .16s, border-color .16s;
+    }
+    .workflow-nav-item::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      flex: 0 0 6px;
+      border: 1px solid var(--border2);
+      border-radius: 50%;
+      background: transparent;
+    }
+    .workflow-nav-item:hover {
+      color: var(--text);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+    }
+    .workflow-nav-item.workflow-nav-active {
+      color: var(--text);
+      background: color-mix(in srgb, var(--accent) 13%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+    }
+    .workflow-nav-item.workflow-nav-active::before {
+      border-color: var(--accent2);
+      background: var(--accent2);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent2) 17%, transparent);
+    }
+    .workflow-nav-item.workflow-nav-step {
+      margin-top: 6px;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .workflow-nav-item.workflow-nav-step:first-child { margin-top: 0; }
+    .workflow-nav-item.workflow-nav-sub { padding-left: 25px; font-size: 11px; }
+    .workflow-nav-item.workflow-nav-sub::before { width: 4px; height: 4px; flex-basis: 4px; }
+    .workflow-nav-item[hidden] { display: none; }
+    .workflow-mobile-trigger { display: none; }
+    .workflow-content { min-width: 0; }
+    .workflow-anchor {
+      display: block;
+      height: 0;
+      scroll-margin-top: 104px;
+    }
+    [data-workflow-section] { scroll-margin-top: 104px; }
+    .workflow-subsection {
+      margin-top: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--surface) 74%, transparent);
+    }
+    .workflow-subsection-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 15px;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-align: left;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .workflow-subsection-header:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+    .workflow-subsection-toggle { margin-left: auto; color: var(--muted); transition: transform .18s; }
+    .workflow-subsection.is-collapsed .workflow-subsection-toggle { transform: rotate(-90deg); }
+    .workflow-subsection-body { padding: 2px 15px 16px; }
+    .workflow-subsection.is-collapsed .workflow-subsection-body { display: none; }
+
+    @media (max-width: 900px) {
+      #payment-workflow-view { max-width: 960px; }
+      .workflow-shell { display: block; }
+      .workflow-nav {
+        top: 84px;
+        max-height: none;
+        overflow: visible;
+        margin-bottom: 14px;
+        padding: 7px;
+      }
+      .workflow-nav-title { display: none; }
+      .workflow-mobile-trigger {
+        width: 100%;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 11px;
+        color: var(--text);
+        background: transparent;
+        border: 0;
+        border-radius: 9px;
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+      }
+      .workflow-mobile-trigger::before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent2);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent2) 17%, transparent);
+      }
+      .workflow-mobile-chevron { margin-left: auto; color: var(--muted); transition: transform .18s; }
+      .workflow-nav.mobile-open .workflow-mobile-chevron { transform: rotate(180deg); }
+      .workflow-nav-list {
+        display: none;
+        max-height: min(62vh, 520px);
+        overflow-y: auto;
+        margin-top: 5px;
+        padding: 7px;
+        border-top: 1px solid var(--border);
+      }
+      .workflow-nav.mobile-open .workflow-nav-list { display: flex; }
+      .workflow-nav-item { min-height: 42px; }
+      .workflow-anchor, [data-workflow-section] { scroll-margin-top: 154px; }
+    }
+
+    @media (max-width: 640px) {
+      .workflow-nav { top: calc(76px + env(safe-area-inset-top)); }
+      .workflow-subsection-body { padding-inline: 11px; }
+    }
+
     @media (max-width: 1180px) {
       .glass-nav {
         display: flex;
@@ -587,6 +785,14 @@
       border: 1px solid rgba(157,178,255,.20);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
       white-space: nowrap;
+      cursor: default;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .app-header-copy > .badge {
+      cursor: default;
+      -webkit-user-select: none;
+      user-select: none;
     }
     html.light .header-feature {
       background: rgba(255,255,255,.52);
@@ -687,6 +893,8 @@
     .method-btn[disabled]:hover { transform: none; }
     .method-status { margin-top: 14px; }
     .rest-panel { margin-bottom: 20px; padding: 16px; border: 1px solid var(--border); border-radius: 10px; background: rgba(61,126,255,.035); }
+    .status-saved-transaction-field { grid-column: 1 / -1; }
+    .status-saved-transaction-hint { color: var(--muted); font-size: 11px; line-height: 1.45; }
     .rest-warning { margin-top: 12px; border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.07); }
     .rest-secret-row {
       margin-top: 14px; display: flex; align-items: flex-start; gap: 12px;
@@ -838,6 +1046,7 @@
       display: grid;
       gap: 14px;
     }
+    .customer-master-body.hidden { display: none; }
     .customer-subtitle {
       margin: 4px 0 -4px;
       color: var(--muted2);
@@ -962,9 +1171,45 @@
       border: 1px solid rgba(239,68,68,.24);
       border-radius: 12px;
     }
+    .app-modal-icon.info {
+      color: var(--accent2);
+      background: rgba(61,126,255,.10);
+      border-color: rgba(61,126,255,.24);
+    }
     .app-modal-title { font-family: var(--display); font-size: 20px; margin-bottom: 8px; }
     .app-modal-text { color: var(--muted2); font-size: 13px; line-height: 1.65; white-space: pre-line; }
     .app-modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+    #log-data-modal .app-modal-panel { width: min(620px, 100%); }
+    .log-data-summary { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .log-data-count {
+      display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px;
+      color: var(--muted2); background: rgba(61,126,255,.07);
+      border: 1px solid var(--border); border-radius: 999px; font-size: 11px;
+    }
+    .log-data-count strong { color: var(--text); font-family: var(--mono); font-weight: 600; }
+    .log-data-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .log-data-option {
+      display: grid; grid-template-columns: 36px 1fr; align-items: start; gap: 11px;
+      width: 100%; padding: 14px; text-align: left; color: var(--text);
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      font-family: inherit; cursor: pointer;
+      transition: color .16s, background .16s, border-color .16s;
+    }
+    .log-data-option:hover { color: var(--accent2); background: rgba(61,126,255,.07); border-color: var(--border2); }
+    .log-data-option:focus-visible { outline: 2px solid var(--accent2); outline-offset: 3px; }
+    .log-data-option-icon {
+      width: 36px; height: 36px; display: grid; place-items: center;
+      color: var(--accent2); background: rgba(61,126,255,.10);
+      border: 1px solid rgba(61,126,255,.20); border-radius: 10px;
+    }
+    .log-data-option-icon svg { width: 18px; height: 18px; }
+    .log-data-option-copy { min-width: 0; }
+    .log-data-option strong { display: block; margin: 1px 0 4px; font-size: 12px; }
+    .log-data-option small { display: block; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    @media (max-width: 560px) {
+      .log-data-options { grid-template-columns: 1fr; }
+      .app-modal-actions { flex-wrap: wrap; }
+    }
     .btn-danger {
       color: #fff;
       background: linear-gradient(135deg, #ef4444, #dc2626);
@@ -1674,9 +1919,40 @@
     .footer-ver-badge {
       background: rgba(61,126,255,0.12); border: 1px solid rgba(61,126,255,0.22);
       color: var(--accent2); font-size: 11px; padding: 1px 8px; border-radius: 20px;
+      cursor: default; -webkit-user-select: none; user-select: none;
     }
     .footer-preview-notice {
-      display: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border: 1px solid rgba(61,126,255,.24);
+      border-radius: 999px;
+      background: rgba(61,126,255,.09);
+      color: var(--accent2);
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .08em;
+      line-height: 1.3;
+      text-transform: uppercase;
+      white-space: nowrap;
+      appearance: none;
+      cursor: default;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .footer-preview-notice::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .footer-preview-notice:focus-visible {
+      outline: 2px solid var(--accent2);
+      outline-offset: 3px;
     }
     .footer-third-party-link {
       display: none !important;
@@ -1693,6 +1969,9 @@
     .footer-links a:hover { color: var(--accent2); }
     .footer-clear-action {
       flex: 0 0 auto;
+    }
+    .footer-log-data-action {
+      flex: 0 0 auto; padding: 5px 11px; font-size: 11px;
     }
 
     /* ── NEXI PREVIEW DESIGN ──
@@ -1911,31 +2190,12 @@
       color: #2d32aa;
     }
     html[data-design="nexi"] .footer-preview-notice {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 9px;
       border: 1px solid rgba(43,212,217,.30);
-      border-radius: 999px;
       background: rgba(43,212,217,.10);
       color: #65eee0;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .08em;
-      line-height: 1.3;
-      text-transform: uppercase;
-      white-space: nowrap;
     }
     html[data-design="nexi"] .footer-third-party-link {
       display: inline-flex !important;
-    }
-    html[data-design="nexi"] .footer-preview-notice::before {
-      content: '';
-      width: 5px;
-      height: 5px;
-      flex: 0 0 auto;
-      border-radius: 50%;
-      background: currentColor;
     }
     html.light[data-design="nexi"] .footer-preview-notice {
       border-color: rgba(45,50,170,.24);
@@ -2257,6 +2517,31 @@
 </button>
 
 <main class="wrapper" id="payment-workflow-view" data-view="payment-workflow">
+  <div class="workflow-shell">
+  <aside class="workflow-nav" id="workflow-nav" aria-label="Payment-Workflow-Navigation">
+    <span class="workflow-nav-title" id="workflow-nav-title">Payment Workflow</span>
+    <button class="workflow-mobile-trigger" id="workflow-mobile-trigger" type="button" aria-expanded="false" aria-controls="workflow-nav-list">
+      <span id="workflow-mobile-current">Schritt 1 · Credentials</span>
+      <span class="workflow-mobile-chevron" aria-hidden="true">▼</span>
+    </button>
+    <nav class="workflow-nav-list" id="workflow-nav-list">
+      <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-creds" id="workflow-nav-step-credentials">Schritt 1 · Credentials</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-credentials" id="workflow-nav-credentials">Zugangsdaten</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="profile-section" id="workflow-nav-profiles">Gespeicherte Profile</button>
+      <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-payment" id="workflow-nav-step-request">Schritt 2 · API-Request</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-interface" id="workflow-nav-interface">Schnittstelle &amp; Use Case</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-integration-options" id="workflow-nav-integration">Integrationsoptionen</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="status-controls" data-workflow-visible="status" id="workflow-nav-status">Statusabfrage</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="create-payment-fields" data-workflow-visible="create" id="workflow-nav-payment-data">Zahlungsdaten</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="customer-master-section" data-workflow-visible="create" id="workflow-nav-customer">Kundendaten</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-callbacks" data-workflow-visible="create" id="workflow-nav-callbacks">Redirect &amp; Callback</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="advanced-section" data-workflow-visible="create" id="workflow-nav-advanced">Erweiterte Einstellungen</button>
+      <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-preview" id="workflow-nav-step-preview">Schritt 3 · Vorschau</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-preview-data" id="workflow-nav-preview-data">Request-Vorschau</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-execution" data-workflow-visible="classic-preview" id="workflow-nav-execution">Testdaten &amp; Ausführen</button>
+    </nav>
+  </aside>
+  <div class="workflow-content">
 
   <!-- Header -->
   <header>
@@ -2337,13 +2622,14 @@
   </div>
 
   <!-- ── STEP 1: CREDENTIALS ── -->
-  <div class="card" id="card-creds">
+  <div class="card" id="card-creds" data-workflow-section tabindex="-1">
     <div class="card-header" onclick="toggleCard('card-creds')">
       <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg></span></div>
       <span class="card-title" id="ct-creds">Schritt 1 — Credentials</span>
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
+      <span class="workflow-anchor" id="workflow-credentials" data-workflow-section tabindex="-1"></span>
       <div class="credential-mode-notice" id="credential-mode-notice">
         <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
         <div><strong id="credential-mode-title">Für Classic erforderlich</strong><span id="credential-mode-text">Merchant ID, Blowfish- und HMAC-Passwort werden für MAC-Berechnung und Verschlüsselung benötigt.</span></div>
@@ -2388,7 +2674,7 @@
 
       <div class="divider"></div>
 
-      <div class="profile-section">
+      <div class="profile-section" id="profile-section" data-workflow-section tabindex="-1">
         <div class="profile-top">
           <span class="profile-top-title"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> <span id="cred-save-title">Verschlüsselte Profile</span></span>
           <span id="cred-save-status" style="margin-left:auto;font-size:12px">–</span>
@@ -2466,13 +2752,14 @@
   </div>
 
   <!-- ── STEP 2: REQUEST CONFIGURATION ── -->
-  <div class="card" id="card-payment">
+  <div class="card" id="card-payment" data-workflow-section tabindex="-1">
     <div class="card-header" onclick="toggleCard('card-payment')">
       <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span></div>
       <span class="card-title" id="ct-payment">Schritt 2 — Request konfigurieren</span>
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
+      <span class="workflow-anchor" id="workflow-interface" data-workflow-section tabindex="-1"></span>
 
       <div class="integration-label" id="integration-label">Schnittstelle</div>
       <div class="method-ctrl">
@@ -2504,6 +2791,13 @@
 
       <div class="rest-panel" id="status-controls" style="display:none">
         <div class="field-grid">
+          <div class="field status-saved-transaction-field">
+            <label><span id="l-status-saved-transaction">Gespeicherte Transaktion</span> <span class="hint" id="h-status-saved-transaction">(optional)</span><button class="param-tip" id="tip-status-saved-transaction" tabindex="-1">?</button></label>
+            <select id="status-saved-transaction">
+              <option value="" id="status-saved-transaction-manual">Manuelle Eingabe</option>
+            </select>
+            <span class="status-saved-transaction-hint" id="status-saved-transaction-summary">Gespeicherte IDs werden aus Request- und Response-Logs zusammengeführt. Die Felder bleiben editierbar.</span>
+          </div>
           <div class="field">
             <label><span id="l-status-lookup">Abfrage über</span><button class="param-tip" id="tip-status-lookup" tabindex="-1">?</button></label>
             <select id="status-lookup" onchange="updateUseCaseUI()">
@@ -2524,6 +2818,7 @@
       </div>
 
       <!-- ── INTEGRATION METHOD SELECTOR ── -->
+      <span class="workflow-anchor" id="workflow-integration-options" data-workflow-section tabindex="-1"></span>
       <div class="method-ctrl" id="classic-method-controls">
         <button class="method-btn method-active" id="method-hpp" onclick="setMethod('hpp')">
           <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span>
@@ -2578,10 +2873,11 @@
           <div class="field">
             <label><span id="l-rest-tool">Ausgabeformat</span><button class="param-tip" id="tip-rest-tool" tabindex="-1">?</button></label>
             <select id="rest-tool">
-              <option value="curl" selected>cURL (Bash / Postman-Import)</option>
-              <option value="powershell">PowerShell</option>
-              <option value="postman">Postman Collection v2.1</option>
-              <option value="http">Raw HTTP</option>
+              <option value="curl" id="rest-tool-curl" selected>cURL (Bash)</option>
+              <option value="curl-powershell" id="rest-tool-curl-powershell">cURL (PowerShell)</option>
+              <option value="powershell" id="rest-tool-powershell">PowerShell (Windows / pwsh)</option>
+              <option value="postman" id="rest-tool-postman">Postman Collection v2.1</option>
+              <option value="http" id="rest-tool-http">Raw HTTP</option>
             </select>
           </div>
         </div>
@@ -2602,7 +2898,7 @@
         <span id="method-info-text"></span>
       </div>
 
-      <div id="create-payment-fields">
+      <div id="create-payment-fields" data-workflow-section tabindex="-1">
 
       <div class="field-grid three">
         <div class="field">
@@ -2671,7 +2967,7 @@
         <input type="text" id="orderDescCustom" placeholder="Eigene Beschreibung" maxlength="127" style="margin-top:8px;display:none">
       </div>
 
-      <div class="customer-master-section" id="customer-master-section">
+      <div class="customer-master-section" id="customer-master-section" data-workflow-section tabindex="-1">
         <div class="customer-master-head">
           <label class="customer-master-toggle">
             <input type="checkbox" id="customer-enabled" onchange="toggleCustomerMasterData()">
@@ -2810,8 +3106,12 @@
         </div>
       </div>
 
-      <div class="sep-label" id="sep-redirect">Redirect-URLs</div>
-
+      <section class="workflow-subsection" id="workflow-callbacks" data-workflow-section tabindex="-1">
+      <button class="workflow-subsection-header" type="button" onclick="toggleWorkflowSubsection('workflow-callbacks')" aria-expanded="true">
+        <span id="workflow-callbacks-title">Redirect- und Callback-URLs</span>
+        <span class="workflow-subsection-toggle" aria-hidden="true">▼</span>
+      </button>
+      <div class="workflow-subsection-body">
       <div class="url-fields">
         <div class="field">
           <label><span id="l-urls">URLSuccess</span> <span class="required">*</span> <span class="hint" id="h-urls">(nach erfolgreicher Zahlung)</span><button class="param-tip" id="tip-urls" tabindex="-1">?</button></label>
@@ -2846,9 +3146,15 @@
         <div class="callback-demo-copy" id="callback-demo-copy"><strong>Externe Demo-Option:</strong> httpbingo.org nur mit synthetischen Testdaten verwenden. URLSuccess, URLFailure und URLBack sind im Browser sichtbar; URLNotify wird nur extern empfangen und ist in dieser App nicht sichtbar.</div>
         <button class="btn btn-ghost" id="btn-httpbingo-demo" type="button" onclick="applyHttpbingoDemo()">httpbingo.org einsetzen</button>
       </div>
+      </div>
+      </section>
 
-      <div id="advanced-section" class="collapsible">
-      <div class="sep-label" id="sep-advanced">Erweiterte Einstellungen</div>
+      <section id="advanced-section" class="workflow-subsection is-collapsed" data-workflow-section tabindex="-1">
+      <button class="workflow-subsection-header" type="button" onclick="toggleWorkflowSubsection('advanced-section')" aria-expanded="false">
+        <span id="sep-advanced">Erweiterte Einstellungen</span>
+        <span class="workflow-subsection-toggle" aria-hidden="true">▼</span>
+      </button>
+      <div class="workflow-subsection-body">
 
       <div class="paytypes-row" id="paytypes-row">
         <div class="field-grid full">
@@ -2878,7 +3184,8 @@
           <input type="text" id="template-custom" placeholder="eigener Template-Name" style="display:none;margin-top:6px">
         </div>
       </div>
-      </div><!-- /advanced-section -->
+      </div>
+      </section><!-- /advanced-section -->
       </div><!-- /create-payment-fields -->
 
       <div class="btn-row">
@@ -2894,13 +3201,14 @@
   </div>
 
   <!-- ── STEP 3: PREVIEW & SUBMIT ── -->
-  <div class="card collapsed" id="card-preview">
+  <div class="card collapsed" id="card-preview" data-workflow-section tabindex="-1">
     <div class="card-header" onclick="toggleCard('card-preview')">
       <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span></div>
       <span class="card-title" id="ct-preview">Schritt 3 — Vorschau & Ausführen</span>
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
+      <span class="workflow-anchor" id="workflow-preview-data" data-workflow-section tabindex="-1"></span>
 
       <div id="preview-empty-hint" class="info-box">
         <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="preview-empty-title">Hinweis:</span></strong> <span id="preview-empty-text">Noch keine Vorschau generiert. Klicke in Schritt 2 auf <strong>„Vorschau generieren"</strong>, um die Request-Daten und die ausführbare Ausgabe hier anzuzeigen.</span>
@@ -2948,6 +3256,7 @@
           </div>
         </div>
 
+        <span class="workflow-anchor payment-preview-only" id="workflow-execution" data-workflow-section tabindex="-1"></span>
         <details class="tc-details payment-preview-only">
           <summary id="tc-summary">Testkartennummern (Non-3DS)</summary>
           <div style="padding:6px 0 2px">
@@ -3017,6 +3326,8 @@
 
     </div>
   </div>
+  </div><!-- /workflow-content -->
+  </div><!-- /workflow-shell -->
 
   <!-- ── REQUEST LOG ── -->
   <div class="card" id="card-log">
@@ -3217,8 +3528,10 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v3.2.0</span>
-      <span class="footer-preview-notice">Unofficial preview</span>
+      <span class="footer-ver-badge" id="footer-ver-badge">v3.3.0</span>
+      <button class="footer-preview-notice" id="footer-design-toggle" type="button" onclick="toggleDesign()">
+        <span id="footer-design-toggle-text">Original Design</span>
+      </button>
     </span>
     <span class="footer-actions">
       <span class="footer-links">
@@ -3235,6 +3548,10 @@
           Third-party notices
         </a>
       </span>
+      <button class="btn btn-ghost footer-log-data-action" type="button" onclick="openLogDataModal()" id="btn-log-data">
+        <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 11v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg></span>
+        <span id="btn-log-data-text">Logs verwalten</span>
+      </button>
       <button class="btn btn-danger-ghost footer-clear-action" style="font-size:11px;padding:5px 11px" onclick="clearAllStorage()" id="btn-clear-all">
         <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></span>
         <span id="btn-clear-all-text">Alles löschen</span>
@@ -3282,6 +3599,34 @@
       <button class="btn btn-secondary" id="log-action-cancel" type="button">Abbrechen</button>
       <button class="btn btn-secondary" id="log-action-secondary" type="button" style="display:none">Zusammenführen</button>
       <button class="btn btn-primary" id="log-action-confirm" type="button">Exportieren</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="log-data-modal" role="dialog" aria-modal="true" aria-labelledby="log-data-modal-title" aria-describedby="log-data-modal-text">
+  <div class="app-modal-panel" role="document">
+    <div class="app-modal-icon info" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 11v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg>
+    </div>
+    <h2 class="app-modal-title" id="log-data-modal-title">Log-Daten verwalten</h2>
+    <p class="app-modal-text" id="log-data-modal-text">Request- und Response-Logs gemeinsam sichern oder aus einer JSON-Datei wiederherstellen. Credentials und Einstellungen sind nicht enthalten.</p>
+    <div class="log-data-summary" aria-live="polite">
+      <span class="log-data-count"><span id="log-data-request-label">Request-Log</span> <strong id="log-data-request-count">0</strong></span>
+      <span class="log-data-count"><span id="log-data-response-label">Response-Log</span> <strong id="log-data-response-count">0</strong></span>
+    </div>
+    <div class="log-data-options">
+      <button class="log-data-option" id="log-data-export" type="button" onclick="exportAllLogs()">
+        <span class="log-data-option-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span>
+        <span class="log-data-option-copy"><strong id="log-data-export-title">Alle Logs exportieren</strong><small id="log-data-export-copy">Speichert beide Logs gemeinsam als JSON-Backup.</small></span>
+      </button>
+      <button class="log-data-option" id="log-data-import" type="button" onclick="openCombinedLogImport()">
+        <span class="log-data-option-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 3h14"/></svg></span>
+        <span class="log-data-option-copy"><strong id="log-data-import-title">Logs importieren</strong><small id="log-data-import-copy">Prüft ein Gesamtbackup oder einen bisherigen Einzel-Export.</small></span>
+      </button>
+    </div>
+    <input type="file" id="combined-log-import-file" accept="application/json,.json" hidden onchange="handleCombinedLogImportFile(this)">
+    <div class="app-modal-actions">
+      <button class="btn btn-secondary" id="log-data-close" type="button">Schließen</button>
     </div>
   </div>
 </div>
@@ -3360,6 +3705,9 @@ let currentLang = 'de';
 let currentIntegration = 'classic';
 let currentMethod = 'hpp';
 let currentUseCase = 'create-payment';
+let statusTransactionCandidates = [];
+let statusTransactionRefreshTimer = null;
+let statusTransactionRefreshToken = 0;
 const PBL_REFS_LS_KEY = 'computop_paybylink_refs';
 
 function onTemplateChange() {
@@ -3484,9 +3832,158 @@ function updateUseCaseUI() {
       : (lookup === 'paymentId' ? 'status_info_classic_payment' : 'status_info_classic_transaction');
     if (infoEl) infoEl.innerHTML = t('method_info_status');
     if (statusInfo) statusInfo.innerHTML = `${t(key)}<br><br>${t('status_result_guidance')}`;
+    populateStatusTransactionOptions();
   }
 
   if (isRest) updateRestControls(); else if (isPayment) setMethod(currentMethod);
+}
+
+function _statusCandidateKey(candidate) {
+  return `${candidate.merchantId || ''}\u001f${candidate.paymentId || ''}\u001f${candidate.transId || ''}`;
+}
+
+function _statusIdentifier(value, maxLength = 26) {
+  const text = String(value || '');
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, 14)}…${text.slice(-7)}`;
+}
+
+function _plainParamIgnoreCase(plain, names) {
+  const params = _parsePlainParams(String(plain || ''));
+  const normalised = Object.fromEntries(Object.entries(params).map(([key, value]) => [key.toLowerCase(), value]));
+  for (const name of names) {
+    const value = normalised[name.toLowerCase()];
+    if (value) return String(value).trim();
+  }
+  return '';
+}
+
+function _mergeStatusCandidate(candidates, incoming) {
+  if (!incoming.paymentId && !incoming.transId) return;
+  const matches = candidates.filter(candidate => {
+    const samePayment = incoming.paymentId && candidate.paymentId === incoming.paymentId;
+    const merchantCompatible = !incoming.merchantId || !candidate.merchantId || incoming.merchantId === candidate.merchantId;
+    const sameTransaction = incoming.transId && candidate.transId === incoming.transId && merchantCompatible;
+    return samePayment || sameTransaction;
+  });
+  if (!matches.length) {
+    candidates.push(incoming);
+    return;
+  }
+
+  const merged = matches.reduce((result, candidate) => ({
+    paymentId: result.paymentId || candidate.paymentId,
+    transId: result.transId || candidate.transId,
+    merchantId: result.merchantId || candidate.merchantId,
+    integration: result.integration || candidate.integration,
+    timestamp: String(result.timestamp || '') > String(candidate.timestamp || '') ? result.timestamp : candidate.timestamp,
+  }), incoming);
+  matches.forEach(candidate => candidates.splice(candidates.indexOf(candidate), 1));
+  candidates.push(merged);
+}
+
+async function collectStatusTransactionCandidates() {
+  const [requests, responses] = await Promise.all([
+    _getLogEntries(LOG_REQUEST_STORE, LOG_LS_KEY),
+    _getLogEntries(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY),
+  ]);
+  const candidates = [];
+  requests.forEach(entry => _mergeStatusCandidate(candidates, {
+    paymentId: String(entry.paymentId || '').trim(),
+    transId: String(entry.transId || '').trim(),
+    merchantId: String(entry.merchantId || '').trim(),
+    integration: String(entry.integration || '').trim(),
+    timestamp: entry.timestamp || '',
+  }));
+  responses.forEach(entry => _mergeStatusCandidate(candidates, {
+    paymentId: _plainParamIgnoreCase(entry.plain, ['PayID', 'PaymentID', 'paymentId']),
+    transId: String(entry.transId || '').trim() || _plainParamIgnoreCase(entry.plain, ['TransID', 'TransactionID']),
+    merchantId: String(entry.merchantId || '').trim() || _plainParamIgnoreCase(entry.plain, ['MerchantID', 'mid']),
+    integration: 'classic',
+    timestamp: entry.timestamp || '',
+  }));
+  return candidates
+    .sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')))
+    .slice(0, 100);
+}
+
+function _formatStatusTransactionOption(candidate) {
+  const date = candidate.timestamp
+    ? new Date(candidate.timestamp).toLocaleString(currentLang === 'en' ? 'en-US' : 'de-DE', { dateStyle: 'short', timeStyle: 'short' })
+    : '';
+  const identifiers = [];
+  if (candidate.paymentId) identifiers.push(`PayID ${_statusIdentifier(candidate.paymentId)}`);
+  if (candidate.transId) identifiers.push(`TransID ${_statusIdentifier(candidate.transId)}`);
+  if (candidate.merchantId) identifiers.push(`MID ${_statusIdentifier(candidate.merchantId, 18)}`);
+  return [date, ...identifiers].filter(Boolean).join(' · ');
+}
+
+async function populateStatusTransactionOptions() {
+  const select = document.getElementById('status-saved-transaction');
+  if (!select || currentUseCase !== 'payment-status') return;
+  const refreshToken = ++statusTransactionRefreshToken;
+  const selectedKey = select.dataset.selectedKey || '';
+  const candidates = await collectStatusTransactionCandidates();
+  if (refreshToken !== statusTransactionRefreshToken) return;
+
+  statusTransactionCandidates = candidates;
+  clearElement(select);
+  const manual = document.createElement('option');
+  manual.value = '';
+  manual.textContent = t('status_saved_manual');
+  select.appendChild(manual);
+  candidates.forEach((candidate, index) => {
+    const option = document.createElement('option');
+    option.value = String(index);
+    option.textContent = _formatStatusTransactionOption(candidate);
+    option.title = [candidate.paymentId && `PayID: ${candidate.paymentId}`, candidate.transId && `TransID: ${candidate.transId}`].filter(Boolean).join(' · ');
+    select.appendChild(option);
+  });
+
+  const selectedIndex = candidates.findIndex(candidate => _statusCandidateKey(candidate) === selectedKey);
+  select.value = selectedIndex >= 0 ? String(selectedIndex) : '';
+  if (selectedIndex < 0) delete select.dataset.selectedKey;
+  const summary = document.getElementById('status-saved-transaction-summary');
+  if (summary) {
+    summary.textContent = candidates.length
+      ? t('status_saved_summary').replace('{count}', String(candidates.length))
+      : t('status_saved_empty');
+  }
+}
+
+function applySavedStatusTransaction() {
+  const select = document.getElementById('status-saved-transaction');
+  if (!select || select.value === '') {
+    if (select) delete select.dataset.selectedKey;
+    return;
+  }
+  const candidate = statusTransactionCandidates[Number(select.value)];
+  if (!candidate) return;
+  select.dataset.selectedKey = _statusCandidateKey(candidate);
+  const paymentInput = document.getElementById('status-payment-id');
+  const transactionInput = document.getElementById('status-transaction-id');
+  if (paymentInput) paymentInput.value = candidate.paymentId || '';
+  if (transactionInput) transactionInput.value = candidate.transId || '';
+
+  const lookup = document.getElementById('status-lookup');
+  if (lookup) {
+    const currentValueAvailable = lookup.value === 'paymentId' ? candidate.paymentId : candidate.transId;
+    if (!currentValueAvailable) lookup.value = candidate.paymentId ? 'paymentId' : 'transactionId';
+  }
+  updateUseCaseUI();
+}
+
+function markStatusTransactionManual() {
+  const select = document.getElementById('status-saved-transaction');
+  if (!select) return;
+  select.value = '';
+  delete select.dataset.selectedKey;
+}
+
+function scheduleStatusTransactionRefresh() {
+  if (currentUseCase !== 'payment-status') return;
+  clearTimeout(statusTransactionRefreshTimer);
+  statusTransactionRefreshTimer = setTimeout(populateStatusTransactionOptions, 0);
 }
 
 function updateCredentialModeUI() {
@@ -3619,6 +4116,8 @@ function renderHelp() {
 }
 
 // ══════════════════════════════════════════════════════════════
+let refreshWorkflowNavigation = () => {};
+
 function applyLang() {
   document.title = t('page_title');
   const setText  = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t(key); };
@@ -3651,6 +4150,21 @@ function applyLang() {
   setText('nav-resp-log', 'nav_resp_log');
   setText('nav-help', 'nav_help');
   setText('nav-changelog', 'nav_changelog');
+  setText('workflow-nav-title', 'workflow_nav_title');
+  setText('workflow-nav-step-credentials', 'workflow_nav_step_credentials');
+  setText('workflow-nav-credentials', 'workflow_nav_credentials');
+  setText('workflow-nav-profiles', 'workflow_nav_profiles');
+  setText('workflow-nav-step-request', 'workflow_nav_step_request');
+  setText('workflow-nav-interface', 'workflow_nav_interface');
+  setText('workflow-nav-integration', 'workflow_nav_integration');
+  setText('workflow-nav-status', 'workflow_nav_status');
+  setText('workflow-nav-payment-data', 'workflow_nav_payment_data');
+  setText('workflow-nav-customer', 'workflow_nav_customer');
+  setText('workflow-nav-callbacks', 'workflow_nav_callbacks');
+  setText('workflow-nav-advanced', 'workflow_nav_advanced');
+  setText('workflow-nav-step-preview', 'workflow_nav_step_preview');
+  setText('workflow-nav-preview-data', 'workflow_nav_preview_data');
+  setText('workflow-nav-execution', 'workflow_nav_execution');
   setText('help-title', 'help_title');
   setText('help-subtitle', 'help_subtitle');
   setText('changelog-title', 'changelog_title');
@@ -3704,11 +4218,15 @@ function applyLang() {
   setText('use-case-status-label', 'use_case_status');
   setText('use-case-mit-cit-state', 'use_case_mit_cit_state');
   setText('l-status-lookup', 'status_lookup_label');
+  setText('l-status-saved-transaction', 'status_saved_label');
+  setText('h-status-saved-transaction', 'status_saved_hint');
+  setText('status-saved-transaction-manual', 'status_saved_manual');
   setText('l-status-payment-id', 'status_payment_id_label');
   setText('l-status-transaction-id', 'status_transaction_id_label');
   setText('status-lookup-payment-option', 'status_payment_id_label');
   setText('status-lookup-transaction-option', 'status_transaction_id_label');
   setTip('tip-status-lookup', 'tip_status_lookup');
+  setTip('tip-status-saved-transaction', 'tip_status_saved');
   setTip('tip-status-payment-id', 'tip_status_payment_id');
   setTip('tip-status-transaction-id', 'tip_status_transaction_id');
   setText('l-rest-version', currentLang === 'en' ? 'REST API Version' : 'REST API-Version');
@@ -3716,6 +4234,11 @@ function applyLang() {
   setText('l-rest-environment', currentLang === 'en' ? 'Target Environment' : 'Zielumgebung');
   setText('l-rest-auth', currentLang === 'en' ? 'Authentication' : 'Authentifizierung');
   setText('l-rest-tool', currentLang === 'en' ? 'Output Format' : 'Ausgabeformat');
+  setText('rest-tool-curl', 'rest_tool_curl');
+  setText('rest-tool-curl-powershell', 'rest_tool_curl_powershell');
+  setText('rest-tool-powershell', 'rest_tool_powershell');
+  setText('rest-tool-postman', 'rest_tool_postman');
+  setText('rest-tool-http', 'rest_tool_http');
   setTip('tip-rest-version', 'tip_rest_version');
   setTip('tip-rest-method', 'tip_rest_method');
   setTip('tip-rest-environment', 'tip_rest_environment');
@@ -3794,7 +4317,7 @@ function applyLang() {
     setTip(`tip-${prefix}-country`, 'tip_customer_country');
   });
   populateCustomerCountryOptions();
-  setText('sep-redirect', 'sep_redirect');
+  setText('workflow-callbacks-title', 'sep_redirect');
   setText('l-urls', 'l_urls'); setText('h-urls', 'h_urls');
   setText('l-urlf', 'l_urlf'); setText('h-urlf', 'h_urlf');
   setText('l-urln', 'l_urln'); setText('h-urln', 'h_urln');
@@ -3839,6 +4362,7 @@ function applyLang() {
   setText('btn-status-submit-text', 'btn_status_submit');
   setText('btn-status-submit-hint', 'btn_status_submit_hint');
   updateUseCaseUI(); // Context-specific labels must win after generic preview labels.
+  refreshWorkflowNavigation();
 
   setText('ct-log', 'ct_log');
   setText('log-subtitle', 'log_subtitle');
@@ -3866,6 +4390,17 @@ function applyLang() {
   setText('resp-log-transfer-hint', 'log_transfer_hint');
 
   setText('footer-name-text', 'footer_name');
+  updateDesignToggle();
+  setText('btn-log-data-text', 'btn_log_data');
+  setText('log-data-modal-title', 'log_data_modal_title');
+  setText('log-data-modal-text', 'log_data_modal_text');
+  setText('log-data-request-label', 'ct_log');
+  setText('log-data-response-label', 'ct_resp_log');
+  setText('log-data-export-title', 'log_data_export_title');
+  setText('log-data-export-copy', 'log_data_export_copy');
+  setText('log-data-import-title', 'log_data_import_title');
+  setText('log-data-import-copy', 'log_data_import_copy');
+  setText('log-data-close', 'log_data_close');
   setText('btn-clear-all-text', 'btn_clear_all');
   setText('clear-all-modal-title', 'clear_all_modal_title');
   setText('clear-all-modal-text', 'clear_all_modal_text');
@@ -4507,6 +5042,20 @@ function validateCustomerAddress(address) {
   }
 }
 
+function normaliseCustomerPhone(countryCode, subscriberNumber) {
+  const country = String(countryCode || '').replace(/\D/g, '');
+  const subscriber = String(subscriberNumber || '').replace(/\D/g, '');
+  if (!country && !subscriber) return null;
+  if (!country || !subscriber || country.length > 3 || subscriber.length > 15) {
+    throw new Error(t('val_customer_phone'));
+  }
+  return { countryCode: country, subscriberNumber: subscriber };
+}
+
+function formatRestContactPhone(phone) {
+  return phone ? `(+${phone.countryCode})${phone.subscriberNumber}` : '';
+}
+
 function collectCustomerMasterData() {
   if (!document.getElementById('customer-enabled')?.checked) return null;
   const firstName = document.getElementById('cust-first-name')?.value.trim() || '';
@@ -4514,8 +5063,9 @@ function collectCustomerMasterData() {
   const email = document.getElementById('cust-email')?.value.trim() || '';
   const phoneCountry = document.getElementById('cust-phone-country')?.value.trim() || '';
   const phoneNumber = document.getElementById('cust-phone-number')?.value.trim() || '';
+  const phone = normaliseCustomerPhone(phoneCountry, phoneNumber);
   if (!firstName || !lastName) throw new Error(t('val_customer_name'));
-  if (!email && (!phoneCountry || !phoneNumber)) throw new Error(t('val_customer_contact'));
+  if (!email && !phone) throw new Error(t('val_customer_contact'));
 
   const billingAddress = customerAddressFromFields('bill');
   const shippingSameAsBilling = document.getElementById('shipping-same')?.checked !== false;
@@ -4533,7 +5083,7 @@ function collectCustomerMasterData() {
     },
     contact: {
       email,
-      phone: phoneCountry && phoneNumber ? { countryCode: phoneCountry, subscriberNumber: phoneNumber } : null
+      phone
     },
     billingAddress,
     shippingAddress,
@@ -4580,7 +5130,7 @@ function restAddressFromCustomer(data, address) {
     },
     contactInfo: {
       email: data.contact.email,
-      phone: data.contact.phone ? `${data.contact.phone.countryCode}${data.contact.phone.subscriberNumber}` : ''
+      phone: formatRestContactPhone(data.contact.phone)
     }
   });
 }
@@ -4821,17 +5371,35 @@ curl --request ${httpMethod} \\
   --header "Authorization: Bearer $ACCESS_TOKEN"${requestBody}`;
 }
 
+function buildPowerShellCurlRequest(url, json, auth, credentials, idempotencyKey, httpMethod = 'POST') {
+  const hasBody = httpMethod !== 'GET';
+  const quote = value => String(value).replace(/'/g, "''");
+  const bodySetup = hasBody ? `$body = @'\n${json}\n'@\n\n` : '';
+  const bodyArgs = hasBody
+    ? ` \`\n  --header 'Content-Type: application/json'${url.includes('/api/v2/') ? ` \`\n  --header 'Idempotency-Key: ${quote(idempotencyKey)}'` : ''} \`\n  --data $body`
+    : '';
+  if (auth === 'basic') {
+    return `${bodySetup}curl.exe --request ${httpMethod} \`\n  --url '${quote(url)}' \`\n  --user '${quote(credentials.merchantId)}:${quote(credentials.apiKey)}'${bodyArgs}`;
+  }
+  const tokenUrl = `${new URL(url).origin}/authorization/oauth/token`;
+  return `$tokenResponse = curl.exe --silent --request POST \`\n  --url '${quote(tokenUrl)}' \`\n  --header 'Content-Type: application/x-www-form-urlencoded' \`\n  --data-urlencode 'grant_type=client_credentials' \`\n  --data-urlencode 'client_id=${quote(credentials.merchantId)}' \`\n  --data-urlencode 'client_secret=${quote(credentials.apiKey)}' | ConvertFrom-Json
+$accessToken = $tokenResponse.access_token
+
+${bodySetup}curl.exe --request ${httpMethod} \`\n  --url '${quote(url)}' \`\n  --header "Authorization: Bearer $accessToken"${bodyArgs}`;
+}
+
 function buildPowerShellRequest(url, json, auth, credentials, idempotencyKey, httpMethod = 'POST') {
   const hasBody = httpMethod !== 'GET';
   const body = `$body = @'\n${json}\n'@`;
   const extraHeader = hasBody && url.includes('/api/v2/') ? `; 'Idempotency-Key' = '${idempotencyKey}'` : '';
   const bodySetup = hasBody ? `${body}\n` : '';
   const bodyArgs = hasBody ? " -ContentType 'application/json' -Body $body" : '';
+  const responseOutput = '$response | ConvertTo-Json -Depth 10';
   if (auth === 'basic') {
-    return `$pair = '${credentials.merchantId}:${credentials.apiKey}'\n$basic = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($pair))\n${bodySetup}Invoke-RestMethod -Method ${httpMethod} -Uri '${url}' -Headers @{ Authorization = "Basic $basic"${extraHeader} }${bodyArgs}`;
+    return `$pair = '${credentials.merchantId}:${credentials.apiKey}'\n$basic = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($pair))\n${bodySetup}$response = Invoke-RestMethod -Method ${httpMethod} -Uri '${url}' -Headers @{ Authorization = "Basic $basic"${extraHeader} }${bodyArgs}\n${responseOutput}`;
   }
   const tokenUrl = `${new URL(url).origin}/authorization/oauth/token`;
-  return `$token = Invoke-RestMethod -Method Post -Uri '${tokenUrl}' -ContentType 'application/x-www-form-urlencoded' -Body @{ grant_type='client_credentials'; client_id='${credentials.merchantId}'; client_secret='${credentials.apiKey}' }\n${bodySetup}Invoke-RestMethod -Method ${httpMethod} -Uri '${url}' -Headers @{ Authorization = "Bearer $($token.access_token)"${extraHeader} }${bodyArgs}`;
+  return `$token = Invoke-RestMethod -Method Post -Uri '${tokenUrl}' -ContentType 'application/x-www-form-urlencoded' -Body @{ grant_type='client_credentials'; client_id='${credentials.merchantId}'; client_secret='${credentials.apiKey}' }\n${bodySetup}$response = Invoke-RestMethod -Method ${httpMethod} -Uri '${url}' -Headers @{ Authorization = "Bearer $($token.access_token)"${extraHeader} }${bodyArgs}\n${responseOutput}`;
 }
 
 function buildPostmanCollection(url, payload, auth, credentials, idempotencyKey, httpMethod = 'POST') {
@@ -4908,7 +5476,7 @@ function renderCommandSyntax(element, source, tool) {
     renderJsonSyntax(element, source);
     return;
   }
-  const pattern = /https?:\/\/[^\s'"}]+|\{\{[^}]+\}\}|\$\([^\n]+?\)|\$[A-Za-z_][\w.]*(?:\.[\w]+)*|--[\w-]+|-[A-Z][A-Za-z]*|'(?:[^']|'')*'|"(?:\\.|[^"\\])*"|\b(?:curl|jq|Invoke-RestMethod|POST|GET|PUT|PATCH|DELETE|HTTP\/1\.1)\b|^(?:Host|Authorization|Content-Type|Content-Length)(?=:)/gm;
+  const pattern = /https?:\/\/[^\s'"}]+|\{\{[^}]+\}\}|\$\([^\n]+?\)|\$[A-Za-z_][\w.]*(?:\.[\w]+)*|--[\w-]+|-[A-Z][A-Za-z]*|'(?:[^']|'')*'|"(?:\\.|[^"\\])*"|\b(?:curl(?:\.exe)?|jq|Invoke-RestMethod|ConvertFrom-Json|ConvertTo-Json|POST|GET|PUT|PATCH|DELETE|HTTP\/1\.1)\b|^(?:Host|Authorization|Content-Type|Content-Length)(?=:)/gm;
   renderSyntaxTokens(element, source, pattern, token => {
     if (/^https?:\/\//.test(token)) return 'syntax-url';
     if (/^\{\{/.test(token) || /^\$/.test(token)) return 'syntax-variable';
@@ -4940,18 +5508,21 @@ async function buildRestPreview() {
     const idempotencyKey = payload?.transId || payload?.transactionId || identifier;
     const builders = {
       curl: () => buildCurlRequest(url, json, auth, credentials, idempotencyKey, httpMethod),
+      'curl-powershell': () => buildPowerShellCurlRequest(url, json, auth, credentials, idempotencyKey, httpMethod),
       powershell: () => buildPowerShellRequest(url, json, auth, credentials, idempotencyKey, httpMethod),
       postman: () => buildPostmanCollection(url, payload, auth, credentials, idempotencyKey, httpMethod),
       http: () => buildRawHttpRequest(url, json, auth, credentials, idempotencyKey, httpMethod)
     };
     const help = currentLang === 'en' ? {
-      curl: 'Run in a terminal or import into Postman using <code>Import → Raw text</code>. The OAuth2 variant also requires <code>jq</code>.',
-      powershell: 'Run in a PowerShell session. The JSON body is passed as a here-string so quotation marks remain unchanged.',
+      curl: '<strong>Bash output:</strong> Do not paste this into PowerShell because <code>\\</code> is not a PowerShell line continuation. Select the PowerShell output format instead, or run it in Bash, WSL, Git Bash, macOS or Linux. It can also be imported into Postman using <code>Import → Raw text</code>. The OAuth2 variant requires <code>jq</code>.',
+      'curl-powershell': 'Run the complete block in PowerShell. It explicitly calls <code>curl.exe</code>, uses PowerShell line continuations and passes the JSON body as a here-string.',
+      powershell: 'Run in a PowerShell session. The JSON body is passed as a here-string, and the response is rendered as JSON with sufficient depth so nested link objects remain visible.',
       postman: 'Save with the <code>.postman_collection.json</code> extension or paste into <code>Import → Raw text</code>. Variables can then be maintained in a private environment.',
       http: 'For REST clients and IDE files such as <code>.http</code>. Replace placeholders before execution.'
     } : {
-      curl: 'Im Terminal ausführen oder in Postman über <code>Import → Raw text</code> importieren. Für OAuth2 benötigt diese Variante zusätzlich <code>jq</code>.',
-      powershell: 'In einer PowerShell-Sitzung ausführen. Der JSON-Body wird als Here-String übergeben, damit Anführungszeichen unverändert bleiben.',
+      curl: '<strong>Bash-Ausgabe:</strong> Nicht in PowerShell einfügen, weil <code>\\</code> dort keine Zeilenfortsetzung ist. Stattdessen das Ausgabeformat PowerShell wählen oder den Befehl in Bash, WSL, Git Bash, macOS oder Linux ausführen. Alternativ über <code>Import → Raw text</code> in Postman importieren. Für OAuth2 wird <code>jq</code> benötigt.',
+      'curl-powershell': 'Den vollständigen Block in PowerShell ausführen. Er ruft ausdrücklich <code>curl.exe</code> auf, verwendet PowerShell-Zeilenfortsetzungen und übergibt den JSON-Body als Here-String.',
+      powershell: 'In einer PowerShell-Sitzung ausführen. Der JSON-Body wird als Here-String übergeben; die Antwort wird mit ausreichender Tiefe als JSON ausgegeben, damit verschachtelte Link-Objekte sichtbar bleiben.',
       postman: 'Als Datei mit Endung <code>.postman_collection.json</code> speichern oder in Postman über <code>Import → Raw text</code> einfügen. Variablen können anschließend in einer privaten Environment gepflegt werden.',
       http: 'Für REST-Clients und IDE-Dateien wie <code>.http</code>. Platzhalter vor der Ausführung ersetzen.'
     };
@@ -5611,25 +6182,28 @@ async function _clearLogStore(storeName, localKey) {
   }
 }
 
-async function _writeLogEntries(storeName, localKey, entries) {
-  const sorted = entries
-    .map(entry => {
-      const record = { ...entry };
-      delete record.id;
-      return record;
-    })
-    .sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')))
-    .slice(0, LOG_MAX);
-  localStorage.setItem(localKey, JSON.stringify(sorted));
+function _prepareLogEntries(entries) {
+  return entries.map(entry => {
+    const record = { ...entry };
+    delete record.id;
+    return record;
+  }).sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || ''))).slice(0, LOG_MAX);
+}
+
+async function _writeLogGroups(groups) {
+  const prepared = groups.map(group => ({ ...group, entries: _prepareLogEntries(group.entries) }));
+  prepared.forEach(group => localStorage.setItem(group.localKey, JSON.stringify(group.entries)));
   const db = await initLogStorage();
   if (!db) return;
   try {
-    const transaction = db.transaction(storeName, 'readwrite');
-    const store = transaction.objectStore(storeName);
-    store.clear();
-    sorted.forEach(entry => store.add(entry));
+    const transaction = db.transaction(prepared.map(group => group.storeName), 'readwrite');
+    prepared.forEach(group => {
+      const store = transaction.objectStore(group.storeName);
+      store.clear();
+      group.entries.forEach(entry => store.add(entry));
+    });
     await _transactionComplete(transaction);
-    localStorage.removeItem(localKey);
+    prepared.forEach(group => localStorage.removeItem(group.localKey));
   } catch (error) {
     console.warn('IndexedDB log import failed; using localStorage fallback:', error);
     db.close();
@@ -5637,8 +6211,14 @@ async function _writeLogEntries(storeName, localKey, entries) {
   }
 }
 
+async function _writeLogEntries(storeName, localKey, entries) {
+  return _writeLogGroups([{ storeName, localKey, entries }]);
+}
+
 const LOG_EXPORT_FORMAT = 'paygate-payment-tester-log';
 const LOG_EXPORT_VERSION = 1;
+const LOG_BACKUP_FORMAT = 'paygate-payment-tester-backup';
+const LOG_BACKUP_VERSION = 1;
 let logActionModalResolver = null;
 
 function _logConfig(kind) {
@@ -5840,6 +6420,179 @@ async function handleLogImportFile(kind, input) {
   }
 }
 
+async function updateLogDataCounts() {
+  const [requests, responses] = await Promise.all([
+    _getLogEntries(LOG_REQUEST_STORE, LOG_LS_KEY),
+    _getLogEntries(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY),
+  ]);
+  const requestCount = document.getElementById('log-data-request-count');
+  const responseCount = document.getElementById('log-data-response-count');
+  if (requestCount) requestCount.textContent = String(requests.length);
+  if (responseCount) responseCount.textContent = String(responses.length);
+}
+
+function openLogDataModal() {
+  const modal = document.getElementById('log-data-modal');
+  if (!modal) return;
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+  updateLogDataCounts();
+  document.getElementById('log-data-export')?.focus();
+}
+
+function closeLogDataModal(restoreFocus = true) {
+  const modal = document.getElementById('log-data-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  if (restoreFocus) document.getElementById('btn-log-data')?.focus();
+}
+
+async function exportAllLogs() {
+  const [requests, responses] = await Promise.all([
+    _getLogEntries(LOG_REQUEST_STORE, LOG_LS_KEY),
+    _getLogEntries(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY),
+  ]);
+  const cleanRequests = requests.map(entry => _sanitizeLogEntry('request', entry)).filter(Boolean);
+  const cleanResponses = responses.map(entry => _sanitizeLogEntry('response', entry)).filter(Boolean);
+  if (!cleanRequests.length && !cleanResponses.length) {
+    showToast(t('toast_log_data_export_empty'), 'info');
+    return;
+  }
+
+  closeLogDataModal(false);
+  if (!await openLogActionModal({
+    mode: 'export',
+    title: t('log_data_export_modal_title'),
+    text: t('log_export_modal_text'),
+    confirmText: t('log_export_modal_confirm'),
+  })) return;
+
+  const exportDate = new Date();
+  const payload = {
+    format: LOG_BACKUP_FORMAT,
+    version: LOG_BACKUP_VERSION,
+    appVersion: _appVersion(),
+    exportedAt: exportDate.toISOString(),
+    logs: {
+      requests: cleanRequests,
+      responses: cleanResponses,
+    },
+  };
+  _downloadTextFile(
+    `paygate-payment-tester-logs-${_localTimestampForFilename(exportDate)}.json`,
+    JSON.stringify(payload, null, 2)
+  );
+}
+
+function openCombinedLogImport() {
+  document.getElementById('combined-log-import-file')?.click();
+}
+
+function _sanitizeImportedEntries(kind, entries) {
+  if (!Array.isArray(entries)) throw new Error(t('err_log_data_entries'));
+  const sanitized = entries.map(entry => _sanitizeLogEntry(kind, entry));
+  if (sanitized.some(entry => !entry)) throw new Error(t('err_log_data_entries'));
+  return _dedupeLogEntries(kind, sanitized);
+}
+
+function _normaliseCombinedLogImport(payload) {
+  if (payload?.format === LOG_BACKUP_FORMAT) {
+    if (payload.version !== LOG_BACKUP_VERSION || !payload.logs || typeof payload.logs !== 'object') {
+      throw new Error(t('err_log_data_format'));
+    }
+    return {
+      includeRequest: true,
+      includeResponse: true,
+      requests: _sanitizeImportedEntries('request', payload.logs.requests),
+      responses: _sanitizeImportedEntries('response', payload.logs.responses),
+    };
+  }
+
+  if (payload?.format === LOG_EXPORT_FORMAT && payload?.type === 'request-log') {
+    return {
+      includeRequest: true,
+      includeResponse: false,
+      requests: _sanitizeImportedEntries('request', payload.entries),
+      responses: [],
+    };
+  }
+  if (payload?.format === LOG_EXPORT_FORMAT && payload?.type === 'response-log') {
+    return {
+      includeRequest: false,
+      includeResponse: true,
+      requests: [],
+      responses: _sanitizeImportedEntries('response', payload.entries),
+    };
+  }
+  throw new Error(t('err_log_data_format'));
+}
+
+async function _prepareLogImportResult(kind, imported, replacing) {
+  const config = _logConfig(kind);
+  const existing = replacing ? [] : (await _getLogEntries(config.storeName, config.localKey))
+    .map(entry => _sanitizeLogEntry(kind, entry)).filter(Boolean);
+  const existingKeys = new Set(existing.map(entry => _logEntryKey(kind, entry)));
+  const newEntries = replacing
+    ? imported
+    : imported.filter(entry => !existingKeys.has(_logEntryKey(kind, entry)));
+  return {
+    entries: replacing ? imported : _dedupeLogEntries(kind, [...newEntries, ...existing]),
+    importedCount: newEntries.length,
+  };
+}
+
+function _formatLogDataText(key, requests, responses) {
+  return t(key).replace('{requests}', String(requests)).replace('{responses}', String(responses));
+}
+
+async function handleCombinedLogImportFile(input) {
+  const file = input?.files?.[0];
+  if (input) input.value = '';
+  if (!file) return;
+
+  try {
+    const payload = _parseLogImport(await file.text());
+    const imported = _normaliseCombinedLogImport(payload);
+    if (!imported.requests.length && !imported.responses.length) throw new Error(t('err_log_import_empty'));
+
+    closeLogDataModal(false);
+    const action = await openLogActionModal({
+      mode: 'import',
+      title: t('log_data_import_modal_title'),
+      text: _formatLogDataText('log_data_import_preview', imported.requests.length, imported.responses.length),
+      confirmText: t('log_import_modal_replace'),
+      secondaryText: t('log_import_modal_merge'),
+    });
+    if (!action) return;
+    const replacing = action === 'confirm';
+    const requestResult = imported.includeRequest
+      ? await _prepareLogImportResult('request', imported.requests, replacing)
+      : null;
+    const responseResult = imported.includeResponse
+      ? await _prepareLogImportResult('response', imported.responses, replacing)
+      : null;
+    const importedRequestCount = requestResult?.importedCount || 0;
+    const importedResponseCount = responseResult?.importedCount || 0;
+    if (!replacing && importedRequestCount === 0 && importedResponseCount === 0) {
+      showToast(t('toast_log_import_no_new'), 'info');
+      return;
+    }
+
+    const groups = [];
+    if (requestResult) groups.push({ storeName: LOG_REQUEST_STORE, localKey: LOG_LS_KEY, entries: requestResult.entries });
+    if (responseResult) groups.push({ storeName: LOG_RESPONSE_STORE, localKey: RESP_LOG_LS_KEY, entries: responseResult.entries });
+    await _writeLogGroups(groups);
+    await Promise.all([
+      requestResult ? renderLog() : Promise.resolve(),
+      responseResult ? renderResponseLog() : Promise.resolve(),
+    ]);
+    showToast(_formatLogDataText('toast_log_data_imported', importedRequestCount, importedResponseCount), 'success');
+  } catch (error) {
+    showToast(t('toast_log_import_error') + error.message, 'error');
+  }
+}
+
 function openLogActionModal({ mode, title, text, confirmText, secondaryText = '' }) {
   const modal = document.getElementById('log-action-modal');
   const titleEl = document.getElementById('log-action-modal-title');
@@ -5920,6 +6673,7 @@ async function renderLog() {
   const container = document.getElementById('log-list');
   if (!container) return;
   requestLogCache = await _getLogEntries(LOG_REQUEST_STORE, LOG_LS_KEY);
+  scheduleStatusTransactionRefresh();
 
   const badge = document.getElementById('log-count-badge');
   if (badge) badge.textContent = requestLogCache.length ? `${requestLogCache.length} ${t('log_entries')}` : '';
@@ -6006,6 +6760,7 @@ async function renderResponseLog() {
   const container = document.getElementById('resp-log-list');
   if (!container) return;
   responseLogCache = await _getLogEntries(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY);
+  scheduleStatusTransactionRefresh();
 
   const badge = document.getElementById('resp-log-count-badge');
   if (badge) badge.textContent = responseLogCache.length ? `${responseLogCache.length} ${t('resp_log_entries')}` : '';
@@ -6199,6 +6954,41 @@ function initDesign() {
   document.documentElement.dataset.design = design;
   if (SUPPORTED_DESIGNS.has(requested)) localStorage.setItem(DESIGN_LS_KEY, design);
   _updateBrowserThemeColor();
+  updateDesignToggle();
+}
+
+function updateDesignToggle() {
+  const button = document.getElementById('footer-design-toggle');
+  const label = document.getElementById('footer-design-toggle-text');
+  if (!button || !label) return;
+
+  const isNexi = document.documentElement.dataset.design === 'nexi';
+  const labelKey = isNexi ? 'footer_design_nexi' : 'footer_design_original';
+  const actionKey = isNexi ? 'footer_design_to_original' : 'footer_design_to_nexi';
+  label.textContent = t(labelKey);
+  button.title = t(actionKey);
+  button.setAttribute('aria-label', t(actionKey));
+  button.setAttribute('aria-pressed', String(isNexi));
+}
+
+function setDesign(design, updateUrl = true) {
+  const nextDesign = SUPPORTED_DESIGNS.has(design) ? design : 'original';
+  document.documentElement.dataset.design = nextDesign;
+  try { localStorage.setItem(DESIGN_LS_KEY, nextDesign); } catch (_) {}
+
+  if (updateUrl) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('design', nextDesign);
+    window.history.replaceState(window.history.state, '', url.toString());
+  }
+
+  _updateBrowserThemeColor();
+  updateDesignToggle();
+}
+
+function toggleDesign() {
+  const isNexi = document.documentElement.dataset.design === 'nexi';
+  setDesign(isNexi ? 'original' : 'nexi');
 }
 
 function _updateBrowserThemeColor() {
@@ -6522,6 +7312,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDesign();
   initTheme();
   initLang();
+  initStatusTransactionPicker();
   generateTransId();
   initPayByLinkDefaults();
   setIntegration(currentIntegration);
@@ -6535,7 +7326,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initClearAllModal();
   initProfileDeleteModal();
   initLogActionModal();
+  initLogDataModal();
   initNavigation();
+  initWorkflowNavigation();
   initCallbackReceiver();
 });
 
@@ -6604,6 +7397,26 @@ function initLogActionModal() {
   });
 }
 
+function initLogDataModal() {
+  const modal = document.getElementById('log-data-modal');
+  const closeButton = document.getElementById('log-data-close');
+  if (!modal || !closeButton) return;
+
+  closeButton.addEventListener('click', () => closeLogDataModal());
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeLogDataModal();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeLogDataModal();
+  });
+}
+
+function initStatusTransactionPicker() {
+  document.getElementById('status-saved-transaction')?.addEventListener('change', applySavedStatusTransaction);
+  document.getElementById('status-payment-id')?.addEventListener('input', markStatusTransactionManual);
+  document.getElementById('status-transaction-id')?.addEventListener('input', markStatusTransactionManual);
+}
+
 function initParamTips() {
   const tip = document.createElement('div');
   tip.id = 'g-tip';
@@ -6643,6 +7456,166 @@ function initParamTips() {
     btn.addEventListener('focus',      () => show(btn));
     btn.addEventListener('blur',       hide);
   });
+}
+
+function toggleWorkflowSubsection(id, expanded) {
+  const section = document.getElementById(id);
+  if (!section) return;
+  const shouldExpand = expanded ?? section.classList.contains('is-collapsed');
+  section.classList.toggle('is-collapsed', !shouldExpand);
+  section.querySelector(':scope > .workflow-subsection-header')?.setAttribute('aria-expanded', String(shouldExpand));
+  refreshWorkflowNavigation();
+}
+
+function initWorkflowNavigation() {
+  const workflowView = document.getElementById('payment-workflow-view');
+  const nav = document.getElementById('workflow-nav');
+  const mobileTrigger = document.getElementById('workflow-mobile-trigger');
+  const mobileCurrent = document.getElementById('workflow-mobile-current');
+  const links = Array.from(document.querySelectorAll('.workflow-nav-item[data-workflow-target]'));
+  if (!workflowView || !nav || !links.length) return;
+
+  let activeLink = null;
+  let updatePending = false;
+  let navigationLockUntil = 0;
+
+  const conditionVisible = link => {
+    const condition = link.dataset.workflowVisible;
+    if (!condition) return true;
+    if (condition === 'status') return currentUseCase === 'payment-status';
+    if (condition === 'create') return currentUseCase === 'create-payment';
+    if (condition === 'classic-preview') {
+      const classicPreview = document.getElementById('debug-section');
+      return currentUseCase === 'create-payment'
+        && currentIntegration === 'classic'
+        && classicPreview?.style.display !== 'none';
+    }
+    return true;
+  };
+
+  const targetIsRendered = target => {
+    if (!target || !target.getClientRects().length) return false;
+    const collapsedCard = target.closest('.card.collapsed');
+    if (collapsedCard && collapsedCard !== target) return false;
+    const collapsedSection = target.closest('.workflow-subsection.is-collapsed');
+    return !collapsedSection || collapsedSection === target;
+  };
+
+  function setActive(link) {
+    if (!link || link.hidden) return;
+    activeLink = link;
+    links.forEach(item => {
+      const isActive = item === link;
+      item.classList.toggle('workflow-nav-active', isActive);
+      if (isActive) item.setAttribute('aria-current', 'location');
+      else item.removeAttribute('aria-current');
+    });
+    if (mobileCurrent) mobileCurrent.textContent = link.textContent.trim();
+  }
+
+  function updateActiveFromScroll() {
+    updatePending = false;
+    if (workflowView.hidden) return;
+    if (Date.now() < navigationLockUntil) return;
+    const activationLine = window.matchMedia('(max-width: 900px)').matches ? 166 : 114;
+    const candidates = links.filter(link => {
+      if (link.hidden) return false;
+      return targetIsRendered(document.getElementById(link.dataset.workflowTarget));
+    });
+    if (!candidates.length) return;
+    let next = candidates[0];
+    candidates.forEach(link => {
+      const target = document.getElementById(link.dataset.workflowTarget);
+      if (target.getBoundingClientRect().top <= activationLine) next = link;
+    });
+    setActive(next);
+  }
+
+  function scheduleUpdate() {
+    if (updatePending) return;
+    updatePending = true;
+    requestAnimationFrame(updateActiveFromScroll);
+  }
+
+  refreshWorkflowNavigation = () => {
+    links.forEach(link => { link.hidden = !conditionVisible(link); });
+    if (activeLink?.hidden) activeLink = null;
+    scheduleUpdate();
+  };
+
+  function expandTarget(target) {
+    const card = target.closest('.card');
+    card?.classList.remove('collapsed');
+    const subsection = target.classList.contains('workflow-subsection')
+      ? target
+      : target.closest('.workflow-subsection');
+    if (subsection?.classList.contains('is-collapsed')) toggleWorkflowSubsection(subsection.id, true);
+  }
+
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      const target = document.getElementById(link.dataset.workflowTarget);
+      if (!target) return;
+      expandTarget(target);
+      setActive(link);
+      navigationLockUntil = Date.now() + 700;
+      nav.classList.remove('mobile-open');
+      mobileTrigger?.setAttribute('aria-expanded', 'false');
+      if (location.hash !== `#${target.id}`) history.pushState({}, '', `#${target.id}`);
+      requestAnimationFrame(() => {
+        const offset = window.matchMedia('(max-width: 900px)').matches ? 156 : 104;
+        const top = window.scrollY + target.getBoundingClientRect().top - offset;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        window.setTimeout(() => {
+          target.focus({ preventScroll: true });
+          navigationLockUntil = 0;
+          scheduleUpdate();
+        }, 700);
+      });
+    });
+  });
+
+  mobileTrigger?.addEventListener('click', () => {
+    const open = nav.classList.toggle('mobile-open');
+    mobileTrigger.setAttribute('aria-expanded', String(open));
+  });
+  document.addEventListener('click', event => {
+    if (!nav.classList.contains('mobile-open') || nav.contains(event.target)) return;
+    nav.classList.remove('mobile-open');
+    mobileTrigger?.setAttribute('aria-expanded', 'false');
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !nav.classList.contains('mobile-open')) return;
+    nav.classList.remove('mobile-open');
+    mobileTrigger?.setAttribute('aria-expanded', 'false');
+    mobileTrigger?.focus();
+  });
+
+  window.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', scheduleUpdate);
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(scheduleUpdate, { rootMargin: '-100px 0px -62% 0px' });
+    links.forEach(link => {
+      const target = document.getElementById(link.dataset.workflowTarget);
+      if (target) observer.observe(target);
+    });
+  }
+  const stateObserver = new MutationObserver(refreshWorkflowNavigation);
+  stateObserver.observe(document.getElementById('card-payment'), {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class', 'style', 'hidden']
+  });
+  stateObserver.observe(document.getElementById('card-preview'), {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class', 'style', 'hidden']
+  });
+
+  const initialTarget = document.getElementById(location.hash.slice(1));
+  const initialLink = initialTarget && links.find(link => link.dataset.workflowTarget === initialTarget.id);
+  if (initialLink) requestAnimationFrame(() => initialLink.click());
+  else refreshWorkflowNavigation();
 }
 
 function initNavigation() {
