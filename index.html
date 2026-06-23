@@ -46,7 +46,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.4.0",
+      "softwareVersion": "3.5.0",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -883,11 +883,27 @@
     label .required { color: var(--accent); margin-left: 3px; }
     label .hint { font-size: 10px; color: var(--muted); text-transform: none; letter-spacing: 0; margin-left: 4px; font-weight: 300; }
     .api-field-name {
-      display:block; margin-top:-2px; color:var(--muted); font-family:var(--mono);
+      display:block; margin:-2px 0 4px; color:var(--muted); font-family:var(--mono);
       font-size:9px; font-style:italic; font-weight:400; letter-spacing:0; line-height:1.45;
       text-transform:none; overflow-wrap:anywhere;
     }
     .api-field-name strong { color:var(--accent2); font-style:normal; font-weight:600; }
+    .customer-master-body .field,
+    .article-item-card .field { gap:4px; min-width:0; }
+    .customer-master-body .field > label,
+    .article-item-card .field > label {
+      height:auto; line-height:16px; overflow:hidden; display:block;
+      white-space:nowrap; text-overflow:ellipsis;
+    }
+    .customer-master-body .field > .api-field-name,
+    .article-item-card .field > .api-field-name {
+      height:auto; min-height:0; margin:0 0 2px; overflow:hidden; display:block;
+      white-space:nowrap; text-overflow:ellipsis;
+    }
+    .api-field-name-content {
+      width:100%; overflow:hidden; display:block;
+      white-space:nowrap; text-overflow:ellipsis;
+    }
 
     /* ── METHOD SELECTOR ── */
     .method-ctrl {
@@ -921,6 +937,8 @@
     .method-info-icon { flex-shrink: 0; margin-top: 1px; color: var(--accent2); }
     .method-info strong { color: var(--accent2); font-weight: 500; }
     .integration-label { font-size: 10px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin: 0 0 7px; }
+    .credential-interface-selector { margin:18px 0 16px; scroll-margin-top:140px; }
+    .credential-interface-selector .method-ctrl { margin-bottom:0; }
     .method-btn[disabled] { cursor: not-allowed; opacity: .48; }
     .method-btn[disabled]:hover { transform: none; }
     .method-status { margin-top: 14px; }
@@ -1051,11 +1069,7 @@
       background: rgba(59, 130, 246, 0.05);
     }
     .customer-master-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: flex-start;
-      flex-wrap: wrap;
+      display: block;
     }
     .customer-master-toggle {
       display: flex;
@@ -1079,6 +1093,31 @@
       border-radius: 4px;
       font: initial;
     }
+    .customer-master-toggle > input[type="checkbox"] {
+      appearance:none; -webkit-appearance:none; display:grid; place-content:center;
+      width:22px; height:22px; min-width:22px; margin:0;
+      border:1.5px solid var(--border2); border-radius:7px;
+      background:color-mix(in srgb, var(--surface) 82%, transparent);
+      box-shadow:inset 0 1px 2px rgba(0,0,0,.12);
+      cursor:pointer; transition:background .16s,border-color .16s,box-shadow .16s,transform .12s;
+    }
+    .customer-master-toggle > input[type="checkbox"]::before {
+      content:''; width:6px; height:10px; margin-top:-2px;
+      border:solid #fff; border-width:0 2px 2px 0;
+      transform:rotate(45deg) scale(0); transform-origin:center;
+      transition:transform .14s cubic-bezier(.2,.8,.2,1.25);
+    }
+    .customer-master-toggle > input[type="checkbox"]:hover {
+      border-color:var(--accent2); box-shadow:0 0 0 3px color-mix(in srgb,var(--accent2) 12%,transparent);
+    }
+    .customer-master-toggle > input[type="checkbox"]:checked {
+      background:var(--accent); border-color:var(--accent);
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);
+    }
+    .customer-master-toggle > input[type="checkbox"]:checked::before { transform:rotate(45deg) scale(1); }
+    .customer-master-toggle > input[type="checkbox"]:focus-visible {
+      outline:2px solid var(--accent2); outline-offset:3px;
+    }
     .customer-master-copy {
       display: block;
       margin-top: 5px;
@@ -1089,10 +1128,10 @@
       line-height: 1.45;
     }
     .customer-master-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px; width: min(100%, 520px); margin: 14px 0 0 26px;
     }
+    .customer-master-actions .btn { width:100%; justify-content:center; }
     .customer-master-body {
       margin-top: 16px;
       display: grid;
@@ -1121,12 +1160,32 @@
       padding: 14px; border: 1px solid var(--border); border-radius: 12px;
       background: rgba(255,255,255,.025);
     }
+    .article-item-card .field-grid + .field-grid { margin-top: 14px; }
     .article-item-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
     .article-item-title { color:var(--text); font-family:var(--display); font-size:13px; font-weight:700; }
     .article-item-remove { min-height:36px; padding:7px 10px; }
     .article-list-footer { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; }
     .article-list-summary { color:var(--muted2); font-family:var(--mono); font-size:10px; }
     .article-list-summary.mismatch { color:#f59e0b; }
+    .custom-fields-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px 14px; margin-top:14px; }
+    .custom-fields-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    @media (max-width:900px) {
+      .custom-fields-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 14px; }
+    }
+    @media (max-width:600px) {
+      .article-item-card .field-grid + .field-grid { margin-top:18px; }
+      .custom-fields-grid { grid-template-columns:1fr; gap:22px; }
+      .api-field-name { margin-bottom:6px; line-height:1.55; }
+      .customer-master-body .field > label,
+      .article-item-card .field > label,
+      .customer-master-body .field > .api-field-name,
+      .article-item-card .field > .api-field-name {
+        height:auto; min-height:0; overflow:visible; display:block;
+        white-space:normal; text-overflow:clip;
+      }
+      .api-field-name-content { overflow:visible; display:block; white-space:normal; text-overflow:clip; }
+      .customer-master-actions { grid-template-columns:1fr; width:100%; margin-left:0; }
+    }
 
     .input-group { position: relative; }
     .input-group input { padding-right: 40px; }
@@ -2331,6 +2390,16 @@
       background: #65eee0;
       box-shadow: 0 0 0 3px rgba(0,180,157,.16), 0 0 10px rgba(43,212,217,.72);
     }
+    html[data-design="nexi"] .customer-master-toggle > input[type="checkbox"]:checked {
+      background:#2bd4d9; border-color:#2bd4d9;
+      box-shadow:0 0 0 3px rgba(43,212,217,.20);
+    }
+    html[data-design="nexi"] .customer-master-toggle > input[type="checkbox"]:checked::before { border-color:#071d49; }
+    html.light[data-design="nexi"] .customer-master-toggle > input[type="checkbox"]:checked {
+      background:#2d32aa; border-color:#2d32aa;
+      box-shadow:0 0 0 3px rgba(45,50,170,.16);
+    }
+    html.light[data-design="nexi"] .customer-master-toggle > input[type="checkbox"]:checked::before { border-color:#fff; }
     html.light[data-design="nexi"] .badge::before {
       background: #2d32aa;
       box-shadow: none;
@@ -2715,9 +2784,10 @@
       <button class="workflow-nav-item workflow-nav-overview" type="button" data-workflow-target="payment-workflow-view" id="workflow-nav-overview">Übersicht</button>
       <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-creds" id="workflow-nav-step-credentials">Schritt 1 · Credentials</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-credentials" id="workflow-nav-credentials">Zugangsdaten</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-interface" id="workflow-nav-interface">Schnittstelle</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="profile-section" id="workflow-nav-profiles">Gespeicherte Profile</button>
       <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-payment" id="workflow-nav-step-request">Schritt 2 · API-Request</button>
-      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-interface" id="workflow-nav-interface">Schnittstelle &amp; Use Case</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-use-case" id="workflow-nav-use-case">Use Case</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-integration-options" id="workflow-nav-integration">Integrationsoptionen</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="status-controls" data-workflow-visible="status" id="workflow-nav-status">Statusabfrage</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="create-payment-fields" data-workflow-visible="create" id="workflow-nav-payment-data">Zahlungsdaten</button>
@@ -2819,15 +2889,28 @@
     </div>
     <div class="card-body">
       <span class="workflow-anchor" id="workflow-credentials" data-workflow-section tabindex="-1"></span>
-      <div class="credential-mode-notice" id="credential-mode-notice">
-        <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
-        <div><strong id="credential-mode-title">Für Classic erforderlich</strong><span id="credential-mode-text">Merchant ID, Blowfish- und HMAC-Passwort werden für MAC-Berechnung und Verschlüsselung benötigt.</span></div>
-      </div>
       <div class="field-grid full">
         <div class="field">
           <label><span id="l-mid">Merchant ID</span> <span class="required" id="merchant-required">*</span> <span class="hint" id="merchant-credential-hint"></span><button class="param-tip" id="tip-mid" tabindex="-1">?</button></label>
           <input type="text" id="merchantId" placeholder="IhreMerchantID" autocomplete="off">
         </div>
+      </div>
+      <div class="credential-interface-selector" id="workflow-interface" data-workflow-section tabindex="-1">
+        <div class="integration-label" id="integration-label">Schnittstelle</div>
+        <div class="method-ctrl">
+          <button class="method-btn method-active" id="integration-classic" onclick="setIntegration('classic')">
+            <span class="icon icon-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m8 9-3 3 3 3"/><path d="m16 9 3 3-3 3"/><path d="m14 5-4 14"/></svg></span>
+            <span>Classic Paygate</span><span class="method-endpoint">Data / Len / MAC</span>
+          </button>
+          <button class="method-btn" id="integration-rest" onclick="setIntegration('rest')">
+            <span class="icon icon-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="m9 9-3 3 3 3"/><path d="m15 9 3 3-3 3"/></svg></span>
+            <span>REST API</span><span class="method-endpoint">JSON Builder</span>
+          </button>
+        </div>
+      </div>
+      <div class="credential-mode-notice" id="credential-mode-notice">
+        <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
+        <div><strong id="credential-mode-title">Für Classic erforderlich</strong><span id="credential-mode-text">Merchant ID, Blowfish- und HMAC-Passwort werden für MAC-Berechnung und Verschlüsselung benötigt.</span></div>
       </div>
       <div class="credential-group" id="classic-credential-group">
         <div class="credential-group-title"><strong id="classic-credential-title">Classic-Credentials</strong><span id="classic-credential-subtitle">für Data / Len / MAC</span></div>
@@ -2848,7 +2931,7 @@
         </div>
       </div>
       </div>
-      <div class="credential-group is-muted" id="rest-credential-group">
+      <div class="credential-group is-muted" id="rest-credential-group" style="display:none">
         <div class="credential-group-title"><strong id="rest-credential-title">REST-Authentifizierung</strong><span id="rest-credential-subtitle">optional – Platzhalter funktionieren ohne Zugangsdaten</span></div>
         <div class="field-grid full">
         <div class="field">
@@ -2948,20 +3031,7 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
-      <span class="workflow-anchor" id="workflow-interface" data-workflow-section tabindex="-1"></span>
-
-      <div class="integration-label" id="integration-label">Schnittstelle</div>
-      <div class="method-ctrl">
-        <button class="method-btn method-active" id="integration-classic" onclick="setIntegration('classic')">
-          <span class="icon icon-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m8 9-3 3 3 3"/><path d="m16 9 3 3-3 3"/><path d="m14 5-4 14"/></svg></span>
-          <span>Classic Paygate</span><span class="method-endpoint">Data / Len / MAC</span>
-        </button>
-        <button class="method-btn" id="integration-rest" onclick="setIntegration('rest')">
-          <span class="icon icon-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="m9 9-3 3 3 3"/><path d="m15 9 3 3-3 3"/></svg></span>
-          <span>REST API</span><span class="method-endpoint">JSON Builder</span>
-        </button>
-      </div>
-
+      <span class="workflow-anchor" id="workflow-use-case" data-workflow-section tabindex="-1"></span>
       <div class="integration-label method-status" id="use-case-label">Use Case</div>
       <div class="method-ctrl" id="use-case-controls">
         <button class="method-btn method-active" id="use-case-create" onclick="setUseCase('create-payment')">
@@ -3423,6 +3493,39 @@
           <input type="text" id="template-custom" placeholder="eigener Template-Name" style="display:none;margin-top:6px">
         </div>
       </div>
+
+      <div class="customer-master-section" id="custom-fields-section" style="margin-top:14px">
+        <div class="customer-master-head">
+          <label class="customer-master-toggle">
+            <input type="checkbox" id="custom-fields-enabled" onchange="toggleCustomFields()">
+            <span>
+              <span id="custom-fields-title">Template-CustomFields mitsenden</span><button class="param-tip" id="tip-custom-fields" tabindex="-1" type="button">?</button>
+              <span class="customer-master-copy" id="custom-fields-copy">Optionale, unverschlüsselte CustomField1–9 für unterstützende Hosted-Payment-Page-Templates.</span>
+              <span class="api-field-name"><strong>Classic HPP: </strong>CustomField1 … CustomField9 (Query-String)</span>
+            </span>
+          </label>
+        </div>
+        <div class="customer-master-body hidden" id="custom-fields-body">
+          <div class="info-box rest-warning" id="custom-fields-warning">
+            Die Bedeutung und Darstellung wird vom ausgewählten Template festgelegt. Nicht jedes Template unterstützt CustomFields; die Werte werden unverschlüsselt in der URL übertragen.
+          </div>
+          <div class="custom-fields-grid">
+            <div class="field"><label id="l-custom-field-1">CustomField1 · z. B. Gesamtbetrag</label><span class="api-field-name"><strong>Classic: </strong>CustomField1</span><input id="custom-field-1" type="text" maxlength="512" placeholder="12,34 EUR"></div>
+            <div class="field"><label id="l-custom-field-2">CustomField2 · z. B. Bestelltext</label><span class="api-field-name"><strong>Classic: </strong>CustomField2</span><input id="custom-field-2" type="text" maxlength="512" placeholder="Bestellung REF-123"></div>
+            <div class="field"><label id="l-custom-field-3">CustomField3 · z. B. Logo-URL</label><span class="api-field-name"><strong>Classic: </strong>CustomField3</span><input id="custom-field-3" type="url" maxlength="1024" placeholder="https://example.com/logo.png"></div>
+            <div class="field"><label id="l-custom-field-4">CustomField4 · z. B. Warenkorb</label><span class="api-field-name"><strong>Classic: </strong>CustomField4</span><input id="custom-field-4" type="text" maxlength="2048" placeholder="1 × Artikel A|1 × Artikel B"></div>
+            <div class="field"><label id="l-custom-field-5">CustomField5 · z. B. Kundendetails</label><span class="api-field-name"><strong>Classic: </strong>CustomField5</span><input id="custom-field-5" type="text" maxlength="2048" placeholder="Firma|Name|Straße|Ort"></div>
+            <div class="field"><label id="l-custom-field-6">CustomField6 · z. B. Lieferadresse</label><span class="api-field-name"><strong>Classic: </strong>CustomField6</span><input id="custom-field-6" type="text" maxlength="2048" placeholder="Firma|Name|Straße|Ort"></div>
+            <div class="field"><label id="l-custom-field-7">CustomField7 · z. B. Rechnungsnummer</label><span class="api-field-name"><strong>Classic: </strong>CustomField7</span><input id="custom-field-7" type="text" maxlength="512" placeholder="RG-123"></div>
+            <div class="field"><label id="l-custom-field-8">CustomField8 · z. B. Zusatzlabel</label><span class="api-field-name"><strong>Classic: </strong>CustomField8</span><input id="custom-field-8" type="text" maxlength="512" placeholder="Zusatzinformation"></div>
+            <div class="field"><label id="l-custom-field-9">CustomField9 · z. B. Zusatztext</label><span class="api-field-name"><strong>Classic: </strong>CustomField9</span><input id="custom-field-9" type="text" maxlength="512" placeholder="Text"></div>
+          </div>
+          <div class="custom-fields-actions">
+            <button class="btn btn-ghost" type="button" onclick="generateCustomFieldExample()"><span id="btn-custom-fields-example">Computop-Beispiel einsetzen</span></button>
+            <button class="btn btn-ghost" type="button" onclick="clearCustomFields()"><span id="btn-custom-fields-clear">CustomFields leeren</span></button>
+          </div>
+        </div>
+      </div>
       </div>
       </section><!-- /advanced-section -->
       </div><!-- /create-payment-fields -->
@@ -3455,20 +3558,20 @@
 
       <div class="debug-section" id="debug-section" style="display:none">
 
-        <div style="margin-bottom:12px">
-          <div class="debug-block">
-            <div class="debug-label">
-              <span id="debug-plain-label">Verschlüsselte Parameter (Data-String)</span>
-              <button class="copy-btn" onclick="copyText('plain-params')"><span id="copy-plain-text">Kopieren</span></button>
-            </div>
-            <pre id="plain-params">–</pre>
-          </div>
-        </div>
-
         <div id="derived-parameters-section" style="margin-bottom:12px;display:none">
           <div class="debug-block">
             <div class="debug-label"><span id="derived-parameters-label">Zusammengesetzte API-Parameter</span></div>
             <div class="derived-parameter-list" id="derived-parameters-list"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div class="debug-block">
+            <div class="debug-label">
+              <span id="debug-plain-label">Klartext-Payload vor Blowfish-Verschlüsselung</span>
+              <button class="copy-btn" onclick="copyText('plain-params')"><span id="copy-plain-text">Kopieren</span></button>
+            </div>
+            <pre id="plain-params">–</pre>
           </div>
         </div>
 
@@ -3560,13 +3663,13 @@
         <div class="info-box" id="rest-test-data-help" style="margin-bottom:12px">
           <strong>Paygate-Testdaten:</strong> Bei Hosted Payment Page und Card Form werden Testkartennummern erst im Paygate-Formular eingegeben, nicht in diesem JSON-Request. Beispiele: Visa <code>4111111111111111</code>, Mastercard <code>5555555555554444</code>, CVC <code>123</code>. <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener">Offizielle Testkarten öffnen</a>.
         </div>
-        <div class="debug-block" id="rest-json-block" style="margin-bottom:12px">
-          <div class="debug-label"><span id="rest-json-label">REST JSON-Payload</span><button class="copy-btn" onclick="copyText('rest-json-output')">Kopieren</button></div>
-          <pre id="rest-json-output">–</pre>
-        </div>
         <div class="debug-block" id="rest-derived-parameters-section" style="margin-bottom:12px;display:none">
           <div class="debug-label"><span id="rest-derived-parameters-label">Zusammengesetzte API-Parameter</span></div>
           <div class="derived-parameter-list" id="rest-derived-parameters-list"></div>
+        </div>
+        <div class="debug-block" id="rest-json-block" style="margin-bottom:12px">
+          <div class="debug-label"><span id="rest-json-label">REST JSON-Payload</span><button class="copy-btn" onclick="copyText('rest-json-output')">Kopieren</button></div>
+          <pre id="rest-json-output">–</pre>
         </div>
         <div class="debug-block">
           <div class="debug-label"><span id="rest-code-label">Ausführbarer Request</span><button class="copy-btn" onclick="copyText('rest-code-output')">Kopieren</button></div>
@@ -3799,7 +3902,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-          <span class="footer-ver-badge" id="footer-ver-badge">v3.4.0</span>
+          <span class="footer-ver-badge" id="footer-ver-badge">v3.5.0</span>
       <button class="footer-preview-notice" id="footer-design-toggle" type="button" onclick="toggleDesign()">
         <span id="footer-design-toggle-text">Original Design</span>
       </button>
@@ -4018,6 +4121,7 @@ function setMethod(method) {
   const infoEl = document.getElementById('method-info-text');
   if (infoEl) infoEl.innerHTML = t(`method_info_${method}`);
   updateArticleListVisibility();
+  updateCustomFieldsVisibility();
 
   // Submit-Button Text
   const submitText = document.getElementById('btn-submit-text');
@@ -4108,9 +4212,12 @@ const ARTICLE_API_PATHS = {
 function _setApiFieldName(label, scope, path) {
   if (!label) return;
   label.parentElement?.querySelector(':scope > .api-field-name')?.remove();
-  const hint = appendTextElement(label.parentElement, 'span', 'api-field-name', '');
-  appendTextElement(hint, 'strong', '', `${scope}: `);
-  hint.appendChild(document.createTextNode(path));
+  const hint = document.createElement('span');
+  hint.className = 'api-field-name';
+  const content = appendTextElement(hint, 'span', 'api-field-name-content', '');
+  appendTextElement(content, 'strong', '', `${scope}: `);
+  content.appendChild(document.createTextNode(path));
+  label.insertAdjacentElement('afterend', hint);
 }
 
 function renderApiFieldNames() {
@@ -4133,6 +4240,18 @@ function renderApiFieldNames() {
   document.querySelectorAll('#article-list-items [data-field]').forEach(field => {
     const label = field.closest('.field')?.querySelector('label');
     if (label) _setApiFieldName(label, 'Classic', ARTICLE_API_PATHS[field.dataset.field] || 'ArticleList');
+  });
+  document.querySelectorAll('.api-field-name').forEach(hint => {
+    if (!hint.querySelector('.api-field-name-content')) {
+      const content = document.createElement('span');
+      content.className = 'api-field-name-content';
+      while (hint.firstChild) content.appendChild(hint.firstChild);
+      hint.appendChild(content);
+    }
+    hint.title = hint.textContent.trim();
+  });
+  document.querySelectorAll('.customer-master-body .field > label, .article-item-card .field > label').forEach(label => {
+    label.title = label.textContent.trim();
   });
 }
 
@@ -4167,10 +4286,9 @@ function _renderDerivedParameterItems(sectionId, listId, items) {
       : 'Es wurden keine zusammengesetzten Parameter erzeugt. Aktiviere Kunden- oder Artikeldaten und generiere die Vorschau erneut.');
     return;
   }
-  items.forEach((item, index) => {
+  items.forEach(item => {
     const details = document.createElement('details');
     details.className = 'derived-parameter-item';
-    if (index === 0) details.open = true;
     appendTextElement(details, 'summary', '', item.name);
     const body = appendTextElement(details, 'div', 'derived-parameter-body', '');
     const rules = appendTextElement(body, 'div', 'derived-parameter-rules', '');
@@ -4284,6 +4402,7 @@ function updateUseCaseUI() {
 
   if (isRest) updateRestControls(); else if (isPayment) setMethod(currentMethod);
   updateArticleListVisibility();
+  updateCustomFieldsVisibility();
   renderApiFieldNames();
 }
 
@@ -4462,6 +4581,8 @@ function updateCredentialModeUI() {
   if (merchantHint) merchantHint.textContent = t(isRest ? 'cred_mid_rest_hint' : 'cred_mid_classic_hint');
   const classicGroup = document.getElementById('classic-credential-group');
   const restGroup = document.getElementById('rest-credential-group');
+  if (classicGroup) classicGroup.style.display = isRest ? 'none' : '';
+  if (restGroup) restGroup.style.display = isRest ? '' : 'none';
   classicGroup?.classList.toggle('is-muted', isRest);
   restGroup?.classList.toggle('is-muted', !isRest);
   restGroup?.classList.toggle('is-emphasized', isRest);
@@ -4613,6 +4734,7 @@ function applyLang() {
   setText('workflow-nav-profiles', 'workflow_nav_profiles');
   setText('workflow-nav-step-request', 'workflow_nav_step_request');
   setText('workflow-nav-interface', 'workflow_nav_interface');
+  setText('workflow-nav-use-case', 'workflow_nav_use_case');
   setText('workflow-nav-integration', 'workflow_nav_integration');
   setText('workflow-nav-status', 'workflow_nav_status');
   setText('workflow-nav-payment-data', 'workflow_nav_payment_data');
@@ -4749,6 +4871,13 @@ function applyLang() {
   setText('btn-clear-article-list', 'btn_clear_article_list');
   setText('btn-add-article-item', 'btn_add_article_item');
   setTip('tip-article-list', 'tip_article_list');
+  setText('custom-fields-title', 'custom_fields_title');
+  setText('custom-fields-copy', 'custom_fields_copy');
+  setText('custom-fields-warning', 'custom_fields_warning');
+  for (let index = 1; index <= 9; index += 1) setText(`l-custom-field-${index}`, `custom_field_${index}`);
+  setText('btn-custom-fields-example', 'btn_custom_fields_example');
+  setText('btn-custom-fields-clear', 'btn_custom_fields_clear');
+  setTip('tip-custom-fields', 'tip_custom_fields');
   updateArticleItemLabels();
   updateArticleListSummary();
   setText('l-cust-salutation', 'l_cust_salutation');
@@ -5586,6 +5715,63 @@ function updateArticleRequirements() {
   updateArticleListSummary();
 }
 
+function updateCustomFieldsVisibility() {
+  const section = document.getElementById('custom-fields-section');
+  if (!section) return;
+  const supported = currentUseCase === 'create-payment' && currentIntegration === 'classic' && currentMethod === 'hpp';
+  section.style.display = supported ? '' : 'none';
+}
+
+function toggleCustomFields() {
+  const enabled = document.getElementById('custom-fields-enabled')?.checked === true;
+  document.getElementById('custom-fields-body')?.classList.toggle('hidden', !enabled);
+}
+
+function collectCustomFields() {
+  if (currentIntegration !== 'classic' || currentMethod !== 'hpp' || document.getElementById('custom-fields-enabled')?.checked !== true) return {};
+  const values = {};
+  for (let index = 1; index <= 9; index += 1) {
+    const value = document.getElementById(`custom-field-${index}`)?.value.trim() || '';
+    if (value) values[`CustomField${index}`] = value;
+  }
+  return values;
+}
+
+function generateCustomFieldExample() {
+  const amount = document.getElementById('amount')?.value || '12.34';
+  const currency = document.getElementById('currency')?.value || 'EUR';
+  const examples = [
+    `${amount.replace('.', ',')} ${currency}`,
+    currentLang === 'en' ? 'Order details' : 'Bestelldetails',
+    'https://www.paytest.org/MerchantLogo.png',
+    '1 x Shoes, green|1 x Shoes, blue|1 x Shoes, black',
+    'Company Ltd.|John Smith|Schwarzenbergstraße 2-4|96050 Bamberg',
+    'Company Ltd.|John Smith|Schwarzenbergstraße 2-4|96050 Bamberg',
+    'RG-Inv 123-2021',
+    currentLang === 'en' ? 'Some Label' : 'Zusatzlabel',
+    currentLang === 'en' ? 'Some Text' : 'Zusatztext'
+  ];
+  examples.forEach((value, index) => {
+    const field = document.getElementById(`custom-field-${index + 1}`);
+    if (field) field.value = value;
+  });
+  const enabled = document.getElementById('custom-fields-enabled');
+  if (enabled) enabled.checked = true;
+  toggleCustomFields();
+  showToast(t('toast_custom_fields_example'), 'success');
+}
+
+function clearCustomFields() {
+  for (let index = 1; index <= 9; index += 1) {
+    const field = document.getElementById(`custom-field-${index}`);
+    if (field) field.value = '';
+  }
+  const enabled = document.getElementById('custom-fields-enabled');
+  if (enabled) enabled.checked = false;
+  toggleCustomFields();
+  showToast(t('toast_custom_fields_cleared'), 'info');
+}
+
 function generateTestArticleList() {
   const container = document.getElementById('article-list-items');
   if (!container) return;
@@ -6322,6 +6508,7 @@ async function buildAndPreview() {
       : orderDescSel;
     const language    = document.getElementById('language').value;
     const payTypes    = document.getElementById('payTypes').value;
+    const customFields = collectCustomFields();
 
     // Validation
     if (!merchantId) { showToast(t('val_mid'), 'error'); return; }
@@ -6399,6 +6586,9 @@ async function buildAndPreview() {
       finalUrl = `${base}?MerchantID=${encodeURIComponent(merchantId)}&Len=${len}&Data=${dataHex}&Language=${language}`;
       if (urlBack) finalUrl += `&URLBack=${encodeURIComponent(urlBack)}`;
       if (tmpl && currentMethod === 'hpp') finalUrl += `&Template=${encodeURIComponent(tmpl)}`;
+      Object.entries(customFields).forEach(([key, value]) => {
+        finalUrl += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+      });
     }
 
     // Show debug — expand card if collapsed
@@ -6420,6 +6610,7 @@ async function buildAndPreview() {
       urlParams['Language'] = language;
       if (urlBack) urlParams['URLBack'] = urlBack;
       if (tmpl && currentMethod === 'hpp') urlParams['Template'] = tmpl;
+      Object.assign(urlParams, customFields);
     }
 
     const urlParamsRaw = Object.entries(urlParams).map(([k, v]) => `${k}=${v}`).join('&');

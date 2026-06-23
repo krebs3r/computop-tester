@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.3.2-blueviolet)
+![Version](https://img.shields.io/badge/version-3.5.0-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -15,10 +15,11 @@ Browser-based development tool for creating and inspecting encrypted
 
 ## Overview
 
-The tester supports Paygate Hosted Payment Page (`paymentPage.aspx`), Credit
-Card Form (`payssl.aspx`) and Pay By Link (`PayByLink.aspx`) integrations. It
-creates the HMAC-SHA256 MAC, encrypts request payloads with Blowfish ECB and can
-decrypt encrypted Paygate callback responses.
+The tester supports Classic Paygate Hosted Payment Page (`paymentPage.aspx`),
+Credit Card Form (`payssl.aspx`) and Pay By Link (`PayByLink.aspx`) integrations,
+plus local REST API V1/V2 request generation. It creates the HMAC-SHA256 MAC,
+encrypts request payloads with Blowfish ECB, decrypts encrypted Paygate callback
+responses and analyses REST JSON responses.
 
 Everything runs in the browser. There is no application backend and no build
 step.
@@ -38,9 +39,15 @@ step.
 - Bilingual inline explanations for REST version, payment type, environment, authentication and output format
 - Automatic locally unique Pay By Link reference numbers
 - Configurable redirect URLs, payment methods and templates
+- Optional customer, billing and shipping data with transparent Base64 JSON breakdown
+- Optional multi-line `ArticleList` data with amount validation and Klarna support
+- Optional unencrypted `CustomField1` through `CustomField9` values for supporting HPP templates
+- Visible Classic, REST V1 and REST V2 API names directly beside workflow fields
+- Ordered request preview showing composed objects, payload, query parameters and executable output
 - Callback receiver for Classic callbacks and REST success, failure and cancel browser redirects
 - Named credential profiles stored locally in the browser
-- IndexedDB request and response logs with up to 250 entries each
+- IndexedDB request and combined Classic/REST response logs with up to 250 entries each
+- Response Log badges for interface, status and detected payment method
 - Syntax-highlighted Classic requests, REST JSON/commands, decrypted callbacks and analysed REST responses
 - Paygate simulation presets and Non-3DS/3DS test-card references
 - Bilingual Help view with Classic/REST comparison, usage guidance, official documentation, test resources, error codes and privacy notes
@@ -63,14 +70,14 @@ The fixed glass navigation keeps the main tools available from every view:
 | Payment Workflow | Classic Paygate requests and local REST API request generation | `#payment-workflow` |
 | Request Log | Generated Classic requests and REST status inquiries | `#request-log` |
 | Response Analysis | Classic callback decryption and REST JSON inspection | `#response` |
-| Response Log | Decrypted Classic responses and captured REST browser redirects | `#response-log` |
+| Response Log | Decrypted Classic responses, analysed REST JSON and captured REST browser redirects | `#response-log` |
 | Help | Integration guidance, usage, official documentation, test resources and privacy notes | `#help` |
 | Changelog | Complete bilingual release history | `#changelog` |
 
 The footer, language selector and theme control remain available throughout
-the application. Navigation badges keep their section colours in active and
-inactive states: green for Payment Workflow, blue for Classic and violet for
-Guide. When the desktop navigation does not fit, edge arrows appear
+the application. Navigation badges distinguish Payment Workflow, Classic,
+orange REST and Guide tools; the optional Nexi design maps them to its own CI
+palette. When the desktop navigation does not fit, edge arrows appear
 automatically; touch gestures and horizontal mouse-wheel scrolling remain
 available as well.
 
@@ -83,8 +90,8 @@ cards use self-contained inline SVG icons and require no external icon library.
 
 1. Download and extract the repository ZIP or clone the repository.
 2. Open `index.html` directly in a modern browser.
-3. For Classic payments, enter Merchant ID, Blowfish password and HMAC password. Classic status inquiries do not require the HMAC password. For REST, this step is optional.
-4. In Step 2 choose Classic or REST, then select payment creation or transaction-status inquiry.
+3. In Step 1 enter the Merchant ID, choose Classic or REST, and enter only the credentials shown for that interface. Classic status inquiries do not require the HMAC password; REST credentials remain optional for placeholder-based output.
+4. In Step 2 select payment creation or transaction-status inquiry and configure the interface-specific request.
 5. Configure the fields and generate the preview.
 6. Inspect and copy the generated request. Classic payment pages and Classic
    status inquiries can also be opened directly from the preview; REST requests
@@ -106,16 +113,36 @@ an external Paygate page to redirect reliably to a local `file://` URL. Use the
 GitHub Pages deployment or serve the directory through a local HTTP server when
 testing automatic callback returns.
 
+## Request Preview
+
+Step 3 follows the same order in which a request is assembled:
+
+1. **Composed API parameters** explain generated objects such as
+   `billToCustomer`, `billingAddress`, shipping objects and `ArticleList`,
+   including decoded JSON and transmitted Base64 values.
+2. **Classic plain-text payload** shows the parameters before Blowfish
+   encryption. This payload becomes `Data`; Pay By Link additionally exposes
+   its outer payload.
+3. **Unencrypted query parameters** show values outside `Data`, including
+   language, template, callback URL and optional template `CustomField1–9`
+   values.
+4. **Final request** shows the complete Classic URL. REST mode instead shows
+   the composed objects, final JSON payload and executable client command.
+
+Long API paths are kept close to their inputs and expose their complete value
+as a tooltip. Customer and article controls use theme-aware checkboxes and
+consistent action-button placement in both Original and Nexi designs.
+
 ## REST Request Builder
 
-The REST builder is part of the **Payment Workflow**. Select **REST API** as the
-interface, then choose the API version, payment type, target environment,
-authentication method and output format.
+The REST builder is part of the **Payment Workflow**. Select **REST API** below
+the Merchant ID in Step 1, then choose the use case, API version, payment type,
+target environment, authentication method and output format in Step 2.
 
 **Step 1 is optional in REST mode.** The JSON payload and executable templates
 can be generated without entering a Merchant ID or API key. The navigation
-badge changes to `OPTIONAL`, Classic credential fields are visually subdued,
-and generated commands use safe placeholders. Real REST credentials are only
+badge changes to `OPTIONAL`, only the REST credential block is shown, and
+generated commands use safe placeholders. Real REST credentials are only
 needed when explicitly embedding authentication values into the output.
 
 - V1 generates requests for the shared `/api/v1/payments` endpoint.

@@ -2,6 +2,20 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.5.0 — Workflow clarity, CustomFields and request transparency
+- Reordered Step 3 to follow request construction from composed objects through payload and query parameters to the final request, and corrected the Classic plain-text payload label
+- Updated README for version 3.5.0, current credential flow, REST/Classic response tooling, customer/article data, CustomFields and preview designs
+- Restyled customer and article opt-in checkboxes with theme-aware colours, animated checks and accessible focus states for Original and Nexi designs
+- Standardized customer and article action buttons in the same dedicated row with consistent sizing and responsive stacking
+- Stabilized customer and article grids with aligned label/API-name rows so long parameter paths no longer shift neighbouring input boxes
+- Moved the Classic/REST interface decision below Merchant ID in Step 1 and show only the credentials required for the selected interface
+- Added optional CustomField1–9 inputs for Classic Hosted Payment Page templates under Advanced Settings
+- Added the official Computop example values for amount, order text, logo, shopping cart, customer, shipping and billing information
+- Added CustomFields as unencrypted query parameters while keeping encrypted Data/Len unchanged
+- Clearly documented that CustomField meaning and rendering depend on explicit template support
+- Moved API parameter names between labels and inputs and increased spacing between article field groups on narrow layouts
+- Updated visible release metadata, changelog and offline cache for version 3.5.0
+
 ### v3.4.0 — Combined Classic and REST Response Log
 - Added visible Classic, REST V1 and REST V2 API field names directly below Payment Workflow inputs
 - Added a composed-parameter preview that decodes and itemises billToCustomer, billingAddress, shipping objects and ArticleList while preserving the separate URL query preview

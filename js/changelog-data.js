@@ -1,6 +1,33 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.5.0', de: { title: 'Workflow-Klarheit, CustomFields und Request-Transparenz', items: [
+    '<strong>Logischer Vorschaufluss</strong> — Schritt 3 folgt jetzt der Request-Erzeugung von zusammengesetzten Objekten über Klartext-Payload und Query-Parameter bis zum finalen Request',
+    '<strong>Aktualisierte README</strong> — Version, Credential-Ablauf, REST-/Classic-Werkzeuge, Kunden-/Artikeldaten, CustomFields und beide Designs sind auf Stand 3.5.0 dokumentiert',
+    '<strong>Themegerechte Checkboxen</strong> — Kunden- und Artikeldaten verwenden eigene Checkboxen mit animiertem Haken, sichtbarem Tastaturfokus und passenden Original-/Nexi-Farben',
+    '<strong>Einheitliche Aktionsbuttons</strong> — Kunden- und Artikeldaten platzieren ihre beiden Aktionen in derselben eigenen Zeile mit identischer Breite und mobilem Stapeln',
+    '<strong>Stabile Eingabezeilen</strong> — Kunden-, Artikel- und CustomField-Grids reservieren einheitlichen Platz für Labels und API-Pfade, sodass lange Parameternamen benachbarte Inputs nicht mehr versetzen',
+    '<strong>Schnittstelle vor Credentials wählen</strong> — Classic oder REST wird jetzt direkt unter der Merchant-ID in Schritt 1 gewählt; anschließend erscheint nur der dazugehörige Credential-Block',
+    '<strong>CustomField1–9</strong> — Erweiterte Einstellungen bieten optionale Felder für unterstützende Classic-HPP-Templates',
+    '<strong>Offizielles Computop-Beispiel</strong> — Ein Klick füllt Betrag, Bestelltext, Logo, Warenkorb, Kunden-, Liefer- und Rechnungsinformationen wie im dokumentierten Payment-Page-Beispiel',
+    '<strong>Korrekte Übertragung</strong> — CustomFields werden unverschlüsselt im Query-String ergänzt; Data und Len bleiben unverändert',
+    '<strong>Templateabhängige Darstellung</strong> — Die Oberfläche weist ausdrücklich darauf hin, dass Bedeutung und Anzeige vom verwendeten Template abhängen',
+    '<strong>Bessere Feldabstände</strong> — API-Namen stehen zwischen Label und Eingabe; Artikelgruppen erhalten insbesondere auf schmalen Ansichten mehr vertikalen Raum',
+    '<strong>Release-Metadaten</strong> — Sichtbare Version, Changelog und Offline-Cache sind auf Version 3.5.0 abgestimmt',
+  ]}, en: { title: 'Workflow clarity, CustomFields and request transparency', items: [
+    '<strong>Logical preview flow</strong> — Step 3 now follows request construction from composed objects through plain-text payload and query parameters to the final request',
+    '<strong>Updated README</strong> — Version, credential flow, REST/Classic tools, customer/article data, CustomFields and both designs are documented for 3.5.0',
+    '<strong>Theme-aware checkboxes</strong> — Customer and article data use custom checkboxes with animated checks, visible keyboard focus and matching Original/Nexi colours',
+    '<strong>Consistent action buttons</strong> — Customer and article data place their two actions in the same dedicated row with matching widths and mobile stacking',
+    '<strong>Stable input rows</strong> — Customer, article and CustomField grids reserve consistent space for labels and API paths so long parameter names no longer shift neighbouring inputs',
+    '<strong>Choose the interface before credentials</strong> — Classic or REST is now selected directly below Merchant ID in Step 1, after which only the matching credential block is shown',
+    '<strong>CustomField1–9</strong> — Advanced Settings provide optional values for supporting Classic HPP templates',
+    '<strong>Official Computop example</strong> — One click fills amount, order text, logo, shopping cart, customer, shipping and billing information from the documented Payment Page example',
+    '<strong>Correct transport</strong> — CustomFields are appended unencrypted to the query string while Data and Len remain unchanged',
+    '<strong>Template-dependent rendering</strong> — The interface clearly states that meaning and presentation depend on the selected template',
+    '<strong>Clearer field spacing</strong> — API names sit between labels and inputs, with more vertical room between article groups on narrow layouts',
+    '<strong>Release metadata</strong> — Visible version, changelog and offline cache are aligned with version 3.5.0',
+  ]}},
   { v: 'v3.4.0', de: { title: 'Gemeinsames Classic- und REST-Response-Log', items: [
     '<strong>Sichtbare API-Feldnamen</strong> — Der Payment-Workflow zeigt direkt unter den Eingabefeldern die jeweils aktiven Classic-, REST-V1- oder REST-V2-Parameternamen und Objektpfade',
     '<strong>Transparente Zusammensetzung</strong> — Eine eigene Vorschau schlüsselt billToCustomer, billingAddress, Versandobjekte und ArticleList feldweise auf und zeigt dekodiertes JSON sowie den übertragenen Base64-Wert',
