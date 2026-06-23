@@ -2,6 +2,27 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.4.0 — Combined Classic and REST Response Log
+- Added visible Classic, REST V1 and REST V2 API field names directly below Payment Workflow inputs
+- Added a composed-parameter preview that decodes and itemises billToCustomer, billingAddress, shipping objects and ArticleList while preserving the separate URL query preview
+- Added per-line ArticleList calculations, decoded JSON and the transmitted Base64 values for transparent request construction
+- Added a payment-method badge to Response Log entries, detected from Classic or REST response fields and correlated request data
+- Added generic article data with workflow navigation, multiple order lines, amount reconciliation and Base64 encoding; Klarna uses the documented order_lines schema and receives bdCountryCode automatically
+- Fixed occasional iOS PWA header overlap by deriving the mobile content offset from the rendered navigation height and Safe Area position
+- Added a bilingual Mobile SDK guide for Android and iOS to both the original and Nexi designs
+- Documented the Payment Intent and short-lived token architecture, backend security boundary, native 3-D Secure, card entry, Google Pay and Apple Pay
+- Added direct links to both SDK repositories and their generated API references
+- Restored a clearly neutral inactive callback-receiver toggle in the Nexi light design
+- Reworked Response Decryption into a shared Response Analysis view with Classic and REST modes
+- Added REST JSON parsing, syntax highlighting and summaries for status, payment IDs, transaction IDs and error details
+- Added analysed REST JSON responses to the shared local Response Log and its export/import format
+- Extended the existing Response Log to store Classic callbacks and REST browser redirects together
+- Added separate Classic and orange REST badges in the top navigation and on every response entry, with Nexi CI colours in the preview design
+- Added automatic capture of REST success, failure and cancel redirect parameters
+- Kept REST webhook URLs editable because a static GitHub Pages app cannot receive server-to-server notifications
+- Preserved compatibility with existing Classic response logs and exported log files
+- Updated bilingual interface text, visible version metadata and the offline cache
+
 ### v3.3.2 — Responsive Footer Refinements
 - Reworked the footer to respond to its own available width instead of relying only on viewport breakpoints
 - Added automatic truncation for long footer links before they can overflow the layout

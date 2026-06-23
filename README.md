@@ -38,12 +38,13 @@ step.
 - Bilingual inline explanations for REST version, payment type, environment, authentication and output format
 - Automatic locally unique Pay By Link reference numbers
 - Configurable redirect URLs, payment methods and templates
-- Callback receiver for returning directly to the tester
+- Callback receiver for Classic callbacks and REST success, failure and cancel browser redirects
 - Named credential profiles stored locally in the browser
 - IndexedDB request and response logs with up to 250 entries each
-- Syntax-highlighted Classic requests, REST JSON/commands and decrypted response parameters
+- Syntax-highlighted Classic requests, REST JSON/commands, decrypted callbacks and analysed REST responses
 - Paygate simulation presets and Non-3DS/3DS test-card references
 - Bilingual Help view with Classic/REST comparison, usage guidance, official documentation, test resources, error codes and privacy notes
+- Bilingual Mobile SDK guide for native Android/Compose and iOS/SwiftUI integrations, available in both application designs
 - Colour-coded navigation badges for Payment Workflow, Classic and Guide sections
 - Automatic desktop navigation overflow controls plus horizontal touch and mouse-wheel scrolling
 - German and English interface
@@ -61,8 +62,8 @@ The fixed glass navigation keeps the main tools available from every view:
 |---|---|---|
 | Payment Workflow | Classic Paygate requests and local REST API request generation | `#payment-workflow` |
 | Request Log | Generated Classic requests and REST status inquiries | `#request-log` |
-| Response Decryption | Classic callback URL or manual Data/Len decryption | `#response` |
-| Response Log | Previously decrypted Classic responses | `#response-log` |
+| Response Analysis | Classic callback decryption and REST JSON inspection | `#response` |
+| Response Log | Decrypted Classic responses and captured REST browser redirects | `#response-log` |
 | Help | Integration guidance, usage, official documentation, test resources and privacy notes | `#help` |
 | Changelog | Complete bilingual release history | `#changelog` |
 
@@ -139,17 +140,17 @@ Test card numbers are entered on the hosted Paygate form, not in the generated
 JSON request. The builder links to the official test-card documentation for
 reference.
 
-## Callback Decryption
+## Response Analysis
 
-1. Open **Response Decryption** from the navigation.
+1. Open **Response Analysis** from the navigation and choose Classic or REST.
 2. Paste the complete Paygate callback URL, or enter `Data` and `Len`
    manually.
 3. The tester uses the Blowfish password from the Payment Workflow.
-4. The decrypted payload is displayed and added to the Response Log.
+4. The decrypted Classic payload or formatted REST response is displayed and added to the shared Response Log.
 
 When the callback receiver is enabled, successful and failed redirect URLs are
 set to the tester itself. Returning callback parameters automatically open the
-Response Decryption view.
+Response Analysis view.
 
 On HTTP/HTTPS deployments, the internal callback receiver is enabled by default
 for new users. `URLNotify` is required for Classic payment requests, but it needs

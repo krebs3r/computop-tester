@@ -46,7 +46,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.3.2",
+      "softwareVersion": "3.4.0",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -655,7 +655,12 @@
         padding: 7px 8px;
       }
       .wrapper {
-        padding-top: calc(92px + env(safe-area-inset-top));
+        padding-top: var(--mobile-content-top, calc(92px + env(safe-area-inset-top)));
+        padding-left: max(14px, env(safe-area-inset-left));
+        padding-right: max(14px, env(safe-area-inset-right));
+      }
+      .standalone-view {
+        padding-top: var(--mobile-content-top, calc(118px + env(safe-area-inset-top)));
         padding-left: max(14px, env(safe-area-inset-left));
         padding-right: max(14px, env(safe-area-inset-right));
       }
@@ -684,6 +689,21 @@
     .nav-link[data-nav-group="classic"]::after {
       content: 'Classic';
       border: 1px solid rgba(61,126,255,.22); background: rgba(61,126,255,.1); color: var(--accent2);
+    }
+    .nav-link[data-nav-group="responses"]::after { display: none; }
+    .nav-interface-badges { display:flex; gap:4px; margin-top:3px; }
+    .nav-interface-badge {
+      display:block; padding:0 6px; border-radius:999px; font-family:var(--mono);
+      font-size:8px; line-height:15px; font-weight:600; letter-spacing:.03em; text-transform:uppercase;
+    }
+    .nav-interface-badge.classic {
+      border:1px solid rgba(61,126,255,.22); background:rgba(61,126,255,.1); color:var(--accent2);
+    }
+    .nav-interface-badge.rest {
+      border:1px solid rgba(245,158,11,.34); background:rgba(245,158,11,.12); color:#fbbf24;
+    }
+    html.light .nav-interface-badge.rest {
+      border-color:rgba(217,119,6,.30); background:rgba(217,119,6,.09); color:#b45309;
     }
     .nav-link[data-nav-group="guide"]::after {
       content: 'Guide';
@@ -862,6 +882,12 @@
     label { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted2); }
     label .required { color: var(--accent); margin-left: 3px; }
     label .hint { font-size: 10px; color: var(--muted); text-transform: none; letter-spacing: 0; margin-left: 4px; font-weight: 300; }
+    .api-field-name {
+      display:block; margin-top:-2px; color:var(--muted); font-family:var(--mono);
+      font-size:9px; font-style:italic; font-weight:400; letter-spacing:0; line-height:1.45;
+      text-transform:none; overflow-wrap:anywhere;
+    }
+    .api-field-name strong { color:var(--accent2); font-style:normal; font-weight:600; }
 
     /* ── METHOD SELECTOR ── */
     .method-ctrl {
@@ -902,6 +928,26 @@
     .status-saved-transaction-field { grid-column: 1 / -1; }
     .status-saved-transaction-hint { color: var(--muted); font-size: 11px; line-height: 1.45; }
     .rest-warning { margin-top: 12px; border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.07); }
+    .response-mode-switch { display:flex; gap:10px; margin-bottom:16px; }
+    .response-mode-button {
+      flex:1; min-height:58px; padding:10px 14px; border:1px solid var(--border);
+      border-radius:10px; background:rgba(255,255,255,.025); color:var(--muted2);
+      cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:12px;
+      font-family:var(--sans); transition:border-color .18s, background .18s, color .18s;
+    }
+    .response-mode-button:hover { border-color:var(--border2); color:var(--text); }
+    .response-mode-button strong { font-family:var(--display); font-size:14px; }
+    .response-mode-button span { font-family:var(--mono); font-size:10px; color:var(--muted); }
+    .response-mode-button.active.classic { border-color:rgba(61,126,255,.45); background:rgba(61,126,255,.10); color:var(--accent2); }
+    .response-mode-button.active.rest { border-color:rgba(245,158,11,.42); background:rgba(245,158,11,.12); color:#fbbf24; }
+    html.light .response-mode-button.active.rest { border-color:rgba(217,119,6,.34); background:rgba(217,119,6,.09); color:#b45309; }
+    .rest-response-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:12px; }
+    .rest-response-summary-item { padding:11px 12px; border:1px solid var(--border); border-radius:9px; background:rgba(255,255,255,.025); min-width:0; }
+    .rest-response-summary-label { display:block; margin-bottom:4px; color:var(--muted); font-family:var(--mono); font-size:9px; letter-spacing:.05em; text-transform:uppercase; }
+    .rest-response-summary-value { display:block; color:var(--text); font-family:var(--mono); font-size:12px; overflow-wrap:anywhere; }
+    .rest-response-summary-value.success { color:var(--success); font-weight:600; }
+    .rest-response-summary-value.failure { color:var(--danger); font-weight:600; }
+    @media (max-width:600px) { .response-mode-switch { flex-direction:column; } }
     .rest-secret-row {
       margin-top: 14px; display: flex; align-items: flex-start; gap: 12px;
       padding: 14px 16px; border: 1px solid rgba(239,68,68,.28); border-radius: 10px;
@@ -1070,6 +1116,17 @@
       font-weight: 600;
       cursor: pointer;
     }
+    .article-list-items { display: grid; gap: 12px; }
+    .article-item-card {
+      padding: 14px; border: 1px solid var(--border); border-radius: 12px;
+      background: rgba(255,255,255,.025);
+    }
+    .article-item-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .article-item-title { color:var(--text); font-family:var(--display); font-size:13px; font-weight:700; }
+    .article-item-remove { min-height:36px; padding:7px 10px; }
+    .article-list-footer { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; }
+    .article-list-summary { color:var(--muted2); font-family:var(--mono); font-size:10px; }
+    .article-list-summary.mismatch { color:#f59e0b; }
 
     .input-group { position: relative; }
     .input-group input { padding-right: 40px; }
@@ -1495,6 +1552,16 @@
       display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
       flex-wrap:wrap; margin-bottom:14px;
     }
+    .derived-parameter-list { display:grid; gap:10px; padding:12px; }
+    .derived-parameter-empty { padding:4px 2px; color:var(--muted2); font-size:11px; line-height:1.55; }
+    .derived-parameter-item { border:1px solid var(--border); border-radius:8px; overflow:hidden; background:rgba(255,255,255,.018); }
+    .derived-parameter-item summary { cursor:pointer; padding:10px 12px; color:var(--text); font-family:var(--mono); font-size:11px; font-weight:600; }
+    .derived-parameter-body { padding:0 12px 12px; }
+    .derived-parameter-rules { display:grid; gap:5px; margin-bottom:10px; color:var(--muted2); font-size:11px; line-height:1.45; }
+    .derived-parameter-rules code { color:var(--accent2); }
+    .derived-parameter-caption { display:block; margin:9px 0 4px; color:var(--muted); font-family:var(--mono); font-size:9px; letter-spacing:.05em; text-transform:uppercase; }
+    .derived-parameter-body pre { padding:10px; border:1px solid var(--border); border-radius:7px; background:rgba(2,6,23,.18); }
+    html.light .derived-parameter-body pre { background:rgba(248,250,252,.8); }
     .log-action-panel { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
     .log-transfer-hint {
       display:flex; align-items:flex-start; gap:7px; max-width:520px;
@@ -1541,10 +1608,15 @@
       border: 1px solid rgba(61,126,255,.24);
     }
     .log-interface-rest {
-      color: #c4a7e7; background: rgba(139,92,246,.12);
-      border: 1px solid rgba(167,139,250,.28);
+      color: #fbbf24; background: rgba(245,158,11,.12);
+      border: 1px solid rgba(245,158,11,.34);
     }
-    html.light .log-interface-rest { color: #6d28d9; background: rgba(124,58,237,.07); border-color: rgba(124,58,237,.22); }
+    html.light .log-interface-rest { color: #b45309; background: rgba(217,119,6,.09); border-color: rgba(217,119,6,.30); }
+    .log-payment-badge {
+      color: #c4b5fd; background: rgba(139,92,246,.12);
+      border: 1px solid rgba(139,92,246,.30);
+    }
+    html.light .log-payment-badge { color: #6d28d9; background: rgba(124,58,237,.08); border-color: rgba(124,58,237,.24); }
     .log-merchant { font-size: 12px; color: var(--muted2); }
     .log-tid { font-family: var(--mono); font-size: 12px; color: var(--text); }
     .log-detail { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
@@ -1614,9 +1686,9 @@
     .cb-receiver-label { display:inline-flex; align-items:center; gap:9px; cursor:pointer; font-size:13px; font-weight:500; user-select:none; }
     .cb-receiver-switch { position:relative; display:inline-block; width:36px; height:20px; flex-shrink:0; }
     .cb-receiver-switch input { opacity:0; width:0; height:0; position:absolute; }
-    .cb-receiver-knob { position:absolute; cursor:pointer; inset:0; box-sizing:border-box; background:var(--border2); border-radius:20px; transition:background 0.2s; }
+    .cb-receiver-knob { position:absolute; cursor:pointer; inset:0; box-sizing:border-box; background:rgba(148,163,184,.38); border:1px solid rgba(148,163,184,.48); border-radius:20px; transition:background 0.2s,border-color 0.2s; }
     .cb-receiver-knob::before { content:''; position:absolute; width:14px; height:14px; left:3px; top:50%; transform:translateY(-50%); border-radius:50%; background:#fff; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.3); }
-    .cb-receiver-switch input:checked + .cb-receiver-knob { background:var(--accent2); }
+    .cb-receiver-switch input:checked + .cb-receiver-knob { background:var(--accent2); border-color:var(--accent2); }
     .cb-receiver-switch input:checked + .cb-receiver-knob::before { transform:translate(16px, -50%); }
     .cb-receiver-row .cb-receiver-hint { font-size:11px; color:var(--muted); }
     .cb-receiver-row.is-unavailable {
@@ -1833,6 +1905,10 @@
     .plugin-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
     .plugin-card h3 { color: var(--text); font-family: var(--display); font-size: 15px; margin: 0 0 4px; }
     .plugin-card p { color: var(--muted2); font-size: 12px; line-height: 1.55; }
+    .mobile-sdk-section .help-callout { margin-bottom: 12px; }
+    .mobile-sdk-details { margin: 12px 0 14px; padding-left: 18px; color: var(--muted2); font-size: 11px; line-height: 1.55; }
+    .mobile-sdk-details li + li { margin-top: 5px; }
+    .mobile-sdk-card .plugin-actions { margin-top: auto; }
     .plugin-actions { display: flex; flex-wrap: wrap; gap: 8px; align-self: end; }
     .plugin-action {
       display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border: 1px solid var(--border);
@@ -2404,6 +2480,27 @@
       background: rgba(45,50,170,.08);
       border-color: rgba(45,50,170,.22);
     }
+    html[data-design="nexi"] .nav-interface-badge.rest,
+    html[data-design="nexi"] .log-interface-rest {
+      color: #65eee0;
+      background: rgba(0,180,157,.18);
+      border-color: rgba(43,212,217,.38);
+    }
+    html.light[data-design="nexi"] .nav-interface-badge.rest,
+    html.light[data-design="nexi"] .log-interface-rest {
+      color: #047a61;
+      background: rgba(4,168,128,.10);
+      border-color: rgba(4,168,128,.28);
+    }
+    html[data-design="nexi"] .response-mode-button.active.rest {
+      color:#65eee0; background:rgba(0,180,157,.18); border-color:rgba(43,212,217,.38);
+    }
+    html.light[data-design="nexi"] .response-mode-button.active.rest {
+      color:#047a61; background:rgba(4,168,128,.10); border-color:rgba(4,168,128,.28);
+    }
+    html.light[data-design="nexi"] .cb-receiver-switch input:not(:checked) + .cb-receiver-knob {
+      background-color:#c9cbd1 !important; border-color:#b8bbc2 !important;
+    }
     html[data-design="nexi"] .nav-link[data-nav-group="workflow"]::after,
     html[data-design="nexi"] .help-type-badge.rest,
     html[data-design="nexi"] .cb-receiver-active-badge,
@@ -2573,8 +2670,14 @@
   </div>
   <div class="nav-group nav-group-center">
     <button class="nav-link" data-nav-view="request-log" data-nav-group="classic" id="nav-log" type="button">Request-Log</button>
-    <button class="nav-link" data-nav-view="response" data-nav-group="classic" id="nav-response" type="button">Response-Entschlüsselung</button>
-    <button class="nav-link" data-nav-view="response-log" data-nav-group="classic" id="nav-resp-log" type="button">Response-Log</button>
+    <button class="nav-link" data-nav-view="response" data-nav-group="responses" id="nav-response" type="button">
+      <span id="nav-response-text">Response-Analyse</span>
+      <span class="nav-interface-badges" aria-label="Classic und REST"><span class="nav-interface-badge classic">Classic</span><span class="nav-interface-badge rest">REST</span></span>
+    </button>
+    <button class="nav-link" data-nav-view="response-log" data-nav-group="responses" id="nav-resp-log" type="button">
+      <span id="nav-resp-log-text">Response-Log</span>
+      <span class="nav-interface-badges" aria-label="Classic und REST"><span class="nav-interface-badge classic">Classic</span><span class="nav-interface-badge rest">REST</span></span>
+    </button>
   </div>
   <div class="nav-group nav-group-support">
     <button class="nav-link" data-nav-view="help" data-nav-group="guide" id="nav-help" type="button">Hilfe</button>
@@ -2619,6 +2722,7 @@
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="status-controls" data-workflow-visible="status" id="workflow-nav-status">Statusabfrage</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="create-payment-fields" data-workflow-visible="create" id="workflow-nav-payment-data">Zahlungsdaten</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="customer-master-section" data-workflow-visible="create" id="workflow-nav-customer">Kundendaten</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="article-list-section" data-workflow-visible="classic-create" id="workflow-nav-articles">Artikeldaten</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-callbacks" data-workflow-visible="create" id="workflow-nav-callbacks">Redirect &amp; Callback</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="advanced-section" data-workflow-visible="create" id="workflow-nav-advanced">Erweiterte Einstellungen</button>
       <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-preview" id="workflow-nav-step-preview">Schritt 3 · Vorschau</button>
@@ -3059,6 +3163,7 @@
             <span>
               <span id="customer-master-title">Kundendaten mitsenden</span><button class="param-tip" id="tip-customer-master" tabindex="-1" type="button">?</button>
               <span class="customer-master-copy" id="customer-master-copy">Optional für 3-D Secure, Risiko- und Stammdaten-Tests. Der Generator füllt nur synthetische Testdaten ein.</span>
+              <span class="api-field-name" id="customer-master-api-name"></span>
             </span>
           </label>
           <div class="customer-master-actions">
@@ -3191,6 +3296,54 @@
         </div>
       </div>
 
+      <div class="customer-master-section" id="article-list-section" data-workflow-section tabindex="-1">
+        <div class="customer-master-head">
+          <label class="customer-master-toggle">
+            <input type="checkbox" id="article-list-enabled" onchange="toggleArticleList()">
+            <span>
+              <span id="article-list-title">Artikeldaten mitsenden</span><button class="param-tip" id="tip-article-list" tabindex="-1" type="button">?</button>
+              <span class="customer-master-copy" id="article-list-copy">Optionale Artikeldaten für unterstützte Zahlarten. ArticleList wird als Base64-kodiertes JSON übertragen.</span>
+              <span class="api-field-name" id="article-list-api-name"><strong>Classic: </strong>ArticleList (Base64-JSON)</span>
+            </span>
+          </label>
+          <div class="customer-master-actions">
+            <button class="btn btn-ghost" type="button" onclick="generateTestArticleList()"><span id="btn-generate-article-list">Testartikel erzeugen</span></button>
+            <button class="btn btn-ghost" type="button" onclick="clearArticleList()"><span id="btn-clear-article-list">Artikelliste leeren</span></button>
+          </div>
+        </div>
+        <div class="customer-master-body hidden" id="article-list-body">
+          <div class="article-list-items" id="article-list-items"></div>
+          <div class="article-list-footer">
+            <button class="btn btn-ghost" type="button" onclick="addArticleItem()"><span id="btn-add-article-item">Weitere Position hinzufügen</span></button>
+            <span class="article-list-summary" id="article-list-summary"></span>
+          </div>
+        </div>
+      </div>
+
+      <template id="article-item-template">
+        <div class="article-item-card">
+          <div class="article-item-head">
+            <span class="article-item-title"></span>
+            <button class="btn btn-ghost article-item-remove" type="button" onclick="removeArticleItem(this)"></button>
+          </div>
+          <div class="field-grid three">
+            <div class="field"><label class="article-label-reference"></label><input type="text" data-field="itemReference" maxlength="30"></div>
+            <div class="field"><label class="article-label-id"></label><input type="text" data-field="id" maxlength="30"></div>
+            <div class="field"><label class="article-label-description"></label><input type="text" data-field="description" maxlength="30"></div>
+          </div>
+          <div class="field-grid three">
+            <div class="field"><label class="article-label-quantity"></label><input type="number" data-field="quantity" min="1" step="1"></div>
+            <div class="field"><label class="article-label-amount"></label><input type="number" data-field="amount" min="0" step="1"></div>
+            <div class="field"><label class="article-label-vat-amount"></label><input type="number" data-field="vatAmount" min="0" step="1"></div>
+          </div>
+          <div class="field-grid three">
+            <div class="field"><label class="article-label-vat-percent"></label><input type="number" data-field="vatPercent" min="0" step="0.01"></div>
+            <div class="field"><label class="article-label-total-amount"></label><input type="number" data-field="totalAmount" step="1"></div>
+            <div class="field"><label class="article-label-position-type"></label><select data-field="positionType"><option value="physical">physical</option><option value="digital">digital</option><option value="discount">discount</option><option value="shipping_fee">shipping_fee</option><option value="sales_tax">sales_tax</option><option value="gift_card">gift_card</option><option value="store_credit">store_credit</option><option value="surcharge">surcharge</option></select></div>
+          </div>
+        </div>
+      </template>
+
       <section class="workflow-subsection" id="workflow-callbacks" data-workflow-section tabindex="-1">
       <button class="workflow-subsection-header" type="button" onclick="toggleWorkflowSubsection('workflow-callbacks')" aria-expanded="true">
         <span id="workflow-callbacks-title">Redirect- und Callback-URLs</span>
@@ -3245,12 +3398,13 @@
         <div class="field-grid full">
           <div class="field">
             <label><span id="l-paytypes">Zahlarten</span> <span class="hint" id="h-paytypes">(PayTypes)</span><button class="param-tip" id="tip-paytypes" tabindex="-1">?</button></label>
-            <select id="payTypes">
+            <select id="payTypes" onchange="updateArticleRequirements()">
               <option id="opt-pt-all" value="" selected>— Alle freigeschalteten Zahlarten (PayTypes weglassen)</option>
               <option id="opt-pt-cc" value="CC">CC – Alle konfigurierten Kreditkartenmarken</option>
               <option value="VISA">VISA</option>
               <option value="MasterCard">MasterCard</option>
               <option value="AMEX">AMEX – American Express</option>
+              <option value="Klarna">Klarna</option>
             </select>
           </div>
         </div>
@@ -3308,6 +3462,13 @@
               <button class="copy-btn" onclick="copyText('plain-params')"><span id="copy-plain-text">Kopieren</span></button>
             </div>
             <pre id="plain-params">–</pre>
+          </div>
+        </div>
+
+        <div id="derived-parameters-section" style="margin-bottom:12px;display:none">
+          <div class="debug-block">
+            <div class="debug-label"><span id="derived-parameters-label">Zusammengesetzte API-Parameter</span></div>
+            <div class="derived-parameter-list" id="derived-parameters-list"></div>
           </div>
         </div>
 
@@ -3403,6 +3564,10 @@
           <div class="debug-label"><span id="rest-json-label">REST JSON-Payload</span><button class="copy-btn" onclick="copyText('rest-json-output')">Kopieren</button></div>
           <pre id="rest-json-output">–</pre>
         </div>
+        <div class="debug-block" id="rest-derived-parameters-section" style="margin-bottom:12px;display:none">
+          <div class="debug-label"><span id="rest-derived-parameters-label">Zusammengesetzte API-Parameter</span></div>
+          <div class="derived-parameter-list" id="rest-derived-parameters-list"></div>
+        </div>
         <div class="debug-block">
           <div class="debug-label"><span id="rest-code-label">Ausführbarer Request</span><button class="copy-btn" onclick="copyText('rest-code-output')">Kopieren</button></div>
           <pre id="rest-code-output">–</pre>
@@ -3439,15 +3604,21 @@
     </div>
   </div>
 
-  <!-- ── RESPONSE DECRYPTOR ── -->
+  <!-- ── RESPONSE ANALYSIS ── -->
   <div class="card collapsed" id="card-response">
     <div class="card-header" onclick="toggleCard('card-response')">
       <div class="card-icon"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg></span></div>
-      <span class="card-title" id="ct-response">Response-Entschlüsseler</span>
+      <span class="card-title" id="ct-response">Response-Analyse</span>
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
 
+      <div class="response-mode-switch" role="group" aria-label="Response-Schnittstelle">
+        <button class="response-mode-button classic active" id="response-mode-classic" type="button" onclick="setResponseAnalysisMode('classic')"><strong>CLASSIC</strong><span>Data / Len / Blowfish</span></button>
+        <button class="response-mode-button rest" id="response-mode-rest" type="button" onclick="setResponseAnalysisMode('rest')"><strong>REST</strong><span>JSON</span></button>
+      </div>
+
+      <div id="classic-response-analysis">
       <div class="info-box" style="margin-bottom:16px">
         <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="resp-info-title">Hinweis:</span></strong> <span id="resp-info-body">Füge die vollständige Callback-URL des Paygate ein (URLSuccess / URLFailure / URLNotify). <code>MerchantID</code>, <code>Len</code> und <code>Data</code> werden automatisch extrahiert und mit dem Blowfish-Passwort aus Schritt&nbsp;1 entschlüsselt.</span>
       </div>
@@ -3475,8 +3646,23 @@
           <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg></span> <span id="btn-decrypt-text">Entschlüsseln</span>
         </button>
       </div>
+      </div>
+
+      <div id="rest-response-analysis" style="display:none">
+        <div class="info-box" style="margin-bottom:16px">
+          <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="rest-resp-info-title">Hinweis:</span></strong> <span id="rest-resp-info-body">Füge die JSON-Antwort aus PowerShell, cURL oder Postman ein. Wichtige Status-, Zahlungs- und Fehlerfelder werden automatisch hervorgehoben.</span>
+        </div>
+        <div class="field" style="margin-bottom:14px">
+          <label id="l-rest-resp-json">REST Response (JSON)</label>
+          <textarea id="rest-resp-json" rows="12" spellcheck="false" placeholder='{"status":"OK","paymentId":"..."}'></textarea>
+        </div>
+        <div class="btn-row" style="margin-top:16px">
+          <button class="btn btn-primary" onclick="analyzeRestResponse()" id="btn-analyze-rest-response"><span id="btn-analyze-rest-response-text">JSON analysieren</span></button>
+        </div>
+      </div>
 
       <div id="resp-result-section" style="margin-top:20px;display:none">
+        <div class="rest-response-summary" id="rest-response-summary" style="display:none"></div>
         <div class="debug-block">
           <div class="debug-label">
             <span id="resp-result-label">Entschlüsselter Payload</span>
@@ -3503,7 +3689,7 @@
     </div>
     <div class="card-body">
       <div class="log-toolbar">
-        <span id="resp-log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 250 entschlüsselten Responses (lokal gespeichert)</span>
+        <span id="resp-log-subtitle" style="font-size:12px;color:var(--muted2)">Letzte 250 Classic- und REST-Responses (lokal gespeichert)</span>
         <div class="log-action-panel">
           <div class="log-actions">
             <button class="btn btn-ghost" onclick="exportLog('response')"><span id="btn-resp-log-export-text">Exportieren</span></button>
@@ -3546,9 +3732,9 @@
         <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
-        <div class="badge">Classic Paygate</div>
-        <h1 id="response-view-title">Response-Entschlüsselung</h1>
-        <p id="response-view-subtitle">Paygate-Callback sicher entschlüsseln</p>
+        <div class="nav-interface-badges" aria-label="Classic und REST"><span class="nav-interface-badge classic">Classic</span><span class="nav-interface-badge rest">REST</span></div>
+        <h1 id="response-view-title">Response-Analyse</h1>
+        <p id="response-view-subtitle">Classic-Callbacks entschlüsseln und REST-JSON auswerten</p>
       </div>
     </div>
   </div>
@@ -3613,7 +3799,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-      <span class="footer-ver-badge" id="footer-ver-badge">v3.3.2</span>
+          <span class="footer-ver-badge" id="footer-ver-badge">v3.4.0</span>
       <button class="footer-preview-notice" id="footer-design-toggle" type="button" onclick="toggleDesign()">
         <span id="footer-design-toggle-text">Original Design</span>
       </button>
@@ -3831,6 +4017,7 @@ function setMethod(method) {
   // Info-Box Text
   const infoEl = document.getElementById('method-info-text');
   if (infoEl) infoEl.innerHTML = t(`method_info_${method}`);
+  updateArticleListVisibility();
 
   // Submit-Button Text
   const submitText = document.getElementById('btn-submit-text');
@@ -3861,6 +4048,181 @@ function setIntegration(integration) {
   updateCredentialModeUI();
   showPreviewEmptyState();
   updateUseCaseUI();
+  updateCallbackReceiverAvailabilityUI();
+  if (document.getElementById('cb-receiver-toggle')?.checked) _applyCallbackReceiver(true);
+}
+
+const API_FIELD_PATHS = {
+  merchantId: { classic: 'MerchantID', restV1: 'Authorization username', restV2: 'OAuth client_id' },
+  blowfishKey: { classic: 'Verschlüsselungsschlüssel (nicht übertragen)', restV1: '—', restV2: '—' },
+  hmacKey: { classic: 'MAC-Schlüssel (nicht übertragen)', restV1: '—', restV2: '—' },
+  restApiKey: { classic: '—', restV1: 'Authorization password', restV2: 'OAuth client_secret' },
+  'rest-version': { classic: '—', restV1: 'Lokale Builder-Einstellung (nicht übertragen)', restV2: 'Lokale Builder-Einstellung (nicht übertragen)' },
+  'rest-method': { classic: '—', restV1: 'payment.method', restV2: 'Endpoint · paymentMethods / channel' },
+  'rest-environment': { classic: '—', restV1: 'API-Host (nicht im JSON)', restV2: 'API-Host (nicht im JSON)' },
+  'rest-auth': { classic: '—', restV1: 'Authorization-Header', restV2: 'Authorization-Header' },
+  'rest-tool': { classic: '—', restV1: 'Lokales Ausgabeformat (nicht übertragen)', restV2: 'Lokales Ausgabeformat (nicht übertragen)' },
+  'status-payment-id': { classic: 'PayID', restV1: 'URL-Pfad: paymentId', restV2: 'URL-Pfad: paymentId' },
+  'status-transaction-id': { classic: 'TransID', restV1: 'URL-Pfad: transactionId', restV2: 'URL-Pfad: transactionId' },
+  amount: { classic: 'Amount', restV1: 'amount.value', restV2: 'amount.value' },
+  currency: { classic: 'Currency', restV1: 'amount.currency', restV2: 'amount.currency' },
+  language: { classic: 'Language', restV1: 'language', restV2: 'language' },
+  transId: { classic: 'TransID', restV1: 'transactionId', restV2: 'transId' },
+  refNr: { classic: 'RefNr', restV1: 'referenceNumber · order.id', restV2: 'refNr · order.merchantReference' },
+  expirationDate: { classic: 'ExpirationDate', restV1: 'expirationTime', restV2: 'expirationTime' },
+  orderDesc: { classic: 'OrderDesc', restV1: 'order.description[]', restV2: 'order.description' },
+  'cust-salutation': { classic: 'billToCustomer.consumer.salutation', restV1: 'customerInfo.consumer.salutation', restV2: '—' },
+  'cust-first-name': { classic: 'billToCustomer.consumer.firstName', restV1: 'customerInfo.consumer.firstName', restV2: '—' },
+  'cust-last-name': { classic: 'billToCustomer.consumer.lastName', restV1: 'customerInfo.consumer.lastName', restV2: '—' },
+  'cust-birth-date': { classic: 'billToCustomer.consumer.birthDate', restV1: 'customerInfo.consumer.birthdate', restV2: '—' },
+  'cust-number': { classic: 'billToCustomer.customerNumber', restV1: 'customerInfo.customerNumber', restV2: '—' },
+  'cust-email': { classic: 'billToCustomer.email', restV1: 'customerInfo.email', restV2: '—' },
+  'cust-phone-country': { classic: 'billToCustomer.phone.countryCode', restV1: 'customerInfo.phone.countryCode', restV2: '—' },
+  'cust-phone-number': { classic: 'billToCustomer.phone.subscriberNumber', restV1: 'customerInfo.phone.subscriberNumber', restV2: '—' },
+  'bill-street': { classic: 'billingAddress.addressLine1.street', restV1: 'billing.addressInfo.addressLine1.street', restV2: '—' },
+  'bill-street-number': { classic: 'billingAddress.addressLine1.streetNumber', restV1: 'billing.addressInfo.addressLine1.streetNumber', restV2: '—' },
+  'bill-postal-code': { classic: 'billingAddress.postalCode', restV1: 'billing.addressInfo.postalCode', restV2: '—' },
+  'bill-city': { classic: 'billingAddress.city', restV1: 'billing.addressInfo.city', restV2: '—' },
+  'bill-country': { classic: 'billingAddress.country.countryA3', restV1: 'billing.addressInfo.country.A2/A3', restV2: '—' },
+  'ship-street': { classic: 'shippingAddress.addressLine1.street', restV1: 'shipping.addressInfo.addressLine1.street', restV2: '—' },
+  'ship-street-number': { classic: 'shippingAddress.addressLine1.streetNumber', restV1: 'shipping.addressInfo.addressLine1.streetNumber', restV2: '—' },
+  'ship-postal-code': { classic: 'shippingAddress.postalCode', restV1: 'shipping.addressInfo.postalCode', restV2: '—' },
+  'ship-city': { classic: 'shippingAddress.city', restV1: 'shipping.addressInfo.city', restV2: '—' },
+  'ship-country': { classic: 'shippingAddress.country.countryA3', restV1: 'shipping.addressInfo.country.A2/A3', restV2: '—' },
+  urlSuccess: { classic: 'URLSuccess', restV1: 'urls.success', restV2: 'urls.return' },
+  urlFailure: { classic: 'URLFailure', restV1: 'urls.failure', restV2: 'urls.cancel' },
+  urlNotify: { classic: 'URLNotify', restV1: 'urls.notify', restV2: 'urls.webhook' },
+  urlBack: { classic: 'URLBack', restV1: 'urls.cancel', restV2: 'urls.cancel' },
+  payTypes: { classic: 'PayTypes', restV1: 'payment.<method>.payTypes[]', restV2: 'allowedPaymentMethods[] / paymentMethods' },
+  template: { classic: 'Template', restV1: 'payment.<method>.template', restV2: 'template.name / paymentMethods.card.template' }
+};
+
+const ARTICLE_API_PATHS = {
+  itemReference: 'ArticleList.order_lines[].reference', id: 'ArticleList.order_lines[].product_identifiers.global_trade_item_number',
+  description: 'ArticleList.order_lines[].name', quantity: 'ArticleList.order_lines[].quantity',
+  amount: 'ArticleList.order_lines[].unit_price', vatAmount: 'ArticleList.order_lines[].total_tax_amount',
+  vatPercent: 'ArticleList.order_lines[].tax_rate (Prozent × 100)', totalAmount: 'ArticleList.order_lines[].total_amount',
+  positionType: 'ArticleList.order_lines[].type'
+};
+
+function _setApiFieldName(label, scope, path) {
+  if (!label) return;
+  label.parentElement?.querySelector(':scope > .api-field-name')?.remove();
+  const hint = appendTextElement(label.parentElement, 'span', 'api-field-name', '');
+  appendTextElement(hint, 'strong', '', `${scope}: `);
+  hint.appendChild(document.createTextNode(path));
+}
+
+function renderApiFieldNames() {
+  const restVersion = document.getElementById('rest-version')?.value === 'v2' ? 'restV2' : 'restV1';
+  const key = currentIntegration === 'rest' ? restVersion : 'classic';
+  const scope = currentIntegration === 'rest' ? `REST ${restVersion === 'restV2' ? 'V2' : 'V1'}` : 'Classic';
+  Object.entries(API_FIELD_PATHS).forEach(([id, paths]) => {
+    const field = document.getElementById(id);
+    const label = field?.closest('.field')?.querySelector('label');
+    if (label) _setApiFieldName(label, scope, paths[key] || '—');
+  });
+  const customerGroupHint = document.getElementById('customer-master-api-name');
+  if (customerGroupHint) {
+    clearElement(customerGroupHint);
+    appendTextElement(customerGroupHint, 'strong', '', `${scope}: `);
+    customerGroupHint.appendChild(document.createTextNode(key === 'classic'
+      ? 'billToCustomer · billingAddress · shipToCustomer · shippingAddress'
+      : (key === 'restV1' ? 'customerInfo · billing · shipping' : '—')));
+  }
+  document.querySelectorAll('#article-list-items [data-field]').forEach(field => {
+    const label = field.closest('.field')?.querySelector('label');
+    if (label) _setApiFieldName(label, 'Classic', ARTICLE_API_PATHS[field.dataset.field] || 'ArticleList');
+  });
+}
+
+function _flattenDerivedValue(value, prefix = '', rows = []) {
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => _flattenDerivedValue(item, `${prefix}[${index}]`, rows));
+  } else if (value && typeof value === 'object') {
+    Object.entries(value).forEach(([key, nested]) => _flattenDerivedValue(nested, prefix ? `${prefix}.${key}` : key, rows));
+  } else {
+    rows.push([prefix, String(value ?? '')]);
+  }
+  return rows;
+}
+
+function _decodeBase64Json(value) {
+  try {
+    const binary = atob(value);
+    const bytes = Uint8Array.from(binary, character => character.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch (_) { return null; }
+}
+
+function _renderDerivedParameterItems(sectionId, listId, items) {
+  const section = document.getElementById(sectionId);
+  const list = document.getElementById(listId);
+  if (!section || !list) return;
+  clearElement(list);
+  section.style.display = '';
+  if (!items.length) {
+    appendTextElement(list, 'div', 'derived-parameter-empty', currentLang === 'en'
+      ? 'No composed parameters were generated. Enable customer data or article data and generate the preview again.'
+      : 'Es wurden keine zusammengesetzten Parameter erzeugt. Aktiviere Kunden- oder Artikeldaten und generiere die Vorschau erneut.');
+    return;
+  }
+  items.forEach((item, index) => {
+    const details = document.createElement('details');
+    details.className = 'derived-parameter-item';
+    if (index === 0) details.open = true;
+    appendTextElement(details, 'summary', '', item.name);
+    const body = appendTextElement(details, 'div', 'derived-parameter-body', '');
+    const rules = appendTextElement(body, 'div', 'derived-parameter-rules', '');
+    appendTextElement(rules, 'div', '', item.note);
+    _flattenDerivedValue(item.decoded).forEach(([path, value]) => {
+      const row = appendTextElement(rules, 'div', '', '');
+      appendTextElement(row, 'code', '', path);
+      row.appendChild(document.createTextNode(` = ${value}`));
+    });
+    if (item.calculations?.length) item.calculations.forEach(calculation => appendTextElement(rules, 'div', '', calculation));
+    appendTextElement(body, 'span', 'derived-parameter-caption', currentLang === 'en' ? 'Decoded JSON' : 'Dekodiertes JSON');
+    const json = appendTextElement(body, 'pre', '', JSON.stringify(item.decoded, null, 2));
+    json.dataset.raw = JSON.stringify(item.decoded, null, 2);
+    if (item.encoded) {
+      appendTextElement(body, 'span', 'derived-parameter-caption', currentLang === 'en' ? 'Transmitted Base64 value' : 'Übertragener Base64-Wert');
+      const encoded = appendTextElement(body, 'pre', '', item.encoded);
+      encoded.dataset.raw = item.encoded;
+    }
+    list.appendChild(details);
+  });
+}
+
+function renderClassicDerivedParameterPreview(params) {
+  const names = ['billToCustomer', 'billingAddress', 'shipToCustomer', 'shippingAddress', 'ArticleList'];
+  const items = names.filter(name => params[name]).map(name => {
+    const decodedValue = _decodeBase64Json(params[name]);
+    const decoded = decodedValue || { error: currentLang === 'en' ? 'Base64 value could not be decoded as JSON.' : 'Der Base64-Wert konnte nicht als JSON dekodiert werden.' };
+    const isArticle = name === 'ArticleList';
+    const calculations = isArticle && decoded?.order_lines ? decoded.order_lines.map((line, index) =>
+      `${currentLang === 'en' ? 'Line' : 'Position'} ${index + 1}: ${line.quantity} × ${line.unit_price} = ${line.total_amount}; tax_rate ${line.tax_rate ?? 0} = ${(line.tax_rate ?? 0) / 100}%`
+    ) : [];
+    return {
+      name,
+      decoded,
+      encoded: params[name],
+      calculations,
+      note: isArticle
+        ? (currentLang === 'en' ? 'Built from the article fields; line totals must equal Amount.' : 'Aus den Artikelfeldern aufgebaut; die Positionssummen müssen Amount entsprechen.')
+        : (currentLang === 'en' ? 'Built from the enabled customer and address fields; empty values are removed.' : 'Aus den aktivierten Kunden- und Adressfeldern aufgebaut; leere Werte werden entfernt.')
+    };
+  });
+  _renderDerivedParameterItems('derived-parameters-section', 'derived-parameters-list', items);
+}
+
+function renderRestDerivedParameterPreview(payload) {
+  const items = ['customerInfo', 'billing', 'shipping'].filter(name => payload?.[name]).map(name => ({
+    name,
+    decoded: payload[name],
+    encoded: '',
+    note: currentLang === 'en' ? 'Built directly as a JSON object; empty values are removed.' : 'Direkt als JSON-Objekt aufgebaut; leere Werte werden entfernt.'
+  }));
+  _renderDerivedParameterItems('rest-derived-parameters-section', 'rest-derived-parameters-list', items);
 }
 
 function setUseCase(useCase) {
@@ -3892,7 +4254,7 @@ function updateUseCaseUI() {
   if (classicExplainer) classicExplainer.style.display = !isRest && isPayment ? 'block' : 'none';
   if (createFields) createFields.style.display = isPayment ? '' : 'none';
   if (statusControls) statusControls.style.display = isPayment ? 'none' : 'block';
-  if (callbackRow) callbackRow.style.display = !isRest && isPayment ? '' : 'none';
+  if (callbackRow) callbackRow.style.display = isPayment ? '' : 'none';
   if (restMethodField) restMethodField.style.display = isPayment ? '' : 'none';
   if (restPrimaryGrid) restPrimaryGrid.style.gridTemplateColumns = isPayment ? '' : '1fr 1fr';
   if (restVersion) {
@@ -3921,6 +4283,8 @@ function updateUseCaseUI() {
   }
 
   if (isRest) updateRestControls(); else if (isPayment) setMethod(currentMethod);
+  updateArticleListVisibility();
+  renderApiFieldNames();
 }
 
 function _statusCandidateKey(candidate) {
@@ -3934,6 +4298,12 @@ function _statusIdentifier(value, maxLength = 26) {
 }
 
 function _plainParamIgnoreCase(plain, names) {
+  const source = String(plain || '').trim();
+  if (source.startsWith('{') || source.startsWith('[')) {
+    try {
+      return _restScalar(_findRestResponseValue(JSON.parse(source), names));
+    } catch (_) {}
+  }
   const params = _parsePlainParams(String(plain || ''));
   const normalised = Object.fromEntries(Object.entries(params).map(([key, value]) => [key.toLowerCase(), value]));
   for (const name of names) {
@@ -3981,10 +4351,10 @@ async function collectStatusTransactionCandidates() {
     timestamp: entry.timestamp || '',
   }));
   responses.forEach(entry => _mergeStatusCandidate(candidates, {
-    paymentId: _plainParamIgnoreCase(entry.plain, ['PayID', 'PaymentID', 'paymentId']),
+    paymentId: String(entry.paymentId || '').trim() || _plainParamIgnoreCase(entry.plain, ['PayID', 'PaymentID', 'paymentId']),
     transId: String(entry.transId || '').trim() || _plainParamIgnoreCase(entry.plain, ['TransID', 'TransactionID']),
     merchantId: String(entry.merchantId || '').trim() || _plainParamIgnoreCase(entry.plain, ['MerchantID', 'mid']),
-    integration: 'classic',
+    integration: entry.integration === 'rest' ? 'rest' : 'classic',
     timestamp: entry.timestamp || '',
   }));
   return candidates
@@ -4157,6 +4527,7 @@ function updateRestControls() {
     : (version === 'v1'
       ? '<strong>REST API V1</strong> — Swagger-basierter JSON-Request-Builder. Der Request wird ausschließlich lokal erzeugt und nicht versendet.'
       : '<strong>REST API V2</strong> — Verwendet die offiziellen V2-Endpunkte und Schemas für Checkout Session, Hosted Card Form und Payment Link.');
+  renderApiFieldNames();
 }
 
 function isStandaloneApp() {
@@ -4231,8 +4602,8 @@ function applyLang() {
   setText('nav-payment', 'nav_payment');
   setText('nav-preview', 'nav_preview');
   setText('nav-log', 'nav_log');
-  setText('nav-response', 'nav_response');
-  setText('nav-resp-log', 'nav_resp_log');
+  setText('nav-response-text', 'nav_response');
+  setText('nav-resp-log-text', 'nav_resp_log');
   setText('nav-help', 'nav_help');
   setText('nav-changelog', 'nav_changelog');
   setText('workflow-nav-title', 'workflow_nav_title');
@@ -4246,6 +4617,7 @@ function applyLang() {
   setText('workflow-nav-status', 'workflow_nav_status');
   setText('workflow-nav-payment-data', 'workflow_nav_payment_data');
   setText('workflow-nav-customer', 'workflow_nav_customer');
+  setText('workflow-nav-articles', 'workflow_nav_articles');
   setText('workflow-nav-callbacks', 'workflow_nav_callbacks');
   setText('workflow-nav-advanced', 'workflow_nav_advanced');
   setText('workflow-nav-step-preview', 'workflow_nav_step_preview');
@@ -4371,6 +4743,14 @@ function applyLang() {
   setText('customer-shipping-title', 'customer_shipping_title');
   setText('btn-generate-customer', 'btn_generate_customer');
   setText('btn-clear-customer', 'btn_clear_customer');
+  setText('article-list-title', 'article_list_title');
+  setText('article-list-copy', 'article_list_copy');
+  setText('btn-generate-article-list', 'btn_generate_article_list');
+  setText('btn-clear-article-list', 'btn_clear_article_list');
+  setText('btn-add-article-item', 'btn_add_article_item');
+  setTip('tip-article-list', 'tip_article_list');
+  updateArticleItemLabels();
+  updateArticleListSummary();
   setText('l-cust-salutation', 'l_cust_salutation');
   setText('l-cust-first-name', 'l_cust_first_name');
   setText('l-cust-last-name', 'l_cust_last_name');
@@ -4387,6 +4767,7 @@ function applyLang() {
   setText('l-shipping-same', 'l_shipping_same');
   setText('customer-v2-warning', 'customer_v2_warning');
   setTip('tip-customer-master', 'tip_customer_master');
+  updateArticleRequirements();
   setTip('tip-cust-salutation', 'tip_cust_salutation');
   setTip('tip-cust-name', 'tip_cust_name');
   setTip('tip-cust-last-name', 'tip_cust_name');
@@ -4439,6 +4820,8 @@ function applyLang() {
   setText('preview-empty-title', 'info_title');
   setHtml('preview-empty-text', 'preview_empty');
   setText('debug-plain-label', 'debug_plain_label');
+  setText('derived-parameters-label', 'derived_parameters_label');
+  setText('rest-derived-parameters-label', 'derived_parameters_label');
   setText('debug-urlparams-label', 'debug_urlparams_label');
   setText('debug-pbl-outer-label', 'debug_pbl_outer_label');
   setText('debug-url-label', 'debug_url_label');
@@ -4468,6 +4851,11 @@ function applyLang() {
   setText('resp-result-label', 'resp_result_label');
   setText('copy-resp-text', 'btn_copy_resp');
   setText('resp-new-badge-text', 'resp_new_badge');
+  setText('rest-resp-info-title', 'resp_info_title');
+  setHtml('rest-resp-info-body', 'rest_resp_info_body');
+  setText('l-rest-resp-json', 'l_rest_resp_json');
+  setAttr('rest-resp-json', 'placeholder', 'ph_rest_resp_json');
+  setText('btn-analyze-rest-response-text', 'btn_analyze_rest_response');
   setText('ct-resp-log', 'ct_resp_log');
   setText('resp-log-subtitle', 'resp_log_subtitle');
   setText('btn-resp-log-clear-text', 'btn_resp_log_clear');
@@ -5100,6 +5488,208 @@ function clearCustomerMasterData() {
   showToast(t('toast_customer_cleared'), 'info');
 }
 
+function initArticleList() {
+  if (!document.querySelector('#article-list-items .article-item-card')) addArticleItem();
+  document.getElementById('amount')?.addEventListener('input', updateArticleListSummary);
+  updateArticleListVisibility();
+}
+
+function updateArticleListVisibility() {
+  const section = document.getElementById('article-list-section');
+  if (!section) return;
+  const supported = currentUseCase === 'create-payment' && currentIntegration === 'classic' && currentMethod !== 'ccf';
+  section.style.display = supported ? '' : 'none';
+  updateArticleListSummary();
+}
+
+function toggleArticleList() {
+  const enabled = document.getElementById('article-list-enabled')?.checked === true;
+  if (enabled && !document.querySelector('#article-list-items .article-item-card')) addArticleItem();
+  document.getElementById('article-list-body')?.classList.toggle('hidden', !enabled);
+  updateArticleListSummary();
+}
+
+function addArticleItem(values = {}) {
+  const template = document.getElementById('article-item-template');
+  const container = document.getElementById('article-list-items');
+  if (!template || !container) return;
+  const card = template.content.firstElementChild.cloneNode(true);
+  const index = container.children.length + 1;
+  const defaults = {
+    itemReference: String(index), id: `TEST-${index}`, description: t('article_default_description'),
+    quantity: 1, amount: 0, totalAmount: 0, vatAmount: 0, vatPercent: 19,
+    positionType: 'physical'
+  };
+  const item = { ...defaults, ...values };
+  card.querySelectorAll('[data-field]').forEach(field => {
+    field.value = item[field.dataset.field] ?? '';
+    field.addEventListener('input', updateArticleListSummary);
+    field.addEventListener('change', updateArticleListSummary);
+  });
+  container.appendChild(card);
+  updateArticleItemLabels();
+  updateArticleListSummary();
+}
+
+function removeArticleItem(button) {
+  button?.closest('.article-item-card')?.remove();
+  if (!document.querySelector('#article-list-items .article-item-card')) addArticleItem({ itemReference: '1', id: '', description: '', amount: '' });
+  updateArticleItemLabels();
+  updateArticleListSummary();
+}
+
+function updateArticleItemLabels() {
+  document.querySelectorAll('#article-list-items .article-item-card').forEach((card, index) => {
+    const title = card.querySelector('.article-item-title');
+    if (title) title.textContent = `${t('article_item_title')} ${index + 1}`;
+    const remove = card.querySelector('.article-item-remove');
+    if (remove) remove.textContent = t('article_remove');
+    const labels = {
+      '.article-label-reference': 'article_item_reference', '.article-label-id': 'article_id',
+      '.article-label-description': 'article_description', '.article-label-quantity': 'article_quantity',
+      '.article-label-amount': 'article_amount', '.article-label-vat-amount': 'article_vat_amount',
+      '.article-label-vat-percent': 'article_vat_percent', '.article-label-total-amount': 'article_total_amount',
+      '.article-label-position-type': 'article_position_type'
+    };
+    Object.entries(labels).forEach(([selector, key]) => {
+      const label = card.querySelector(selector);
+      if (label) label.textContent = t(key);
+    });
+  });
+  renderApiFieldNames();
+}
+
+function articleListTotalFromForm() {
+  return Array.from(document.querySelectorAll('#article-list-items .article-item-card')).reduce((sum, card) => {
+    const totalAmount = Number(card.querySelector('[data-field="totalAmount"]')?.value) || 0;
+    return sum + totalAmount;
+  }, 0);
+}
+
+function updateArticleListSummary() {
+  const summary = document.getElementById('article-list-summary');
+  if (!summary) return;
+  const enabled = document.getElementById('article-list-enabled')?.checked === true;
+  const klarnaSelected = document.getElementById('payTypes')?.value.toLowerCase() === 'klarna';
+  if (!enabled) {
+    summary.textContent = klarnaSelected ? t('article_summary_required') : '';
+    summary.classList.toggle('mismatch', klarnaSelected);
+    return;
+  }
+  const total = articleListTotalFromForm();
+  const paymentAmount = amountToCents(document.getElementById('amount')?.value || '0');
+  summary.textContent = t('article_summary').replace('{total}', (total / 100).toFixed(2)).replace('{amount}', (paymentAmount / 100).toFixed(2));
+  summary.classList.toggle('mismatch', total !== paymentAmount);
+}
+
+function updateArticleRequirements() {
+  updateArticleListSummary();
+}
+
+function generateTestArticleList() {
+  const container = document.getElementById('article-list-items');
+  if (!container) return;
+  container.replaceChildren();
+  const amount = amountToCents(document.getElementById('amount')?.value || '0');
+  addArticleItem({
+    itemReference: '1', id: 'TEST-1', description: t('article_default_description'),
+    quantity: 1, amount, totalAmount: amount, vatAmount: Math.round(amount * 19 / 119), vatPercent: 19,
+    positionType: 'physical'
+  });
+  const enabled = document.getElementById('article-list-enabled');
+  if (enabled) enabled.checked = true;
+  toggleArticleList();
+  showToast(t('toast_article_generated'), 'success');
+}
+
+function clearArticleList() {
+  const container = document.getElementById('article-list-items');
+  if (container) container.replaceChildren();
+  addArticleItem({ itemReference: '1', id: '', description: '', amount: '', totalAmount: '', vatAmount: '' });
+  const enabled = document.getElementById('article-list-enabled');
+  if (enabled) enabled.checked = false;
+  toggleArticleList();
+  showToast(t('toast_article_cleared'), 'info');
+}
+
+function collectArticleList(expectedAmount) {
+  if (currentIntegration !== 'classic' || currentMethod === 'ccf') return null;
+  const enabled = document.getElementById('article-list-enabled')?.checked === true;
+  const klarnaSelected = document.getElementById('payTypes')?.value.toLowerCase() === 'klarna';
+  if (!enabled) {
+    if (klarnaSelected) throw new Error(t('val_article_required'));
+    return null;
+  }
+  const orderLines = Array.from(document.querySelectorAll('#article-list-items .article-item-card')).map(card => {
+    const value = name => card.querySelector(`[data-field="${name}"]`)?.value.trim() || '';
+    const name = value('description');
+    const quantity = Number(value('quantity'));
+    const unitPrice = Number(value('amount'));
+    const totalAmount = Number(value('totalAmount'));
+    const vatAmountRaw = value('vatAmount');
+    const vatPercentRaw = value('vatPercent');
+    const type = value('positionType');
+    if (!name || !type) throw new Error(t('val_article_fields'));
+    if (!Number.isInteger(quantity) || quantity < 1) throw new Error(t('val_article_quantity'));
+    if (!Number.isInteger(unitPrice) || unitPrice < 0 || !Number.isInteger(totalAmount)) throw new Error(t('val_article_amount'));
+    const line = {
+      name,
+      quantity,
+      unit_price: unitPrice,
+      total_amount: totalAmount,
+      type
+    };
+    const reference = value('itemReference');
+    const gtin = value('id');
+    if (reference) line.reference = reference;
+    if (gtin) line.product_identifiers = { global_trade_item_number: gtin };
+    if (vatPercentRaw || vatAmountRaw) {
+      const vatPercent = Number(vatPercentRaw);
+      const vatAmount = Number(vatAmountRaw);
+      if (!Number.isFinite(vatPercent) || vatPercent < 0 || !Number.isInteger(vatAmount)) throw new Error(t('val_article_vat'));
+      line.tax_rate = Math.round(vatPercent * 100);
+      line.total_tax_amount = vatAmount;
+    }
+    return line;
+  });
+  if (!orderLines.length) throw new Error(t('val_article_fields'));
+  const total = orderLines.reduce((sum, line) => sum + line.total_amount, 0);
+  if (total !== expectedAmount) throw new Error(t('val_article_total').replace('{total}', String(total)).replace('{amount}', String(expectedAmount)));
+  return { order_lines: orderLines };
+}
+
+function applyArticleListToClassicParams(params, articleList) {
+  if (!articleList) return;
+  params['MsgVer'] = '2.0';
+  const encoded = base64EncodeUtf8(JSON.stringify(articleList));
+  if (encoded.length > 2048) throw new Error(t('val_article_length'));
+  params['ArticleList'] = encoded;
+}
+
+function applyArticleAddressDataToClassicParams(params, data) {
+  const fallbackCountry = splitCustomerCountry(document.getElementById('bill-country')?.value).a2 || 'DE';
+  params['bdCountryCode'] = data?.billingAddress?.countryA2 || fallbackCountry;
+  if (!data) return;
+  if (!data.contact.email) throw new Error(t('val_article_email'));
+  const billing = data.billingAddress;
+  params['bdFirstName'] = data.consumer.firstName;
+  params['bdLastName'] = data.consumer.lastName;
+  params['bdEmail'] = data.contact.email;
+  params['bdStreet'] = `${billing.street} ${billing.streetNumber}`.trim();
+  params['bdZip'] = billing.postalCode;
+  params['bdCity'] = billing.city;
+  if (!data.shippingSameAsBilling) {
+    const shipping = data.shippingAddress;
+    params['sdCountryCode'] = shipping.countryA2;
+    params['sdFirstName'] = data.consumer.firstName;
+    params['sdLastName'] = data.consumer.lastName;
+    params['sdEmail'] = data.contact.email;
+    params['sdStreet'] = `${shipping.street} ${shipping.streetNumber}`.trim();
+    params['sdZip'] = shipping.postalCode;
+    params['sdCity'] = shipping.city;
+  }
+}
+
 function splitCustomerCountry(value) {
   const [a2 = '', a3 = ''] = (value || '').split('|');
   return { a2, a3 };
@@ -5616,7 +6206,12 @@ async function buildRestPreview() {
     const testDataHelp = document.getElementById('rest-test-data-help');
     if (jsonBlock) jsonBlock.style.display = isStatus ? 'none' : 'block';
     if (testDataHelp) testDataHelp.style.display = isStatus ? 'none' : 'block';
-    if (!isStatus) renderJsonSyntax(document.getElementById('rest-json-output'), json);
+    if (!isStatus) {
+      renderJsonSyntax(document.getElementById('rest-json-output'), json);
+      renderRestDerivedParameterPreview(payload);
+    } else {
+      _renderDerivedParameterItems('rest-derived-parameters-section', 'rest-derived-parameters-list', []);
+    }
     renderCommandSyntax(document.getElementById('rest-code-output'), builders[tool](), tool);
     document.getElementById('rest-tool-help').innerHTML = help[tool];
     document.getElementById('card-preview').classList.remove('collapsed');
@@ -5644,6 +6239,7 @@ async function buildRestPreview() {
 
 async function buildClassicStatusPreview() {
   try {
+    _renderDerivedParameterItems('derived-parameters-section', 'derived-parameters-list', []);
     const merchantId = document.getElementById('merchantId').value.trim();
     const blowfishKey = document.getElementById('blowfishKey').value;
     const lookup = document.getElementById('status-lookup').value;
@@ -5743,6 +6339,7 @@ async function buildAndPreview() {
     const amount = amountToCents(amountRaw);
     if (!amount || amount < 1) { showToast(t('val_amount'), 'error'); return; }
     const customerData = collectCustomerMasterData();
+    const articleList = collectArticleList(amount);
 
     // Build MAC message: PayID*TransID*MerchantID*Amount*Currency
     // PayID is empty for the initial request → leading asterisk required (see Paygate docs)
@@ -5769,6 +6366,9 @@ async function buildAndPreview() {
       params['ExpirationDate'] = expirationDate;
     }
     applyCustomerDataToClassicParams(params, customerData);
+    if (articleList) applyArticleAddressDataToClassicParams(params, customerData);
+    applyArticleListToClassicParams(params, articleList);
+    renderClassicDerivedParameterPreview(params);
 
     const tmplSel = document.getElementById('template')?.value || '';
     const tmpl = tmplSel === '__custom__'
@@ -5861,7 +6461,7 @@ async function buildAndPreview() {
     document.getElementById('btn-submit').dataset.url = finalUrl;
 
     // Save to request log
-    await _saveLogEntry({ merchantId, transId, amount, currency, integration: 'classic', url: finalUrl });
+    await _saveLogEntry({ merchantId, transId, amount, currency, paymentMethod: payTypes, integration: 'classic', url: finalUrl });
     await renderLog();
 
     showToast(`${t('toast_preview_done')}${len} · Data=${dataHex.length/2} Bytes`, 'success');
@@ -6352,6 +6952,10 @@ function _sanitizeLogEntry(kind, entry) {
       status: _safeLogString(entry.status, 50),
       transId: _safeLogString(entry.transId, 120),
       merchantId: _safeLogString(entry.merchantId, 120),
+      paymentId: _safeLogString(entry.paymentId, 120),
+      integration: _safeLogString(entry.integration || 'classic', 30),
+      result: _safeLogString(entry.result, 30),
+      url: _safeLogString(entry.url),
       plain,
     };
   }
@@ -6373,7 +6977,7 @@ function _sanitizeLogEntry(kind, entry) {
 
 function _logEntryKey(kind, entry) {
   return kind === 'response'
-    ? ['response', entry.plain, entry.transId, entry.status, entry.merchantId].join('\u001f')
+    ? ['response', entry.integration, entry.plain, entry.paymentId, entry.transId, entry.status, entry.merchantId].join('\u001f')
     : ['request', entry.url, entry.transId, entry.paymentId, entry.useCase, entry.integration, entry.lookup, entry.amount, entry.currency, entry.merchantId].join('\u001f');
 }
 
@@ -6741,6 +7345,13 @@ function _renderRequestLogDetail(target, rawUrl) {
 }
 
 function _renderResponseLogDetail(target, plain) {
+  const source = String(plain || '').trim();
+  if (source.startsWith('{') || source.startsWith('[')) {
+    try {
+      renderJsonSyntax(target, JSON.stringify(JSON.parse(source), null, 2));
+      return;
+    } catch (_) {}
+  }
   const entries = String(plain || '').split('&').map(pair => {
     const index = pair.indexOf('=');
     return index > 0 ? [pair.substring(0, index), pair.substring(index + 1)] : null;
@@ -6830,6 +7441,55 @@ function _parsePlainParams(plain) {
   return result;
 }
 
+function _normalisePaymentMethodLabel(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  const first = raw.split(',')[0].trim();
+  const compact = first.replace(/[\s_-]+/g, '').toUpperCase();
+  const labels = {
+    CC: 'Card', CARD: 'Card', CARDS: 'Card', CREDITCARD: 'Card',
+    VISA: 'Visa', MASTERCARD: 'Mastercard', MASTER: 'Mastercard', AMEX: 'Amex',
+    PAYPAL: 'PayPal', KLARNA: 'Klarna', SOFORT: 'Sofort',
+    APPLEPAY: 'Apple Pay', GOOGLEPAY: 'Google Pay', AMAZONPAY: 'Amazon Pay',
+    IDEAL: 'iDEAL', EPS: 'EPS', BANCONTACT: 'Bancontact', BLIK: 'BLIK',
+    SEPA: 'SEPA', DIRECTDEBIT: 'Direct Debit'
+  };
+  return labels[compact] || first;
+}
+
+function _paymentMethodFromPlain(plain) {
+  const params = _parsePlainParams(String(plain || ''));
+  const wanted = ['PayType', 'PaymentMethod', 'PaymentType', 'CCBrand', 'CardBrand', 'Brand', 'Type', 'pt'];
+  for (const name of wanted) {
+    const key = Object.keys(params).find(candidate => candidate.toLowerCase() === name.toLowerCase());
+    if (key && params[key]) {
+      try { return _normalisePaymentMethodLabel(decodeURIComponent(params[key].replace(/\+/g, ' '))); }
+      catch (_) { return _normalisePaymentMethodLabel(params[key]); }
+    }
+  }
+  const source = String(plain || '').trim();
+  if (source.startsWith('{') || source.startsWith('[')) {
+    try {
+      const payload = JSON.parse(source);
+      return _normalisePaymentMethodLabel(_restScalar(_findRestResponseValue(payload, [
+        'paymentMethod', 'paymentMethodType', 'paymentType', 'payType', 'cardBrand', 'ccBrand', 'brand'
+      ])));
+    } catch (_) {}
+  }
+  return '';
+}
+
+function _responsePaymentMethod(entry, requestEntries) {
+  const direct = _normalisePaymentMethodLabel(entry.paymentMethod) || _paymentMethodFromPlain(entry.plain);
+  if (direct) return direct;
+  const paymentId = entry.paymentId || _plainParamIgnoreCase(entry.plain, ['PayID', 'PaymentID', 'paymentId']);
+  const transId = entry.transId || _plainParamIgnoreCase(entry.plain, ['TransID', 'TransId', 'transactionId']);
+  const request = requestEntries.find(candidate =>
+    (paymentId && candidate.paymentId === paymentId) || (transId && candidate.transId === transId)
+  );
+  return _normalisePaymentMethodLabel(request?.paymentMethod);
+}
+
 async function _saveRespLogEntry(plain) {
   const params = _parsePlainParams(plain);
   const entry  = {
@@ -6837,6 +7497,8 @@ async function _saveRespLogEntry(plain) {
     status:     params['Status']     || '',
     transId:    params['TransID']    || params['TransId'] || '',
     merchantId: params['MerchantID'] || params['mid']     || '',
+    paymentMethod: _paymentMethodFromPlain(plain),
+    integration: 'classic',
     plain
   };
   await _addLogEntry(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY, entry);
@@ -6846,6 +7508,7 @@ async function renderResponseLog() {
   const container = document.getElementById('resp-log-list');
   if (!container) return;
   responseLogCache = await _getLogEntries(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY);
+  const requestEntries = await _getLogEntries(LOG_REQUEST_STORE, LOG_LS_KEY);
   scheduleStatusTransactionRefresh();
 
   const badge = document.getElementById('resp-log-count-badge');
@@ -6861,27 +7524,36 @@ async function renderResponseLog() {
   clearElement(container);
   responseLogCache.forEach((e, i) => {
     const ts     = new Date(e.timestamp).toLocaleString(currentLang === 'en' ? 'en-US' : 'de-DE');
-    const status = e.status || '–';
-    const dotCls = status === 'OK'     ? 'rlog-status-ok'
-                 : status === 'FAILED' ? 'rlog-status-fail'
+    const integration = e.integration === 'rest' ? 'REST' : 'CLASSIC';
+    const status = e.status || e.result || '–';
+    const paymentMethod = _responsePaymentMethod(e, requestEntries);
+    const normalisedStatus = status.toUpperCase();
+    const dotCls = ['OK', 'SUCCESS'].includes(normalisedStatus) ? 'rlog-status-ok'
+                 : ['FAILED', 'FAILURE'].includes(normalisedStatus) ? 'rlog-status-fail'
                  : 'rlog-status-other';
     const entry = appendTextElement(container, 'div', 'log-entry', '');
     entry.addEventListener('click', () => toggleRespLogDetail(i));
     const meta = appendTextElement(entry, 'div', 'log-meta', '');
     appendTextElement(meta, 'span', 'log-ts', ts);
+    const integrationBadge = appendTextElement(meta, 'span', `log-interface-${e.integration === 'rest' ? 'rest' : 'classic'}`, integration);
+    integrationBadge.classList.add('log-badge');
     const statusBadge = appendTextElement(meta, 'span', 'log-badge', status);
-    if (status === 'OK') {
+    if (['OK', 'SUCCESS'].includes(normalisedStatus)) {
       statusBadge.classList.add('status-ok');
       statusBadge.style.cssText = 'background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25);color:var(--success)';
     }
-    if (status === 'FAILED') {
+    if (['FAILED', 'FAILURE'].includes(normalisedStatus)) {
       statusBadge.classList.add('status-failed');
       statusBadge.style.cssText = 'background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:var(--danger)';
     }
+    if (paymentMethod) appendTextElement(meta, 'span', 'log-badge log-payment-badge', paymentMethod);
     appendTextElement(meta, 'span', 'log-merchant', e.merchantId || '–');
     appendTextElement(meta, 'span', `log-status-dot ${dotCls}`, '');
-    const transId = appendTextElement(entry, 'div', 'log-tid', 'TransID: ');
-    const transIdValue = appendTextElement(transId, 'span', '', e.transId || '–');
+    const identifier = e.integration === 'rest'
+      ? (e.paymentId || _plainParamIgnoreCase(e.plain, ['PayID', 'PaymentID', 'paymentId']))
+      : e.transId;
+    const transId = appendTextElement(entry, 'div', 'log-tid', e.integration === 'rest' ? 'PayID: ' : 'TransID: ');
+    const transIdValue = appendTextElement(transId, 'span', '', identifier || '–');
     transIdValue.style.color = 'var(--accent2)';
     const detail = appendTextElement(entry, 'div', 'log-detail', '');
     detail.id = `resp-log-detail-${i}`;
@@ -6950,9 +7622,136 @@ async function confirmClearAllStorage() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// RESPONSE DECRYPTOR
+// RESPONSE ANALYSIS
 // ══════════════════════════════════════════════════════════════
+let currentResponseAnalysisMode = 'classic';
+
+function setResponseAnalysisMode(mode) {
+  if (!['classic', 'rest'].includes(mode)) return;
+  currentResponseAnalysisMode = mode;
+  document.getElementById('response-mode-classic')?.classList.toggle('active', mode === 'classic');
+  document.getElementById('response-mode-rest')?.classList.toggle('active', mode === 'rest');
+  const classic = document.getElementById('classic-response-analysis');
+  const rest = document.getElementById('rest-response-analysis');
+  if (classic) classic.style.display = mode === 'classic' ? '' : 'none';
+  if (rest) rest.style.display = mode === 'rest' ? '' : 'none';
+  const result = document.getElementById('resp-result-section');
+  if (result) result.style.display = 'none';
+  const summary = document.getElementById('rest-response-summary');
+  if (summary) summary.style.display = 'none';
+  const badge = document.getElementById('resp-new-badge');
+  if (badge) badge.style.display = 'none';
+}
+
+function _findRestResponseValue(payload, names) {
+  const wanted = new Set(names.map(name => String(name).toLowerCase()));
+  const queue = [payload];
+  while (queue.length) {
+    const current = queue.shift();
+    if (!current || typeof current !== 'object') continue;
+    for (const [key, value] of Object.entries(current)) {
+      const isScalar = value === null || typeof value !== 'object' || Array.isArray(value);
+      if (wanted.has(key.toLowerCase()) && isScalar && value !== null && value !== undefined && value !== '') return value;
+    }
+    for (const value of Object.values(current)) {
+      if (value && typeof value === 'object') queue.push(value);
+    }
+  }
+  return '';
+}
+
+function _restScalar(value) {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (Array.isArray(value)) return value.map(_restScalar).filter(Boolean).join(', ');
+  return '';
+}
+
+function _restResponseMetadata(payload) {
+  return {
+    status: _restScalar(_findRestResponseValue(payload, ['status', 'result', 'state'])),
+    paymentId: _restScalar(_findRestResponseValue(payload, ['paymentId', 'payId', 'PayID'])),
+    transId: _restScalar(_findRestResponseValue(payload, ['transactionId', 'transId', 'TransID'])),
+    merchantId: _restScalar(_findRestResponseValue(payload, ['merchantId', 'mid', 'MerchantID'])),
+    paymentMethod: _restScalar(_findRestResponseValue(payload, [
+      'paymentMethod', 'paymentMethodType', 'paymentType', 'payType', 'cardBrand', 'ccBrand', 'brand'
+    ])),
+    code: _restScalar(_findRestResponseValue(payload, ['errorCode', 'responseCode', 'code'])),
+    message: _restScalar(_findRestResponseValue(payload, ['errorMessage', 'description', 'message', 'detail'])),
+  };
+}
+
+function _renderRestResponseSummary(metadata) {
+  const container = document.getElementById('rest-response-summary');
+  if (!container) return;
+  clearElement(container);
+  const fields = [
+    ['rest_resp_field_status', metadata.status, 'status'],
+    ['rest_resp_field_payment_id', metadata.paymentId],
+    ['rest_resp_field_transaction_id', metadata.transId],
+    ['rest_resp_field_merchant_id', metadata.merchantId],
+    ['rest_resp_field_code', metadata.code],
+    ['rest_resp_field_message', metadata.message],
+  ].filter(([, value]) => value);
+  if (!fields.length) fields.push(['rest_resp_field_summary', t('rest_resp_no_fields')]);
+  fields.forEach(([labelKey, value, kind]) => {
+    const item = appendTextElement(container, 'div', 'rest-response-summary-item', '');
+    appendTextElement(item, 'span', 'rest-response-summary-label', t(labelKey));
+    const valueEl = appendTextElement(item, 'span', 'rest-response-summary-value', value);
+    if (kind === 'status') {
+      const normalised = String(value).toUpperCase();
+      if (['OK', 'SUCCESS', 'SUCCEEDED', 'COMPLETED', 'AUTHORIZED', 'CAPTURED'].includes(normalised)) valueEl.classList.add('success');
+      if (['FAILED', 'FAILURE', 'ERROR', 'DECLINED', 'CANCELLED', 'CANCELED'].includes(normalised)) valueEl.classList.add('failure');
+    }
+  });
+  container.style.display = 'grid';
+}
+
+async function _saveRestRespLogEntry(metadata, formatted) {
+  await _addLogEntry(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY, {
+    timestamp: new Date().toISOString(),
+    status: metadata.status,
+    paymentId: metadata.paymentId,
+    transId: metadata.transId,
+    merchantId: metadata.merchantId,
+    paymentMethod: _normalisePaymentMethodLabel(metadata.paymentMethod),
+    integration: 'rest',
+    result: metadata.status,
+    url: '',
+    plain: formatted,
+  });
+}
+
+async function analyzeRestResponse() {
+  const raw = document.getElementById('rest-resp-json')?.value.trim() || '';
+  if (!raw) { showToast(t('rest_resp_empty'), 'error'); return; }
+  try {
+    const payload = JSON.parse(raw);
+    if (payload === null || typeof payload !== 'object') throw new Error(t('rest_resp_object_required'));
+    const formatted = JSON.stringify(payload, null, 2);
+    const metadata = _restResponseMetadata(payload);
+    const responseEl = document.getElementById('resp-plain');
+    renderJsonSyntax(responseEl, formatted);
+    responseEl.dataset.raw = formatted;
+    document.getElementById('resp-result-label').textContent = t('rest_resp_result_label');
+    _renderRestResponseSummary(metadata);
+    const resultSection = document.getElementById('resp-result-section');
+    resultSection.style.display = 'block';
+    resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const newBadge = document.getElementById('resp-new-badge');
+    if (newBadge) newBadge.style.display = 'inline-flex';
+    await _saveRestRespLogEntry(metadata, formatted);
+    await renderResponseLog();
+    showToast(t('rest_resp_success'), 'success');
+  } catch (error) {
+    const prefix = error instanceof SyntaxError ? t('rest_resp_invalid') : '';
+    showToast(prefix + error.message, 'error');
+  }
+}
+
 async function decryptResponse() {
+  setResponseAnalysisMode('classic');
   const callbackUrl = document.getElementById('resp-url').value.trim();
   let dataHex = document.getElementById('resp-data').value.trim();
   let lenVal  = parseInt(document.getElementById('resp-len').value) || 0;
@@ -6999,6 +7798,9 @@ async function decryptResponse() {
       statusEl.style.fontWeight = '600';
     });
     responseEl.dataset.raw = plain;
+    document.getElementById('resp-result-label').textContent = t('resp_result_label');
+    const summary = document.getElementById('rest-response-summary');
+    if (summary) summary.style.display = 'none';
     document.getElementById('resp-result-section').style.display = 'block';
     document.getElementById('resp-result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -7156,6 +7958,20 @@ function _callbackBaseUrl() {
   return window.location.origin + window.location.pathname;
 }
 
+function _restCallbackUrl(result) {
+  const url = new URL(_callbackBaseUrl());
+  url.searchParams.set('callback', 'rest');
+  url.searchParams.set('result', result);
+  return url.href;
+}
+
+function _restoreCallbackInput(input) {
+  input.value = input.dataset.backup || '';
+  delete input.dataset.backup;
+  input.readOnly = false;
+  input.style.opacity = '';
+}
+
 function _applyCallbackReceiver(enabled) {
   const base = _callbackBaseUrl();
   const ids = ['urlSuccess', 'urlFailure', 'urlNotify', 'urlBack'];
@@ -7163,15 +7979,17 @@ function _applyCallbackReceiver(enabled) {
     const el = document.getElementById(id);
     if (!el) return;
     if (enabled) {
-      if (!el.dataset.backup) el.dataset.backup = el.value;
-      el.value    = base;
+      if (!('backup' in el.dataset)) el.dataset.backup = el.value;
+      if (currentIntegration === 'rest' && id === 'urlNotify') {
+        _restoreCallbackInput(el);
+        return;
+      }
+      const restResults = { urlSuccess: 'success', urlFailure: 'failure', urlBack: 'cancel' };
+      el.value = currentIntegration === 'rest' ? _restCallbackUrl(restResults[id]) : base;
       el.readOnly = true;
       el.style.opacity = '0.65';
     } else {
-      el.value    = el.dataset.backup || '';
-      delete el.dataset.backup;
-      el.readOnly = false;
-      el.style.opacity = '';
+      _restoreCallbackInput(el);
     }
   });
 }
@@ -7193,7 +8011,12 @@ function updateCallbackReceiverAvailabilityUI() {
     toggle.title = receiverSupported ? '' : t('cb_receiver_file_title');
   }
   row?.classList.toggle('is-unavailable', !receiverSupported);
-  if (hint) hint.textContent = t(receiverSupported ? 'cb_receiver_hint' : 'cb_receiver_file_hint');
+  if (hint) {
+    const hintKey = !receiverSupported
+      ? 'cb_receiver_file_hint'
+      : (currentIntegration === 'rest' ? 'cb_receiver_rest_hint' : 'cb_receiver_hint');
+    hint.textContent = t(hintKey);
+  }
   return receiverSupported;
 }
 
@@ -7246,6 +8069,46 @@ function _callbackPayloadFromUrl(urlString) {
     url: url.href,
     createdAt: Date.now(),
   };
+}
+
+function _restCallbackPayloadFromUrl(urlString) {
+  const url = new URL(urlString, window.location.href);
+  if (url.searchParams.get('callback') !== 'rest') return null;
+  const params = new URLSearchParams(url.searchParams);
+  params.delete('callback');
+  const result = params.get('result') || '';
+  return {
+    timestamp: new Date().toISOString(),
+    status: params.get('Status') || params.get('status') || result,
+    result,
+    paymentId: params.get('PayID') || params.get('paymentId') || params.get('PaymentID') || '',
+    transId: params.get('TransID') || params.get('transactionId') || '',
+    merchantId: params.get('MerchantID') || params.get('mid') || '',
+    paymentMethod: _normalisePaymentMethodLabel(
+      params.get('PayType') || params.get('paymentMethod') || params.get('paymentType') ||
+      params.get('Brand') || params.get('Type') || params.get('pt') || ''
+    ),
+    integration: 'rest',
+    url: url.href,
+    plain: params.toString(),
+  };
+}
+
+async function handleRestCallbackUrl(urlString) {
+  try {
+    if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return false;
+    const entry = _restCallbackPayloadFromUrl(urlString);
+    if (!entry) return false;
+    window.history.replaceState({}, '', _callbackBaseUrl());
+    await _addLogEntry(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY, entry);
+    await renderResponseLog();
+    document.getElementById('nav-resp-log')?.click();
+    showToast(t('toast_rest_callback_received'), 'success');
+    return true;
+  } catch (e) {
+    console.warn('handleRestCallbackUrl error:', e);
+    return false;
+  }
 }
 
 function _publishCallback(payload) {
@@ -7349,6 +8212,7 @@ function handleCallbackUrl(urlString, cleanCurrentUrl = false) {
     const respUrlEl = document.getElementById('resp-url');
     if (respUrlEl) respUrlEl.value = callbackUrl.href;
 
+    setResponseAnalysisMode('classic');
     document.getElementById('nav-response')?.click();
 
     showToast(t('toast_callback_received'), 'success');
@@ -7372,6 +8236,10 @@ function handleCallbackUrl(urlString, cleanCurrentUrl = false) {
 }
 
 function checkCallbackParams() {
+  if (_restCallbackPayloadFromUrl(window.location.href)) {
+    handleRestCallbackUrl(window.location.href);
+    return;
+  }
   const payload = _callbackPayloadFromUrl(window.location.href);
   if (!payload) return;
 
@@ -7398,6 +8266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDesign();
   initTheme();
   initLang();
+  initArticleList();
   initStatusTransactionPicker();
   generateTransId();
   initPayByLinkDefaults();
@@ -7586,6 +8455,7 @@ function initWorkflowNavigation() {
     if (!condition) return true;
     if (condition === 'status') return currentUseCase === 'payment-status';
     if (condition === 'create') return currentUseCase === 'create-payment';
+    if (condition === 'classic-create') return currentUseCase === 'create-payment' && currentIntegration === 'classic';
     if (condition === 'classic-preview') {
       const classicPreview = document.getElementById('debug-section');
       return currentUseCase === 'create-payment'
@@ -7777,6 +8647,20 @@ function initNavigation() {
     navScrollRight.classList.toggle('visible', hasOverflow && !atEnd);
   }
 
+  function updateMobileContentOffset() {
+    if (!glassNav || !window.matchMedia('(max-width: 640px)').matches) {
+      document.documentElement.style.removeProperty('--mobile-content-top');
+      return;
+    }
+    const navBottom = glassNav.getBoundingClientRect().bottom;
+    document.documentElement.style.setProperty('--mobile-content-top', `${Math.ceil(navBottom + 14)}px`);
+  }
+
+  function updateNavigationMetrics() {
+    updateMobileContentOffset();
+    updateNavScrollControls();
+  }
+
   function scrollNavigation(direction) {
     if (!glassNav) return;
     glassNav.scrollBy({ left: direction * Math.max(260, glassNav.clientWidth * .62), behavior: 'smooth' });
@@ -7865,14 +8749,15 @@ function initNavigation() {
   window.addEventListener('scroll', scheduleWorkflowNavigationUpdate, { passive: true });
   window.addEventListener('resize', () => {
     scheduleWorkflowNavigationUpdate();
-    updateNavScrollControls();
+    updateNavigationMetrics();
   });
+  window.visualViewport?.addEventListener('resize', updateNavigationMetrics, { passive: true });
   if ('ResizeObserver' in window && glassNav) {
-    new ResizeObserver(updateNavScrollControls).observe(glassNav);
+    new ResizeObserver(updateNavigationMetrics).observe(glassNav);
   }
   if ('onscrollend' in window) window.addEventListener('scrollend', releaseNavigationLock);
   scheduleWorkflowNavigationUpdate();
-  requestAnimationFrame(updateNavScrollControls);
+  updateNavigationMetrics();
 }
 
 // ── PWA Service Worker Registration ──
