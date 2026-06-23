@@ -26,3 +26,7 @@ confirmed with the relevant rights holder before that release is distributed.
 
 The Nexi design is an unofficial technical preview and must not be presented
 as an approved Nexi product or service.
+
+The derived `assets/payment-page/merchant-logo-nexi.png` combines the official
+white Nexi logo with the application name for the optional Hosted Payment Page
+CustomField example. The same trademark and redistribution restrictions apply.

@@ -18,7 +18,7 @@
  * the cached version is used as a fallback.
  */
 
-const CACHE_NAME = 'computop-tester-v3.5.0-r1';
+const CACHE_NAME = 'computop-tester-v3.5.0-r2';
 const ASSETS = [
   './',
   './index.html',
@@ -34,6 +34,8 @@ const ASSETS = [
   './assets/nexi/logos/nexi-color.png',
   './assets/nexi/logos/nexi-white.png',
   './assets/nexi/README.md',
+  './assets/payment-page/merchant-logo-original.png',
+  './assets/payment-page/merchant-logo-nexi.png',
   './icons/app-icon.svg',
   './icons/apple-touch-icon.png',
   './icons/icon-192.png',

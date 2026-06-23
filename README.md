@@ -42,6 +42,7 @@ step.
 - Optional customer, billing and shipping data with transparent Base64 JSON breakdown
 - Optional multi-line `ArticleList` data with amount validation and Klarna support
 - Optional unencrypted `CustomField1` through `CustomField9` values for supporting HPP templates
+- Design-aware transparent 276 × 87 PNG assets for the `CustomField3` merchant logo in Original and Nexi presentations
 - Visible Classic, REST V1 and REST V2 API names directly beside workflow fields
 - Ordered request preview showing composed objects, payload, query parameters and executable output
 - Callback receiver for Classic callbacks and REST success, failure and cancel browser redirects
@@ -233,6 +234,7 @@ js/changelog-data.js       Bilingual in-app release history
 js/help-data.js            Bilingual Help view content and resource links
 icons/                     Browser, Apple Touch and PWA icons
 assets/nexi/               Official Nexi preview fonts and logos
+assets/payment-page/       Hosted Payment Page merchant-logo PNGs
 service-worker.js          PWA network-first cache
 manifest.json              Web app manifest
 og-image.png               Open Graph and social sharing preview

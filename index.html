@@ -3512,7 +3512,7 @@
           <div class="custom-fields-grid">
             <div class="field"><label id="l-custom-field-1">CustomField1 · z. B. Gesamtbetrag</label><span class="api-field-name"><strong>Classic: </strong>CustomField1</span><input id="custom-field-1" type="text" maxlength="512" placeholder="12,34 EUR"></div>
             <div class="field"><label id="l-custom-field-2">CustomField2 · z. B. Bestelltext</label><span class="api-field-name"><strong>Classic: </strong>CustomField2</span><input id="custom-field-2" type="text" maxlength="512" placeholder="Bestellung REF-123"></div>
-            <div class="field"><label id="l-custom-field-3">CustomField3 · z. B. Logo-URL</label><span class="api-field-name"><strong>Classic: </strong>CustomField3</span><input id="custom-field-3" type="url" maxlength="1024" placeholder="https://example.com/logo.png"></div>
+            <div class="field"><label id="l-custom-field-3">CustomField3 · Logo-URL (276 × 87 PNG)</label><span class="api-field-name"><strong>Classic: </strong>CustomField3</span><input id="custom-field-3" type="url" maxlength="1024" placeholder="https://example.com/logo.png"></div>
             <div class="field"><label id="l-custom-field-4">CustomField4 · z. B. Warenkorb</label><span class="api-field-name"><strong>Classic: </strong>CustomField4</span><input id="custom-field-4" type="text" maxlength="2048" placeholder="1 × Artikel A|1 × Artikel B"></div>
             <div class="field"><label id="l-custom-field-5">CustomField5 · z. B. Kundendetails</label><span class="api-field-name"><strong>Classic: </strong>CustomField5</span><input id="custom-field-5" type="text" maxlength="2048" placeholder="Firma|Name|Straße|Ort"></div>
             <div class="field"><label id="l-custom-field-6">CustomField6 · z. B. Lieferadresse</label><span class="api-field-name"><strong>Classic: </strong>CustomField6</span><input id="custom-field-6" type="text" maxlength="2048" placeholder="Firma|Name|Straße|Ort"></div>
@@ -3521,7 +3521,7 @@
             <div class="field"><label id="l-custom-field-9">CustomField9 · z. B. Zusatztext</label><span class="api-field-name"><strong>Classic: </strong>CustomField9</span><input id="custom-field-9" type="text" maxlength="512" placeholder="Text"></div>
           </div>
           <div class="custom-fields-actions">
-            <button class="btn btn-ghost" type="button" onclick="generateCustomFieldExample()"><span id="btn-custom-fields-example">Computop-Beispiel einsetzen</span></button>
+            <button class="btn btn-ghost" type="button" onclick="generateCustomFieldExample()"><span id="btn-custom-fields-example">Payment-Tester-Beispiel einsetzen</span></button>
             <button class="btn btn-ghost" type="button" onclick="clearCustomFields()"><span id="btn-custom-fields-clear">CustomFields leeren</span></button>
           </div>
         </div>
@@ -5737,13 +5737,31 @@ function collectCustomFields() {
   return values;
 }
 
+const PAYMENT_PAGE_LOGO_URLS = Object.freeze({
+  original: 'https://krebs3r.github.io/computop-tester/assets/payment-page/merchant-logo-original.png',
+  nexi: 'https://krebs3r.github.io/computop-tester/assets/payment-page/merchant-logo-nexi.png'
+});
+
+function getPaymentPageLogoUrl(design = document.documentElement.dataset.design) {
+  return PAYMENT_PAGE_LOGO_URLS[design] || PAYMENT_PAGE_LOGO_URLS.original;
+}
+
+function syncCustomFieldLogoForDesign(design) {
+  const field = document.getElementById('custom-field-3');
+  if (!field) return;
+  const currentValue = field.value.trim();
+  if (Object.values(PAYMENT_PAGE_LOGO_URLS).includes(currentValue)) {
+    field.value = getPaymentPageLogoUrl(design);
+  }
+}
+
 function generateCustomFieldExample() {
   const amount = document.getElementById('amount')?.value || '12.34';
   const currency = document.getElementById('currency')?.value || 'EUR';
   const examples = [
     `${amount.replace('.', ',')} ${currency}`,
     currentLang === 'en' ? 'Order details' : 'Bestelldetails',
-    'https://www.paytest.org/MerchantLogo.png',
+    getPaymentPageLogoUrl(),
     '1 x Shoes, green|1 x Shoes, blue|1 x Shoes, black',
     'Company Ltd.|John Smith|Schwarzenbergstraße 2-4|96050 Bamberg',
     'Company Ltd.|John Smith|Schwarzenbergstraße 2-4|96050 Bamberg',
@@ -8063,6 +8081,7 @@ function setDesign(design, updateUrl = true) {
 
   _updateBrowserThemeColor();
   updateDesignToggle();
+  syncCustomFieldLogoForDesign(nextDesign);
 }
 
 function toggleDesign() {
