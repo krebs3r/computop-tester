@@ -46,7 +46,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.5.0",
+      "softwareVersion": "3.5.1",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -1590,6 +1590,32 @@
     .step.active .step-num { color: var(--accent); }
     .step.active { color: var(--text); }
     .step.done .step-num { color: var(--success); }
+
+    .preview-stale-notice {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(245,158,11,.26);
+      border-radius: 8px;
+      background: rgba(245,158,11,.07);
+    }
+    .preview-stale-notice.is-visible { display: flex; }
+    .preview-stale-copy { display: flex; align-items: flex-start; gap: 8px; min-width: 0; color: var(--muted2); font-size: 12px; line-height: 1.55; }
+    .preview-stale-copy .icon { color: var(--warning); margin-top: 1px; flex-shrink: 0; }
+    .preview-stale-copy strong { color: var(--warning); font-weight: 600; }
+    .preview-stale-notice .btn { flex-shrink: 0; }
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: .58;
+      filter: grayscale(.2);
+    }
+    @media (max-width: 720px) {
+      .preview-stale-notice { align-items: stretch; flex-direction: column; }
+      .preview-stale-notice .btn { justify-content: center; width: 100%; }
+    }
 
     /* ── URL LIST ── */
     .url-fields { display: flex; flex-direction: column; gap: 10px; }
@@ -3534,6 +3560,9 @@
         <button class="btn btn-primary" onclick="buildAndPreview()" id="btn-preview">
           <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> <span id="btn-preview-text">Vorschau generieren</span>
         </button>
+        <button class="btn btn-ghost" type="button" onclick="startNewPaymentFlow()" id="btn-new-flow">
+          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></span> <span id="btn-new-flow-text">Neuen Payment Flow starten</span>
+        </button>
         <button class="btn btn-ghost" id="btn-newtid" onclick="generateTransId()">
           <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span> <span id="btn-newtid-text">Neue Trans-ID</span>
         </button>
@@ -3554,6 +3583,16 @@
 
       <div id="preview-empty-hint" class="info-box">
         <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="preview-empty-title">Hinweis:</span></strong> <span id="preview-empty-text">Noch keine Vorschau generiert. Klicke in Schritt 2 auf <strong>„Vorschau generieren"</strong>, um die Request-Daten und die ausführbare Ausgabe hier anzuzeigen.</span>
+      </div>
+
+      <div class="preview-stale-notice" id="preview-stale-notice" role="status">
+        <div class="preview-stale-copy">
+          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span>
+          <span><strong id="preview-stale-title">Vorschau nicht mehr aktuell.</strong> <span id="preview-stale-text">In Schritt 2 wurden Daten geändert. Aktualisiere die Vorschau, bevor du die Payment Page öffnest.</span></span>
+        </div>
+        <button class="btn btn-primary" type="button" onclick="buildAndPreview()" id="btn-refresh-preview">
+          <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></span> <span id="btn-refresh-preview-text">Vorschau aktualisieren</span>
+        </button>
       </div>
 
       <div class="debug-section" id="debug-section" style="display:none">
@@ -3902,7 +3941,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-          <span class="footer-ver-badge" id="footer-ver-badge">v3.5.0</span>
+          <span class="footer-ver-badge" id="footer-ver-badge">v3.5.1</span>
       <button class="footer-preview-notice" id="footer-design-toggle" type="button" onclick="toggleDesign()">
         <span id="footer-design-toggle-text">Original Design</span>
       </button>
@@ -3958,6 +3997,20 @@
     <div class="app-modal-actions">
       <button class="btn btn-secondary" id="profile-delete-cancel" type="button">Abbrechen</button>
       <button class="btn btn-danger" id="profile-delete-confirm" type="button">Profil löschen</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="new-flow-modal" role="dialog" aria-modal="true" aria-labelledby="new-flow-modal-title" aria-describedby="new-flow-modal-text">
+  <div class="app-modal-panel" role="document">
+    <div class="app-modal-icon info" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+    </div>
+    <h2 class="app-modal-title" id="new-flow-modal-title">Neuen Payment Flow starten?</h2>
+    <p class="app-modal-text" id="new-flow-modal-text">Der aktuelle Payment Flow wird verworfen und mit einer neuen Trans-ID neu gestartet. Gespeicherte Profile, Logs und Einstellungen bleiben erhalten.</p>
+    <div class="app-modal-actions">
+      <button class="btn btn-ghost" type="button" id="new-flow-cancel">Abbrechen</button>
+      <button class="btn btn-primary" type="button" id="new-flow-confirm">Neu starten</button>
     </div>
   </div>
 </div>
@@ -4083,6 +4136,49 @@ let statusTransactionCandidates = [];
 let statusTransactionRefreshTimer = null;
 let statusTransactionRefreshToken = 0;
 const PBL_REFS_LS_KEY = 'computop_paybylink_refs';
+const previewState = { hasPreview: false, isStale: false, isResetting: false };
+
+function updatePreviewStaleUI() {
+  const staleNotice = document.getElementById('preview-stale-notice');
+  const submitButton = document.getElementById('btn-submit');
+  const statusSubmitButton = document.getElementById('btn-status-submit');
+  const isStale = previewState.hasPreview && previewState.isStale;
+  staleNotice?.classList.toggle('is-visible', isStale);
+  if (submitButton) submitButton.disabled = isStale;
+  if (statusSubmitButton) statusSubmitButton.disabled = isStale;
+}
+
+function markPreviewFresh() {
+  previewState.hasPreview = true;
+  previewState.isStale = false;
+  updatePreviewStaleUI();
+}
+
+function clearPreviewFreshness() {
+  previewState.hasPreview = false;
+  previewState.isStale = false;
+  updatePreviewStaleUI();
+}
+
+function markPreviewStale() {
+  if (previewState.isResetting || !previewState.hasPreview) return;
+  previewState.isStale = true;
+  updatePreviewStaleUI();
+}
+
+function initPaymentFlowChangeTracking() {
+  [document.getElementById('card-creds'), document.getElementById('card-payment')].forEach(card => {
+    if (!card) return;
+    card.addEventListener('input', event => {
+      if (event.target.closest('#btn-preview, #btn-new-flow')) return;
+      markPreviewStale();
+    });
+    card.addEventListener('change', event => {
+      if (event.target.closest('#btn-preview, #btn-new-flow')) return;
+      markPreviewStale();
+    });
+  });
+}
 
 function onTemplateChange() {
   const sel = document.getElementById('template');
@@ -4094,6 +4190,7 @@ function onTemplateChange() {
 
 function setMethod(method) {
   const previousMethod = currentMethod;
+  if (previousMethod !== method) markPreviewStale();
   currentMethod = method;
   document.getElementById('method-hpp').classList.toggle('method-active', method === 'hpp');
   document.getElementById('method-ccf').classList.toggle('method-active', method === 'ccf');
@@ -4612,11 +4709,80 @@ function showPreviewEmptyState() {
   const restOutput = document.getElementById('rest-debug-section');
   const statusSubmitRow = document.getElementById('classic-status-submit-row');
   const statusSubmitButton = document.getElementById('btn-status-submit');
+  const submitButton = document.getElementById('btn-submit');
+  clearPreviewFreshness();
   if (emptyHint) emptyHint.style.display = 'block';
   if (classicOutput) classicOutput.style.display = 'none';
   if (restOutput) restOutput.style.display = 'none';
   if (statusSubmitRow) statusSubmitRow.style.display = 'none';
   if (statusSubmitButton) delete statusSubmitButton.dataset.url;
+  if (submitButton) delete submitButton.dataset.url;
+}
+
+function resetControlsToDefaults(container) {
+  if (!container) return;
+  container.querySelectorAll('input, select, textarea').forEach(field => {
+    if (field.type === 'checkbox' || field.type === 'radio') {
+      field.checked = field.defaultChecked;
+    } else if (field.tagName === 'SELECT') {
+      const defaultOption = Array.from(field.options).findIndex(option => option.defaultSelected);
+      field.selectedIndex = defaultOption >= 0 ? defaultOption : 0;
+    } else {
+      field.value = field.defaultValue || '';
+    }
+  });
+}
+
+function startNewPaymentFlow() {
+  openNewFlowModal();
+}
+
+function performNewPaymentFlowReset() {
+  previewState.isResetting = true;
+  try {
+    resetControlsToDefaults(document.getElementById('card-payment'));
+    resetControlsToDefaults(document.getElementById('status-controls'));
+    setUseCase('create-payment');
+    setIntegration('classic');
+    setMethod('hpp');
+    generateTransId();
+    initPayByLinkDefaults();
+    onOrderDescChange(document.getElementById('orderDesc'));
+    onTemplateChange();
+    updateArticleListVisibility();
+    updateCustomFieldsVisibility();
+    updateRestControls();
+    showPreviewEmptyState();
+    document.getElementById('card-creds')?.classList.remove('collapsed');
+    document.getElementById('card-payment')?.classList.remove('collapsed');
+    document.getElementById('card-preview')?.classList.add('collapsed');
+    document.getElementById('card-creds')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showToast(t('toast_new_flow_started'), 'success');
+  } finally {
+    previewState.isResetting = false;
+    clearPreviewFreshness();
+  }
+}
+
+function openNewFlowModal() {
+  const modal = document.getElementById('new-flow-modal');
+  const confirmButton = document.getElementById('new-flow-confirm');
+  if (!modal || !confirmButton) return;
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+  confirmButton.focus();
+}
+
+function closeNewFlowModal() {
+  const modal = document.getElementById('new-flow-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  document.body.classList.remove('modal-open');
+}
+
+function confirmNewPaymentFlow() {
+  closeNewFlowModal();
+  performNewPaymentFlowReset();
 }
 
 function updateRestControls() {
@@ -4945,9 +5111,13 @@ function applyLang() {
 
   setText('ct-preview', 'ct_preview');
   setText('btn-preview-text', 'btn_preview');
+  setText('btn-new-flow-text', 'btn_new_flow');
   setText('btn-newtid-text', 'btn_newtid');
   setText('preview-empty-title', 'info_title');
   setHtml('preview-empty-text', 'preview_empty');
+  setText('preview-stale-title', 'preview_stale_title');
+  setText('preview-stale-text', 'preview_stale_text');
+  setText('btn-refresh-preview-text', 'btn_refresh_preview');
   setText('debug-plain-label', 'debug_plain_label');
   setText('derived-parameters-label', 'derived_parameters_label');
   setText('rest-derived-parameters-label', 'derived_parameters_label');
@@ -5012,6 +5182,10 @@ function applyLang() {
   setText('profile-delete-modal-title', 'profile_delete_modal_title');
   setText('profile-delete-cancel', 'profile_delete_modal_cancel');
   setText('profile-delete-confirm', 'profile_delete_modal_confirm');
+  setText('new-flow-modal-title', 'new_flow_modal_title');
+  setText('new-flow-modal-text', 'new_flow_modal_text');
+  setText('new-flow-cancel', 'clear_all_modal_cancel');
+  setText('new-flow-confirm', 'new_flow_modal_confirm');
   setText('log-action-cancel', 'clear_all_modal_cancel');
   updateProfileDeleteModalText();
 
@@ -5416,6 +5590,7 @@ function generateTransId() {
   const ts = Date.now();
   const rand = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
   document.getElementById('transId').value = `TID-${ts}-${rand}`;
+  markPreviewStale();
 }
 
 function getUsedPayByLinkRefs() {
@@ -6422,6 +6597,7 @@ async function buildRestPreview() {
     document.getElementById('preview-empty-hint').style.display = 'none';
     document.getElementById('debug-section').style.display = 'none';
     document.getElementById('rest-debug-section').style.display = 'block';
+    markPreviewFresh();
     if (isStatus) {
       await _saveLogEntry({
         merchantId: credentials.include ? credentials.merchantId : '',
@@ -6459,6 +6635,7 @@ async function buildClassicStatusPreview() {
     document.getElementById('preview-empty-hint').style.display = 'none';
     document.getElementById('rest-debug-section').style.display = 'none';
     document.getElementById('debug-section').style.display = 'block';
+    markPreviewFresh();
     document.querySelectorAll('.payment-preview-only').forEach(element => { element.style.display = 'none'; });
     const statusSubmitRow = document.getElementById('classic-status-submit-row');
     const statusSubmitButton = document.getElementById('btn-status-submit');
@@ -6615,6 +6792,7 @@ async function buildAndPreview() {
     if (emptyHint) emptyHint.style.display = 'none';
     document.getElementById('debug-section').style.display = 'block';
     document.querySelectorAll('.payment-preview-only').forEach(element => { element.style.display = ''; });
+    markPreviewFresh();
     const statusSubmitRow = document.getElementById('classic-status-submit-row');
     if (statusSubmitRow) statusSubmitRow.style.display = 'none';
 
@@ -6688,6 +6866,7 @@ async function buildAndPreview() {
 }
 
 function submitPayment() {
+  if (previewState.isStale) { showToast(t('toast_preview_stale'), 'error'); return; }
   const url = document.getElementById('btn-submit').dataset.url;
   if (!url) { showToast(t('toast_no_url'), 'error'); return; }
   if (isStandaloneApp() && currentMethod !== 'pbl') {
@@ -6698,6 +6877,7 @@ function submitPayment() {
 }
 
 function submitClassicStatus() {
+  if (previewState.isStale) { showToast(t('toast_preview_stale'), 'error'); return; }
   const url = document.getElementById('btn-status-submit')?.dataset.url;
   if (!url) { showToast(t('toast_no_url'), 'error'); return; }
   showToast(t('toast_status_submit'), 'info');
@@ -8490,10 +8670,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initParamTips();
   initClearAllModal();
   initProfileDeleteModal();
+  initNewFlowModal();
   initLogActionModal();
   initLogDataModal();
   initNavigation();
   initWorkflowNavigation();
+  initPaymentFlowChangeTracking();
   initCallbackReceiver();
 });
 
@@ -8541,6 +8723,22 @@ function initProfileDeleteModal() {
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && modal.classList.contains('open')) closeProfileDeleteModal();
+  });
+}
+
+function initNewFlowModal() {
+  const modal = document.getElementById('new-flow-modal');
+  const cancel = document.getElementById('new-flow-cancel');
+  const confirmButton = document.getElementById('new-flow-confirm');
+  if (!modal || !cancel || !confirmButton) return;
+
+  cancel.addEventListener('click', closeNewFlowModal);
+  confirmButton.addEventListener('click', confirmNewPaymentFlow);
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeNewFlowModal();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeNewFlowModal();
   });
 }
 

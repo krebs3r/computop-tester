@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.5.0-blueviolet)
+![Version](https://img.shields.io/badge/version-3.5.1-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -45,6 +45,8 @@ step.
 - Design-aware transparent 276 × 87 PNG assets for the `CustomField3` merchant logo in Original and Nexi presentations
 - Visible Classic, REST V1 and REST V2 API names directly beside workflow fields
 - Ordered request preview showing composed objects, payload, query parameters and executable output
+- Outdated-preview protection that blocks executable Step 3 actions after request inputs change until the preview is refreshed
+- In-app "Start new payment flow" confirmation for resetting the current workflow without deleting saved profiles or logs
 - Callback receiver for Classic callbacks and REST success, failure and cancel browser redirects
 - Named credential profiles stored locally in the browser
 - IndexedDB request and combined Classic/REST response logs with up to 250 entries each
@@ -98,6 +100,12 @@ cards use self-contained inline SVG icons and require no external icon library.
    status inquiries can also be opened directly from the preview; REST requests
    remain copy-only.
 
+If Step 1 credentials or Step 2 request data are changed after generating a
+preview, Step 3 is marked as outdated and executable actions are disabled until
+the preview is refreshed. Use **Start new payment flow** in Step 2 to discard
+the current workflow and restart with a new Transaction ID; stored profiles,
+request logs, response logs, language, theme and settings remain untouched.
+
 For Pay By Link, the tester generates a locally unique reference number and a
 default expiration date. The preview exposes both the inner HPP payload and the outer Pay By Link payload.
 The Paygate documentation describes this endpoint as a server-to-server API, so browser CORS
@@ -133,6 +141,12 @@ Step 3 follows the same order in which a request is assembled:
 Long API paths are kept close to their inputs and expose their complete value
 as a tooltip. Customer and article controls use theme-aware checkboxes and
 consistent action-button placement in both Original and Nexi designs.
+
+Step 3 also tracks whether the displayed output still matches the current
+workflow inputs. When credentials, integration options, payment data,
+redirects, customer data, article data or advanced settings change, the preview
+shows a refresh notice and blocks Paygate/status launch actions until the
+request is generated again.
 
 ## REST Request Builder
 

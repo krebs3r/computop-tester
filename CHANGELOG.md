@@ -2,6 +2,14 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.5.1 — Payment Flow freshness and restart controls
+- Mark Step 3 previews as outdated when Step 1 credentials or Step 2 request data change after a preview has already been generated
+- Added a Step 3 refresh notice with a dedicated action so users can regenerate the preview before opening the Hosted Payment Page, Credit Card Form, Pay By Link request or status inquiry
+- Disabled executable Step 3 actions while the preview is outdated to prevent launching Paygate with stale request data
+- Added a "Start new payment flow" action in Step 2 for resetting the current workflow with a new Transaction ID while keeping saved profiles, logs, language, theme and settings intact
+- Replaced the browser confirmation popup with an in-app confirmation modal that matches the existing application design and supports keyboard and backdrop dismissal
+- Updated README, in-app changelog, visible version metadata and offline cache for version 3.5.1
+
 ### v3.5.0 — Workflow clarity, CustomFields and request transparency
 - Added transparent 276 × 87 Hosted Payment Page merchant logos for Original and Nexi designs; the CustomField example selects and synchronizes the matching public asset URL
 - Reordered Step 3 to follow request construction from composed objects through payload and query parameters to the final request, and corrected the Classic plain-text payload label

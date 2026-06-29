@@ -1,6 +1,21 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.5.1', de: { title: 'Aktuelle Vorschau und neuer Payment Flow', items: [
+    '<strong>Veraltete Vorschau erkannt</strong> — Schritt 3 wird als nicht mehr aktuell markiert, sobald nach einer generierten Vorschau Credentials oder Request-Daten geändert werden',
+    '<strong>Sicherer Paygate-Start</strong> — Ausführbare Aktionen in Schritt 3 bleiben gesperrt, bis die Vorschau aktualisiert wurde, damit keine alten Request-Daten geöffnet werden',
+    '<strong>Direkte Aktualisierung</strong> — Ein Hinweis in Schritt 3 erklärt den Zustand und bietet eine eigene Aktion zum erneuten Generieren der Vorschau',
+    '<strong>Neuer Payment Flow</strong> — Schritt 2 bietet eine Aktion zum Neustart des aktuellen Workflows mit neuer Trans-ID, ohne gespeicherte Profile, Logs, Sprache, Theme oder Einstellungen zu löschen',
+    '<strong>App-eigener Dialog</strong> — Der Neustart verwendet ein Bestätigungsmodal im bestehenden Design statt eines Browser-Popups',
+    '<strong>Release-Metadaten</strong> — README, Changelog, sichtbare Version und Offline-Cache sind auf Version 3.5.1 abgestimmt',
+  ]}, en: { title: 'Fresh preview and new payment flow', items: [
+    '<strong>Outdated preview detection</strong> — Step 3 is marked as no longer current when credentials or request data change after a preview has been generated',
+    '<strong>Safer Paygate launch</strong> — Executable Step 3 actions stay disabled until the preview is refreshed so stale request data cannot be opened accidentally',
+    '<strong>Direct refresh</strong> — A Step 3 notice explains the state and provides a dedicated action for regenerating the preview',
+    '<strong>New payment flow</strong> — Step 2 can restart the current workflow with a new Trans-ID without deleting saved profiles, logs, language, theme or settings',
+    '<strong>In-app dialog</strong> — Restart confirmation now uses a modal matching the existing design instead of a browser popup',
+    '<strong>Release metadata</strong> — README, changelog, visible version and offline cache are aligned with version 3.5.1',
+  ]}},
   { v: 'v3.5.0', de: { title: 'Workflow-Klarheit, CustomFields und Request-Transparenz', items: [
     '<strong>Passendes Merchant-Logo</strong> — Transparente 276 × 87-PNGs für Original- und Nexi-Design werden über CustomField3 eingesetzt und beim Designwechsel automatisch synchronisiert',
     '<strong>Logischer Vorschaufluss</strong> — Schritt 3 folgt jetzt der Request-Erzeugung von zusammengesetzten Objekten über Klartext-Payload und Query-Parameter bis zum finalen Request',
