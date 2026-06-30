@@ -2,6 +2,17 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.5.2 — Payment-focused app and header icons
+- Replaced the favicon and PWA app icon set with a payment-focused Shield + Card mark while preserving the existing SVG, PNG, Apple Touch and maskable icon file names and sizes
+- Uses the new payment app icon in the original design header without an additional logo frame
+- Kept the Nexi design header on the Nexi logo while still using the new app icon for browser tabs, install prompts and PWA surfaces
+- Aligned Payment Workflow, Request Log, Response Analysis and Response Log header badges with the compact Navbar badge design for more consistent scanning
+- Aligned original-design header icons to the title area and refined the original light-mode glass treatment across the main header and Help view boxes
+- Added a stable Releases link next to the local main-branch ZIP download and clarified the difference between the current development build and tagged releases
+- Renamed Step 1 from Credentials to Configuration because it now covers interface selection, profiles and credentials
+- Refreshed the Open Graph preview image with the new payment identity
+- Updated README, in-app changelog, visible version metadata and offline cache for version 3.5.2
+
 ### v3.5.1 — Payment Flow freshness and restart controls
 - Mark Step 3 previews as outdated when Step 1 credentials or Step 2 request data change after a preview has already been generated
 - Added a Step 3 refresh notice with a dedicated action so users can regenerate the preview before opening the Hosted Payment Page, Credit Card Form, Pay By Link request or status inquiry

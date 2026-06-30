@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.5.1-blueviolet)
+![Version](https://img.shields.io/badge/version-3.5.2-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -60,7 +60,11 @@ step.
 - German and English interface
 - Dark, light and automatic system theme
 - Installable PWA with network-first offline caching
-- iOS-friendly app icon set with standard and maskable PWA variants
+- Payment-focused app icon set with standard, Apple Touch and maskable PWA variants
+- Original-design header uses the payment app icon without an additional logo frame; Nexi design keeps the Nexi header logo
+- Original-design header icons are aligned to the title area, with refined light-mode glass treatment for the main header and Help view boxes
+- Navbar-aligned badges in the Payment Workflow, Request Log, Response Analysis and Response Log headers for consistent Classic, REST and Payment Workflow scanning
+- Local download guidance distinguishes the current main-branch development build from stable tagged GitHub releases
 - Touch-oriented responsive layout with safe-area support and 44px interaction targets
 - Direct local operation through `file://` without a development server
 
@@ -116,6 +120,10 @@ opened from the preview.
 No local HTTP server is required. Service-worker and installation features are
 available only when the app is served through HTTP/HTTPS, including GitHub
 Pages.
+
+The in-app local download link points to the current `main` branch ZIP, so it
+always contains the newest committed state. For a stable, tagged version with
+release notes, use the project's [GitHub Releases](https://github.com/krebs3r/computop-tester/releases).
 
 The internal callback receiver also requires HTTP/HTTPS. Browsers do not allow
 an external Paygate page to redirect reliably to a local `file://` URL. Use the
@@ -246,12 +254,12 @@ index.html                 Main application, styles and runtime logic
 js/i18n.js                 German and English translations
 js/changelog-data.js       Bilingual in-app release history
 js/help-data.js            Bilingual Help view content and resource links
-icons/                     Browser, Apple Touch and PWA icons
+icons/                     Browser, Apple Touch, PWA and original header icons
 assets/nexi/               Official Nexi preview fonts and logos
 assets/payment-page/       Hosted Payment Page merchant-logo PNGs
 service-worker.js          PWA network-first cache
 manifest.json              Web app manifest
-og-image.png               Open Graph and social sharing preview
+og-image.png               Open Graph and social sharing preview with the payment app icon
 THIRD_PARTY_NOTICES.md      Brand-asset sources and license exclusions
 VERSION                    Canonical application version
 CHANGELOG.md               Complete release history

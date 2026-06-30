@@ -1,6 +1,29 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.5.2', de: { title: 'Payment-Icons für App und Header', items: [
+    '<strong>Neues App-Icon</strong> — Favicon und PWA-Icons verwenden jetzt ein payment-orientiertes Shield-und-Karte-Motiv',
+    '<strong>Alle Icon-Varianten erneuert</strong> — SVG, Browser-PNGs, Apple-Touch-Icon und maskable PWA-Icons behalten ihre bisherigen Dateinamen, Größen und Manifest-Vorgaben',
+    '<strong>Header vereinfacht</strong> — Das Original-Design nutzt im Header direkt das neue Payment-App-Icon ohne zusätzlichen Logo-Rahmen',
+    '<strong>Nexi-Design bleibt markenkonform</strong> — Im Nexi-Design bleibt das Nexi-Logo im Header sichtbar; Browser-Tab, Favicon und PWA-Installation nutzen trotzdem das neue App-Icon',
+    '<strong>Einheitliche Badges</strong> — Payment Workflow, Request-Log, Response-Analyse und Response-Log nutzen im Header das kompakte Badge-Design der Navbar',
+    '<strong>Glass-Design poliert</strong> — Header-Icons im Original-Design sind am Titelbereich ausgerichtet; Light-Mode-Header und Help-Boxen wirken jetzt gläserner',
+    '<strong>Download-Auswahl</strong> — Der lokale Download erklärt jetzt den aktuellen Entwicklungsstand aus dem main-Branch und verlinkt zusätzlich stabile GitHub Releases',
+    '<strong>Schritt 1 umbenannt</strong> — Der erste Payment-Workflow-Schritt heißt jetzt Konfiguration, weil er neben Credentials auch Schnittstelle und Profile umfasst',
+    '<strong>Social Preview</strong> — Das Open-Graph-Bild wurde mit der neuen Payment-App-Identität aktualisiert',
+    '<strong>Release-Metadaten</strong> — README, Changelog, sichtbare Version und Offline-Cache sind auf Version 3.5.2 abgestimmt',
+  ]}, en: { title: 'Payment icons for app and header', items: [
+    '<strong>New app icon</strong> — Favicon and PWA icons now use a payment-focused shield-and-card mark',
+    '<strong>All icon variants refreshed</strong> — SVG, browser PNGs, Apple Touch icon and maskable PWA icons keep their existing file names, sizes and manifest requirements',
+    '<strong>Simplified header</strong> — The original design header now uses the new payment app icon directly without an additional logo frame',
+    '<strong>Nexi design remains brand-aligned</strong> — The Nexi design keeps the Nexi logo in the header; browser tabs, favicon and PWA installation still use the new app icon',
+    '<strong>Consistent badges</strong> — Payment Workflow, Request Log, Response Analysis and Response Log headers now use the compact Navbar badge design',
+    '<strong>Polished glass design</strong> — Original-design header icons are aligned to the title area, and the light-mode header plus Help boxes now feel more translucent',
+    '<strong>Download choice</strong> — The local download now explains the current main-branch development build and also links to stable GitHub releases',
+    '<strong>Step 1 renamed</strong> — The first Payment Workflow step is now Configuration because it covers interface selection and profiles as well as credentials',
+    '<strong>Social preview</strong> — The Open Graph image was updated with the new payment app identity',
+    '<strong>Release metadata</strong> — README, changelog, visible version and offline cache are aligned with version 3.5.2',
+  ]}},
   { v: 'v3.5.1', de: { title: 'Aktuelle Vorschau und neuer Payment Flow', items: [
     '<strong>Veraltete Vorschau erkannt</strong> — Schritt 3 wird als nicht mehr aktuell markiert, sobald nach einer generierten Vorschau Credentials oder Request-Daten geändert werden',
     '<strong>Sicherer Paygate-Start</strong> — Ausführbare Aktionen in Schritt 3 bleiben gesperrt, bis die Vorschau aktualisiert wurde, damit keine alten Request-Daten geöffnet werden',
