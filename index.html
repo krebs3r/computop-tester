@@ -725,6 +725,10 @@
     html.light .nav-interface-badge.rest {
       border-color:rgba(217,119,6,.30); background:rgba(217,119,6,.09); color:#b45309;
     }
+    .nav-interface-badge.guide {
+      border: 1px solid rgba(139,92,246,.28); background: rgba(139,92,246,.1); color: #a78bfa;
+    }
+    html.light .nav-interface-badge.guide { color: #7c3aed; }
     .nav-link[data-nav-group="guide"]::after {
       content: 'Guide';
       border: 1px solid rgba(139,92,246,.28); background: rgba(139,92,246,.1); color: #a78bfa;
@@ -4085,14 +4089,14 @@
 
 <main class="standalone-view" id="help-view" hidden>
   <div class="standalone-view-header">
-    <div class="standalone-header-layout">
+    <div class="standalone-header-layout has-header-nav-badges">
       <div class="app-header-icon brand-header-icon" aria-hidden="true">
         <img class="brand-mark-original" src="icons/app-icon.svg" alt="">
         <img class="brand-logo brand-logo-color" src="assets/nexi/logos/nexi-color.png" alt="">
         <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
-        <div class="badge">Paygate</div>
+        <div class="nav-interface-badges header-nav-badges" aria-label="Guide"><span class="nav-interface-badge guide">Guide</span></div>
         <h1 id="help-title">Hilfe &amp; Dokumentation</h1>
         <p id="help-subtitle">Integration wählen, App bedienen und sicher testen</p>
       </div>
