@@ -441,6 +441,7 @@
       gap: 24px;
     }
     .workflow-nav {
+      position: -webkit-sticky;
       position: sticky;
       top: 92px;
       z-index: 30;
@@ -575,7 +576,7 @@
       #payment-workflow-view { max-width: 960px; }
       .workflow-shell { display: block; }
       .workflow-nav {
-        top: var(--workflow-mobile-sticky-top, 86px);
+        top: var(--workflow-mobile-sticky-top, var(--mobile-content-top, calc(92px + env(safe-area-inset-top))));
         width: var(--workflow-mobile-width, calc(100% + 12px));
         margin-left: var(--workflow-mobile-offset, -6px);
         max-height: none;
@@ -9014,9 +9015,11 @@ function initWorkflowNavigation() {
 
   let activeLink = null;
   let updatePending = false;
+  let metricsUpdatePending = false;
   let navigationLockUntil = 0;
 
   function updateMobileMetrics() {
+    metricsUpdatePending = false;
     if (!glassNav || !workflowShell || !window.matchMedia('(max-width: 900px)').matches) {
       nav.style.removeProperty('--workflow-mobile-sticky-top');
       nav.style.removeProperty('--workflow-mobile-width');
@@ -9025,9 +9028,19 @@ function initWorkflowNavigation() {
     }
     const glassRect = glassNav.getBoundingClientRect();
     const shellRect = workflowShell.getBoundingClientRect();
-    nav.style.setProperty('--workflow-mobile-sticky-top', `${Math.ceil(glassRect.bottom + 14)}px`);
+    const viewportOffsetTop = window.visualViewport?.offsetTop || 0;
+    nav.style.setProperty('--workflow-mobile-sticky-top', `${Math.ceil(glassRect.bottom + viewportOffsetTop + 14)}px`);
     nav.style.setProperty('--workflow-mobile-width', `${glassRect.width}px`);
     nav.style.setProperty('--workflow-mobile-offset', `${glassRect.left - shellRect.left}px`);
+  }
+
+  function scheduleMobileMetricsUpdate() {
+    if (metricsUpdatePending) return;
+    metricsUpdatePending = true;
+    requestAnimationFrame(() => {
+      updateMobileMetrics();
+      scheduleUpdate();
+    });
   }
 
   const conditionVisible = link => {
@@ -9149,9 +9162,13 @@ function initWorkflowNavigation() {
 
   window.addEventListener('scroll', scheduleUpdate, { passive: true });
   window.addEventListener('resize', () => {
-    updateMobileMetrics();
+    scheduleMobileMetricsUpdate();
     scheduleUpdate();
   });
+  window.addEventListener('orientationchange', scheduleMobileMetricsUpdate, { passive: true });
+  window.addEventListener('pageshow', scheduleMobileMetricsUpdate);
+  window.visualViewport?.addEventListener('resize', scheduleMobileMetricsUpdate, { passive: true });
+  window.visualViewport?.addEventListener('scroll', scheduleMobileMetricsUpdate, { passive: true });
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(scheduleUpdate, { rootMargin: '-100px 0px -62% 0px' });
     links.forEach(link => {
@@ -9172,7 +9189,7 @@ function initWorkflowNavigation() {
   });
   if ('ResizeObserver' in window && glassNav) {
     new ResizeObserver(() => {
-      updateMobileMetrics();
+      scheduleMobileMetricsUpdate();
       scheduleUpdate();
     }).observe(glassNav);
   }
@@ -9180,6 +9197,8 @@ function initWorkflowNavigation() {
   const initialTarget = document.getElementById(location.hash.slice(1));
   const initialLink = initialTarget && links.find(link => link.dataset.workflowTarget === initialTarget.id);
   updateMobileMetrics();
+  window.setTimeout(scheduleMobileMetricsUpdate, 120);
+  window.setTimeout(scheduleMobileMetricsUpdate, 420);
   if (initialLink) requestAnimationFrame(() => initialLink.click());
   else refreshWorkflowNavigation();
 }
