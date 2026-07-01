@@ -7,6 +7,7 @@ All notable changes to Paygate Payment Tester are documented here.
 - Extracted inline CSS to `css/style.css`; the main HTML file dropped from 480 KB to 344 KB
 - Self-hosted Syne, DM Sans and DM Mono in `assets/fonts/`; removed the Google Fonts CDN dependency so no visitor IP reaches Google servers
 - Added a Content Security Policy meta tag that blocks external scripts, stylesheets and fonts, restricts cross-origin requests and limits form submissions to the app origin and `computop-paygate.com`
+- Removed `frame-ancestors` from the CSP meta tag because browsers ignore that directive outside HTTP response headers; deployments that need anti-framing protection must set it as a server header
 - Service Worker cache name is now derived from the `VERSION` file at install time; the footer version badge syncs itself on load — no manual update needed
 - Added a Git pre-commit hook that scans staged changes for hardcoded Paygate credentials (Blowfish key, HMAC secret, MerchantID) and aborts the commit on a match
 - Replaced the outdated Paygate badge on the Changelog header with a consistent teal Updates badge matching the navigation style; added a matching Updates badge below the Changelog nav link
