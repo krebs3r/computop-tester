@@ -4,6 +4,26 @@ The MIT License in this repository applies to the original source code of the
 Paygate Payment Tester. It does not grant rights to third-party trademarks,
 logos, fonts, icons, product names, or other brand assets.
 
+## Web fonts (self-hosted)
+
+The following typefaces are served from `assets/fonts/` under the
+SIL Open Font License, Version 1.1 (https://openfontlicense.org/).
+
+### DM Mono
+- Designer: Colophon Foundry, commissioned by Google
+- Source: https://fonts.google.com/specimen/DM+Mono
+- License: SIL Open Font License 1.1
+
+### DM Sans
+- Designer: Colophon Foundry, commissioned by Google
+- Source: https://fonts.google.com/specimen/DM+Sans
+- License: SIL Open Font License 1.1
+
+### Syne
+- Designer: Lucas Descroix
+- Source: https://fonts.google.com/specimen/Syne
+- License: SIL Open Font License 1.1
+
 ## Nexi brand assets
 
 The optional Nexi preview design uses official Nexi brand assets published by

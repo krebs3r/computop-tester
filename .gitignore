@@ -3,6 +3,14 @@
 .env.*
 !.env.example
 
+# AI assistant workspaces
+.claude/
+.cursor/
+.aider*
+
+# Local development scripts
+release.ps1
+
 # Editor and operating-system metadata
 .idea/
 .vscode/

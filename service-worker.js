@@ -18,10 +18,12 @@
  * the cached version is used as a fallback.
  */
 
-const CACHE_NAME = 'computop-tester-v3.5.2';
+let CACHE_NAME = 'computop-tester';
+
 const ASSETS = [
   './',
   './index.html',
+  './css/style.css',
   './CHANGELOG.md',
   './VERSION',
   './og-image.png',
@@ -29,6 +31,19 @@ const ASSETS = [
   './js/changelog-data.js',
   './js/help-data.js',
   './THIRD_PARTY_NOTICES.md',
+  './assets/fonts/dm-mono-light-latin-ext.woff2',
+  './assets/fonts/dm-mono-light-latin.woff2',
+  './assets/fonts/dm-mono-regular-latin-ext.woff2',
+  './assets/fonts/dm-mono-regular-latin.woff2',
+  './assets/fonts/dm-mono-medium-latin-ext.woff2',
+  './assets/fonts/dm-mono-medium-latin.woff2',
+  './assets/fonts/dm-sans-latin-ext.woff2',
+  './assets/fonts/dm-sans-latin.woff2',
+  './assets/fonts/dm-sans-italic-latin-ext.woff2',
+  './assets/fonts/dm-sans-italic-latin.woff2',
+  './assets/fonts/syne-greek.woff2',
+  './assets/fonts/syne-latin-ext.woff2',
+  './assets/fonts/syne-latin.woff2',
   './assets/nexi/fonts/NexiSansPro-Regular.woff2',
   './assets/nexi/fonts/NexiSansPro-SemiBold.woff2',
   './assets/nexi/logos/nexi-color.png',
@@ -49,9 +64,15 @@ const ASSETS = [
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+    fetch('./VERSION')
+      .then(r => r.ok ? r.text() : null)
+      .catch(() => null)
+      .then(v => {
+        if (v) CACHE_NAME = `computop-tester-${v.trim()}`;
+        return caches.open(CACHE_NAME)
+          .then(cache => cache.addAll(ASSETS))
+          .then(() => self.skipWaiting());
+      })
   );
 });
 

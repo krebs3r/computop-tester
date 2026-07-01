@@ -2,6 +2,17 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.5.3 — GDPR compliance, security and performance
+
+- Extracted inline CSS to `css/style.css`; the main HTML file dropped from 480 KB to 344 KB
+- Self-hosted Syne, DM Sans and DM Mono in `assets/fonts/`; removed the Google Fonts CDN dependency so no visitor IP reaches Google servers
+- Added a Content Security Policy meta tag that blocks external scripts, stylesheets and fonts, restricts cross-origin requests and limits form submissions to the app origin and `computop-paygate.com`
+- Service Worker cache name is now derived from the `VERSION` file at install time; the footer version badge syncs itself on load — no manual update needed
+- Added a Git pre-commit hook that scans staged changes for hardcoded Paygate credentials (Blowfish key, HMAC secret, MerchantID) and aborts the commit on a match
+- Replaced the outdated Paygate badge on the Changelog header with a consistent teal Updates badge matching the navigation style; added a matching Updates badge below the Changelog nav link
+- Updated `.gitignore` to exclude local AI-tool workspace directories and local development scripts
+- Added SIL Open Font License notices for DM Mono, DM Sans and Syne to THIRD_PARTY_NOTICES
+
 ### v3.5.2 — Payment-focused app and header icons
 - Replaced the favicon and PWA app icon set with a payment-focused Shield + Card mark while preserving the existing SVG, PNG, Apple Touch and maskable icon file names and sizes
 - Uses the new payment app icon in the original design header without an additional logo frame

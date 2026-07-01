@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.5.2-blueviolet)
+![Version](https://img.shields.io/badge/version-3.5.3-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -227,6 +227,7 @@ for focusing the existing PWA window varies by platform.
 | Credential profiles | Merchant ID, Classic secrets and optional REST API key encrypted with AES-GCM in `localStorage` |
 | Request/response logs | Plain records in `IndexedDB`, with `localStorage` fallback |
 | Language/theme/settings | `localStorage` |
+| External resource loading | Blocked — scripts, styles and fonts are self-hosted; a Content Security Policy meta tag restricts cross-origin requests and limits form submissions to `computop-paygate.com` |
 
 ## Preview Designs
 
@@ -250,17 +251,19 @@ on the merchant configuration.
 ## Project Structure
 
 ```text
-index.html                 Main application, styles and runtime logic
+index.html                 Main application and runtime logic
+css/style.css              Application styles
+assets/fonts/              Self-hosted Syne, DM Sans and DM Mono web fonts
+assets/nexi/               Official Nexi preview fonts and logos
+assets/payment-page/       Hosted Payment Page merchant-logo PNGs
 js/i18n.js                 German and English translations
 js/changelog-data.js       Bilingual in-app release history
 js/help-data.js            Bilingual Help view content and resource links
 icons/                     Browser, Apple Touch, PWA and original header icons
-assets/nexi/               Official Nexi preview fonts and logos
-assets/payment-page/       Hosted Payment Page merchant-logo PNGs
 service-worker.js          PWA network-first cache
 manifest.json              Web app manifest
-og-image.png               Open Graph and social sharing preview with the payment app icon
-THIRD_PARTY_NOTICES.md      Brand-asset sources and license exclusions
+og-image.png               Open Graph and social sharing preview
+THIRD_PARTY_NOTICES.md     Font, brand-asset sources and license exclusions
 VERSION                    Canonical application version
 CHANGELOG.md               Complete release history
 ```

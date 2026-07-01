@@ -1,6 +1,21 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.5.3', de: { title: 'DSGVO-Konformität, Sicherheit und Performance', items: [
+    '<strong>CSS ausgelagert</strong> — Styles aus dem Inline-Block in <code>css/style.css</code> verschoben; die Hauptdatei schrumpfte von 480 KB auf 344 KB',
+    '<strong>Schriften selbst gehostet</strong> — Syne, DM Sans und DM Mono werden aus <code>assets/fonts/</code> geladen; die Google-Fonts-CDN-Verbindung entfällt, sodass keine Besucher-IP mehr Google erreicht',
+    '<strong>Content Security Policy</strong> — Neues CSP-Meta-Tag blockiert externe Scripts, Stylesheets und Schriften, schränkt Cross-Origin-Requests ein und beschränkt Formular-Submits auf den eigenen Server und <code>computop-paygate.com</code>',
+    '<strong>Service Worker ohne manuelle Versionspflege</strong> — Cache-Name und Footer-Badge synchronisieren sich automatisch aus der <code>VERSION</code>-Datei; manuelles Anpassen entfällt',
+    '<strong>Pre-commit-Credential-Scan</strong> — Git-Hook prüft vor jedem Commit auf hartcodierte Zugangsdaten (Blowfish-Key, HMAC-Secret, MerchantID) und stoppt den Commit bei Fund',
+    '<strong>Changelog-Badge vereinheitlicht</strong> — Veralteter Paygate-Badge im Changelog-Header durch einen einheitlichen teal Updates-Badge ersetzt; passender Badge erscheint jetzt auch unter dem Changelog-Navlink',
+  ]}, en: { title: 'GDPR compliance, security and performance', items: [
+    '<strong>CSS extracted</strong> — Moved styles from the inline block to <code>css/style.css</code>; the main HTML file dropped from 480 KB to 344 KB',
+    '<strong>Self-hosted fonts</strong> — Syne, DM Sans and DM Mono are now served from <code>assets/fonts/</code>; the Google Fonts CDN connection is removed so no visitor IP reaches Google',
+    '<strong>Content Security Policy</strong> — New CSP meta tag blocks external scripts, stylesheets and fonts, restricts cross-origin requests and limits form submissions to the app origin and <code>computop-paygate.com</code>',
+    '<strong>Service Worker auto-versioning</strong> — Cache name and footer version badge now sync automatically from the <code>VERSION</code> file; manual updates are no longer needed',
+    '<strong>Pre-commit credential scan</strong> — Git hook checks staged changes for hardcoded credentials (Blowfish key, HMAC secret, MerchantID) and aborts the commit on a match',
+    '<strong>Changelog badge unified</strong> — Replaced the outdated Paygate badge on the Changelog header with a consistent teal Updates badge; a matching badge now appears below the Changelog nav link',
+  ]}},
   { v: 'v3.5.2', de: { title: 'Payment-Icons für App und Header', items: [
     '<strong>Neues App-Icon</strong> — Favicon und PWA-Icons verwenden jetzt ein payment-orientiertes Shield-und-Karte-Motiv',
     '<strong>Alle Icon-Varianten erneuert</strong> — SVG, Browser-PNGs, Apple-Touch-Icon und maskable PWA-Icons behalten ihre bisherigen Dateinamen, Größen und Manifest-Vorgaben',
