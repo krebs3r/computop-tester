@@ -18,7 +18,8 @@
  * the cached version is used as a fallback.
  */
 
-let CACHE_NAME = 'computop-tester';
+const CACHE_BASE_NAME = 'computop-tester';
+let cacheNamePromise = getCacheName();
 
 const ASSETS = [
   './',
@@ -27,9 +28,11 @@ const ASSETS = [
   './CHANGELOG.md',
   './VERSION',
   './og-image.png',
+  './js/bootstrap.js',
   './js/i18n.js',
   './js/changelog-data.js',
   './js/help-data.js',
+  './js/app.js',
   './THIRD_PARTY_NOTICES.md',
   './assets/fonts/dm-mono-light-latin-ext.woff2',
   './assets/fonts/dm-mono-light-latin.woff2',
@@ -62,14 +65,18 @@ const ASSETS = [
   './manifest.json'
 ];
 
+function getCacheName() {
+  return fetch('./VERSION', { cache: 'no-store' })
+    .then(r => r.ok ? r.text() : null)
+    .then(v => v ? `${CACHE_BASE_NAME}-${v.trim()}` : CACHE_BASE_NAME)
+    .catch(() => CACHE_BASE_NAME);
+}
+
 self.addEventListener('install', e => {
   e.waitUntil(
-    fetch('./VERSION')
-      .then(r => r.ok ? r.text() : null)
-      .catch(() => null)
-      .then(v => {
-        if (v) CACHE_NAME = `computop-tester-${v.trim()}`;
-        return caches.open(CACHE_NAME)
+    cacheNamePromise
+      .then(cacheName => {
+        return caches.open(cacheName)
           .then(cache => cache.addAll(ASSETS))
           .then(() => self.skipWaiting());
       })
@@ -78,20 +85,37 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    cacheNamePromise
+      .then(cacheName =>
+        caches.keys().then(keys =>
+          Promise.all(keys.filter(k => k !== cacheName).map(k => caches.delete(k)))
+        )
+      )
+      .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', e => {
+  const requestUrl = new URL(e.request.url);
+
+  if (e.request.method !== 'GET' || requestUrl.origin !== self.location.origin) {
+    e.respondWith(fetch(e.request));
+    return;
+  }
+
   e.respondWith(
-    fetch(e.request)
-      .then(response => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
-        return response;
-      })
-      .catch(() => caches.match(e.request))
+    cacheNamePromise.then(cacheName =>
+      fetch(e.request)
+        .then(response => {
+          if (response && response.ok) {
+            const clone = response.clone();
+            caches.open(cacheName)
+              .then(cache => cache.put(e.request, clone))
+              .catch(() => {});
+          }
+          return response;
+        })
+        .catch(() => caches.match(e.request))
+    )
   );
 });

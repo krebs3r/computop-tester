@@ -227,7 +227,7 @@ for focusing the existing PWA window varies by platform.
 | Credential profiles | Merchant ID, Classic secrets and optional REST API key encrypted with AES-GCM in `localStorage` |
 | Request/response logs | Plain records in `IndexedDB`, with `localStorage` fallback |
 | Language/theme/settings | `localStorage` |
-| External resource loading | Blocked — scripts, styles and fonts are self-hosted; a Content Security Policy meta tag restricts cross-origin requests and limits form submissions to `computop-paygate.com` |
+| External resource loading | Blocked — scripts, styles and fonts are self-hosted; a Content Security Policy meta tag restricts cross-origin requests, blocks object/frame embedding and limits form submissions to `computop-paygate.com` |
 
 ## Preview Designs
 
@@ -256,6 +256,8 @@ css/style.css              Application styles
 assets/fonts/              Self-hosted Syne, DM Sans and DM Mono web fonts
 assets/nexi/               Official Nexi preview fonts and logos
 assets/payment-page/       Hosted Payment Page merchant-logo PNGs
+js/bootstrap.js            Early design/theme bootstrap before first render
+js/app.js                  Application runtime logic
 js/i18n.js                 German and English translations
 js/changelog-data.js       Bilingual in-app release history
 js/help-data.js            Bilingual Help view content and resource links
