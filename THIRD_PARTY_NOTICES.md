@@ -24,6 +24,15 @@ SIL Open Font License, Version 1.1 (https://openfontlicense.org/).
 - Source: https://fonts.google.com/specimen/Syne
 - License: SIL Open Font License 1.1
 
+## JavaScript libraries (vendored)
+
+### QR Code Generator for JavaScript
+- Author: Kazuhiko Arase
+- Source: https://github.com/kazuhikoarase/qrcode-generator
+- File: `js/vendor/qrcode.js`
+- License: MIT License (http://www.opensource.org/licenses/mit-license.php)
+- Note: The word "QR Code" is a registered trademark of DENSO WAVE INCORPORATED.
+
 ## Nexi brand assets
 
 The optional Nexi preview design uses official Nexi brand assets published by

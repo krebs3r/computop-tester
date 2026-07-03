@@ -29,6 +29,7 @@ const ASSETS = [
   './VERSION',
   './og-image.png',
   './js/bootstrap.js',
+  './js/vendor/qrcode.js',
   './js/i18n.js',
   './js/changelog-data.js',
   './js/help-data.js',

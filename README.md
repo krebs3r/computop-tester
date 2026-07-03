@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.5.3-blueviolet)
+![Version](https://img.shields.io/badge/version-3.6.0-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -78,6 +78,7 @@ The fixed glass navigation keeps the main tools available from every view:
 | Request Log | Generated Classic requests and REST status inquiries | `#request-log` |
 | Response Analysis | Classic callback decryption and REST JSON inspection | `#response` |
 | Response Log | Decrypted Classic responses, analysed REST JSON and captured REST browser redirects | `#response-log` |
+| Tools | Standalone MAC validator and Base64 encoder/decoder with credentialOnFile presets | `#tools` |
 | Help | Integration guidance, usage, official documentation, test resources and privacy notes | `#help` |
 | Changelog | Complete bilingual release history | `#changelog` |
 
@@ -227,7 +228,7 @@ for focusing the existing PWA window varies by platform.
 | Credential profiles | Merchant ID, Classic secrets and optional REST API key encrypted with AES-GCM in `localStorage` |
 | Request/response logs | Plain records in `IndexedDB`, with `localStorage` fallback |
 | Language/theme/settings | `localStorage` |
-| External resource loading | Blocked — scripts, styles and fonts are self-hosted; a Content Security Policy meta tag restricts cross-origin requests, blocks object/frame embedding and limits form submissions to `computop-paygate.com` |
+| External resource loading | Blocked — scripts, styles and fonts are self-hosted; a Content Security Policy meta tag forbids inline scripts, restricts cross-origin requests, allows framing only for the embedded `computop-paygate.com` credit card form and limits form submissions to `computop-paygate.com` |
 
 ## Preview Designs
 
@@ -239,10 +240,12 @@ work independently from the selected design.
 Nexi trademarks, logos, fonts, and other brand assets are not covered by this
 project's MIT License. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-The credential encryption key is derived from an application-owned static
-passphrase. This protects against casual inspection of `localStorage`, but it
-is not equivalent to encryption with a user-owned master password and does not
-protect against malicious scripts or access to the active browser profile.
+By default the credential encryption key is derived from an application-owned
+static passphrase, which protects against casual inspection of `localStorage`.
+An optional master password (step 1 → profiles) derives the key from a
+user-owned secret instead, so stored profiles can no longer be decrypted from
+the public source code alone. Neither mode protects against malicious scripts
+running inside the active browser profile.
 
 Use this application only for development and testing. Prefer test credentials
 and small test amounts. Credit-card authorisations may still be real depending
@@ -258,6 +261,7 @@ assets/nexi/               Official Nexi preview fonts and logos
 assets/payment-page/       Hosted Payment Page merchant-logo PNGs
 js/bootstrap.js            Early design/theme bootstrap before first render
 js/app.js                  Application runtime logic
+js/vendor/qrcode.js        Vendored MIT-licensed QR code generator
 js/i18n.js                 German and English translations
 js/changelog-data.js       Bilingual in-app release history
 js/help-data.js            Bilingual Help view content and resource links

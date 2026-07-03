@@ -159,6 +159,7 @@ function setMethod(method) {
   if (submitHint) submitHint.textContent = isStandaloneApp() && method !== 'pbl'
     ? t('btn_submit_hint_pwa')
     : t(submitHintKey);
+  updateEmbedButtonVisibility();
 }
 
 function setIntegration(integration) {
@@ -775,17 +776,35 @@ function renderChangelog() {
   });
 }
 
+function bindSectionJumpLinks(container) {
+  if (!container) return;
+  container.querySelectorAll('.help-jump a[href^="#"]').forEach(link => {
+    if (link.dataset.jumpBound === '1') return;
+    link.dataset.jumpBound = '1';
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      const target = container.querySelector(link.getAttribute('href'));
+      if (!target) return;
+      const navBottom = document.querySelector('.glass-nav')?.getBoundingClientRect().bottom || 90;
+      const offset = Math.ceil(navBottom + 14);
+      const targetTop = window.scrollY + target.getBoundingClientRect().top;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const desiredTop = targetTop - offset;
+      if (desiredTop > maxScroll) {
+        const currentPadding = parseFloat(getComputedStyle(container).paddingBottom) || 0;
+        container.style.paddingBottom = `${Math.ceil(currentPadding + desiredTop - maxScroll)}px`;
+      }
+      const top = window.scrollY + target.getBoundingClientRect().top - offset;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    });
+  });
+}
+
 function renderHelp() {
   const container = document.getElementById('help-content');
   if (!container || typeof HELP_CONTENT === 'undefined') return;
   container.innerHTML = HELP_CONTENT[currentLang] || HELP_CONTENT.de;
-  container.querySelectorAll('.help-jump a[href^="#"]').forEach(link => {
-    link.addEventListener('click', event => {
-      event.preventDefault();
-      const target = container.querySelector(link.getAttribute('href'));
-      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
+  bindSectionJumpLinks(container);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -821,8 +840,75 @@ function applyLang() {
   setText('nav-log', 'nav_log');
   setText('nav-response-text', 'nav_response');
   setText('nav-resp-log-text', 'nav_resp_log');
+  setText('nav-tools', 'nav_tools');
   setText('nav-help', 'nav_help');
   setText('nav-changelog', 'nav_changelog');
+  setText('tools-view-title', 'tools_view_title');
+  setText('tools-view-subtitle', 'tools_view_subtitle');
+  setText('ct-mac-validator', 'ct_mac_validator');
+  setHtml('mac-validator-intro', 'mac_validator_intro');
+  setText('l-mac-payid', 'l_mac_payid');
+  setText('h-mac-payid', 'h_mac_payid');
+  setText('l-mac-transid', 'l_mac_transid');
+  setText('l-mac-merchantid', 'l_mac_merchantid');
+  setText('l-mac-amount', 'l_mac_amount');
+  setText('h-mac-amount', 'h_mac_amount');
+  setText('l-mac-currency', 'l_mac_currency');
+  setText('l-mac-hmac-key', 'l_mac_hmac_key');
+  setText('l-mac-expected', 'l_mac_expected');
+  setText('h-mac-expected', 'h_mac_expected');
+  setText('btn-mac-validate', 'btn_mac_validate');
+  setText('btn-mac-fill', 'btn_mac_fill');
+  setText('ct-base64-tool', 'ct_base64_tool');
+  setHtml('base64-tool-intro', 'base64_tool_intro');
+  setText('tools-jump-mac', 'tools_jump_mac');
+  setText('tools-jump-b64', 'tools_jump_b64');
+  setText('tools-jump-links', 'tools_jump_links');
+  setText('tools-links-title', 'tools_links_title');
+  setText('tools-links-intro', 'tools_links_intro');
+  setText('tools-resource-tool-desc', 'tools_resource_tool_desc');
+  setText('tools-resource-doc-desc', 'tools_resource_doc_desc');
+  setText('l-b64-sample', 'l_b64_sample');
+  setText('opt-b64-custom', 'opt_b64_custom');
+  setText('opt-b64-cof-cit', 'opt_b64_cof_cit');
+  setText('opt-b64-cof-mit', 'opt_b64_cof_mit');
+  setText('opt-b64-browser-info', 'opt_b64_browser_info');
+  setText('l-b64-plain', 'l_b64_plain');
+  setText('l-b64-encoded', 'l_b64_encoded');
+  setText('l-b64-param', 'l_b64_param');
+  setText('h-b64-param', 'h_b64_param');
+  setText('btn-b64-encode', 'btn_b64_encode');
+  setText('btn-b64-decode', 'btn_b64_decode');
+  setText('btn-b64-copy', 'btn_b64_copy');
+  setText('btn-b64-copy-param', 'btn_b64_copy_param');
+  setText('btn-submit-embed-text', 'btn_submit_embed');
+  setText('ct-embedded-form', 'ct_embedded_form');
+  setText('btn-embed-close-text', 'btn_embed_close');
+  setHtml('embedded-form-hint', 'embedded_form_hint');
+  setText('btn-show-qr-text', 'btn_show_qr');
+  setText('qr-modal-title', 'qr_modal_title');
+  setText('qr-modal-text', 'qr_modal_text');
+  setText('qr-modal-dense-hint', 'qr_modal_dense_hint');
+  setText('qr-modal-close', 'btn_embed_close');
+  setText('btn-master-pw-text', 'btn_master_pw');
+  setText('master-pw-title', 'master_pw_title');
+  setText('master-pw-text', 'master_pw_text');
+  setText('l-master-pw-current', 'l_master_pw_current');
+  setText('l-master-pw-new', 'l_master_pw_new');
+  setText('l-master-pw-repeat', 'l_master_pw_repeat');
+  setText('master-pw-cancel', 'btn_master_cancel');
+  setText('master-pw-disable', 'btn_master_disable');
+  setText('master-unlock-title', 'master_unlock_title');
+  setText('master-unlock-text', 'master_unlock_text');
+  setText('l-master-unlock', 'l_master_unlock');
+  setText('master-unlock-cancel', 'btn_master_cancel');
+  setText('master-unlock-confirm', 'btn_master_unlock');
+  setText('credential-lock-title', 'credential_lock_title');
+  setText('credential-lock-text', 'credential_lock_text');
+  setAttr('credential-lock-input', 'placeholder', 'l_master_unlock');
+  setText('credential-lock-submit-text', 'btn_master_unlock');
+  setText('credential-lock-settings-text', 'credential_lock_settings');
+  setText('credential-lock-note', 'credential_lock_note');
   setText('workflow-nav-title', 'workflow_nav_title');
   setText('workflow-nav-overview', 'workflow_nav_overview');
   setText('workflow-nav-step-credentials', 'workflow_nav_step_credentials');
@@ -876,6 +962,9 @@ function applyLang() {
   setTip('tip-hmacpw',  'tip_hmacpw');
   setText('cred-save-title', 'cred_save_title');
   setText('cred-save-text', 'cred_save_text');
+  setText('master-recommendation-title', 'master_recommendation_title');
+  setText('master-recommendation-text', 'master_recommendation_text');
+  setText('master-recommendation-action', 'master_recommendation_action');
   setText('btn-save-text', 'btn_save');
   setText('btn-load-text', 'btn_load');
   setText('btn-delete-text', 'btn_delete');
@@ -1424,6 +1513,127 @@ async function hmacSha256(keyStr, message) {
 }
 
 // ══════════════════════════════════════════════════════════════
+// TOOLS — MAC VALIDATOR & BASE64 ENCODER
+// ══════════════════════════════════════════════════════════════
+async function validateMac() {
+  const value = id => (document.getElementById(id)?.value || '').trim();
+  const payId      = value('mac-payid');
+  const transId    = value('mac-transid');
+  const merchantId = value('mac-merchantid');
+  const amount     = value('mac-amount');
+  const currency   = value('mac-currency');
+  const hmacKey    = document.getElementById('mac-hmac-key')?.value || '';
+  const expected   = value('mac-expected').toLowerCase();
+
+  if (!transId || !merchantId || !amount || !currency || !hmacKey) {
+    showToast(t('val_mac_missing'), 'error');
+    return;
+  }
+
+  const macMsg = `${payId}*${transId}*${merchantId}*${amount}*${currency}`;
+  const mac = await hmacSha256(hmacKey, macMsg);
+
+  const result = document.getElementById('mac-result');
+  if (!result) return;
+  clearElement(result);
+  const msgLine = appendTextElement(result, 'div', '', '');
+  appendTextElement(msgLine, 'strong', '', t('mac_result_message') + ': ');
+  const msgValue = appendTextElement(msgLine, 'code', '', macMsg);
+  msgValue.style.wordBreak = 'break-all';
+  const macLine = appendTextElement(result, 'div', '', '');
+  macLine.style.marginTop = '6px';
+  appendTextElement(macLine, 'strong', '', t('mac_result_value') + ': ');
+  const macValue = appendTextElement(macLine, 'code', '', mac);
+  macValue.style.wordBreak = 'break-all';
+  if (expected) {
+    const match = expected === mac;
+    const verdict = appendTextElement(result, 'div', '', match ? t('mac_result_match') : t('mac_result_mismatch'));
+    verdict.style.cssText = `margin-top:8px;font-weight:600;color:var(--${match ? 'success' : 'danger'})`;
+  }
+  result.style.display = '';
+}
+
+function macFillFromWorkflow() {
+  const setValue = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+  setValue('mac-transid', document.getElementById('transId')?.value || '');
+  setValue('mac-merchantid', document.getElementById('merchantId')?.value || '');
+  setValue('mac-amount', String(amountToCents(document.getElementById('amount')?.value || '0') || ''));
+  setValue('mac-currency', document.getElementById('currency')?.value || '');
+  setValue('mac-hmac-key', document.getElementById('hmacKey')?.value || '');
+  showToast(t('toast_mac_filled'), 'info');
+}
+
+const B64_SAMPLES = {
+  'cof-cit': {
+    param: 'credentialOnFile',
+    json: '{\n  "type": {\n    "unscheduled": "CIT"\n  },\n  "initialPayment": true\n}',
+  },
+  'cof-mit': {
+    param: 'credentialOnFile',
+    json: '{\n  "type": {\n    "unscheduled": "MIT"\n  },\n  "initialPayment": false\n}',
+  },
+  'browser-info': {
+    param: 'browserInfo',
+    json: '{\n  "javaEnabled": false,\n  "javascriptEnabled": true,\n  "language": "de-DE",\n  "colorDepth": 24,\n  "screenHeight": 1080,\n  "screenWidth": 1920,\n  "timeZoneOffset": "-120",\n  "userAgent": "Mozilla/5.0",\n  "acceptHeaders": "text/html",\n  "ipAddress": "127.0.0.1"\n}',
+  },
+};
+
+function applyB64Sample() {
+  const key = document.getElementById('b64-sample')?.value || '';
+  const sample = B64_SAMPLES[key];
+  if (!sample) return;
+  const plain = document.getElementById('b64-plain');
+  const param = document.getElementById('b64-param-name');
+  if (plain) plain.value = sample.json;
+  if (param) param.value = sample.param;
+  const encoded = document.getElementById('b64-encoded');
+  if (encoded) encoded.value = '';
+}
+
+function base64DecodeUtf8(value) {
+  const binary = atob(value);
+  const bytes = Uint8Array.from(binary, ch => ch.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
+function b64Encode() {
+  const plain = document.getElementById('b64-plain');
+  const encoded = document.getElementById('b64-encoded');
+  if (!plain || !encoded) return;
+  if (!plain.value) { showToast(t('err_b64_empty'), 'error'); return; }
+  encoded.value = base64EncodeUtf8(plain.value);
+}
+
+function b64Decode() {
+  const plain = document.getElementById('b64-plain');
+  const encoded = document.getElementById('b64-encoded');
+  if (!plain || !encoded) return;
+  if (!encoded.value.trim()) { showToast(t('err_b64_empty'), 'error'); return; }
+  try {
+    plain.value = base64DecodeUtf8(encoded.value.trim());
+    const sampleSelect = document.getElementById('b64-sample');
+    if (sampleSelect) sampleSelect.value = '';
+  } catch (_) {
+    showToast(t('err_b64_decode'), 'error');
+  }
+}
+
+function b64CopyEncoded() {
+  const encoded = document.getElementById('b64-encoded');
+  if (!encoded || !encoded.value.trim()) { showToast(t('err_b64_empty'), 'error'); return; }
+  navigator.clipboard.writeText(encoded.value.trim())
+    .then(() => showToast(t('toast_copied'), 'success'));
+}
+
+function b64CopyParam() {
+  const encoded = document.getElementById('b64-encoded');
+  const param = (document.getElementById('b64-param-name')?.value || '').trim();
+  if (!encoded || !encoded.value.trim() || !param) { showToast(t('err_b64_param'), 'error'); return; }
+  navigator.clipboard.writeText(`${param}=${encoded.value.trim()}`)
+    .then(() => showToast(t('toast_copied'), 'success'));
+}
+
+// ══════════════════════════════════════════════════════════════
 // UI HELPERS
 // ══════════════════════════════════════════════════════════════
 function toggleCard(id) {
@@ -1498,7 +1708,7 @@ function renderTestCards3DS() {
   tbody.innerHTML = TEST_CARDS_3DS.map(([brand, formatted, raw, scenarioKey, cls]) => {
     return `<tr>
       <td>${brand}</td>
-      <td class="tc-num" onclick="navigator.clipboard.writeText('${raw}').then(()=>showToast(t('toast_copied'),'success'))" title="${hint}">${formatted}</td>
+      <td class="tc-num" data-action="copy-test-card" data-number="${raw}" title="${hint}">${formatted}</td>
       <td class="${cls}">${t(scenarioKey)}</td>
     </tr>`;
   }).join('');
@@ -1512,7 +1722,7 @@ function renderTestCards() {
     const cls = key === 'tc_ok' ? 'tc-ok' : 'tc-dec';
     return `<tr>
       <td>${brand}</td>
-      <td class="tc-num" onclick="navigator.clipboard.writeText('${raw}').then(()=>showToast(t('toast_copied'),'success'))" title="${hint}">${formatted}</td>
+      <td class="tc-num" data-action="copy-test-card" data-number="${raw}" title="${hint}">${formatted}</td>
       <td class="${cls}">${t(key)}</td>
     </tr>`;
   }).join('');
@@ -2816,18 +3026,151 @@ function submitClassicStatus() {
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
+// ── Embedded PaySSL form (opt-in) ──
+// Paygate sends `frame-ancestors https: http:`, so the credit card form may
+// be framed from an http(s) origin. file:// has a null origin and is blocked
+// there, hence the button stays hidden without a server.
+function embeddedFormSupported() {
+  return currentMethod === 'ccf' && window.location.protocol !== 'file:';
+}
+
+function updateEmbedButtonVisibility() {
+  const btn = document.getElementById('btn-submit-embed');
+  if (btn) btn.style.display = embeddedFormSupported() ? '' : 'none';
+  if (!embeddedFormSupported()) closeEmbeddedForm();
+}
+
+function submitPaymentEmbedded() {
+  if (previewState.isStale) { showToast(t('toast_preview_stale'), 'error'); return; }
+  const url = document.getElementById('btn-submit').dataset.url;
+  if (!url) { showToast(t('toast_no_url'), 'error'); return; }
+  const card = document.getElementById('card-embedded-form');
+  const frame = document.getElementById('embedded-form-frame');
+  if (!card || !frame) return;
+  frame.src = url;
+  card.style.display = '';
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeEmbeddedForm() {
+  const card = document.getElementById('card-embedded-form');
+  const frame = document.getElementById('embedded-form-frame');
+  if (!card || card.style.display === 'none') return;
+  if (frame) frame.src = 'about:blank';
+  card.style.display = 'none';
+}
+
+// ── Request URL as QR code (scan to continue on a phone) ──
+function showRequestQr() {
+  if (previewState.isStale) { showToast(t('toast_preview_stale'), 'error'); return; }
+  const url = document.getElementById('btn-submit')?.dataset.url;
+  if (!url) { showToast(t('toast_no_url'), 'error'); return; }
+  if (typeof qrcode !== 'function') { showToast(t('err_qr_failed'), 'error'); return; }
+  const container = document.getElementById('qr-modal-code');
+  const modal = document.getElementById('qr-modal');
+  if (!container || !modal) return;
+  let svgTag = '';
+  let moduleCount = 0;
+  // Long Data parameters can exceed a level's capacity; retry with lower ECC.
+  for (const eccLevel of ['M', 'L']) {
+    try {
+      const qr = qrcode(0, eccLevel);
+      qr.addData(url);
+      qr.make();
+      moduleCount = qr.getModuleCount();
+      svgTag = qr.createSvgTag({ cellSize: 4, margin: 4, scalable: true });
+      break;
+    } catch (_) { /* try next level */ }
+  }
+  if (!svgTag) { showToast(t('err_qr_failed'), 'error'); return; }
+  container.innerHTML = svgTag;
+  const svg = container.querySelector('svg');
+  if (svg) {
+    svg.style.width = 'min(400px, 100%)';
+    svg.style.height = 'auto';
+    svg.setAttribute('role', 'img');
+  }
+  // From roughly version 27 (~125 modules) on-screen scanning gets finicky.
+  const denseHint = document.getElementById('qr-modal-dense-hint');
+  if (denseHint) denseHint.style.display = moduleCount >= 125 ? '' : 'none';
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+}
+
+function closeQrModal() {
+  const modal = document.getElementById('qr-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  const container = document.getElementById('qr-modal-code');
+  if (container) container.innerHTML = '';
+}
+
+function initQrModal() {
+  const modal = document.getElementById('qr-modal');
+  const close = document.getElementById('qr-modal-close');
+  if (!modal || !close) return;
+  close.addEventListener('click', closeQrModal);
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeQrModal();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeQrModal();
+  });
+}
+
 // ══════════════════════════════════════════════════════════════
 // CREDENTIAL STORAGE — AES-GCM via Web Crypto API
 // ══════════════════════════════════════════════════════════════
 const CRED_LS_KEY     = 'computop_credentials_enc'; // kept for migration
 const PROFILES_LS_KEY = 'computop_profiles';
 const LAST_PROFILE_KEY = 'computop_last_profile';
+const CRED_KDF_LS_KEY  = 'computop_cred_kdf';
 const CRED_PASSPHRASE  = 'computop-tester-v1-local-storage';
+const CLEAR_ALL_SCROLL_RESET_KEY = 'computop_clear_all_scroll_reset';
 
-async function _deriveKey(salt) {
+// With an optional user-defined master password the AES key is no longer
+// derivable from the public source code. The passphrase lives in memory only.
+let credMasterPassphrase = null;
+
+function _credKdfMode() {
+  return localStorage.getItem(CRED_KDF_LS_KEY) === 'password' ? 'password' : 'static';
+}
+
+function _credLocked() {
+  return _credKdfMode() === 'password' && !credMasterPassphrase;
+}
+
+function _activePassphrase() {
+  if (_credKdfMode() === 'password') {
+    if (!credMasterPassphrase) throw new Error(t('err_master_locked'));
+    return credMasterPassphrase;
+  }
+  return CRED_PASSPHRASE;
+}
+
+function updateCredentialLockUI() {
+  const locked = _credLocked();
+  const card = document.getElementById('card-creds');
+  const overlay = document.getElementById('credential-lock-overlay');
+  const input = document.getElementById('credential-lock-input');
+  card?.classList.toggle('is-credential-locked', locked);
+  if (locked) card?.classList.remove('collapsed');
+  overlay?.setAttribute('aria-hidden', String(!locked));
+  if (!locked && input) input.value = '';
+}
+
+function updateMasterPasswordRecommendation() {
+  const panel = document.getElementById('master-password-recommendation');
+  if (!panel) return;
+  const shouldShow = _credKdfMode() !== 'password' && _getProfiles().length > 0;
+  panel.hidden = !shouldShow;
+}
+
+async function _deriveKey(salt, passphrase) {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(
-    'raw', enc.encode(CRED_PASSPHRASE), 'PBKDF2', false, ['deriveKey']
+    'raw', enc.encode(passphrase ?? _activePassphrase()), 'PBKDF2', false, ['deriveKey']
   );
   return crypto.subtle.deriveKey(
     { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
@@ -2850,23 +3193,208 @@ function _uid() {
   return Math.random().toString(36).slice(2, 10);
 }
 
-async function _encryptData(data) {
+async function _encryptData(data, passphrase) {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv   = crypto.getRandomValues(new Uint8Array(12));
-  const key  = await _deriveKey(salt);
+  const key  = await _deriveKey(salt, passphrase);
   const ct   = await crypto.subtle.encrypt(
     { name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(data))
   );
   return { salt: Array.from(salt), iv: Array.from(iv), ct: Array.from(new Uint8Array(ct)) };
 }
 
-async function _decryptData(enc) {
+async function _decryptData(enc, passphrase) {
   const salt = new Uint8Array(enc.salt);
   const iv   = new Uint8Array(enc.iv);
   const ct   = new Uint8Array(enc.ct);
-  const key  = await _deriveKey(salt);
+  const key  = await _deriveKey(salt, passphrase);
   const pt   = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
   return JSON.parse(new TextDecoder().decode(pt));
+}
+
+// ── Master password: unlock, activate, change, disable ──
+function _promptMasterPassword() {
+  return new Promise(resolve => {
+    const modal = document.getElementById('master-unlock-modal');
+    const input = document.getElementById('master-unlock-input');
+    if (!modal || !input) { resolve(null); return; }
+    window.__masterUnlockResolve = resolve;
+    input.value = '';
+    modal.classList.add('open');
+    document.body.classList.add('modal-open');
+    setTimeout(() => input.focus(), 50);
+  });
+}
+
+function _finishMasterUnlock(value) {
+  const modal = document.getElementById('master-unlock-modal');
+  modal?.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  const resolve = window.__masterUnlockResolve;
+  window.__masterUnlockResolve = null;
+  if (resolve) resolve(value);
+}
+
+async function _unlockMasterPassword(pw) {
+  const profiles = _getProfiles();
+  if (profiles.length > 0) await _decryptData(profiles[0].enc, pw);
+  credMasterPassphrase = pw;
+  _updateCredStatus();
+  updateCredentialLockUI();
+}
+
+async function _ensureUnlocked() {
+  if (!_credLocked()) return true;
+  for (;;) {
+    const pw = await _promptMasterPassword();
+    if (pw === null || pw === '') return false;
+    try {
+      await _unlockMasterPassword(pw);
+      return true;
+    } catch (_) {
+      showToast(t('err_master_wrong'), 'error');
+    }
+  }
+}
+
+async function unlockCredentialsInline() {
+  const input = document.getElementById('credential-lock-input');
+  const pw = input?.value || '';
+  if (!_credLocked()) {
+    updateCredentialLockUI();
+    return;
+  }
+  if (!pw) {
+    input?.focus();
+    return;
+  }
+  try {
+    await _unlockMasterPassword(pw);
+    await loadCredentials();
+    showToast(t('toast_cred_loaded'), 'success');
+  } catch (_) {
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    showToast(t('err_master_wrong'), 'error');
+  }
+}
+
+async function _reencryptProfiles(fromPassphrase, toPassphrase) {
+  const profiles = _getProfiles();
+  const reencrypted = [];
+  for (const profile of profiles) {
+    const data = await _decryptData(profile.enc, fromPassphrase);
+    const enc  = await _encryptData(data, toPassphrase);
+    reencrypted.push({ ...profile, enc });
+  }
+  _saveProfiles(reencrypted);
+}
+
+function openMasterPwModal() {
+  const modal = document.getElementById('master-pw-modal');
+  if (!modal) return;
+  const active = _credKdfMode() === 'password';
+  const currentField = document.getElementById('master-pw-current-field');
+  const applyButton = document.getElementById('master-pw-apply');
+  const disableButton = document.getElementById('master-pw-disable');
+  if (currentField) currentField.style.display = active ? '' : 'none';
+  if (applyButton) applyButton.textContent = t(active ? 'btn_master_change' : 'btn_master_enable');
+  if (disableButton) disableButton.style.display = active ? '' : 'none';
+  ['master-pw-current', 'master-pw-new', 'master-pw-repeat'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+}
+
+function closeMasterPwModal() {
+  const modal = document.getElementById('master-pw-modal');
+  modal?.classList.remove('open');
+  document.body.classList.remove('modal-open');
+}
+
+async function _verifyCurrentMasterPw(currentPw) {
+  const profiles = _getProfiles();
+  if (profiles.length === 0) return true;
+  try {
+    await _decryptData(profiles[0].enc, currentPw);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+async function applyMasterPw() {
+  const active = _credKdfMode() === 'password';
+  const currentPw = document.getElementById('master-pw-current')?.value || '';
+  const newPw     = document.getElementById('master-pw-new')?.value || '';
+  const repeatPw  = document.getElementById('master-pw-repeat')?.value || '';
+  if (newPw.length < 8) { showToast(t('err_master_short'), 'error'); return; }
+  if (newPw !== repeatPw) { showToast(t('err_master_mismatch'), 'error'); return; }
+  try {
+    if (active) {
+      if (!(await _verifyCurrentMasterPw(currentPw))) { showToast(t('err_master_wrong'), 'error'); return; }
+      await _reencryptProfiles(currentPw, newPw);
+    } else {
+      await _reencryptProfiles(CRED_PASSPHRASE, newPw);
+      localStorage.setItem(CRED_KDF_LS_KEY, 'password');
+    }
+    credMasterPassphrase = newPw;
+    closeMasterPwModal();
+    _updateCredStatus();
+    updateCredentialLockUI();
+    showToast(t('toast_master_enabled'), 'success');
+  } catch (e) {
+    showToast(t('toast_cred_err') + e.message, 'error');
+  }
+}
+
+async function disableMasterPw() {
+  const currentPw = document.getElementById('master-pw-current')?.value || '';
+  if (!(await _verifyCurrentMasterPw(currentPw))) { showToast(t('err_master_wrong'), 'error'); return; }
+  try {
+    await _reencryptProfiles(currentPw, CRED_PASSPHRASE);
+    localStorage.removeItem(CRED_KDF_LS_KEY);
+    credMasterPassphrase = null;
+    closeMasterPwModal();
+    _updateCredStatus();
+    updateCredentialLockUI();
+    showToast(t('toast_master_disabled'), 'info');
+  } catch (e) {
+    showToast(t('toast_cred_err') + e.message, 'error');
+  }
+}
+
+function initMasterPwModals() {
+  document.getElementById('master-pw-cancel')?.addEventListener('click', closeMasterPwModal);
+  document.getElementById('master-pw-apply')?.addEventListener('click', applyMasterPw);
+  document.getElementById('master-pw-disable')?.addEventListener('click', disableMasterPw);
+  const settingsModal = document.getElementById('master-pw-modal');
+  settingsModal?.addEventListener('click', event => {
+    if (event.target === settingsModal) closeMasterPwModal();
+  });
+  document.getElementById('master-unlock-cancel')?.addEventListener('click', () => _finishMasterUnlock(null));
+  document.getElementById('master-unlock-confirm')?.addEventListener('click', () => {
+    _finishMasterUnlock(document.getElementById('master-unlock-input')?.value || '');
+  });
+  document.getElementById('master-unlock-input')?.addEventListener('keydown', event => {
+    if (event.key === 'Enter') _finishMasterUnlock(event.target.value || '');
+  });
+  document.getElementById('credential-lock-input')?.addEventListener('keydown', event => {
+    if (event.key === 'Enter') unlockCredentialsInline();
+  });
+  const unlockModal = document.getElementById('master-unlock-modal');
+  unlockModal?.addEventListener('click', event => {
+    if (event.target === unlockModal) _finishMasterUnlock(null);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape') return;
+    if (settingsModal?.classList.contains('open')) closeMasterPwModal();
+    if (unlockModal?.classList.contains('open')) _finishMasterUnlock(null);
+  });
 }
 
 function _readFormCredentials() {
@@ -2888,6 +3416,7 @@ function _fillFormCredentials(data) {
 async function saveProfile() {
   const name = (document.getElementById('profile-name').value || '').trim();
   if (!name) { showToast(t('toast_profile_name_req'), 'error'); return; }
+  if (!(await _ensureUnlocked())) return;
   try {
     const enc      = await _encryptData(_readFormCredentials());
     const profiles = _getProfiles();
@@ -2898,7 +3427,8 @@ async function saveProfile() {
     localStorage.setItem(LAST_PROFILE_KEY, entry.id);
     _renderProfileSelect(entry.id);
     document.getElementById('profile-name').value = '';
-    showToast(t('toast_profile_saved'), 'success');
+    const hasMasterPassword = _credKdfMode() === 'password';
+    showToast(t(hasMasterPassword ? 'toast_profile_saved' : 'toast_profile_saved_master_hint'), hasMasterPassword ? 'success' : 'warning');
   } catch(e) {
     showToast(t('toast_cred_err') + e.message, 'error');
   }
@@ -2909,6 +3439,7 @@ async function loadProfile() {
   if (!id) { showToast(t('toast_profile_none'), 'error'); return; }
   const profile = _getProfiles().find(p => p.id === id);
   if (!profile) return;
+  if (!(await _ensureUnlocked())) return;
   try {
     _fillFormCredentials(await _decryptData(profile.enc));
     localStorage.setItem(LAST_PROFILE_KEY, id);
@@ -3012,8 +3543,12 @@ async function loadCredentials() {
   if (!lastId) return;
   const profile = _getProfiles().find(p => p.id === lastId);
   if (!profile) return;
+  // With an active master password the app never prompts on startup;
+  // loading a profile is the deliberate unlock action.
+  if (_credLocked()) { updateCredentialLockUI(); return; }
   try {
     _fillFormCredentials(await _decryptData(profile.enc));
+    updateCredentialLockUI();
   } catch(e) {
     console.warn('Profil konnte nicht geladen werden:', e);
   }
@@ -3024,10 +3559,14 @@ function _updateCredStatus() {
   if (!el) return;
   const profiles = _getProfiles();
   if (profiles.length > 0) {
-    el.innerHTML = '<span style="color:var(--success)">' + profiles.length + '\u00a0' + t('cred_status_saved') + '</span>';
+    const lockHint = _credLocked() ? ' \u00b7 ' + t('cred_status_locked') : '';
+    el.innerHTML = '<span style="color:var(--success)">' + profiles.length + '\u00a0' + t('cred_status_saved') + '</span>'
+      + (lockHint ? '<span style="color:var(--warning)">' + lockHint + '</span>' : '');
   } else {
     el.innerHTML = '<span style="color:var(--muted)">' + t('cred_status_none') + '</span>';
   }
+  updateCredentialLockUI();
+  updateMasterPasswordRecommendation();
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -3919,16 +4458,30 @@ function openClearAllModal() {
   document.getElementById('clear-all-cancel')?.focus();
 }
 
-function closeClearAllModal() {
+function closeClearAllModal(restoreFocus = true) {
   const modal = document.getElementById('clear-all-modal');
   if (!modal) return;
   modal.classList.remove('open');
   document.body.classList.remove('modal-open');
-  document.getElementById('btn-clear-all')?.focus();
+  if (restoreFocus) document.getElementById('btn-clear-all')?.focus();
+}
+
+function resetScrollAfterClearAllIfNeeded() {
+  let shouldReset = false;
+  try {
+    shouldReset = sessionStorage.getItem(CLEAR_ALL_SCROLL_RESET_KEY) === '1';
+    if (shouldReset) sessionStorage.removeItem(CLEAR_ALL_SCROLL_RESET_KEY);
+  } catch (_) {}
+  if (!shouldReset) return;
+  try { history.scrollRestoration = 'manual'; } catch (_) {}
+  const scrollTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  scrollTop();
+  requestAnimationFrame(scrollTop);
+  setTimeout(scrollTop, 120);
 }
 
 async function confirmClearAllStorage() {
-  closeClearAllModal();
+  closeClearAllModal(false);
   await Promise.all([
     _clearLogStore(LOG_REQUEST_STORE, LOG_LS_KEY),
     _clearLogStore(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY),
@@ -3936,10 +4489,31 @@ async function confirmClearAllStorage() {
   [
     PROFILES_LS_KEY, LAST_PROFILE_KEY, CRED_LS_KEY,
     LOG_LS_KEY, RESP_LOG_LS_KEY, DESIGN_LS_KEY, THEME_LS_KEY, LANG_LS_KEY, CALLBACK_RECEIVER_KEY,
-    PBL_REFS_LS_KEY, PAYMENT_PENDING_KEY, CALLBACK_RELAY_KEY, CALLBACK_RELAY_ACK_KEY
+    PBL_REFS_LS_KEY, PAYMENT_PENDING_KEY, CALLBACK_RELAY_KEY, CALLBACK_RELAY_ACK_KEY,
+    CRED_KDF_LS_KEY
   ].forEach(k => localStorage.removeItem(k));
+  if (window.caches) {
+    try {
+      const cacheKeys = await caches.keys();
+      await Promise.all(cacheKeys.map(key => caches.delete(key)));
+    } catch (_) {}
+  }
+  if (navigator.serviceWorker) {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map(reg => reg.unregister()));
+    } catch (_) {}
+  }
+  try {
+    sessionStorage.setItem(CLEAR_ALL_SCROLL_RESET_KEY, '1');
+    history.scrollRestoration = 'manual';
+  } catch (_) {}
+  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   showToast(t('toast_clear_all'), 'info');
-  setTimeout(() => location.reload(), 800);
+  setTimeout(() => {
+    const cleanUrl = location.href.split('#')[0];
+    location.replace(cleanUrl);
+  }, 800);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -4584,10 +5158,13 @@ function checkCallbackParams() {
 // INIT
 // ══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
+  resetScrollAfterClearAllIfNeeded();
+  initActionDelegation();
   initStandaloneViews();
   initDesign();
   initTheme();
   initLang();
+  bindSectionJumpLinks(document.getElementById('tools-view'));
   initArticleList();
   initStatusTransactionPicker();
   generateTransId();
@@ -4601,6 +5178,8 @@ document.addEventListener('DOMContentLoaded', () => {
   _updateCredStatus();
   initParamTips();
   initClearAllModal();
+  initQrModal();
+  initMasterPwModals();
   initProfileDeleteModal();
   initNewFlowModal();
   initLogActionModal();
@@ -4614,6 +5193,99 @@ document.addEventListener('DOMContentLoaded', () => {
     if (badge && v) badge.textContent = 'v' + v.trim();
   }).catch(() => {});
 });
+
+// Central action registries: markup declares intent via data-action /
+// data-action-change attributes; the CSP forbids inline event handlers.
+const CLICK_ACTIONS = {
+  'generate-transid': () => generateTransId(),
+  'build-and-preview': () => buildAndPreview(),
+  'toggle-workflow-subsection': el => toggleWorkflowSubsection(el.dataset.target),
+  'toggle-theme': () => toggleTheme(),
+  'toggle-lang': () => toggleLang(),
+  'toggle-design': () => toggleDesign(),
+  'toggle-pwd': el => togglePwd(el.dataset.target, el),
+  'toggle-card': el => toggleCard(el.dataset.target),
+  'submit-payment': () => submitPayment(),
+  'submit-classic-status': () => submitClassicStatus(),
+  'start-new-payment-flow': () => startNewPaymentFlow(),
+  'set-use-case': el => setUseCase(el.dataset.arg),
+  'set-response-analysis-mode': el => setResponseAnalysisMode(el.dataset.arg),
+  'set-method': el => setMethod(el.dataset.arg),
+  'set-integration': el => setIntegration(el.dataset.arg),
+  'save-profile': () => saveProfile(),
+  'load-profile': () => loadProfile(),
+  'delete-profile': () => deleteProfile(),
+  'remove-article-item': el => removeArticleItem(el),
+  'open-log-import': el => openLogImport(el.dataset.arg),
+  'open-log-data-modal': () => openLogDataModal(),
+  'open-combined-log-import': () => openCombinedLogImport(),
+  'generate-test-customer': () => generateTestCustomer(),
+  'generate-test-articlelist': () => generateTestArticleList(),
+  'generate-pbl-ref': () => generatePayByLinkRef(),
+  'generate-customfield-example': () => generateCustomFieldExample(),
+  'export-log': el => exportLog(el.dataset.arg),
+  'export-all-logs': () => exportAllLogs(),
+  'decrypt-response': () => decryptResponse(),
+  'copy-text': el => copyText(el.dataset.target),
+  'copy-resp-plain': () => copyRespPlain(),
+  'copy-test-card': el => {
+    navigator.clipboard.writeText(el.dataset.number || '')
+      .then(() => showToast(t('toast_copied'), 'success'));
+  },
+  'clear-response-log': () => clearResponseLog(),
+  'clear-log': () => clearLog(),
+  'clear-customer-master-data': () => clearCustomerMasterData(),
+  'clear-customfields': () => clearCustomFields(),
+  'clear-articlelist': () => clearArticleList(),
+  'clear-all-storage': () => clearAllStorage(),
+  'apply-httpbingo-demo': () => applyHttpbingoDemo(),
+  'analyze-rest-response': () => analyzeRestResponse(),
+  'add-article-item': () => addArticleItem(),
+  'validate-mac': () => validateMac(),
+  'mac-fill-from-workflow': () => macFillFromWorkflow(),
+  'submit-payment-embedded': () => submitPaymentEmbedded(),
+  'close-embedded-form': () => closeEmbeddedForm(),
+  'show-request-qr': () => showRequestQr(),
+  'open-master-pw-modal': () => openMasterPwModal(),
+  'unlock-credentials-inline': () => unlockCredentialsInline(),
+  'b64-encode': () => b64Encode(),
+  'b64-decode': () => b64Decode(),
+  'b64-copy-encoded': () => b64CopyEncoded(),
+  'b64-copy-param': () => b64CopyParam(),
+};
+
+const CHANGE_ACTIONS = {
+  'update-rest-controls': () => updateRestControls(),
+  'validate-rest-credential-optin': el => validateRestCredentialOptIn(el),
+  'update-use-case-ui': () => updateUseCaseUI(),
+  'update-article-requirements': () => updateArticleRequirements(),
+  'toggle-shipping-address': () => toggleShippingAddress(),
+  'toggle-customer-master-data': () => toggleCustomerMasterData(),
+  'toggle-customfields': () => toggleCustomFields(),
+  'toggle-callback-receiver': () => toggleCallbackReceiver(),
+  'toggle-articlelist': () => toggleArticleList(),
+  'on-template-change': () => onTemplateChange(),
+  'on-profile-select': () => onProfileSelect(),
+  'on-orderdesc-change': el => onOrderDescChange(el),
+  'handle-log-import-file': el => handleLogImportFile(el.dataset.arg, el),
+  'handle-combined-log-import-file': el => handleCombinedLogImportFile(el),
+  'apply-b64-sample': () => applyB64Sample(),
+};
+
+function initActionDelegation() {
+  document.addEventListener('click', event => {
+    const el = event.target.closest('[data-action]');
+    if (!el) return;
+    const action = CLICK_ACTIONS[el.dataset.action];
+    if (action) action(el);
+  });
+  document.addEventListener('change', event => {
+    const el = event.target.closest('[data-action-change]');
+    if (!el) return;
+    const action = CHANGE_ACTIONS[el.dataset.actionChange];
+    if (action) action(el);
+  });
+}
 
 function initStandaloneViews() {
   const placements = {
@@ -4974,6 +5646,7 @@ function initNavigation() {
     'request-log': document.getElementById('request-log-view'),
     response: document.getElementById('response-view'),
     'response-log': document.getElementById('response-log-view'),
+    tools: document.getElementById('tools-view'),
     help: document.getElementById('help-view'),
     changelog: document.getElementById('changelog-view'),
   };

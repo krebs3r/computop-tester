@@ -1,4 +1,8 @@
 (function() {
+      if (window.top !== window.self) {
+        try { window.top.location.replace(window.location.href); }
+        catch (_) { document.documentElement.style.display = 'none'; }
+      }
       const html = document.documentElement;
       const allowedDesigns = ['original', 'nexi'];
       const designParams = new URLSearchParams(window.location.search);

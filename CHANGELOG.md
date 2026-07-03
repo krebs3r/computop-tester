@@ -2,6 +2,23 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.6.0 — Tools view, hardened CSP, master password and glass polish
+
+- Added a Tools view with a standalone MAC validator that calculates the HMAC-SHA256 MAC over `PayID*TransID*MerchantID*Amount*Currency`, optionally compares it against an expected value and can copy values from the current workflow
+- Added a Base64 encoder/decoder with credentialOnFile presets (CIT initial and MIT subsequent payments) and a browserInfo sample, matching the workflow of the official Computop test tool, including copy-as-parameter output
+- Added an optional master password for credential profiles: the AES-GCM key is then derived from the user password via PBKDF2 instead of the built-in static passphrase, profiles are re-encrypted on activation, change and deactivation, and unlocking happens on demand when loading or saving a profile
+- Added a glass lock overlay for locked credential profiles in step 1 with inline master-password unlock, an explanation of why browser-stored credentials get a second encryption layer, and a visible recommendation after saving profiles without a master password
+- Replaced all 78 inline event handlers with data-action attributes and two delegated listeners, allowing `'unsafe-inline'` to be removed from `script-src`; scripts now execute exclusively from same-origin files
+- Restricted `frame-src` to `https://www.computop-paygate.com` and added an opt-in embedded credit card form: PaySSL loads in an iframe inside step 3 (card data stays on Computop's origin, SAQ-A-style), with the new-tab flow remaining the default and the button hidden on `file://`
+- Added a frame-buster to the render bootstrap so the app itself cannot be clickjacked via framing, complementing the meta CSP that cannot carry `frame-ancestors`
+- Added a QR code action in step 3 that renders the final request URL for scanning with a phone, using the vendored MIT-licensed qrcode-generator library served from `js/vendor/`
+- Fixed the Tools page jump links so linked boxes land below the glass navigation like the help-page anchors
+- Extended "Delete all local data" to also remove Service Worker caches and unregister the worker in addition to profiles, logs and settings, and prevented the page from jumping back to the footer after the reset
+- Polished master-password modal actions and toast layering so button rows stay inside their dialog and feedback remains visible above blurred modals
+- Documented the callback receiver's privacy behaviour in the help view: response parameters pass through the host's server logs, Classic responses stay Blowfish-encrypted and are decrypted locally only
+- Increased translucency of the original design's main surfaces (navigation, cards, headers, app intro, help/changelog panels, footer) with raised backdrop blur and stronger glass edges; the Nexi design is unaffected
+- Updated README, in-app changelog, third-party notices, visible version metadata and offline cache for version 3.6.0
+
 ### v3.5.3 — GDPR compliance, security and performance
 
 - Extracted inline CSS to `css/style.css`; the main HTML file dropped from 480 KB to 344 KB
