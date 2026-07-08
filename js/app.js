@@ -62,6 +62,7 @@ let currentLang = 'de';
 let currentIntegration = 'classic';
 let currentMethod = 'hpp';
 let currentUseCase = 'create-payment';
+let currentClassicEncryption = 'blowfish';
 let statusTransactionCandidates = [];
 let statusTransactionRefreshTimer = null;
 let statusTransactionRefreshToken = 0;
@@ -168,20 +169,47 @@ function setIntegration(integration) {
   document.getElementById('integration-classic')?.classList.toggle('method-active', !isRest);
   document.getElementById('integration-rest')?.classList.toggle('method-active', isRest);
   const classicControls = document.getElementById('classic-method-controls');
-  const classicExplainer = document.getElementById('classic-tech-explainer');
+  const classicEncryptionSection = document.getElementById('workflow-encryption');
   const restControls = document.getElementById('rest-controls');
-  if (classicExplainer && classicControls && classicExplainer.nextElementSibling !== classicControls) {
-    classicControls.parentNode.insertBefore(classicExplainer, classicControls);
-  }
   const isPayment = currentUseCase === 'create-payment';
-  if (classicExplainer) classicExplainer.style.display = !isRest && isPayment ? 'block' : 'none';
   if (classicControls) classicControls.style.display = !isRest && isPayment ? 'flex' : 'none';
+  if (classicEncryptionSection) classicEncryptionSection.style.display = !isRest ? '' : 'none';
   if (restControls) restControls.style.display = isRest ? 'block' : 'none';
   updateCredentialModeUI();
   showPreviewEmptyState();
   updateUseCaseUI();
   updateCallbackReceiverAvailabilityUI();
   if (document.getElementById('cb-receiver-toggle')?.checked) _applyCallbackReceiver(true);
+}
+
+function setClassicEncryption(encryption) {
+  currentClassicEncryption = encryption === 'aes' ? 'aes' : 'blowfish';
+  document.getElementById('classic-encryption-blowfish')?.classList.toggle('method-active', currentClassicEncryption === 'blowfish');
+  document.getElementById('classic-encryption-aes')?.classList.toggle('method-active', currentClassicEncryption === 'aes');
+  updateClassicEncryptionUI();
+  markPreviewStale();
+}
+
+function updateClassicEncryptionUI() {
+  const isAes = currentClassicEncryption === 'aes';
+  const infoText = document.getElementById('classic-encryption-info-text');
+  const keyHint = document.getElementById('h-bfpw');
+  const tip = document.getElementById('tip-bfpw');
+  const stepKey = document.getElementById('te-s2-key');
+  const stepDesc = document.getElementById('te-s2-desc');
+  const dataLegend = document.getElementById('te-leg-data');
+  const plainLabel = document.getElementById('debug-plain-label');
+  const dataLabel = document.getElementById('debug-data-label');
+  const responseInfo = document.getElementById('resp-info-body');
+  if (infoText) infoText.textContent = t(isAes ? 'classic_encryption_info_aes' : 'classic_encryption_info_blowfish');
+  if (keyHint) keyHint.textContent = t(isAes ? 'h_bfpw_aes' : 'h_bfpw');
+  if (tip) tip.dataset.tip = t(isAes ? 'tip_bfpw_aes' : 'tip_bfpw');
+  if (stepKey) stepKey.textContent = t(isAes ? 'te_s2_key_aes' : 'te_s2_key_blowfish');
+  if (stepDesc) stepDesc.innerHTML = t(isAes ? 'te_s2_desc_aes' : 'te_s2_desc');
+  if (dataLegend) dataLegend.textContent = t(isAes ? 'te_leg_data_aes' : 'te_leg_data');
+  if (plainLabel) plainLabel.textContent = t(isAes ? 'debug_plain_label_aes' : 'debug_plain_label');
+  if (dataLabel) dataLabel.textContent = t(isAes ? 'debug_data_label_aes' : 'debug_data_label_blowfish');
+  if (responseInfo) responseInfo.innerHTML = t(isAes ? 'resp_info_body_aes' : 'resp_info_body');
 }
 
 const API_FIELD_PATHS = {
@@ -194,6 +222,7 @@ const API_FIELD_PATHS = {
   'rest-environment': { classic: '—', restV1: 'API-Host (nicht im JSON)', restV2: 'API-Host (nicht im JSON)' },
   'rest-auth': { classic: '—', restV1: 'Authorization-Header', restV2: 'Authorization-Header' },
   'rest-tool': { classic: '—', restV1: 'Lokales Ausgabeformat (nicht übertragen)', restV2: 'Lokales Ausgabeformat (nicht übertragen)' },
+  'status-lookup': { classic: 'Suchschlüssel-Auswahl (nicht übertragen)', restV1: 'Endpoint-Auswahl (nicht im JSON)', restV2: 'Endpoint-Auswahl (nicht im JSON)' },
   'status-payment-id': { classic: 'PayID', restV1: 'URL-Pfad: paymentId', restV2: 'URL-Pfad: paymentId' },
   'status-transaction-id': { classic: 'TransID', restV1: 'URL-Pfad: transactionId', restV2: 'URL-Pfad: transactionId' },
   amount: { classic: 'Amount', restV1: 'amount.value', restV2: 'amount.value' },
@@ -386,7 +415,7 @@ function updateUseCaseUI() {
   const isPayment = currentUseCase === 'create-payment';
   const lookup = document.getElementById('status-lookup')?.value || 'paymentId';
   const classicControls = document.getElementById('classic-method-controls');
-  const classicExplainer = document.getElementById('classic-tech-explainer');
+  const classicEncryptionSection = document.getElementById('workflow-encryption');
   const createFields = document.getElementById('create-payment-fields');
   const statusControls = document.getElementById('status-controls');
   const callbackRow = document.getElementById('cb-receiver-row');
@@ -397,7 +426,7 @@ function updateUseCaseUI() {
   const newTidButton = document.getElementById('btn-newtid');
 
   if (classicControls) classicControls.style.display = !isRest && isPayment ? 'flex' : 'none';
-  if (classicExplainer) classicExplainer.style.display = !isRest && isPayment ? 'block' : 'none';
+  if (classicEncryptionSection) classicEncryptionSection.style.display = !isRest ? '' : 'none';
   if (createFields) createFields.style.display = isPayment ? '' : 'none';
   if (statusControls) statusControls.style.display = isPayment ? 'none' : 'block';
   if (callbackRow) callbackRow.style.display = isPayment ? '' : 'none';
@@ -888,6 +917,7 @@ function applyLang() {
   setText('btn-show-qr-text', 'btn_show_qr');
   setText('qr-modal-title', 'qr_modal_title');
   setText('qr-modal-text', 'qr_modal_text');
+  setText('qr-modal-fallback-text', 'qr_modal_fallback_text');
   setText('qr-modal-dense-hint', 'qr_modal_dense_hint');
   setText('qr-modal-close', 'btn_embed_close');
   setText('btn-master-pw-text', 'btn_master_pw');
@@ -918,14 +948,18 @@ function applyLang() {
   setText('workflow-nav-interface', 'workflow_nav_interface');
   setText('workflow-nav-use-case', 'workflow_nav_use_case');
   setText('workflow-nav-integration', 'workflow_nav_integration');
+  setText('workflow-integration-options', 'workflow_nav_integration');
+  setText('workflow-nav-encryption', 'workflow_nav_encryption');
   setText('workflow-nav-status', 'workflow_nav_status');
   setText('workflow-nav-payment-data', 'workflow_nav_payment_data');
   setText('workflow-nav-customer', 'workflow_nav_customer');
   setText('workflow-nav-articles', 'workflow_nav_articles');
+  setText('workflow-nav-custom-fields', 'workflow_nav_custom_fields');
   setText('workflow-nav-callbacks', 'workflow_nav_callbacks');
-  setText('workflow-nav-advanced', 'workflow_nav_advanced');
   setText('workflow-nav-step-preview', 'workflow_nav_step_preview');
+  setText('workflow-nav-url-explainer', 'workflow_nav_url_explainer');
   setText('workflow-nav-preview-data', 'workflow_nav_preview_data');
+  setText('workflow-nav-test-cards', 'workflow_nav_test_cards');
   setText('workflow-nav-execution', 'workflow_nav_execution');
   setText('help-title', 'help_title');
   setText('help-subtitle', 'help_subtitle');
@@ -950,6 +984,11 @@ function applyLang() {
   setText('ct-creds', 'ct_creds');
   setText('l-mid', 'l_mid'); setText('l-bfpw', 'l_bfpw'); setText('h-bfpw', 'h_bfpw');
   setText('l-hmacpw', 'l_hmacpw'); setText('h-hmacpw', 'h_hmacpw');
+  setText('classic-encryption-label', 'classic_encryption_label');
+  setText('classic-encryption-info-title', 'classic_encryption_info_title');
+  setText('classic-encryption-doc-blowfish', 'classic_encryption_doc_blowfish');
+  setText('classic-encryption-doc-aes', 'classic_encryption_doc_aes');
+  setText('classic-encryption-doc-faq', 'classic_encryption_doc_faq');
   setText('classic-credential-title', 'classic_credential_title');
   setText('classic-credential-subtitle', 'classic_credential_subtitle');
   setText('rest-credential-title', 'rest_credential_title');
@@ -1038,10 +1077,11 @@ function applyLang() {
   setText('opt-od-sim-dec', 'opt_od_sim_dec');
   setText('opt-od-custom',  'opt_od_custom');
   setText('tc-summary', 'tc_summary');
-  setHtml('tc-note',    'tc_note');
+  setText('test-cards-title', 'workflow_nav_test_cards');
+  setText('test-cards-info-title', 'test_cards_info_title');
+  setHtml('test-cards-info-text', 'test_cards_info_text');
   setText('tc-h-brand', 'tc_h_brand'); setText('tc-h-number', 'tc_h_number'); setText('tc-h-result', 'tc_h_result');
   setText('tc-3ds-summary', 'tc_3ds_summary');
-  setHtml('tc-3ds-note',    'tc_3ds_note');
   setText('tc-3ds-h-brand', 'tc_3ds_h_brand'); setText('tc-3ds-h-number', 'tc_3ds_h_number'); setText('tc-3ds-h-scenario', 'tc_3ds_h_scenario');
   renderTestCards();
   renderTestCards3DS();
@@ -1117,7 +1157,6 @@ function applyLang() {
   setTip('tip-urlf',  'tip_urlf');
   setTip('tip-urln',  'tip_urln');
   setTip('tip-urlb',  'tip_urlb');
-  setText('sep-advanced', 'sep_advanced');
   setText('l-paytypes', 'l_paytypes'); setText('h-paytypes', 'h_paytypes');
   setText('l-template', 'l_template'); setText('h-template', 'h_template');
   setText('opt-tmpl-none', 'opt_tmpl_none');
@@ -1140,12 +1179,13 @@ function applyLang() {
   setText('preview-stale-text', 'preview_stale_text');
   setText('btn-refresh-preview-text', 'btn_refresh_preview');
   setText('debug-plain-label', 'debug_plain_label');
+  setText('debug-data-label', 'debug_data_label');
   setText('derived-parameters-label', 'derived_parameters_label');
   setText('rest-derived-parameters-label', 'derived_parameters_label');
   setText('debug-urlparams-label', 'debug_urlparams_label');
   setText('debug-pbl-outer-label', 'debug_pbl_outer_label');
   setText('debug-url-label', 'debug_url_label');
-  setText('copy-plain-text', 'btn_copy'); setText('copy-urlparams-text', 'btn_copy'); setText('copy-pbl-outer-text', 'btn_copy'); setText('copy-url-text', 'btn_copy');
+  setText('copy-plain-text', 'btn_copy'); setText('copy-data-text', 'btn_copy'); setText('copy-urlparams-text', 'btn_copy'); setText('copy-pbl-outer-text', 'btn_copy'); setText('copy-url-text', 'btn_copy');
   setText('btn-submit-text', 'btn_submit');
   setText('btn-submit-hint', 'btn_submit_hint');
   setText('btn-status-submit-text', 'btn_status_submit');
@@ -1208,6 +1248,7 @@ function applyLang() {
   setText('new-flow-cancel', 'clear_all_modal_cancel');
   setText('new-flow-confirm', 'new_flow_modal_confirm');
   setText('log-action-cancel', 'clear_all_modal_cancel');
+  updateClassicEncryptionUI();
   updateProfileDeleteModalText();
 
   // Lang toggle indicator
@@ -1512,6 +1553,67 @@ async function hmacSha256(keyStr, message) {
   return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
 
+function bytesToHex(bytes) {
+  return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function hexToBytes(hex) {
+  const clean = String(hex || '').replace(/\s+/g, '');
+  if (!clean || clean.length % 2 !== 0 || /[^0-9a-f]/i.test(clean)) throw new Error(t('err_hex_data'));
+  const out = new Uint8Array(clean.length / 2);
+  for (let i = 0; i < clean.length; i += 2) out[i / 2] = parseInt(clean.slice(i, i + 2), 16);
+  return out;
+}
+
+function aesKeyBytes(keyStr) {
+  const keyBytes = new TextEncoder().encode(keyStr);
+  if (![16, 24, 32].includes(keyBytes.length)) throw new Error(t('err_aes_key_length'));
+  return keyBytes;
+}
+
+function classicDataByteLength(dataValue) {
+  if (currentClassicEncryption !== 'aes') return String(dataValue || '').length / 2;
+  const parts = String(dataValue || '').split('-');
+  return parts.reduce((sum, part) => sum + part.length / 2, 0);
+}
+
+function renderEncryptedDataPreview(dataValue) {
+  const dataEl = document.getElementById('encrypted-data');
+  if (!dataEl) return;
+  dataEl.textContent = dataValue || '–';
+  dataEl.dataset.raw = dataValue || '';
+}
+
+async function aesCbcEncrypt(keyStr, plaintext) {
+  const key = await crypto.subtle.importKey('raw', aesKeyBytes(keyStr), { name: 'AES-CBC' }, false, ['encrypt']);
+  const iv = crypto.getRandomValues(new Uint8Array(16));
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, key, new TextEncoder().encode(plaintext));
+  return `${bytesToHex(iv)}-${bytesToHex(new Uint8Array(ciphertext))}`;
+}
+
+async function aesCbcDecrypt(keyStr, dataValue, len) {
+  const [ivHex, cipherHex] = String(dataValue || '').split('-');
+  if (!ivHex || !cipherHex) throw new Error(t('err_aes_data_format'));
+  const iv = hexToBytes(ivHex);
+  if (iv.length !== 16) throw new Error(t('err_aes_iv_length'));
+  const key = await crypto.subtle.importKey('raw', aesKeyBytes(keyStr), { name: 'AES-CBC' }, false, ['decrypt']);
+  const plaintext = await crypto.subtle.decrypt({ name: 'AES-CBC', iv }, key, hexToBytes(cipherHex));
+  const decoded = new TextDecoder().decode(plaintext);
+  return len ? decoded.slice(0, len) : decoded;
+}
+
+async function encryptClassicData(keyStr, plaintext) {
+  return currentClassicEncryption === 'aes'
+    ? aesCbcEncrypt(keyStr, plaintext)
+    : Blowfish.encrypt(keyStr, plaintext);
+}
+
+async function decryptClassicData(keyStr, dataValue, len) {
+  return currentClassicEncryption === 'aes'
+    ? aesCbcDecrypt(keyStr, dataValue, len)
+    : Blowfish.decrypt(keyStr, dataValue, len || undefined);
+}
+
 // ══════════════════════════════════════════════════════════════
 // TOOLS — MAC VALIDATOR & BASE64 ENCODER
 // ══════════════════════════════════════════════════════════════
@@ -1798,10 +1900,10 @@ function paramsToString(params) {
   return Object.entries(params).map(([key, value]) => `${key}=${value}`).join('&');
 }
 
-function buildPayByLinkRequest(merchantId, blowfishKey, innerParams, outerOptions = {}) {
+async function buildPayByLinkRequest(merchantId, blowfishKey, innerParams, outerOptions = {}) {
   const innerPlain = paramsToString(innerParams);
   const innerLen = innerPlain.length;
-  const innerData = Blowfish.encrypt(blowfishKey, innerPlain);
+  const innerData = await encryptClassicData(blowfishKey, innerPlain);
   const outerParams = { MerchantID: merchantId, Len: String(innerLen), Data: innerData };
 
   if (outerOptions.language) outerParams.Language = outerOptions.language;
@@ -1810,13 +1912,13 @@ function buildPayByLinkRequest(merchantId, blowfishKey, innerParams, outerOption
 
   const outerPlain = paramsToString(outerParams);
   const outerLen = outerPlain.length;
-  const outerData = Blowfish.encrypt(blowfishKey, outerPlain);
+  const outerData = await encryptClassicData(blowfishKey, outerPlain);
   const finalUrl = `https://www.computop-paygate.com/PayByLink.aspx?action=create&MerchantID=${encodeURIComponent(merchantId)}&Len=${outerLen}&Data=${outerData}`;
 
   return { innerPlain, innerLen, innerData, outerParams, outerPlain, outerLen, outerData, finalUrl };
 }
 
-function buildClassicStatusRequest(merchantId, blowfishKey, lookup, paymentId, transactionId) {
+async function buildClassicStatusRequest(merchantId, blowfishKey, lookup, paymentId, transactionId) {
   const params = { MerchantID: merchantId };
   let endpoint;
   if (lookup === 'paymentId') {
@@ -1829,7 +1931,7 @@ function buildClassicStatusRequest(merchantId, blowfishKey, lookup, paymentId, t
   }
   const plain = paramsToString(params);
   const len = plain.length;
-  const data = Blowfish.encrypt(blowfishKey, plain);
+  const data = await encryptClassicData(blowfishKey, plain);
   const urlParams = { MerchantID: merchantId, Len: String(len), Data: data };
   const finalUrl = `https://www.computop-paygate.com/${endpoint}?MerchantID=${encodeURIComponent(merchantId)}&Len=${len}&Data=${data}`;
   return { lookup, endpoint, params, plain, len, data, urlParams, finalUrl };
@@ -2772,7 +2874,7 @@ async function buildClassicStatusPreview() {
     if (lookup === 'paymentId' && !paymentId) throw new Error(t('val_status_payment_id'));
     if (!transactionId) throw new Error(t('val_status_transaction_id'));
 
-    const request = buildClassicStatusRequest(merchantId, blowfishKey, lookup, paymentId, transactionId);
+    const request = await buildClassicStatusRequest(merchantId, blowfishKey, lookup, paymentId, transactionId);
     document.getElementById('card-preview').classList.remove('collapsed');
     document.getElementById('preview-empty-hint').style.display = 'none';
     document.getElementById('rest-debug-section').style.display = 'none';
@@ -2788,6 +2890,7 @@ async function buildClassicStatusPreview() {
     const plainParamsEl = document.getElementById('plain-params');
     renderParamLines(plainParamsEl, Object.entries(request.params), () => 'val');
     plainParamsEl.dataset.raw = request.plain;
+    renderEncryptedDataPreview(request.data);
     const urlParamsEl = document.getElementById('url-params');
     renderParamLines(urlParamsEl, Object.entries(request.urlParams).map(([key, value]) => [key, key === 'Data' ? value.substring(0, 80) + '…' : value]), () => 'val');
     urlParamsEl.dataset.raw = paramsToString(request.urlParams);
@@ -2800,6 +2903,7 @@ async function buildClassicStatusPreview() {
       paymentId,
       useCase: 'payment-status',
       integration: 'classic',
+      encryption: currentClassicEncryption,
       lookup,
       url: request.finalUrl
     });
@@ -2905,12 +3009,12 @@ async function buildAndPreview() {
     const urlBack = document.getElementById('urlBack').value.trim();
     let plainStr = paramsToString(params);
     let len = plainStr.length;
-    let dataHex = Blowfish.encrypt(blowfishKey, plainStr);
+    let dataHex = await encryptClassicData(blowfishKey, plainStr);
     let pblRequest = null;
     let finalUrl;
 
     if (currentMethod === 'pbl') {
-      pblRequest = buildPayByLinkRequest(merchantId, blowfishKey, params, { language, template: tmpl, urlBack });
+      pblRequest = await buildPayByLinkRequest(merchantId, blowfishKey, params, { language, template: tmpl, urlBack });
       plainStr = pblRequest.innerPlain;
       len = pblRequest.outerLen;
       dataHex = pblRequest.outerData;
@@ -2964,6 +3068,7 @@ async function buildAndPreview() {
     const plainParamsEl = document.getElementById('plain-params');
     renderParamLines(plainParamsEl, Object.entries(params), k => k === 'MAC' ? 'enc' : 'val');
     plainParamsEl.dataset.raw = plainStr;
+    renderEncryptedDataPreview(dataHex);
 
     const pblOuterSection = document.getElementById('pbl-outer-section');
     const pblOuterEl = document.getElementById('pbl-outer-params');
@@ -2990,10 +3095,10 @@ async function buildAndPreview() {
     document.getElementById('btn-submit').dataset.url = finalUrl;
 
     // Save to request log
-    await _saveLogEntry({ merchantId, transId, amount, currency, paymentMethod: payTypes, integration: 'classic', url: finalUrl });
+    await _saveLogEntry({ merchantId, transId, amount, currency, paymentMethod: payTypes, integration: 'classic', encryption: currentClassicEncryption, url: finalUrl });
     await renderLog();
 
-    showToast(`${t('toast_preview_done')}${len} · Data=${dataHex.length/2} Bytes`, 'success');
+    showToast(`${t('toast_preview_done')}${len} · Data=${classicDataByteLength(dataHex)} Bytes`, 'success');
 
     // Scroll to preview
     document.getElementById('debug-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -3029,15 +3134,19 @@ function submitClassicStatus() {
 // ── Embedded PaySSL form (opt-in) ──
 // Paygate sends `frame-ancestors https: http:`, so the credit card form may
 // be framed from an http(s) origin. file:// has a null origin and is blocked
-// there, hence the button stays hidden without a server.
-function embeddedFormSupported() {
-  return currentMethod === 'ccf' && window.location.protocol !== 'file:';
+// there. The tester still shows a placeholder on file:// for debugging.
+function embeddedFormAvailable() {
+  return currentMethod === 'ccf';
+}
+
+function embeddedFormCanFrame() {
+  return embeddedFormAvailable() && window.location.protocol !== 'file:';
 }
 
 function updateEmbedButtonVisibility() {
   const btn = document.getElementById('btn-submit-embed');
-  if (btn) btn.style.display = embeddedFormSupported() ? '' : 'none';
-  if (!embeddedFormSupported()) closeEmbeddedForm();
+  if (btn) btn.style.display = embeddedFormAvailable() ? '' : 'none';
+  if (!embeddedFormAvailable()) closeEmbeddedForm();
 }
 
 function submitPaymentEmbedded() {
@@ -3046,8 +3155,17 @@ function submitPaymentEmbedded() {
   if (!url) { showToast(t('toast_no_url'), 'error'); return; }
   const card = document.getElementById('card-embedded-form');
   const frame = document.getElementById('embedded-form-frame');
-  if (!card || !frame) return;
-  frame.src = url;
+  const placeholder = document.getElementById('embedded-form-placeholder');
+  const canFrame = embeddedFormCanFrame();
+  if (!card || !frame || !placeholder) return;
+  frame.style.display = canFrame ? '' : 'none';
+  placeholder.style.display = canFrame ? 'none' : '';
+  if (canFrame) {
+    frame.src = url;
+  } else {
+    frame.src = 'about:blank';
+    placeholder.innerHTML = t('embedded_form_file_placeholder');
+  }
   card.style.display = '';
   card.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -3055,8 +3173,11 @@ function submitPaymentEmbedded() {
 function closeEmbeddedForm() {
   const card = document.getElementById('card-embedded-form');
   const frame = document.getElementById('embedded-form-frame');
+  const placeholder = document.getElementById('embedded-form-placeholder');
   if (!card || card.style.display === 'none') return;
   if (frame) frame.src = 'about:blank';
+  if (placeholder) placeholder.style.display = 'none';
+  if (frame) frame.style.display = '';
   card.style.display = 'none';
 }
 
@@ -3068,7 +3189,13 @@ function showRequestQr() {
   if (typeof qrcode !== 'function') { showToast(t('err_qr_failed'), 'error'); return; }
   const container = document.getElementById('qr-modal-code');
   const modal = document.getElementById('qr-modal');
+  const fallback = document.getElementById('qr-modal-fallback');
+  const fallbackUrl = document.getElementById('qr-modal-url');
   if (!container || !modal) return;
+  if (fallback) fallback.style.display = 'none';
+  if (fallbackUrl) fallbackUrl.value = '';
+  container.style.display = 'grid';
+  container.innerHTML = '';
   let svgTag = '';
   let moduleCount = 0;
   // Long Data parameters can exceed a level's capacity; retry with lower ECC.
@@ -3082,7 +3209,19 @@ function showRequestQr() {
       break;
     } catch (_) { /* try next level */ }
   }
-  if (!svgTag) { showToast(t('err_qr_failed'), 'error'); return; }
+  if (!svgTag) {
+    container.style.display = 'none';
+    if (fallback) fallback.style.display = '';
+    if (fallbackUrl) fallbackUrl.value = url;
+    const denseHint = document.getElementById('qr-modal-dense-hint');
+    if (denseHint) {
+      denseHint.textContent = t('qr_modal_too_long_hint');
+      denseHint.style.display = '';
+    }
+    modal.classList.add('open');
+    document.body.classList.add('modal-open');
+    return;
+  }
   container.innerHTML = svgTag;
   const svg = container.querySelector('svg');
   if (svg) {
@@ -3092,7 +3231,10 @@ function showRequestQr() {
   }
   // From roughly version 27 (~125 modules) on-screen scanning gets finicky.
   const denseHint = document.getElementById('qr-modal-dense-hint');
-  if (denseHint) denseHint.style.display = moduleCount >= 125 ? '' : 'none';
+  if (denseHint) {
+    denseHint.textContent = t('qr_modal_dense_hint');
+    denseHint.style.display = moduleCount >= 125 ? '' : 'none';
+  }
   modal.classList.add('open');
   document.body.classList.add('modal-open');
 }
@@ -3104,6 +3246,10 @@ function closeQrModal() {
   document.body.classList.remove('modal-open');
   const container = document.getElementById('qr-modal-code');
   if (container) container.innerHTML = '';
+  const fallback = document.getElementById('qr-modal-fallback');
+  const fallbackUrl = document.getElementById('qr-modal-url');
+  if (fallback) fallback.style.display = 'none';
+  if (fallbackUrl) fallbackUrl.value = '';
 }
 
 function initQrModal() {
@@ -4671,7 +4817,7 @@ async function decryptResponse() {
   if (!dataHex)     { showToast(t('resp_no_data'), 'error'); return; }
 
   try {
-    const plain = Blowfish.decrypt(blowfishKey, dataHex, lenVal || undefined);
+    const plain = await decryptClassicData(blowfishKey, dataHex, lenVal || undefined);
 
     // Parse key=value pairs
     const responseEntries = plain.split('&').map(pair => {
@@ -5189,8 +5335,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initPaymentFlowChangeTracking();
   initCallbackReceiver();
   fetch('./VERSION').then(r => r.text()).then(v => {
+    const version = v.trim();
     const badge = document.getElementById('footer-ver-badge');
-    if (badge && v) badge.textContent = 'v' + v.trim();
+    const changelogBadge = document.getElementById('changelog-version-badge');
+    if (badge && version) badge.textContent = 'v' + version;
+    if (changelogBadge && version) changelogBadge.textContent = 'v' + version;
   }).catch(() => {});
 });
 
@@ -5212,6 +5361,7 @@ const CLICK_ACTIONS = {
   'set-response-analysis-mode': el => setResponseAnalysisMode(el.dataset.arg),
   'set-method': el => setMethod(el.dataset.arg),
   'set-integration': el => setIntegration(el.dataset.arg),
+  'set-classic-encryption': el => setClassicEncryption(el.dataset.arg),
   'save-profile': () => saveProfile(),
   'load-profile': () => loadProfile(),
   'delete-profile': () => deleteProfile(),
@@ -5481,9 +5631,11 @@ function initWorkflowNavigation() {
   const conditionVisible = link => {
     const condition = link.dataset.workflowVisible;
     if (!condition) return true;
+    if (condition === 'classic') return currentIntegration === 'classic';
     if (condition === 'status') return currentUseCase === 'payment-status';
     if (condition === 'create') return currentUseCase === 'create-payment';
     if (condition === 'classic-create') return currentUseCase === 'create-payment' && currentIntegration === 'classic';
+    if (condition === 'classic-hpp') return currentUseCase === 'create-payment' && currentIntegration === 'classic' && currentMethod === 'hpp';
     if (condition === 'classic-preview') {
       const classicPreview = document.getElementById('debug-section');
       return currentUseCase === 'create-payment'

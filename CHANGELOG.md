@@ -2,6 +2,19 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.6.1 — Classic AES Data/Len support and workflow navigation polish
+
+- Moved the Classic encryption selector into its own open Step 2 workflow section and moved the GET-URL explanation into an open Step 3 preview box with its own navigation entry.
+- Added a Classic encryption selector for Blowfish ECB (default) and AES-CBC/PKCS7, including Computop Helpdesk setup guidance and direct links to the official Blowfish, AES and encryption FAQ documentation
+- Added AES-CBC request generation with random 16-byte IVs and Computop-compatible `Data=IVhex-CiphertextHex` formatting while preserving the existing `Len` handling
+- Added a dedicated Step 3 `Data` preview block with copy action so encrypted payloads can be compared directly against external calculations or Computop examples
+- Extended Classic status inquiries, Pay By Link request generation and Response Analysis so AES-configured MIDs can build and decrypt Classic `Data` payloads locally
+- Reworked Step 2 workflow navigation so invisible anchors now land on visible section headings, Integration Options has its own heading and Advanced Settings was removed after moving its fields into their topical sections
+- Moved Payment Methods and Template into Payment Data, and moved Template CustomFields into their own workflow section below Customer Data and Article Data with action buttons visible like the other data boxes
+- Added a dedicated Step 3 Test Cards navigation entry, a shared Computop-style explanation box and two styled Non-3DS and 3-D Secure 2.x boxes whose card numbers stay on one line
+- Replaced the Changelog header "Updates" badge with the current version number while keeping the same badge design
+- Updated README, Help, in-app labels, visible version metadata and the in-app changelog for version 3.6.1
+
 ### v3.6.0 — Tools view, hardened CSP, master password and glass polish
 
 - Added a Tools view with a standalone MAC validator that calculates the HMAC-SHA256 MAC over `PayID*TransID*MerchantID*Amount*Currency`, optionally compares it against an expected value and can copy values from the current workflow
@@ -9,9 +22,9 @@ All notable changes to Paygate Payment Tester are documented here.
 - Added an optional master password for credential profiles: the AES-GCM key is then derived from the user password via PBKDF2 instead of the built-in static passphrase, profiles are re-encrypted on activation, change and deactivation, and unlocking happens on demand when loading or saving a profile
 - Added a glass lock overlay for locked credential profiles in step 1 with inline master-password unlock, an explanation of why browser-stored credentials get a second encryption layer, and a visible recommendation after saving profiles without a master password
 - Replaced all 78 inline event handlers with data-action attributes and two delegated listeners, allowing `'unsafe-inline'` to be removed from `script-src`; scripts now execute exclusively from same-origin files
-- Restricted `frame-src` to `https://www.computop-paygate.com` and added an opt-in embedded credit card form: PaySSL loads in an iframe inside step 3 (card data stays on Computop's origin, SAQ-A-style), with the new-tab flow remaining the default and the button hidden on `file://`
+- Restricted `frame-src` to `https://www.computop-paygate.com` and added an opt-in embedded credit card form: PaySSL loads in an iframe inside step 3 (card data stays on Computop's origin, SAQ-A-style), with the new-tab flow remaining the default and a visible `file://` placeholder explaining Computop's framing limitation
 - Added a frame-buster to the render bootstrap so the app itself cannot be clickjacked via framing, complementing the meta CSP that cannot carry `frame-ancestors`
-- Added a QR code action in step 3 that renders the final request URL for scanning with a phone, using the vendored MIT-licensed qrcode-generator library served from `js/vendor/`
+- Added a QR code action in step 3 that renders the final request URL for scanning with a phone, using the vendored MIT-licensed qrcode-generator library served from `js/vendor/`; very long Classic URLs now fall back to a copyable link instead of only showing an error
 - Fixed the Tools page jump links so linked boxes land below the glass navigation like the help-page anchors
 - Extended "Delete all local data" to also remove Service Worker caches and unregister the worker in addition to profiles, logs and settings, and prevented the page from jumping back to the footer after the reset
 - Polished master-password modal actions and toast layering so button rows stay inside their dialog and feedback remains visible above blurred modals

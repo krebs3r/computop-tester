@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.6.0-blueviolet)
+![Version](https://img.shields.io/badge/version-3.6.1-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -18,7 +18,7 @@ Browser-based development tool for creating and inspecting encrypted
 The tester supports Classic Paygate Hosted Payment Page (`paymentPage.aspx`),
 Credit Card Form (`payssl.aspx`) and Pay By Link (`PayByLink.aspx`) integrations,
 plus local REST API V1/V2 request generation. It creates the HMAC-SHA256 MAC,
-encrypts request payloads with Blowfish ECB, decrypts encrypted Paygate callback
+encrypts request payloads with Blowfish ECB or Helpdesk-enabled AES-CBC, decrypts encrypted Paygate callback
 responses and analyses REST JSON responses.
 
 Everything runs in the browser. There is no application backend and no build
@@ -27,7 +27,7 @@ step.
 ## Main Features
 
 - HMAC-SHA256 MAC generation using the native Web Crypto API
-- Blowfish ECB request encryption and callback decryption
+- Blowfish ECB request encryption and callback decryption, plus optional AES-CBC/PKCS7 Classic Data/Len handling for MIDs configured by Computop Helpdesk
 - HPP, PaySSL and Pay By Link integration modes
 - Pay By Link request generation with documented two-stage encryption
 - Local REST API V1/V2 request builder without sending requests from the browser
@@ -99,7 +99,7 @@ cards use self-contained inline SVG icons and require no external icon library.
 1. Download and extract the repository ZIP or clone the repository.
 2. Open `index.html` directly in a modern browser.
 3. In Step 1 enter the Merchant ID, choose Classic or REST, and enter only the credentials shown for that interface. Classic status inquiries do not require the HMAC password; REST credentials remain optional for placeholder-based output.
-4. In Step 2 select payment creation or transaction-status inquiry and configure the interface-specific request.
+4. In Step 2 select payment creation or transaction-status inquiry, choose the Classic encryption mode when using Classic, and configure the interface-specific request.
 5. Configure the fields and generate the preview.
 6. Inspect and copy the generated request. Classic payment pages and Classic
    status inquiries can also be opened directly from the preview; REST requests
@@ -135,16 +135,22 @@ testing automatic callback returns.
 
 Step 3 follows the same order in which a request is assembled:
 
+For Classic payment requests, the "How is the GET URL generated?" explanation
+is shown as its own Step 3 preview block with a dedicated workflow navigation
+entry.
+
 1. **Composed API parameters** explain generated objects such as
    `billToCustomer`, `billingAddress`, shipping objects and `ArticleList`,
    including decoded JSON and transmitted Base64 values.
-2. **Classic plain-text payload** shows the parameters before Blowfish
-   encryption. This payload becomes `Data`; Pay By Link additionally exposes
+2. **Classic plain-text payload** shows the parameters before Classic Data
+   encryption (Blowfish ECB or AES-CBC). This payload becomes `Data`; Pay By Link additionally exposes
    its outer payload.
-3. **Unencrypted query parameters** show values outside `Data`, including
+3. **Encrypted Data parameter** shows the complete generated `Data` value for
+   comparison with external tools or Computop examples.
+4. **Unencrypted query parameters** show values outside `Data`, including
    language, template, callback URL and optional template `CustomField1–9`
    values.
-4. **Final request** shows the complete Classic URL. REST mode instead shows
+5. **Final request** shows the complete Classic URL. REST mode instead shows
    the composed objects, final JSON payload and executable client command.
 
 Long API paths are kept close to their inputs and expose their complete value
@@ -196,7 +202,7 @@ reference.
 1. Open **Response Analysis** from the navigation and choose Classic or REST.
 2. Paste the complete Paygate callback URL, or enter `Data` and `Len`
    manually.
-3. The tester uses the Blowfish password from the Payment Workflow.
+3. The tester uses the selected Classic encryption mode and the Blowfish/AES password from the Payment Workflow.
 4. The decrypted Classic payload or formatted REST response is displayed and added to the shared Response Log.
 
 When the callback receiver is enabled, successful and failed redirect URLs are
@@ -224,7 +230,7 @@ for focusing the existing PWA window varies by platform.
 | Payment request | Generated locally in the browser |
 | REST request | Generated and formatted locally; never submitted by the application |
 | MAC | HMAC-SHA256 through Web Crypto |
-| Payment payload | Blowfish ECB as required by Paygate |
+| Payment payload | Blowfish ECB by default; optional AES-CBC/PKCS7 when enabled for the MID by Computop Helpdesk |
 | Credential profiles | Merchant ID, Classic secrets and optional REST API key encrypted with AES-GCM in `localStorage` |
 | Request/response logs | Plain records in `IndexedDB`, with `localStorage` fallback |
 | Language/theme/settings | `localStorage` |

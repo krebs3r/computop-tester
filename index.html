@@ -45,7 +45,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.6.0",
+      "softwareVersion": "3.6.1",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -114,16 +114,19 @@
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-interface" id="workflow-nav-interface">Schnittstelle</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="profile-section" id="workflow-nav-profiles">Gespeicherte Profile</button>
       <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-payment" id="workflow-nav-step-request">Schritt 2 · API-Request</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-encryption" data-workflow-visible="classic" id="workflow-nav-encryption">Verschlüsselung</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-use-case" id="workflow-nav-use-case">Use Case</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-integration-options" id="workflow-nav-integration">Integrationsoptionen</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="status-controls" data-workflow-visible="status" id="workflow-nav-status">Statusabfrage</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="create-payment-fields" data-workflow-visible="create" id="workflow-nav-payment-data">Zahlungsdaten</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="customer-master-section" data-workflow-visible="create" id="workflow-nav-customer">Kundendaten</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="article-list-section" data-workflow-visible="classic-create" id="workflow-nav-articles">Artikeldaten</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="custom-fields-section" data-workflow-visible="classic-hpp" id="workflow-nav-custom-fields">Template-CustomFields</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-callbacks" data-workflow-visible="create" id="workflow-nav-callbacks">Redirect &amp; Callback</button>
-      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="advanced-section" data-workflow-visible="create" id="workflow-nav-advanced">Erweiterte Einstellungen</button>
       <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-preview" id="workflow-nav-step-preview">Schritt 3 · Vorschau</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-url-explainer" data-workflow-visible="classic-preview" id="workflow-nav-url-explainer">GET-URL-Erzeugung</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-preview-data" id="workflow-nav-preview-data">Request-Vorschau</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-test-cards" data-workflow-visible="classic-preview" id="workflow-nav-test-cards">Testkarten</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-execution" data-workflow-visible="classic-preview" id="workflow-nav-execution">Testdaten &amp; Ausführen</button>
     </nav>
   </aside>
@@ -144,7 +147,7 @@
           <span class="header-feature" id="header-feature-hpp">Hosted Payment Page</span>
           <span class="header-feature" id="header-feature-ccf">Kreditkartenformular</span>
           <span class="header-feature" id="header-feature-pbl">Pay By Link</span>
-          <span class="header-feature" id="header-feature-blowfish">Blowfish ECB</span>
+          <span class="header-feature" id="header-feature-blowfish">Blowfish ECB · AES-CBC</span>
           <span class="header-feature" id="header-feature-hmac">HMAC-SHA256</span>
           <span class="header-feature" id="header-feature-rest-versions">REST API V1/V2</span>
           <span class="header-feature" id="header-feature-rest-json">JSON Builder</span>
@@ -249,7 +252,7 @@
         <div class="credential-group-title"><strong id="classic-credential-title">Classic-Credentials</strong><span id="classic-credential-subtitle">für Data / Len / MAC</span></div>
         <div class="field-grid">
         <div class="field">
-          <label><span id="l-bfpw">Blowfish Passwort</span> <span class="required">*</span> <span class="hint" id="h-bfpw">(für Data-Verschlüsselung)</span><button class="param-tip" id="tip-bfpw" tabindex="-1">?</button></label>
+          <label><span id="l-bfpw">Blowfish / AES Passwort</span> <span class="required">*</span> <span class="hint" id="h-bfpw">(für Data-Verschlüsselung)</span><button class="param-tip" id="tip-bfpw" tabindex="-1">?</button></label>
           <div class="input-group">
             <input type="password" id="blowfishKey" placeholder="••••••••••••••••" autocomplete="off">
             <button class="toggle-vis" data-action="toggle-pwd" data-target="blowfishKey" title="Passwort anzeigen"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
@@ -312,63 +315,6 @@
         </div>
       </div>
 
-      <div class="tech-explainer" id="classic-tech-explainer">
-
-        <div class="te-title">
-          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          <span id="te-title">Wie wird die GET-URL erzeugt?</span>
-        </div>
-
-        <div class="te-flow">
-
-          <div class="te-step">
-            <div class="te-step-num">1</div>
-            <div class="te-step-body">
-              <div class="te-step-label"><span id="te-s1-label">MAC-Berechnung</span> <span class="te-key">HMAC-Passwort</span></div>
-              <div class="te-step-desc" id="te-s1-desc">
-                Mit dem <strong>HMAC-Passwort</strong> wird per HMAC-SHA256 eine digitale Signatur über den String <code>*TransID*MerchantID*Amount*Currency</code> berechnet. Das führende <code>*</code> steht für die leere PayID einer neuen Transaktion. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate lehnt Anfragen mit falschem oder fehlendem MAC sofort ab.
-              </div>
-            </div>
-          </div>
-
-          <div class="te-arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-          </div>
-
-          <div class="te-step">
-            <div class="te-step-num">2</div>
-            <div class="te-step-body">
-              <div class="te-step-label"><span id="te-s2-label">Payload-Verschlüsselung</span> <span class="te-key">Blowfish-Passwort</span></div>
-              <div class="te-step-desc" id="te-s2-desc">
-                Alle Zahlungsparameter (inkl. des MAC) werden als Klartextstring im Format <code>Key=Value&amp;Key=Value…</code> zusammengesetzt. Dieser String wird mit dem <strong>Blowfish-Passwort</strong> per Blowfish ECB verschlüsselt und anschließend hexadezimal kodiert. Das Ergebnis bildet den <code>Data</code>-Parameter. Die Länge des ursprünglichen Klartexts wird separat als <code>Len</code> übergeben, da Blowfish auf ein Vielfaches von 8 Byte auffüllt.
-              </div>
-            </div>
-          </div>
-
-          <div class="te-arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-          </div>
-
-          <div class="te-step">
-            <div class="te-step-num">3</div>
-            <div class="te-step-body">
-              <div class="te-step-label"><span id="te-s3-label">URL-Zusammensetzung</span></div>
-              <div class="te-step-desc" id="te-s3-desc">
-                Die finale GET-URL setzt sich aus drei unverschlüsselten Pflichtparametern zusammen, die direkt an die Paygate-Endpoint-URL angehängt werden:
-              </div>
-              <div class="te-url-anatomy">
-                <span class="te-url-base">https://www.computop-paygate.com/paymentPage.aspx</span><span class="te-url-sep">?</span><span class="te-url-param param-mid">MerchantID=<em>IhreMID</em></span><span class="te-url-sep">&amp;</span><span class="te-url-param param-len">Len=<em>142</em></span><span class="te-url-sep">&amp;</span><span class="te-url-param param-data">Data=<em>a3f09c…</em></span>
-              </div>
-              <div class="te-url-legend">
-                <span class="te-legend-item"><span class="te-dot dot-mid"></span><code>MerchantID</code> <span id="te-leg-mid">— Händlerkennung (Klartext)</span></span>
-                <span class="te-legend-item"><span class="te-dot dot-len"></span><code>Len</code> <span id="te-leg-len">— Länge des unverschlüsselten Payloads in Bytes</span></span>
-                <span class="te-legend-item"><span class="te-dot dot-data"></span><code>Data</code> <span id="te-leg-data">— Blowfish-ECB-verschlüsselter, hex-kodierter Payload</span></span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
     </div>
     <div class="credential-lock-overlay" id="credential-lock-overlay" aria-hidden="true">
       <div class="credential-lock-panel">
@@ -401,8 +347,30 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
-      <span class="workflow-anchor" id="workflow-use-case" data-workflow-section tabindex="-1"></span>
-      <div class="integration-label method-status" id="use-case-label">Use Case</div>
+      <section class="classic-encryption-section" id="workflow-encryption" data-workflow-section tabindex="-1">
+        <div class="integration-label" id="classic-encryption-label">Classic-Verschlüsselung</div>
+        <div class="classic-encryption-selector">
+          <div class="method-ctrl compact">
+            <button class="method-btn method-active" id="classic-encryption-blowfish" data-action="set-classic-encryption" data-arg="blowfish" type="button">
+              <span>Blowfish ECB</span><span class="method-endpoint">Standard</span>
+            </button>
+            <button class="method-btn" id="classic-encryption-aes" data-action="set-classic-encryption" data-arg="aes" type="button">
+              <span>AES-CBC</span><span class="method-endpoint">Helpdesk Setup</span>
+            </button>
+          </div>
+        </div>
+        <div class="classic-encryption-info info-box" id="classic-encryption-info">
+          <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="classic-encryption-info-title">Classic-Verschlüsselung:</span></strong>
+          <span id="classic-encryption-info-text">Blowfish ECB ist der Standardmodus. AES-CBC kann durch den Computop Helpdesk für eine MID aktiviert werden und nutzt 16, 24 oder 32 Byte lange Schlüssel.</span>
+          <span class="doc-links">
+            <a href="https://developer.computop.com/display/EN/Create+an+API+call+and+use+encryption#CreateanAPIcallanduseencryption-EncryptparametersintoData/Len(Blowfish)" target="_blank" rel="noopener" id="classic-encryption-doc-blowfish">Blowfish-Doku</a>
+            <a href="https://developer.computop.com/display/EN/Create+an+API+call+and+use+encryption#CreateanAPIcallanduseencryption-EncrytparametersintoData/Len(AES)" target="_blank" rel="noopener" id="classic-encryption-doc-aes">AES-Doku</a>
+            <a href="https://support.computop.com/hc/en-gb/articles/360017483480-What-encryption-does-Computop-use" target="_blank" rel="noopener" id="classic-encryption-doc-faq">Computop FAQ</a>
+          </span>
+        </div>
+      </section>
+
+      <div class="integration-label method-status workflow-section-heading" id="workflow-use-case" data-workflow-section tabindex="-1"><span id="use-case-label">Use Case</span></div>
       <div class="method-ctrl" id="use-case-controls">
         <button class="method-btn method-active" id="use-case-create" data-action="set-use-case" data-arg="create-payment">
           <span class="icon icon-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span>
@@ -447,7 +415,7 @@
       </div>
 
       <!-- ── INTEGRATION METHOD SELECTOR ── -->
-      <span class="workflow-anchor" id="workflow-integration-options" data-workflow-section tabindex="-1"></span>
+      <div class="integration-label method-status workflow-section-heading" id="workflow-integration-options" data-workflow-section tabindex="-1">Integrationsoptionen</div>
       <div class="method-ctrl" id="classic-method-controls">
         <button class="method-btn method-active" id="method-hpp" data-action="set-method" data-arg="hpp">
           <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span>
@@ -594,6 +562,36 @@
           <option id="opt-od-custom"  value="__custom__">Eigene Eingabe …</option>
         </select>
         <input type="text" id="orderDescCustom" placeholder="Eigene Beschreibung" maxlength="127" style="margin-top:8px;display:none">
+      </div>
+
+      <div class="paytypes-row" id="paytypes-row">
+        <div class="field-grid full">
+          <div class="field">
+            <label><span id="l-paytypes">Zahlarten</span> <span class="hint" id="h-paytypes">(PayTypes)</span><button class="param-tip" id="tip-paytypes" tabindex="-1">?</button></label>
+            <select id="payTypes" data-action-change="update-article-requirements">
+              <option id="opt-pt-all" value="" selected>— Alle freigeschalteten Zahlarten (PayTypes weglassen)</option>
+              <option id="opt-pt-cc" value="CC">CC – Alle konfigurierten Kreditkartenmarken</option>
+              <option value="VISA">VISA</option>
+              <option value="MasterCard">MasterCard</option>
+              <option value="AMEX">AMEX – American Express</option>
+              <option value="Klarna">Klarna</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-grid full" style="margin-top:14px">
+        <div class="field">
+          <label><span id="l-template">Template</span> <span class="hint" id="h-template">(optional, unverschlüsselt)</span><button class="param-tip" id="tip-template" tabindex="-1">?</button></label>
+          <select id="template" data-action-change="on-template-change">
+            <option id="opt-tmpl-none" value="">— kein Template (Standard)</option>
+            <option value="ct_paymentpagelogos_v1">ct_paymentpagelogos_v1</option>
+            <option value="ct_paymentpagedropdown_v1">ct_paymentpagedropdown_v1</option>
+            <option value="ct_paymentpagedropdown_v2">ct_paymentpagedropdown_v2</option>
+            <option id="opt-tmpl-custom" value="__custom__">— Freitext …</option>
+          </select>
+          <input type="text" id="template-custom" placeholder="eigener Template-Name" style="display:none;margin-top:6px">
+        </div>
       </div>
 
       <div class="customer-master-section" id="customer-master-section" data-workflow-section tabindex="-1">
@@ -760,6 +758,39 @@
         </div>
       </div>
 
+      <div class="customer-master-section" id="custom-fields-section" data-workflow-section tabindex="-1">
+        <div class="customer-master-head">
+          <label class="customer-master-toggle">
+            <input type="checkbox" id="custom-fields-enabled" data-action-change="toggle-customfields">
+            <span>
+              <span id="custom-fields-title">Template-CustomFields mitsenden</span><button class="param-tip" id="tip-custom-fields" tabindex="-1" type="button">?</button>
+              <span class="customer-master-copy" id="custom-fields-copy">Optionale, unverschlüsselte CustomField1–9 für unterstützende Hosted-Payment-Page-Templates.</span>
+              <span class="api-field-name"><strong>Classic HPP: </strong>CustomField1 … CustomField9 (Query-String)</span>
+            </span>
+          </label>
+          <div class="customer-master-actions">
+            <button class="btn btn-ghost" type="button" data-action="generate-customfield-example"><span id="btn-custom-fields-example">Payment-Tester-Beispiel einsetzen</span></button>
+            <button class="btn btn-ghost" type="button" data-action="clear-customfields"><span id="btn-custom-fields-clear">CustomFields leeren</span></button>
+          </div>
+        </div>
+        <div class="customer-master-body hidden" id="custom-fields-body">
+          <div class="info-box rest-warning" id="custom-fields-warning">
+            Die Bedeutung und Darstellung wird vom ausgewählten Template festgelegt. Nicht jedes Template unterstützt CustomFields; die Werte werden unverschlüsselt in der URL übertragen.
+          </div>
+          <div class="custom-fields-grid">
+            <div class="field"><label id="l-custom-field-1">CustomField1 · z. B. Gesamtbetrag</label><span class="api-field-name"><strong>Classic: </strong>CustomField1</span><input id="custom-field-1" type="text" maxlength="512" placeholder="12,34 EUR"></div>
+            <div class="field"><label id="l-custom-field-2">CustomField2 · z. B. Bestelltext</label><span class="api-field-name"><strong>Classic: </strong>CustomField2</span><input id="custom-field-2" type="text" maxlength="512" placeholder="Bestellung REF-123"></div>
+            <div class="field"><label id="l-custom-field-3">CustomField3 · Logo-URL (276 × 87 PNG)</label><span class="api-field-name"><strong>Classic: </strong>CustomField3</span><input id="custom-field-3" type="url" maxlength="1024" placeholder="https://example.com/logo.png"></div>
+            <div class="field"><label id="l-custom-field-4">CustomField4 · z. B. Warenkorb</label><span class="api-field-name"><strong>Classic: </strong>CustomField4</span><input id="custom-field-4" type="text" maxlength="2048" placeholder="1 × Artikel A|1 × Artikel B"></div>
+            <div class="field"><label id="l-custom-field-5">CustomField5 · z. B. Kundendetails</label><span class="api-field-name"><strong>Classic: </strong>CustomField5</span><input id="custom-field-5" type="text" maxlength="2048" placeholder="Firma|Name|Straße|Ort"></div>
+            <div class="field"><label id="l-custom-field-6">CustomField6 · z. B. Lieferadresse</label><span class="api-field-name"><strong>Classic: </strong>CustomField6</span><input id="custom-field-6" type="text" maxlength="2048" placeholder="Firma|Name|Straße|Ort"></div>
+            <div class="field"><label id="l-custom-field-7">CustomField7 · z. B. Rechnungsnummer</label><span class="api-field-name"><strong>Classic: </strong>CustomField7</span><input id="custom-field-7" type="text" maxlength="512" placeholder="RG-123"></div>
+            <div class="field"><label id="l-custom-field-8">CustomField8 · z. B. Zusatzlabel</label><span class="api-field-name"><strong>Classic: </strong>CustomField8</span><input id="custom-field-8" type="text" maxlength="512" placeholder="Zusatzinformation"></div>
+            <div class="field"><label id="l-custom-field-9">CustomField9 · z. B. Zusatztext</label><span class="api-field-name"><strong>Classic: </strong>CustomField9</span><input id="custom-field-9" type="text" maxlength="512" placeholder="Text"></div>
+          </div>
+        </div>
+      </div>
+
       <template id="article-item-template">
         <div class="article-item-card">
           <div class="article-item-head">
@@ -827,77 +858,6 @@
       </div>
       </section>
 
-      <section id="advanced-section" class="workflow-subsection is-collapsed" data-workflow-section tabindex="-1">
-      <button class="workflow-subsection-header" type="button" data-action="toggle-workflow-subsection" data-target="advanced-section" aria-expanded="false">
-        <span id="sep-advanced">Erweiterte Einstellungen</span>
-        <span class="workflow-subsection-toggle" aria-hidden="true">▼</span>
-      </button>
-      <div class="workflow-subsection-body">
-
-      <div class="paytypes-row" id="paytypes-row">
-        <div class="field-grid full">
-          <div class="field">
-            <label><span id="l-paytypes">Zahlarten</span> <span class="hint" id="h-paytypes">(PayTypes)</span><button class="param-tip" id="tip-paytypes" tabindex="-1">?</button></label>
-            <select id="payTypes" data-action-change="update-article-requirements">
-              <option id="opt-pt-all" value="" selected>— Alle freigeschalteten Zahlarten (PayTypes weglassen)</option>
-              <option id="opt-pt-cc" value="CC">CC – Alle konfigurierten Kreditkartenmarken</option>
-              <option value="VISA">VISA</option>
-              <option value="MasterCard">MasterCard</option>
-              <option value="AMEX">AMEX – American Express</option>
-              <option value="Klarna">Klarna</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-grid full" style="margin-top:10px">
-        <div class="field">
-          <label><span id="l-template">Template</span> <span class="hint" id="h-template">(optional, unverschlüsselt)</span><button class="param-tip" id="tip-template" tabindex="-1">?</button></label>
-          <select id="template" data-action-change="on-template-change">
-            <option id="opt-tmpl-none" value="">— kein Template (Standard)</option>
-            <option value="ct_paymentpagelogos_v1">ct_paymentpagelogos_v1</option>
-            <option value="ct_paymentpagedropdown_v1">ct_paymentpagedropdown_v1</option>
-            <option value="ct_paymentpagedropdown_v2">ct_paymentpagedropdown_v2</option>
-            <option id="opt-tmpl-custom" value="__custom__">— Freitext …</option>
-          </select>
-          <input type="text" id="template-custom" placeholder="eigener Template-Name" style="display:none;margin-top:6px">
-        </div>
-      </div>
-
-      <div class="customer-master-section" id="custom-fields-section" style="margin-top:14px">
-        <div class="customer-master-head">
-          <label class="customer-master-toggle">
-            <input type="checkbox" id="custom-fields-enabled" data-action-change="toggle-customfields">
-            <span>
-              <span id="custom-fields-title">Template-CustomFields mitsenden</span><button class="param-tip" id="tip-custom-fields" tabindex="-1" type="button">?</button>
-              <span class="customer-master-copy" id="custom-fields-copy">Optionale, unverschlüsselte CustomField1–9 für unterstützende Hosted-Payment-Page-Templates.</span>
-              <span class="api-field-name"><strong>Classic HPP: </strong>CustomField1 … CustomField9 (Query-String)</span>
-            </span>
-          </label>
-        </div>
-        <div class="customer-master-body hidden" id="custom-fields-body">
-          <div class="info-box rest-warning" id="custom-fields-warning">
-            Die Bedeutung und Darstellung wird vom ausgewählten Template festgelegt. Nicht jedes Template unterstützt CustomFields; die Werte werden unverschlüsselt in der URL übertragen.
-          </div>
-          <div class="custom-fields-grid">
-            <div class="field"><label id="l-custom-field-1">CustomField1 · z. B. Gesamtbetrag</label><span class="api-field-name"><strong>Classic: </strong>CustomField1</span><input id="custom-field-1" type="text" maxlength="512" placeholder="12,34 EUR"></div>
-            <div class="field"><label id="l-custom-field-2">CustomField2 · z. B. Bestelltext</label><span class="api-field-name"><strong>Classic: </strong>CustomField2</span><input id="custom-field-2" type="text" maxlength="512" placeholder="Bestellung REF-123"></div>
-            <div class="field"><label id="l-custom-field-3">CustomField3 · Logo-URL (276 × 87 PNG)</label><span class="api-field-name"><strong>Classic: </strong>CustomField3</span><input id="custom-field-3" type="url" maxlength="1024" placeholder="https://example.com/logo.png"></div>
-            <div class="field"><label id="l-custom-field-4">CustomField4 · z. B. Warenkorb</label><span class="api-field-name"><strong>Classic: </strong>CustomField4</span><input id="custom-field-4" type="text" maxlength="2048" placeholder="1 × Artikel A|1 × Artikel B"></div>
-            <div class="field"><label id="l-custom-field-5">CustomField5 · z. B. Kundendetails</label><span class="api-field-name"><strong>Classic: </strong>CustomField5</span><input id="custom-field-5" type="text" maxlength="2048" placeholder="Firma|Name|Straße|Ort"></div>
-            <div class="field"><label id="l-custom-field-6">CustomField6 · z. B. Lieferadresse</label><span class="api-field-name"><strong>Classic: </strong>CustomField6</span><input id="custom-field-6" type="text" maxlength="2048" placeholder="Firma|Name|Straße|Ort"></div>
-            <div class="field"><label id="l-custom-field-7">CustomField7 · z. B. Rechnungsnummer</label><span class="api-field-name"><strong>Classic: </strong>CustomField7</span><input id="custom-field-7" type="text" maxlength="512" placeholder="RG-123"></div>
-            <div class="field"><label id="l-custom-field-8">CustomField8 · z. B. Zusatzlabel</label><span class="api-field-name"><strong>Classic: </strong>CustomField8</span><input id="custom-field-8" type="text" maxlength="512" placeholder="Zusatzinformation"></div>
-            <div class="field"><label id="l-custom-field-9">CustomField9 · z. B. Zusatztext</label><span class="api-field-name"><strong>Classic: </strong>CustomField9</span><input id="custom-field-9" type="text" maxlength="512" placeholder="Text"></div>
-          </div>
-          <div class="custom-fields-actions">
-            <button class="btn btn-ghost" type="button" data-action="generate-customfield-example"><span id="btn-custom-fields-example">Payment-Tester-Beispiel einsetzen</span></button>
-            <button class="btn btn-ghost" type="button" data-action="clear-customfields"><span id="btn-custom-fields-clear">CustomFields leeren</span></button>
-          </div>
-        </div>
-      </div>
-      </div>
-      </section><!-- /advanced-section -->
       </div><!-- /create-payment-fields -->
 
       <div class="btn-row">
@@ -941,6 +901,60 @@
 
       <div class="debug-section" id="debug-section" style="display:none">
 
+        <div class="tech-explainer payment-preview-only" id="classic-tech-explainer">
+          <div class="te-title" id="workflow-url-explainer" data-workflow-section tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <span id="te-title">Wie wird die GET-URL erzeugt?</span>
+          </div>
+            <div class="te-flow">
+              <div class="te-step">
+                <div class="te-step-num">1</div>
+                <div class="te-step-body">
+                  <div class="te-step-label"><span id="te-s1-label">MAC-Berechnung</span> <span class="te-key">HMAC-Passwort</span></div>
+                  <div class="te-step-desc" id="te-s1-desc">
+                    Mit dem <strong>HMAC-Passwort</strong> wird per HMAC-SHA256 eine digitale Signatur über den String <code>*TransID*MerchantID*Amount*Currency</code> berechnet. Das führende <code>*</code> steht für die leere PayID einer neuen Transaktion. Der MAC wird als Parameter in den Payload aufgenommen und stellt die <strong>Integrität der Anfrage</strong> sicher — das Paygate lehnt Anfragen mit falschem oder fehlendem MAC sofort ab.
+                  </div>
+                </div>
+              </div>
+
+              <div class="te-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+              </div>
+
+              <div class="te-step">
+                <div class="te-step-num">2</div>
+                <div class="te-step-body">
+                  <div class="te-step-label"><span id="te-s2-label">Payload-Verschlüsselung</span> <span class="te-key" id="te-s2-key">Blowfish / AES Passwort</span></div>
+                  <div class="te-step-desc" id="te-s2-desc">
+                    Alle Zahlungsparameter (inkl. des MAC) werden als Klartextstring im Format <code>Key=Value&amp;Key=Value…</code> zusammengesetzt. Dieser String wird mit dem <strong>Blowfish-Passwort</strong> per Blowfish ECB verschlüsselt und anschließend hexadezimal kodiert. Das Ergebnis bildet den <code>Data</code>-Parameter. Die Länge des ursprünglichen Klartexts wird separat als <code>Len</code> übergeben, da Blowfish auf ein Vielfaches von 8 Byte auffüllt.
+                  </div>
+                </div>
+              </div>
+
+              <div class="te-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+              </div>
+
+              <div class="te-step">
+                <div class="te-step-num">3</div>
+                <div class="te-step-body">
+                  <div class="te-step-label"><span id="te-s3-label">URL-Zusammensetzung</span></div>
+                  <div class="te-step-desc" id="te-s3-desc">
+                    Die finale GET-URL setzt sich aus drei unverschlüsselten Pflichtparametern zusammen, die direkt an die Paygate-Endpoint-URL angehängt werden:
+                  </div>
+                  <div class="te-url-anatomy">
+                    <span class="te-url-base">https://www.computop-paygate.com/paymentPage.aspx</span><span class="te-url-sep">?</span><span class="te-url-param param-mid">MerchantID=<em>IhreMID</em></span><span class="te-url-sep">&amp;</span><span class="te-url-param param-len">Len=<em>142</em></span><span class="te-url-sep">&amp;</span><span class="te-url-param param-data">Data=<em>a3f09c…</em></span>
+                  </div>
+                  <div class="te-url-legend">
+                    <span class="te-legend-item"><span class="te-dot dot-mid"></span><code>MerchantID</code> <span id="te-leg-mid">— Händlerkennung (Klartext)</span></span>
+                    <span class="te-legend-item"><span class="te-dot dot-len"></span><code>Len</code> <span id="te-leg-len">— Länge des unverschlüsselten Payloads in Bytes</span></span>
+                    <span class="te-legend-item"><span class="te-dot dot-data"></span><code>Data</code> <span id="te-leg-data">— Blowfish-ECB- oder AES-CBC-verschlüsselter, hex-kodierter Payload</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
         <div id="derived-parameters-section" style="margin-bottom:12px;display:none">
           <div class="debug-block">
             <div class="debug-label"><span id="derived-parameters-label">Zusammengesetzte API-Parameter</span></div>
@@ -955,6 +969,16 @@
               <button class="copy-btn" data-action="copy-text" data-target="plain-params"><span id="copy-plain-text">Kopieren</span></button>
             </div>
             <pre id="plain-params">–</pre>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div class="debug-block">
+            <div class="debug-label">
+              <span id="debug-data-label">Data-Parameter nach Verschlüsselung</span>
+              <button class="copy-btn" data-action="copy-text" data-target="encrypted-data"><span id="copy-data-text">Kopieren</span></button>
+            </div>
+            <pre id="encrypted-data">–</pre>
           </div>
         </div>
 
@@ -988,41 +1012,48 @@
           </div>
         </div>
 
+        <section class="test-cards-section payment-preview-only" id="workflow-test-cards" data-workflow-section tabindex="-1">
+          <div class="debug-label test-cards-heading" id="test-cards-title">Testkarten</div>
+          <div class="test-cards-info info-box">
+            <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="test-cards-info-title">Testkarten:</span></strong>
+            <span id="test-cards-info-text">Ablaufdatum und CVC können frei gewählt werden. Non-3DS-Karten gelten ohne 3-D Secure; 3-D-Secure-Karten benötigen Testmodus und 3DS-Konfiguration. Für Challenge-Szenarien lautet das OTP <strong>1234</strong>. Quelle: <a href="https://developer.computop.com/display/EN/Test+credit+card" target="_blank" rel="noopener">Paygate-Dokumentation</a>.</span>
+          </div>
+          <div class="test-card-grid">
+            <div class="test-card-panel">
+              <div class="test-card-panel-title" id="tc-summary">Testkartennummern (Non-3DS)</div>
+              <div class="test-card-table-wrap">
+                <table class="test-card-table">
+                  <thead>
+                    <tr>
+                      <th id="tc-h-brand">Marke</th>
+                      <th id="tc-h-number">Kartennummer</th>
+                      <th id="tc-h-result">Ergebnis</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tc-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="test-card-panel">
+              <div class="test-card-panel-title" id="tc-3ds-summary">Testkartennummern (3-D Secure 2.x)</div>
+              <div class="test-card-table-wrap">
+                <table class="test-card-table">
+                  <thead>
+                    <tr>
+                      <th id="tc-3ds-h-brand">Marke</th>
+                      <th id="tc-3ds-h-number">Kartennummer</th>
+                      <th id="tc-3ds-h-scenario">Szenario</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tc-3ds-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <span class="workflow-anchor payment-preview-only" id="workflow-execution" data-workflow-section tabindex="-1"></span>
-        <details class="tc-details payment-preview-only">
-          <summary id="tc-summary">Testkartennummern (Non-3DS)</summary>
-          <div style="padding:6px 0 2px">
-            <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-note">Ablauf: beliebig (z.B. 10/30) · CVC: beliebig (z.B. 123) · Gilt nur ohne 3-D Secure</p>
-            <table class="test-card-table">
-              <thead>
-                <tr>
-                  <th id="tc-h-brand">Marke</th>
-                  <th id="tc-h-number">Kartennummer</th>
-                  <th id="tc-h-result">Ergebnis</th>
-                </tr>
-              </thead>
-              <tbody id="tc-tbody"></tbody>
-            </table>
-          </div>
-        </details>
-
-        <details class="tc-details payment-preview-only">
-          <summary id="tc-3ds-summary">Testkartennummern (3-D Secure 2.x)</summary>
-          <div style="padding:6px 0 2px">
-            <p style="font-size:11px;color:var(--muted);margin-bottom:4px" id="tc-3ds-note">Ablauf: beliebig · CVC: beliebig · Nur im Test-Modus mit 3DS-Konfiguration · Challenge-OTP: <strong>1234</strong></p>
-            <table class="test-card-table">
-              <thead>
-                <tr>
-                  <th id="tc-3ds-h-brand">Marke</th>
-                  <th id="tc-3ds-h-number">Kartennummer</th>
-                  <th id="tc-3ds-h-scenario">Szenario</th>
-                </tr>
-              </thead>
-              <tbody id="tc-3ds-tbody"></tbody>
-            </table>
-          </div>
-        </details>
-
         <div class="btn-row payment-preview-only">
           <button class="btn btn-primary" data-action="submit-payment" id="btn-submit">
             <span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span> <span id="btn-submit-text">Zur Hosted Payment Page</span> <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
@@ -1079,8 +1110,9 @@
       </button>
     </div>
     <div class="card-body">
-      <div class="info-box" id="embedded-form-hint">Das Formular lädt direkt von <code>computop-paygate.com</code>; Kartendaten berühren diese App nicht. Bleibt der Bereich leer oder bricht 3-D Secure aus, nutze „Zahlung im neuen Tab öffnen“.</div>
-      <iframe id="embedded-form-frame" title="Paygate" referrerpolicy="no-referrer" style="width:100%;min-height:580px;border:1px solid var(--border);border-radius:12px;background:#fff"></iframe>
+      <div class="info-box embedded-form-hint" id="embedded-form-hint">Das Formular lädt direkt von <code>computop-paygate.com</code>; Kartendaten berühren diese App nicht. Bleibt der Bereich leer oder bricht 3-D Secure aus, nutze „Zahlung im neuen Tab öffnen“.</div>
+      <div class="embedded-form-placeholder" id="embedded-form-placeholder" style="display:none"></div>
+      <iframe class="embedded-form-frame" id="embedded-form-frame" title="Paygate" referrerpolicy="no-referrer"></iframe>
     </div>
   </div>
   </div><!-- /workflow-content -->
@@ -1121,7 +1153,7 @@
     <div class="card-body">
 
       <div class="response-mode-switch" role="group" aria-label="Response-Schnittstelle">
-        <button class="response-mode-button classic active" id="response-mode-classic" type="button" data-action="set-response-analysis-mode" data-arg="classic"><strong>CLASSIC</strong><span>Data / Len / Blowfish</span></button>
+        <button class="response-mode-button classic active" id="response-mode-classic" type="button" data-action="set-response-analysis-mode" data-arg="classic"><strong>CLASSIC</strong><span>Data / Len / Blowfish / AES</span></button>
         <button class="response-mode-button rest" id="response-mode-rest" type="button" data-action="set-response-analysis-mode" data-arg="rest"><strong>REST</strong><span>JSON</span></button>
       </div>
 
@@ -1273,7 +1305,7 @@
         <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
-        <div class="nav-interface-badges header-nav-badges" aria-label="Changelog"><span class="nav-interface-badge changelog">Updates</span></div>
+        <div class="nav-interface-badges header-nav-badges" aria-label="Changelog"><span class="nav-interface-badge changelog" id="changelog-version-badge">v3.6.1</span></div>
         <h1 id="changelog-title">Changelog</h1>
         <p id="changelog-subtitle">Vollständige Versionshistorie und Änderungen</p>
       </div>
@@ -1428,7 +1460,7 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-          <span class="footer-ver-badge" id="footer-ver-badge">v3.6.0</span>
+          <span class="footer-ver-badge" id="footer-ver-badge">v3.6.1</span>
       <button class="footer-preview-notice" id="footer-design-toggle" type="button" data-action="toggle-design">
         <span id="footer-design-toggle-text">Original Design</span>
       </button>
@@ -1479,6 +1511,10 @@
     <h2 class="app-modal-title" id="qr-modal-title">Request als QR-Code</h2>
     <p class="app-modal-text" id="qr-modal-text">Mit dem Smartphone scannen, um die Zahlung dort zu starten.</p>
     <div id="qr-modal-code" style="display:grid;place-items:center;background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin:0 0 16px"></div>
+    <div class="qr-modal-fallback" id="qr-modal-fallback" style="display:none">
+      <p class="app-modal-text" id="qr-modal-fallback-text">Die Request-URL ist zu lang für einen zuverlässigen QR-Code. Öffne die Zahlung stattdessen im neuen Tab oder kopiere den Link.</p>
+      <textarea id="qr-modal-url" readonly></textarea>
+    </div>
     <p class="app-modal-text" id="qr-modal-dense-hint" style="display:none">Sehr dichter Code (lange Classic-URL): Bildschirm hell stellen und die Kamera nah heranführen. Falls das Scannen scheitert, die Zahlung stattdessen im neuen Tab öffnen.</p>
     <div class="app-modal-actions">
       <button class="btn btn-secondary" id="qr-modal-close" type="button">Schließen</button>
