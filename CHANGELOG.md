@@ -2,6 +2,16 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.6.2 — Version badges and reliable workflow navigation
+
+- Replaced the static Changelog navigation hint with a dynamic `Beta v3.6.2` badge and added the same Beta version badge to the Changelog header
+- Removed the redundant version badge from the footer while keeping the app version available for log exports
+- Reworked the Payment Workflow scrollspy to follow the actual rendered target order instead of relying on navigation order
+- Corrected the Step 3 anchor order so GET URL Generation, Request Preview and Test Cards activate their matching navigation entries
+- Made workflow scroll offsets follow the actual glass navigation height so section headings remain visible below the navigation
+- Improved end-of-page detection so Test Cards remains active when its heading cannot reach the normal activation line
+- Renamed the final Step 3 navigation entry from "Test Data & Submit" to "Execute" because test data now belongs to the dedicated Test Cards section
+
 ### v3.6.1 — Classic AES Data/Len support and workflow navigation polish
 
 - Moved the Classic encryption selector into its own open Step 2 workflow section and moved the GET-URL explanation into an open Step 3 preview box with its own navigation entry.

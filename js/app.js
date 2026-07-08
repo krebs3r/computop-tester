@@ -3935,7 +3935,8 @@ function _logConfig(kind) {
 }
 
 function _appVersion() {
-  return (document.getElementById('footer-ver-badge')?.textContent || '').replace(/^v/i, '') || 'unknown';
+  return (document.getElementById('changelog-version-badge')?.textContent || '')
+    .replace(/^(?:Beta\s+)?v/i, '') || 'unknown';
 }
 
 function _safeLogString(value, maxLength = 20000) {
@@ -5336,10 +5337,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initCallbackReceiver();
   fetch('./VERSION').then(r => r.text()).then(v => {
     const version = v.trim();
-    const badge = document.getElementById('footer-ver-badge');
     const changelogBadge = document.getElementById('changelog-version-badge');
-    if (badge && version) badge.textContent = 'v' + version;
-    if (changelogBadge && version) changelogBadge.textContent = 'v' + version;
+    const navVersionBadge = document.getElementById('nav-version-badge');
+    if (changelogBadge && version) changelogBadge.textContent = 'Beta v' + version;
+    if (navVersionBadge && version) navVersionBadge.textContent = 'Beta v' + version;
   }).catch(() => {});
 });
 
@@ -5603,6 +5604,14 @@ function initWorkflowNavigation() {
   let metricsUpdatePending = false;
   let navigationLockUntil = 0;
 
+  function workflowScrollOffset() {
+    const navBottom = glassNav?.getBoundingClientRect().bottom || 96;
+    const mobileBottom = window.matchMedia('(max-width: 900px)').matches
+      ? nav.getBoundingClientRect().bottom
+      : 0;
+    return Math.ceil(Math.max(navBottom, mobileBottom) + 12);
+  }
+
   function updateMobileMetrics() {
     metricsUpdatePending = false;
     if (!glassNav || !workflowShell || !window.matchMedia('(max-width: 900px)').matches) {
@@ -5669,19 +5678,24 @@ function initWorkflowNavigation() {
     updatePending = false;
     if (workflowView.hidden) return;
     if (Date.now() < navigationLockUntil) return;
-    const activationLine = window.matchMedia('(max-width: 900px)').matches
-      ? Math.ceil(nav.getBoundingClientRect().bottom + 8)
-      : 114;
+    const activationLine = workflowScrollOffset();
     const candidates = links.filter(link => {
       if (link.hidden) return false;
       return targetIsRendered(document.getElementById(link.dataset.workflowTarget));
     });
     if (!candidates.length) return;
-    let next = candidates[0];
-    candidates.forEach(link => {
-      const target = document.getElementById(link.dataset.workflowTarget);
-      if (target.getBoundingClientRect().top <= activationLine) next = link;
-    });
+    const positioned = candidates
+      .map(link => ({
+        link,
+        top: document.getElementById(link.dataset.workflowTarget).getBoundingClientRect().top
+      }))
+      .sort((a, b) => a.top - b.top);
+    const passed = positioned.filter(item => item.top <= activationLine);
+    const atPageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 24;
+    const closest = positioned.reduce((best, item) =>
+      Math.abs(item.top - activationLine) < Math.abs(best.top - activationLine) ? item : best
+    );
+    const next = (atPageBottom ? closest : passed.at(-1) || positioned[0]).link;
     setActive(next);
   }
 
@@ -5712,21 +5726,18 @@ function initWorkflowNavigation() {
       if (!target) return;
       expandTarget(target);
       setActive(link);
-      navigationLockUntil = Date.now() + 700;
+      navigationLockUntil = Date.now() + 1200;
       nav.classList.remove('mobile-open');
       mobileTrigger?.setAttribute('aria-expanded', 'false');
       if (location.hash !== `#${target.id}`) history.pushState({}, '', `#${target.id}`);
       requestAnimationFrame(() => {
-        const offset = window.matchMedia('(max-width: 900px)').matches
-          ? Math.ceil(nav.getBoundingClientRect().bottom + 8)
-          : 104;
+        const offset = workflowScrollOffset();
         const top = window.scrollY + target.getBoundingClientRect().top - offset;
         window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
         window.setTimeout(() => {
           target.focus({ preventScroll: true });
           navigationLockUntil = 0;
-          scheduleUpdate();
-        }, 700);
+        }, 1200);
       });
     });
   });

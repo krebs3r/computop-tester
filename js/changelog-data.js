@@ -1,6 +1,23 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.6.2', de: { title: 'Versionsbadges und zuverlässige Workflow-Navigation', items: [
+    '<strong>Beta-Version sichtbar</strong> — Die Changelog-Navigation und der Changelog-Header zeigen die aktuelle Version nun einheitlich als <code>Beta v3.6.2</code>',
+    '<strong>Footer aufgeräumt</strong> — Die redundante Versionsbadge wurde aus dem Footer entfernt; Log-Exporte erhalten die App-Version weiterhin korrekt',
+    '<strong>Scrollspy stabilisiert</strong> — Die aktive Workflow-Markierung folgt jetzt der tatsächlichen Reihenfolge und Position der sichtbaren Zielbereiche statt nur der Reihenfolge im Inhaltsverzeichnis',
+    '<strong>Schritt-3-Anker korrigiert</strong> — GET-URL-Erzeugung, Request-Vorschau und Testkarten aktivieren zuverlässig den jeweils passenden Navigationspunkt',
+    '<strong>Dynamischer Scroll-Abstand</strong> — Sprungziele richten sich an der tatsächlichen Höhe der Glass-Navigation aus, sodass Überschriften nicht mehr verdeckt oder überscrollt werden',
+    '<strong>Testkarten am Seitenende</strong> — Wenn die Testkarten-Überschrift die normale Aktivierungslinie nicht erreichen kann, wird nun der tatsächlich nächstgelegene Abschnitt markiert',
+    '<strong>Ausführen klar benannt</strong> — Der letzte Punkt in Schritt 3 heißt nur noch „Ausführen“, da die Testdaten vollständig im eigenen Punkt „Testkarten“ liegen',
+  ]}, en: { title: 'Version badges and reliable workflow navigation', items: [
+    '<strong>Visible Beta version</strong> — Changelog navigation and the Changelog header now consistently show the current version as <code>Beta v3.6.2</code>',
+    '<strong>Cleaner footer</strong> — The redundant version badge was removed from the footer while log exports continue to receive the correct app version',
+    '<strong>Stable scrollspy</strong> — Active workflow highlighting now follows the actual order and position of rendered targets instead of only the table-of-contents order',
+    '<strong>Correct Step 3 anchors</strong> — GET URL Generation, Request Preview and Test Cards now reliably activate their matching navigation entries',
+    '<strong>Dynamic scroll offset</strong> — Jump targets use the actual glass navigation height so headings are no longer hidden or overscrolled',
+    '<strong>Test cards at page end</strong> — When the Test Cards heading cannot reach the normal activation line, the section actually closest to the navigation is selected',
+    '<strong>Clear Execute label</strong> — The final Step 3 entry is now simply “Execute” because test data belongs entirely to the dedicated Test Cards section',
+  ]}},
   { v: 'v3.6.1', de: { title: 'Classic-AES für Data/Len und Workflow-Navigation', items: [
     '<strong>Classic-Verschlüsselung wählbar</strong> — Schritt 2 startet nun mit einem eigenen offenen Workflow-Abschnitt für Blowfish ECB (Standard) und AES-CBC/PKCS7 inklusive Helpdesk-Hinweis und Links zur offiziellen Computop-Doku',
     '<strong>Erklärung verschoben</strong> — Die Box „Wie wird die GET-URL erzeugt?“ sitzt jetzt offen in Schritt 3 direkt bei der Request-Vorschau und hat einen eigenen Navigationspunkt',

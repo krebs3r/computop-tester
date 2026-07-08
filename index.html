@@ -45,7 +45,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.6.1",
+      "softwareVersion": "3.6.2",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -79,7 +79,10 @@
     <button class="nav-link" data-nav-view="help" data-nav-group="guide" id="nav-help" type="button">Hilfe</button>
   </div>
   <div class="nav-group nav-group-right">
-    <button class="nav-link" data-nav-view="changelog" data-nav-group="changelog" id="nav-changelog" type="button">Changelog</button>
+    <button class="nav-link" data-nav-view="changelog" data-nav-group="changelog" type="button">
+      <span id="nav-changelog">Changelog</span>
+      <span class="nav-interface-badge changelog" id="nav-version-badge">Beta v3.6.2</span>
+    </button>
     <button class="lang-toggle" data-action="toggle-lang" id="lang-toggle-btn" title="Switch language / Sprache wechseln">
       <span class="lang-seg lang-seg-active" id="lang-de">DE</span>
       <span class="lang-sep">|</span>
@@ -116,8 +119,8 @@
       <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-payment" id="workflow-nav-step-request">Schritt 2 · API-Request</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-encryption" data-workflow-visible="classic" id="workflow-nav-encryption">Verschlüsselung</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-use-case" id="workflow-nav-use-case">Use Case</button>
-      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-integration-options" id="workflow-nav-integration">Integrationsoptionen</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="status-controls" data-workflow-visible="status" id="workflow-nav-status">Statusabfrage</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-integration-options" id="workflow-nav-integration">Integrationsoptionen</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="create-payment-fields" data-workflow-visible="create" id="workflow-nav-payment-data">Zahlungsdaten</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="customer-master-section" data-workflow-visible="create" id="workflow-nav-customer">Kundendaten</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="article-list-section" data-workflow-visible="classic-create" id="workflow-nav-articles">Artikeldaten</button>
@@ -127,7 +130,7 @@
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-url-explainer" data-workflow-visible="classic-preview" id="workflow-nav-url-explainer">GET-URL-Erzeugung</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-preview-data" id="workflow-nav-preview-data">Request-Vorschau</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-test-cards" data-workflow-visible="classic-preview" id="workflow-nav-test-cards">Testkarten</button>
-      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-execution" data-workflow-visible="classic-preview" id="workflow-nav-execution">Testdaten &amp; Ausführen</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-execution" data-workflow-visible="classic-preview" id="workflow-nav-execution">Ausführen</button>
     </nav>
   </aside>
   <div class="workflow-content">
@@ -883,8 +886,6 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
-      <span class="workflow-anchor" id="workflow-preview-data" data-workflow-section tabindex="-1"></span>
-
       <div id="preview-empty-hint" class="info-box">
         <strong class="info-lead"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span id="preview-empty-title">Hinweis:</span></strong> <span id="preview-empty-text">Noch keine Vorschau generiert. Klicke in Schritt 2 auf <strong>„Vorschau generieren"</strong>, um die Request-Daten und die ausführbare Ausgabe hier anzuzeigen.</span>
       </div>
@@ -954,6 +955,8 @@
               </div>
             </div>
         </div>
+
+        <span class="workflow-anchor" id="workflow-preview-data" data-workflow-section tabindex="-1"></span>
 
         <div id="derived-parameters-section" style="margin-bottom:12px;display:none">
           <div class="debug-block">
@@ -1305,7 +1308,7 @@
         <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
-        <div class="nav-interface-badges header-nav-badges" aria-label="Changelog"><span class="nav-interface-badge changelog" id="changelog-version-badge">v3.6.1</span></div>
+        <div class="nav-interface-badges header-nav-badges" aria-label="Changelog"><span class="nav-interface-badge changelog" id="changelog-version-badge">Beta v3.6.2</span></div>
         <h1 id="changelog-title">Changelog</h1>
         <p id="changelog-subtitle">Vollständige Versionshistorie und Änderungen</p>
       </div>
@@ -1460,7 +1463,6 @@
     <span class="footer-version">
       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span id="footer-name-text">Paygate Payment Tester</span>
-          <span class="footer-ver-badge" id="footer-ver-badge">v3.6.1</span>
       <button class="footer-preview-notice" id="footer-design-toggle" type="button" data-action="toggle-design">
         <span id="footer-design-toggle-text">Original Design</span>
       </button>
