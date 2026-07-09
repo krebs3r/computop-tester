@@ -8,6 +8,7 @@ All notable changes to Paygate Payment Tester are documented here.
 - Added a separated, unobtrusive author credit linking to `martin-krebs.eu` at the bottom of the settings menu
 - Expanded the Payment Workflow notice with trusted callback URL guidance, the server-side implications of `URLNotify` and a clear reminder that external endpoints are used at the user's own responsibility
 - Clarified the credential security recommendation: prefer an access-restricted HTTPS deployment under your control, keep direct local use of `index.html` available, and account for the reachability requirements of return and notification URLs
+- Expanded the local-processing introduction to name `localStorage` and `IndexedDB` as the browser storage used for settings and local history data
 
 ### v3.6.3 — Compact glass settings menu
 

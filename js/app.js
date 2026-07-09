@@ -901,7 +901,7 @@ function applyLang() {
   setText('app-intro-inspect-text', 'app_intro_inspect_text');
   setText('app-intro-response-title', 'app_intro_response_title');
   setText('app-intro-response-text', 'app_intro_response_text');
-  setText('app-intro-local', 'app_intro_local');
+  setHtml('app-intro-local', 'app_intro_local');
   setText('nav-creds', 'nav_creds');
   setText('nav-payment', 'nav_payment');
   setText('nav-preview', 'nav_preview');
