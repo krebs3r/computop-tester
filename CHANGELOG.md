@@ -2,6 +2,12 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.6.4 — Settings attribution and safer callback guidance
+
+- Restyled the presentation switch as a full settings item with its own paintbrush SVG icon
+- Added a separated, unobtrusive author credit linking to `martin-krebs.eu` at the bottom of the settings menu
+- Expanded the Payment Workflow notice with trusted callback URL guidance, the server-side implications of `URLNotify` and a clear reminder that external endpoints are used at the user's own responsibility
+
 ### v3.6.3 — Compact glass settings menu
 
 - Added an SVG settings gear at the right side of the navigation with an accessible glass overlay menu

@@ -1,6 +1,15 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.6.4', de: { title: 'Autorenhinweis und sichere Callback-URLs', items: [
+    '<strong>Designwechsel aufgewertet</strong> — „Original Design“ erscheint als vollwertiger Einstellungspunkt mit eigenem Pinsel-SVG',
+    '<strong>Urheberschaft dezent sichtbar</strong> — Ein abgetrennter Autorenhinweis am Ende des Einstellungsmenüs verlinkt unaufdringlich auf <code>martin-krebs.eu</code>',
+    '<strong>URL-Sicherheit verdeutlicht</strong> — Der Payment Workflow erklärt den sicheren Umgang mit Rücksprung- und Benachrichtigungs-URLs, die serverseitige Bedeutung von <code>URLNotify</code> und die Eigenverantwortung bei externen Endpunkten',
+  ]}, en: { title: 'Author attribution and safer callback URLs', items: [
+    '<strong>Improved presentation switch</strong> — “Original Design” now appears as a full settings item with its own paintbrush SVG',
+    '<strong>Subtle author attribution</strong> — A separated author credit at the bottom of the settings menu links unobtrusively to <code>martin-krebs.eu</code>',
+    '<strong>Clearer URL safety guidance</strong> — The Payment Workflow explains safe handling of return and notification URLs, the server-side implications of <code>URLNotify</code>, and user responsibility for external endpoints',
+  ]}},
   { v: 'v3.6.3', de: { title: 'Kompaktes Glass-Einstellungsmenü', items: [
     '<strong>Einstellungen gebündelt</strong> — Ein neues SVG-Zahnrad rechts in der Navigation öffnet ein barrierearmes Glass-Menü',
     '<strong>Verschlüsselung auf einen Blick</strong> — Blowfish ECB und AES-CBC besitzen passende, leichte Inline-SVG-Icons direkt in der Classic-Auswahl',

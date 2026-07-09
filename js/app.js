@@ -914,6 +914,7 @@ function applyLang() {
   setText('settings-menu-title', 'settings_title');
   setText('settings-theme-text', 'settings_theme');
   setText('settings-language-text', 'settings_language');
+  setText('settings-site-credit', 'settings_site_credit');
   setText('classic-demo-title', 'classic_demo_title');
   setText('classic-demo-description', 'classic_demo_description');
   setText('classic-demo-preview-title', 'classic_demo_preview_title');
