@@ -1,7 +1,7 @@
 # Paygate Payment Tester
 
-Browser-based development tool for creating and inspecting encrypted
-[Paygate](https://www.computop.com) payment requests.
+Browser-based development tool for creating, inspecting and troubleshooting
+encrypted [Paygate](https://www.computop.com) payment requests.
 
 ![Version](https://img.shields.io/badge/version-3.6.4-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -13,281 +13,255 @@ Browser-based development tool for creating and inspecting encrypted
 > approved product of Computop or Nexi Group. The optional Nexi presentation is
 > an unofficial technical preview.
 
-## Overview
-
-The tester supports Classic Paygate Hosted Payment Page (`paymentPage.aspx`),
-Credit Card Form (`payssl.aspx`) and Pay By Link (`PayByLink.aspx`) integrations,
-plus local REST API V1/V2 request generation. It creates the HMAC-SHA256 MAC,
-encrypts request payloads with Blowfish ECB or Helpdesk-enabled AES-CBC, decrypts encrypted Paygate callback
-responses and analyses REST JSON responses.
-
 Everything runs in the browser. There is no application backend and no build
-step.
+step. The app can be opened directly through `file://`; PWA installation,
+offline caching and automatic browser redirects require HTTP/HTTPS.
 
-## Main Features
+## Supported Workflows
 
-- HMAC-SHA256 MAC generation using the native Web Crypto API
-- Blowfish ECB request encryption and callback decryption, plus optional AES-CBC/PKCS7 Classic Data/Len handling for MIDs configured by Computop Helpdesk
-- HPP, PaySSL and Pay By Link integration modes
-- Pay By Link request generation with documented two-stage encryption
-- Local REST API V1/V2 request builder without sending requests from the browser
-- Transaction-status inquiries through REST V1 and Classic `inquire.aspx` / `inquire24.aspx`
-- Use-case selector prepared for additional workflows such as MIT/CIT after documentation review
-- cURL, PowerShell, Postman Collection and raw HTTP output formats
-- Optional REST API key storage in encrypted local credential profiles
-- REST request generation without credentials, using safe authentication placeholders by default
-- Optional Classic demo preview that calculates MAC, encrypted Data, Len and the complete URL with non-executable local demo credentials
-- Bilingual inline explanations for REST version, payment type, environment, authentication and output format
-- Automatic locally unique Pay By Link reference numbers
-- Configurable redirect URLs, payment methods and templates
-- Optional customer, billing and shipping data with transparent Base64 JSON breakdown
-- Optional multi-line `ArticleList` data with amount validation and Klarna support
-- Optional unencrypted `CustomField1` through `CustomField9` values for supporting HPP templates
-- Design-aware transparent 276 × 87 PNG assets for the `CustomField3` merchant logo in Original and Nexi presentations
-- Visible Classic, REST V1 and REST V2 API names directly beside workflow fields
-- Ordered request preview showing composed objects, payload, query parameters and executable output
-- Outdated-preview protection that blocks executable Step 3 actions after request inputs change until the preview is refreshed
-- In-app "Start new payment flow" confirmation for resetting the current workflow without deleting saved profiles or logs
-- Callback receiver for Classic callbacks and REST success, failure and cancel browser redirects
-- Named credential profiles stored locally in the browser
-- IndexedDB request and combined Classic/REST response logs with up to 250 entries each
-- Response Log badges for interface, status and detected payment method
-- Syntax-highlighted Classic requests, REST JSON/commands, decrypted callbacks and analysed REST responses
-- Paygate simulation presets and Non-3DS/3DS test-card references
-- Bilingual Help view with Classic/REST comparison, usage guidance, official documentation, test resources, error codes and privacy notes
-- Bilingual Mobile SDK guide for native Android/Compose and iOS/SwiftUI integrations, available in both application designs
-- Colour-coded navigation badges for Payment Workflow, Classic and Guide sections
-- Automatic desktop navigation overflow controls plus horizontal touch and mouse-wheel scrolling
-- German and English interface
-- Dark, light and automatic system theme
+### Classic Paygate
+
+- Hosted Payment Page (`paymentPage.aspx`), Credit Card Form (`payssl.aspx`)
+  and Pay By Link (`PayByLink.aspx`)
+- HMAC-SHA256 MAC generation through the native Web Crypto API
+- Blowfish ECB encryption and decryption
+- Optional AES-CBC/PKCS7 `Data`/`Len` handling for MIDs enabled by Computop
+  Helpdesk
+- Transaction-status inquiries through `inquire.aspx` and `inquire24.aspx`
+- Configurable payment methods, templates, redirect URLs and callback URLs
+- Optional customer, billing, shipping, `ArticleList` and template
+  `CustomField1`–`CustomField9` data
+- Simulation presets, Non-3DS/3DS test-card references and a non-executable
+  demo preview that does not require real credentials
+- QR sharing for suitable request URLs and a copyable-link fallback for URLs
+  that are too long for a reliable QR code
+- Optional embedded PaySSL form on supported HTTP/HTTPS deployments
+
+### REST API
+
+- Local REST V1/V2 request generation without sending requests from the browser
+- REST V1 payment and status-inquiry requests
+- REST V2 checkout-session, hosted-card and payment-link request shapes
+- Basic Auth and OAuth2 Client Credentials output
+- cURL, PowerShell, Postman Collection v2.1 and raw HTTP formats
+- Safe authentication placeholders by default; credentials are optional until
+  they are deliberately embedded into generated output
+- Syntax-highlighted JSON and executable command previews
+
+### Analysis, Tools and Local Data
+
+- Classic callback decryption and REST JSON inspection
+- Combined Classic/REST response log with interface, status and payment-method
+  badges
+- Request and response logs with up to 250 entries each
+- JSON backup and restoration of both logs
+- Standalone MAC validator and Base64 encoder/decoder
+- `credentialOnFile` examples for CIT and MIT parameters
+- Named, locally encrypted credential profiles with an optional master password
+- German and English interface, three appearance modes and two presentations
 - Installable PWA with network-first offline caching
-- Payment-focused app icon set with standard, Apple Touch and maskable PWA variants
-- Original-design header uses the payment app icon without an additional logo frame; Nexi design keeps the Nexi header logo
-- Original-design header icons are aligned to the title area, with refined light-mode glass treatment for the main header and Help view boxes
-- Navbar-aligned badges in the Payment Workflow, Request Log, Response Analysis and Response Log headers for consistent Classic, REST and Payment Workflow scanning
-- Local download guidance distinguishes the current main-branch development build from stable tagged GitHub releases
-- Touch-oriented responsive layout with safe-area support and 44px interaction targets
-- Direct local operation through `file://` without a development server
+
+The use-case selector also contains placeholders for possible future workflows
+such as MIT/CIT. These are not implemented payment workflows yet; the current
+MIT/CIT support consists of parameter examples in the Tools view.
+
+## Quick Start
+
+1. Open the [live app](https://krebs3r.github.io/computop-tester/), download a
+   release or clone the repository.
+2. For local use, open `index.html` in a modern browser. No local server is
+   required.
+3. In **Step 1 — Configuration**, select Classic or REST and enter only the
+   credentials needed for the selected interface. REST requests can be built
+   entirely with placeholders.
+4. In **Step 2 — Configure Request**, choose payment creation or a
+   transaction-status inquiry and configure the visible interface-specific
+   fields.
+5. Generate the preview, inspect the assembled values and copy or deliberately
+   execute the result. The browser never submits REST requests itself.
+
+Classic status inquiries do not require the HMAC password. For a Classic
+payment preview without real credentials, enable the demo option. Demo URLs
+cannot be opened, stored in the request log or shared as QR codes.
+
+If Step 1 or Step 2 data changes after generation, Step 3 is marked as outdated
+and executable actions remain disabled until the preview is refreshed. **Start
+new payment flow** resets the current workflow and Transaction ID without
+deleting saved profiles, logs or settings.
+
+## Payment Workflow
+
+The Payment Workflow follows the same three-step sequence for Classic and REST:
+
+1. **Configuration** selects the interface and manages credentials or saved
+   profiles.
+2. **Configure Request** selects the use case and contains only the options
+   relevant to the current interface.
+3. **Preview & Submit** explains the assembled request before offering copy,
+   download or Classic execution actions.
+
+For Classic payment requests, Step 3 presents the construction process in this
+order:
+
+1. Composed API parameters such as `billToCustomer`, `billingAddress`,
+   shipping objects and `ArticleList`, including decoded JSON and transmitted
+   Base64 values
+2. Plain-text Classic payload before Blowfish ECB or AES-CBC encryption
+3. Complete encrypted `Data` parameter
+4. Unencrypted query parameters, including language, template, callback URLs
+   and supported `CustomField1`–`CustomField9` values
+5. Final request URL and available execution actions
+
+Pay By Link additionally shows its inner HPP payload and outer Pay By Link
+payload. The endpoint is designed as a server-to-server API, so browser CORS
+rules may prevent the app from reading the generated customer link. Its
+`action=create` URL can still be inspected and copied.
+
+REST mode instead shows composed objects, the final JSON payload and the
+selected client command. V1 uses the shared `/api/v1/payments` endpoint; V2 uses
+use-case-specific endpoints and an `Idempotency-Key` header. REST requests are
+copy-only because API credentials and execution belong in a backend or a
+controlled external tool.
+
+## Responses and Callbacks
+
+**Response Analysis** decrypts Classic callback data or formats and inspects
+REST JSON. Analysed results are added to the shared Response Log.
+
+On HTTP/HTTPS deployments, the internal callback receiver can set
+`URLSuccess`, `URLFailure` and `URLBack` to the tester. Browser redirects then
+return to Response Analysis automatically. REST success, failure and cancel
+redirects can also be captured in the Response Log.
+
+`URLNotify` is different: it is a server-to-server notification and cannot be
+received or observed by this static browser app. It must point to a trusted,
+reachable backend under your control. The optional httpbingo.org preset is
+only a payload-completeness aid for synthetic test data; notifications sent
+there are received externally, not by this application.
+
+Direct `file://` use cannot reliably receive redirects from an external Paygate
+page. Use the GitHub Pages deployment or serve the directory through a local
+HTTP server when testing automatic callback returns.
+
+When installed as a PWA, Paygate still opens in the browser because it is
+outside the app's origin and scope. After the redirect, the callback can be
+transferred to the already open PWA. Window focusing and closing behaviour
+varies by browser and platform.
 
 ## Application Views
 
-The fixed glass navigation keeps the main tools available from every view:
-
 | View | Purpose | URL hash |
 |---|---|---|
-| Payment Workflow | Classic Paygate requests and local REST API request generation | `#payment-workflow` |
-| Request Log | Generated Classic requests and REST status inquiries | `#request-log` |
-| Response Analysis | Classic callback decryption and REST JSON inspection | `#response` |
-| Response Log | Decrypted Classic responses, analysed REST JSON and captured REST browser redirects | `#response-log` |
-| Tools | Standalone MAC validator and Base64 encoder/decoder with credentialOnFile presets | `#tools` |
-| Help | Integration guidance, usage, official documentation, test resources and privacy notes | `#help` |
-| Changelog | Complete bilingual release history | `#changelog` |
+| Payment Workflow | Build Classic and REST requests | `#payment-workflow` |
+| Request Log | Review generated Classic requests and REST status inquiries | `#request-log` |
+| Response Analysis | Decrypt Classic callbacks and inspect REST JSON | `#response` |
+| Response Log | Review analysed responses and captured browser redirects | `#response-log` |
+| Tools | Validate MACs and encode or decode Base64 parameters | `#tools` |
+| Help | Read integration guidance and open official resources | `#help` |
+| Changelog | Review the complete bilingual release history | `#changelog` |
 
-The settings gear at the right of the navigation provides language, theme and
-presentation controls plus log management and local-data deletion throughout the application.
-Navigation badges distinguish Payment Workflow, Classic,
-orange REST and Guide tools; the optional Nexi design maps them to its own CI
-palette. When the desktop navigation does not fit, edge arrows appear
-automatically; touch gestures and horizontal mouse-wheel scrolling remain
-available as well.
+The settings menu provides language, appearance and presentation controls,
+log backup and restoration, log management and deletion of all local app data.
+Deleting all local data also clears the app's service-worker caches and
+unregisters its service worker.
 
-The **Help** view explains the differences between Classic and REST, guides
-users through the application and links to official Paygate documentation,
-test cards, error and response codes, and the Paygate status page. Its resource
-cards use self-contained inline SVG icons and require no external icon library.
+## Local Use and Installation
 
-## Local Usage
+Clone the repository or download and extract a ZIP, then open `index.html`.
+Scripts, styles, fonts and runtime assets are self-hosted, so the core app works
+without a development server.
 
-1. Download and extract the repository ZIP or clone the repository.
-2. Open `index.html` directly in a modern browser.
-3. In Step 1 enter the Merchant ID, choose Classic or REST, and enter only the credentials shown for that interface. Classic status inquiries do not require the HMAC password; REST credentials remain optional for placeholder-based output.
-4. In Step 2 select payment creation or transaction-status inquiry, choose the Classic encryption mode when using Classic, and configure the interface-specific request.
-5. Configure the fields and generate the preview.
-6. Inspect and copy the generated request. Classic payment pages and Classic
-   status inquiries can also be opened directly from the preview; REST requests
-   remain copy-only.
+Service workers require HTTP/HTTPS. Offline caching and PWA installation
+therefore become available only on deployments such as GitHub Pages or a local
+HTTP server.
 
-If Step 1 credentials or Step 2 request data are changed after generating a
-preview, Step 3 is marked as outdated and executable actions are disabled until
-the preview is refreshed. Use **Start new payment flow** in Step 2 to discard
-the current workflow and restart with a new Transaction ID; stored profiles,
-request logs, response logs, language, theme and settings remain untouched.
+The in-app source download points to the current `main` branch and may include
+changes newer than the latest release. For a stable, tagged version with
+release notes, use [GitHub Releases](https://github.com/krebs3r/computop-tester/releases).
 
-For Pay By Link, the tester generates a locally unique reference number and a
-default expiration date. The preview exposes both the inner HPP payload and the outer Pay By Link payload.
-The Paygate documentation describes this endpoint as a server-to-server API, so browser CORS
-rules may prevent the app from reading the returned customer link directly.
-The generated `action=create` request URL can still be inspected, copied and
-opened from the preview.
+The embedded PaySSL form also requires HTTP/HTTPS and permission from the
+Paygate page to be framed. On `file://`, the app keeps the preview visible and
+shows an explanatory placeholder; opening PaySSL in a new browser tab remains
+available.
 
-No local HTTP server is required. Service-worker and installation features are
-available only when the app is served through HTTP/HTTPS, including GitHub
-Pages.
+## Data, Privacy and Security
 
-The in-app local download link points to the current `main` branch ZIP, so it
-always contains the newest committed state. For a stable, tagged version with
-release notes, use the project's [GitHub Releases](https://github.com/krebs3r/computop-tester/releases).
-
-The internal callback receiver also requires HTTP/HTTPS. Browsers do not allow
-an external Paygate page to redirect reliably to a local `file://` URL. Use the
-GitHub Pages deployment or serve the directory through a local HTTP server when
-testing automatic callback returns.
-
-## Request Preview
-
-Step 3 follows the same order in which a request is assembled:
-
-For Classic payment requests, the "How is the GET URL generated?" explanation
-is shown as its own Step 3 preview block with a dedicated workflow navigation
-entry.
-
-1. **Composed API parameters** explain generated objects such as
-   `billToCustomer`, `billingAddress`, shipping objects and `ArticleList`,
-   including decoded JSON and transmitted Base64 values.
-2. **Classic plain-text payload** shows the parameters before Classic Data
-   encryption (Blowfish ECB or AES-CBC). This payload becomes `Data`; Pay By Link additionally exposes
-   its outer payload.
-3. **Encrypted Data parameter** shows the complete generated `Data` value for
-   comparison with external tools or Computop examples.
-4. **Unencrypted query parameters** show values outside `Data`, including
-   language, template, callback URL and optional template `CustomField1–9`
-   values.
-5. **Final request** shows the complete Classic URL. REST mode instead shows
-   the composed objects, final JSON payload and executable client command.
-
-Long API paths are kept close to their inputs and expose their complete value
-as a tooltip. Customer and article controls use theme-aware checkboxes and
-consistent action-button placement in both Original and Nexi designs.
-
-Step 3 also tracks whether the displayed output still matches the current
-workflow inputs. When credentials, integration options, payment data,
-redirects, customer data, article data or advanced settings change, the preview
-shows a refresh notice and blocks Paygate/status launch actions until the
-request is generated again.
-
-## REST Request Builder
-
-The REST builder is part of the **Payment Workflow**. Select **REST API** below
-the Merchant ID in Step 1, then choose the use case, API version, payment type,
-target environment, authentication method and output format in Step 2.
-
-**Step 1 is optional in REST mode.** The JSON payload and executable templates
-can be generated without entering a Merchant ID or API key. The navigation
-badge changes to `OPTIONAL`, only the REST credential block is shown, and
-generated commands use safe placeholders. Real REST credentials are only
-needed when explicitly embedding authentication values into the output.
-
-- V1 generates requests for the shared `/api/v1/payments` endpoint.
-- V1 status inquiries generate `GET /api/v1/payments/{paymentId}` or
-  `GET /api/v1/payments/transactions/{transactionId}` without a request body.
-- V2 uses dedicated endpoints for checkout sessions, hosted card payments and
-  payment links, with the corresponding V2 payload shape and an
-  `Idempotency-Key` header.
-- Basic Auth uses the Merchant ID and REST API key. OAuth2 output uses them as
-  client ID and client secret to obtain an access token.
-- Available output formats are cURL, PowerShell, Postman Collection v2.1 and
-  raw HTTP for REST clients or `.http` files.
-- JSON and executable output are syntax highlighted and can be copied
-  independently.
-
-The browser only assembles the request; it does not submit it. By default,
-generated commands contain safe placeholders. Credentials are inserted only
-after enabling the explicit warning option. The REST API key can be stored in
-the same locally encrypted profile as the Classic credentials.
-
-Test card numbers are entered on the hosted Paygate form, not in the generated
-JSON request. The builder links to the official test-card documentation for
-reference.
-
-## Response Analysis
-
-1. Open **Response Analysis** from the navigation and choose Classic or REST.
-2. Paste the complete Paygate callback URL, or enter `Data` and `Len`
-   manually.
-3. The tester uses the selected Classic encryption mode and the Blowfish/AES password from the Payment Workflow.
-4. The decrypted Classic payload or formatted REST response is displayed and added to the shared Response Log.
-
-When the callback receiver is enabled, successful and failed redirect URLs are
-set to the tester itself. Returning callback parameters automatically open the
-Response Analysis view.
-
-On HTTP/HTTPS deployments, the internal callback receiver is enabled by default
-for new users. `URLNotify` is required for Classic payment requests, but it needs
-a reachable server-to-server endpoint and cannot be observed by this static
-browser app. The optional httpbingo.org preset sets an external notify URL for
-payload completeness and uses parameter-free URLs as required by the Paygate
-documentation, but the notify is received only by httpbingo.org and must be used
-with synthetic test data.
-
-When installed as a PWA, the external Paygate payment page still opens in the
-browser because it is outside the app's origin and scope. After the redirect,
-the callback is transferred back to the already open PWA. The browser tab only
-closes after the app confirms that it received the response. Browser support
-for focusing the existing PWA window varies by platform.
-
-## Data and Security
-
-| Data | Storage/processing |
+| Data | Storage or processing |
 |---|---|
 | Payment request | Generated locally in the browser |
-| REST request | Generated and formatted locally; never submitted by the application |
+| REST request | Generated and formatted locally; never submitted by the app |
 | MAC | HMAC-SHA256 through Web Crypto |
-| Payment payload | Blowfish ECB by default; optional AES-CBC/PKCS7 when enabled for the MID by Computop Helpdesk |
-| Credential profiles | Merchant ID, Classic secrets and optional REST API key encrypted with AES-GCM in `localStorage` |
-| Request/response logs | Plain records in `IndexedDB`, with `localStorage` fallback |
-| Language/theme/settings | `localStorage` |
-| External resource loading | Blocked — scripts, styles and fonts are self-hosted; a Content Security Policy meta tag forbids inline scripts, restricts cross-origin requests, allows framing only for the embedded `computop-paygate.com` credit card form and limits form submissions to `computop-paygate.com` |
+| Classic payload | Blowfish ECB, or optional Helpdesk-enabled AES-CBC/PKCS7 |
+| Credential profiles | AES-GCM-encrypted in `localStorage` |
+| Request and response logs | Plain records in `IndexedDB`, with a `localStorage` fallback |
+| Language, appearance and settings | `localStorage` |
+| Runtime assets | Self-hosted; external scripts, styles and fonts are blocked |
 
-## Preview Designs
+By default, the credential-profile encryption key is derived from an
+application-owned static passphrase. This protects against casual inspection
+of `localStorage`, but the key can be reconstructed from the public source
+code. Enabling the optional master password derives the key from a user-owned
+secret instead. Neither mode protects against malicious code running in the
+active browser profile, and neither replaces a password manager or backend
+secret store.
 
-The existing presentation remains the default. An unofficial Nexi preview can
-be enabled explicitly with `?design=nexi`; `?design=original` restores the
-default presentation. Light, dark, and automatic system appearance continue to
-work independently from the selected design.
+When the hosted Paygate page or an external documentation link is opened, data
+leaves the app deliberately. Callback query parameters also pass through the
+hosting provider's server logs before being processed locally. Classic callback
+`Data` remains encrypted during that redirect and is decrypted only in the
+browser.
 
-Nexi trademarks, logos, fonts, and other brand assets are not covered by this
+The Content Security Policy blocks inline and external scripts, styles and
+fonts, restricts cross-origin connections and limits forms and frames to the
+required Paygate origins. A runtime frame-buster protects the application
+itself because the `frame-ancestors` directive cannot be enforced through a
+meta CSP.
+
+Use only trusted HTTPS callback targets under your control. Prefer test
+credentials, synthetic customer data and small test amounts. Credit-card
+authorisations may still be real depending on the merchant configuration.
+
+## Presentation and Branding
+
+The original presentation is the default. The optional, unofficial Nexi
+preview can be enabled in Settings or with `?design=nexi`;
+`?design=original` restores the default. Light, dark and automatic system
+appearance work independently of the selected presentation.
+
+Nexi trademarks, logos, fonts and other brand assets are not covered by this
 project's MIT License. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-By default the credential encryption key is derived from an application-owned
-static passphrase, which protects against casual inspection of `localStorage`.
-An optional master password (step 1 → profiles) derives the key from a
-user-owned secret instead, so stored profiles can no longer be decrypted from
-the public source code alone. Neither mode protects against malicious scripts
-running inside the active browser profile.
-
-Use this application only for development and testing. Prefer test credentials
-and small test amounts. Credit-card authorisations may still be real depending
-on the merchant configuration.
 
 ## Project Structure
 
 ```text
-index.html                 Main application and runtime logic
+index.html                 Application markup and static entry point
 css/style.css              Application styles
-assets/fonts/              Self-hosted Syne, DM Sans and DM Mono web fonts
-assets/nexi/               Official Nexi preview fonts and logos
-assets/payment-page/       Hosted Payment Page merchant-logo PNGs
-js/bootstrap.js            Early design/theme bootstrap before first render
+js/bootstrap.js            Early presentation/theme bootstrap
 js/app.js                  Application runtime logic
-js/vendor/qrcode.js        Vendored MIT-licensed QR code generator
 js/i18n.js                 German and English translations
 js/changelog-data.js       Bilingual in-app release history
-js/help-data.js            Bilingual Help view content and resource links
-icons/                     Browser, Apple Touch, PWA and original header icons
+js/help-data.js            Bilingual Help content and resource links
+js/vendor/qrcode.js        Vendored MIT-licensed QR generator
+assets/fonts/              Self-hosted application fonts
+assets/nexi/               Nexi preview fonts, logos and notices
+assets/payment-page/       Hosted Payment Page merchant-logo PNGs
+icons/                     Browser, Apple Touch, PWA and header icons
 service-worker.js          PWA network-first cache
 manifest.json              Web app manifest
 og-image.png               Open Graph and social sharing preview
-THIRD_PARTY_NOTICES.md     Font, brand-asset sources and license exclusions
+CNAME                      GitHub Pages custom domain
+.nojekyll                  Disables Jekyll processing on GitHub Pages
 VERSION                    Canonical application version
 CHANGELOG.md               Complete release history
+THIRD_PARTY_NOTICES.md     Third-party sources and license exclusions
+LICENSE                    MIT License for the original source code
 ```
 
-## Release History
+## Releases and License
 
-The complete history is available in [CHANGELOG.md](CHANGELOG.md) and in the
-application's **Changelog** view.
+The complete release history is available in [CHANGELOG.md](CHANGELOG.md) and
+in the application's **Changelog** view.
 
-## License
-
-Original source code: MIT, see [LICENSE](LICENSE). Third-party trademarks and
-brand assets are excluded; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Original source code is licensed under the MIT License; see
+[LICENSE](LICENSE). Third-party trademarks and brand assets are excluded; see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
