@@ -5,10 +5,12 @@ const CHANGELOG = [
     '<strong>Designwechsel aufgewertet</strong> — „Original Design“ erscheint als vollwertiger Einstellungspunkt mit eigenem Pinsel-SVG',
     '<strong>Urheberschaft dezent sichtbar</strong> — Ein abgetrennter Autorenhinweis am Ende des Einstellungsmenüs verlinkt unaufdringlich auf <code>martin-krebs.eu</code>',
     '<strong>URL-Sicherheit verdeutlicht</strong> — Der Payment Workflow erklärt den sicheren Umgang mit Rücksprung- und Benachrichtigungs-URLs, die serverseitige Bedeutung von <code>URLNotify</code> und die Eigenverantwortung bei externen Endpunkten',
+    '<strong>Betriebsempfehlung präzisiert</strong> — Bevorzugt wird eine eigene, zugriffsgeschützte HTTPS-Umgebung; das direkte lokale Öffnen der <code>index.html</code> bleibt möglich, unterliegt bei Rücksprung- und Benachrichtigungs-URLs aber Erreichbarkeitsgrenzen',
   ]}, en: { title: 'Author attribution and safer callback URLs', items: [
     '<strong>Improved presentation switch</strong> — “Original Design” now appears as a full settings item with its own paintbrush SVG',
     '<strong>Subtle author attribution</strong> — A separated author credit at the bottom of the settings menu links unobtrusively to <code>martin-krebs.eu</code>',
     '<strong>Clearer URL safety guidance</strong> — The Payment Workflow explains safe handling of return and notification URLs, the server-side implications of <code>URLNotify</code>, and user responsibility for external endpoints',
+    '<strong>Clearer deployment recommendation</strong> — An access-restricted HTTPS environment under your control is preferred; opening <code>index.html</code> directly remains supported but is subject to reachability limits for return and notification URLs',
   ]}},
   { v: 'v3.6.3', de: { title: 'Kompaktes Glass-Einstellungsmenü', items: [
     '<strong>Einstellungen gebündelt</strong> — Ein neues SVG-Zahnrad rechts in der Navigation öffnet ein barrierearmes Glass-Menü',
