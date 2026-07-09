@@ -60,6 +60,37 @@ let currentLang = 'de';
 // INTEGRATION METHOD — Classic Paygate or REST request builder
 // ══════════════════════════════════════════════════════════════
 let currentIntegration = 'classic';
+const CLASSIC_DEMO_CREDENTIALS = Object.freeze({
+  merchantId: 'DEMO_MERCHANT_ID',
+  encryptionKey: 'DemoKey123456789',
+  hmacKey: 'DemoHmacKey-NotReal'
+});
+
+function classicDemoEnabled() {
+  return document.getElementById('classic-demo-mode')?.checked === true;
+}
+
+function classicCredentialsForPreview() {
+  const demo = classicDemoEnabled();
+  return {
+    merchantId: document.getElementById('merchantId').value.trim() || (demo ? CLASSIC_DEMO_CREDENTIALS.merchantId : ''),
+    blowfishKey: document.getElementById('blowfishKey').value || (demo ? CLASSIC_DEMO_CREDENTIALS.encryptionKey : ''),
+    hmacKey: document.getElementById('hmacKey').value || (demo ? CLASSIC_DEMO_CREDENTIALS.hmacKey : ''),
+    isDemo: demo
+  };
+}
+
+function setClassicDemoPreviewState(isDemo, targetButton) {
+  const notice = document.getElementById('classic-demo-preview-notice');
+  if (notice) notice.style.display = isDemo ? '' : 'none';
+  if (targetButton) targetButton.dataset.demo = String(isDemo);
+}
+
+function blockClassicDemoExecution(button) {
+  if (button?.dataset.demo !== 'true') return false;
+  showToast(t('classic_demo_execution_blocked'), 'error');
+  return true;
+}
 let currentMethod = 'hpp';
 let currentUseCase = 'create-payment';
 let currentClassicEncryption = 'blowfish';
@@ -675,8 +706,16 @@ function showPreviewEmptyState() {
   if (classicOutput) classicOutput.style.display = 'none';
   if (restOutput) restOutput.style.display = 'none';
   if (statusSubmitRow) statusSubmitRow.style.display = 'none';
-  if (statusSubmitButton) delete statusSubmitButton.dataset.url;
-  if (submitButton) delete submitButton.dataset.url;
+  if (statusSubmitButton) {
+    delete statusSubmitButton.dataset.url;
+    delete statusSubmitButton.dataset.demo;
+  }
+  if (submitButton) {
+    delete submitButton.dataset.url;
+    delete submitButton.dataset.demo;
+  }
+  const demoNotice = document.getElementById('classic-demo-preview-notice');
+  if (demoNotice) demoNotice.style.display = 'none';
 }
 
 function resetControlsToDefaults(container) {
@@ -872,6 +911,15 @@ function applyLang() {
   setText('nav-tools', 'nav_tools');
   setText('nav-help', 'nav_help');
   setText('nav-changelog', 'nav_changelog');
+  setText('settings-menu-title', 'settings_title');
+  setText('settings-theme-text', 'settings_theme');
+  setText('settings-language-text', 'settings_language');
+  setText('classic-demo-title', 'classic_demo_title');
+  setText('classic-demo-description', 'classic_demo_description');
+  setText('classic-demo-preview-title', 'classic_demo_preview_title');
+  setText('classic-demo-preview-text', 'classic_demo_preview_text');
+  setAttr('settings-toggle-btn', 'title', 'settings_title');
+  setAttr('settings-toggle-btn', 'aria-label', 'settings_title');
   setText('tools-view-title', 'tools_view_title');
   setText('tools-view-subtitle', 'tools_view_subtitle');
   setText('ct-mac-validator', 'ct_mac_validator');
@@ -2864,8 +2912,8 @@ async function buildRestPreview() {
 async function buildClassicStatusPreview() {
   try {
     _renderDerivedParameterItems('derived-parameters-section', 'derived-parameters-list', []);
-    const merchantId = document.getElementById('merchantId').value.trim();
-    const blowfishKey = document.getElementById('blowfishKey').value;
+    const credentials = classicCredentialsForPreview();
+    const { merchantId, blowfishKey, isDemo } = credentials;
     const lookup = document.getElementById('status-lookup').value;
     const paymentId = document.getElementById('status-payment-id').value.trim();
     const transactionId = document.getElementById('status-transaction-id').value.trim();
@@ -2885,6 +2933,7 @@ async function buildClassicStatusPreview() {
     const statusSubmitButton = document.getElementById('btn-status-submit');
     if (statusSubmitRow) statusSubmitRow.style.display = 'flex';
     if (statusSubmitButton) statusSubmitButton.dataset.url = request.finalUrl;
+    setClassicDemoPreviewState(isDemo, statusSubmitButton);
     document.getElementById('pbl-outer-section').style.display = 'none';
 
     const plainParamsEl = document.getElementById('plain-params');
@@ -2897,7 +2946,7 @@ async function buildClassicStatusPreview() {
     document.getElementById('full-url').textContent = request.finalUrl;
     document.getElementById('full-url').dataset.raw = request.finalUrl;
 
-    await _saveLogEntry({
+    if (!isDemo) await _saveLogEntry({
       merchantId,
       transId: transactionId,
       paymentId,
@@ -2907,8 +2956,8 @@ async function buildClassicStatusPreview() {
       lookup,
       url: request.finalUrl
     });
-    await renderLog();
-    showToast(t('toast_status_preview_done'), 'success');
+    if (!isDemo) await renderLog();
+    showToast(isDemo ? t('classic_demo_preview_done') + t('toast_status_preview_done') : t('toast_status_preview_done'), 'success');
     document.getElementById('debug-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   } catch (error) {
     showToast(t('toast_err') + error.message, 'error');
@@ -2929,9 +2978,8 @@ async function buildAndPreview() {
   btn.innerHTML = '<span class="icon icon-md"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="spin-icon"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg></span> ' + t('btn_preview_loading');
 
   try {
-    const merchantId  = document.getElementById('merchantId').value.trim();
-    const blowfishKey = document.getElementById('blowfishKey').value;
-    const hmacKey     = document.getElementById('hmacKey').value;
+    const credentials = classicCredentialsForPreview();
+    const { merchantId, blowfishKey, hmacKey, isDemo } = credentials;
     const transId     = document.getElementById('transId').value.trim();
     let refNr         = document.getElementById('refNr').value.trim();
     const expirationRaw = document.getElementById('expirationDate').value.trim();
@@ -3019,7 +3067,7 @@ async function buildAndPreview() {
       len = pblRequest.outerLen;
       dataHex = pblRequest.outerData;
       finalUrl = pblRequest.finalUrl;
-      if (!reservePayByLinkRef(refNr)) throw new Error(t('pbl_ref_generation_error'));
+      if (!isDemo && !reservePayByLinkRef(refNr)) throw new Error(t('pbl_ref_generation_error'));
     } else {
       const base = currentMethod === 'ccf'
         ? 'https://www.computop-paygate.com/payssl.aspx'
@@ -3041,6 +3089,7 @@ async function buildAndPreview() {
     markPreviewFresh();
     const statusSubmitRow = document.getElementById('classic-status-submit-row');
     if (statusSubmitRow) statusSubmitRow.style.display = 'none';
+    setClassicDemoPreviewState(isDemo, document.getElementById('btn-submit'));
 
     // URL-Parameter (unverschlüsselt) sammeln
     const urlParams = {};
@@ -3095,10 +3144,12 @@ async function buildAndPreview() {
     document.getElementById('btn-submit').dataset.url = finalUrl;
 
     // Save to request log
-    await _saveLogEntry({ merchantId, transId, amount, currency, paymentMethod: payTypes, integration: 'classic', encryption: currentClassicEncryption, url: finalUrl });
-    await renderLog();
+    if (!isDemo) {
+      await _saveLogEntry({ merchantId, transId, amount, currency, paymentMethod: payTypes, integration: 'classic', encryption: currentClassicEncryption, url: finalUrl });
+      await renderLog();
+    }
 
-    showToast(`${t('toast_preview_done')}${len} · Data=${classicDataByteLength(dataHex)} Bytes`, 'success');
+    showToast(`${isDemo ? t('classic_demo_preview_done') : t('toast_preview_done')}${len} · Data=${classicDataByteLength(dataHex)} Bytes`, 'success');
 
     // Scroll to preview
     document.getElementById('debug-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -3114,6 +3165,7 @@ async function buildAndPreview() {
 
 function submitPayment() {
   if (previewState.isStale) { showToast(t('toast_preview_stale'), 'error'); return; }
+  if (blockClassicDemoExecution(document.getElementById('btn-submit'))) return;
   const url = document.getElementById('btn-submit').dataset.url;
   if (!url) { showToast(t('toast_no_url'), 'error'); return; }
   if (isStandaloneApp() && currentMethod !== 'pbl') {
@@ -3125,6 +3177,7 @@ function submitPayment() {
 
 function submitClassicStatus() {
   if (previewState.isStale) { showToast(t('toast_preview_stale'), 'error'); return; }
+  if (blockClassicDemoExecution(document.getElementById('btn-status-submit'))) return;
   const url = document.getElementById('btn-status-submit')?.dataset.url;
   if (!url) { showToast(t('toast_no_url'), 'error'); return; }
   showToast(t('toast_status_submit'), 'info');
@@ -3151,6 +3204,7 @@ function updateEmbedButtonVisibility() {
 
 function submitPaymentEmbedded() {
   if (previewState.isStale) { showToast(t('toast_preview_stale'), 'error'); return; }
+  if (blockClassicDemoExecution(document.getElementById('btn-submit'))) return;
   const url = document.getElementById('btn-submit').dataset.url;
   if (!url) { showToast(t('toast_no_url'), 'error'); return; }
   const card = document.getElementById('card-embedded-form');
@@ -3184,6 +3238,7 @@ function closeEmbeddedForm() {
 // ── Request URL as QR code (scan to continue on a phone) ──
 function showRequestQr() {
   if (previewState.isStale) { showToast(t('toast_preview_stale'), 'error'); return; }
+  if (blockClassicDemoExecution(document.getElementById('btn-submit'))) return;
   const url = document.getElementById('btn-submit')?.dataset.url;
   if (!url) { showToast(t('toast_no_url'), 'error'); return; }
   if (typeof qrcode !== 'function') { showToast(t('err_qr_failed'), 'error'); return; }
@@ -4896,7 +4951,7 @@ function updateDesignToggle() {
   const labelKey = isNexi ? 'footer_design_nexi' : 'footer_design_original';
   const actionKey = isNexi ? 'footer_design_to_original' : 'footer_design_to_nexi';
   label.textContent = t(labelKey);
-  button.title = t(actionKey);
+  button.removeAttribute('title');
   button.setAttribute('aria-label', t(actionKey));
   button.setAttribute('aria-pressed', String(isNexi));
 }
@@ -4977,6 +5032,61 @@ function toggleTheme() {
   localStorage.setItem(THEME_LS_KEY, newMode);
   _applyTheme(newMode, false);
   showToast(newMode === 'light' ? t('toast_theme_light') : t('toast_theme_dark'), 'info');
+}
+
+function positionSettingsMenu() {
+  const trigger = document.getElementById('settings-toggle-btn');
+  const menu = document.getElementById('settings-menu');
+  const nav = document.querySelector('.glass-nav');
+  if (!trigger || !menu || menu.hidden) return;
+  const anchorRect = (nav || trigger).getBoundingClientRect();
+  const gap = 12;
+  const right = Math.max(8, document.documentElement.clientWidth - anchorRect.right);
+  menu.style.top = `${Math.round(anchorRect.bottom + gap)}px`;
+  menu.style.right = `${Math.round(right)}px`;
+}
+
+function setSettingsMenuOpen(open, focusMenu = false) {
+  const trigger = document.getElementById('settings-toggle-btn');
+  const menu = document.getElementById('settings-menu');
+  if (!trigger || !menu) return;
+  menu.hidden = !open;
+  trigger.setAttribute('aria-expanded', String(open));
+  if (open) {
+    positionSettingsMenu();
+    if (focusMenu) menu.querySelector('[role="menuitem"]')?.focus();
+  }
+}
+
+function toggleSettingsMenu() {
+  const menu = document.getElementById('settings-menu');
+  setSettingsMenuOpen(Boolean(menu?.hidden));
+}
+
+function initSettingsMenu() {
+  const trigger = document.getElementById('settings-toggle-btn');
+  const menu = document.getElementById('settings-menu');
+  if (!trigger || !menu) return;
+  trigger.addEventListener('keydown', event => {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setSettingsMenuOpen(true, true);
+    }
+  });
+  document.addEventListener('click', event => {
+    if (!menu.hidden && !menu.contains(event.target) && !trigger.contains(event.target)) setSettingsMenuOpen(false);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || menu.hidden) return;
+    setSettingsMenuOpen(false);
+    trigger.focus();
+  });
+  menu.addEventListener('click', event => {
+    const action = event.target.closest('[data-action]')?.dataset.action;
+    if (action === 'open-log-data-modal' || action === 'clear-all-storage') setSettingsMenuOpen(false);
+  });
+  window.addEventListener('resize', positionSettingsMenu, { passive: true });
+  window.addEventListener('scroll', positionSettingsMenu, { passive: true });
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -5307,6 +5417,7 @@ function checkCallbackParams() {
 document.addEventListener('DOMContentLoaded', () => {
   resetScrollAfterClearAllIfNeeded();
   initActionDelegation();
+  initSettingsMenu();
   initStandaloneViews();
   initDesign();
   initTheme();
@@ -5352,6 +5463,7 @@ const CLICK_ACTIONS = {
   'toggle-workflow-subsection': el => toggleWorkflowSubsection(el.dataset.target),
   'toggle-theme': () => toggleTheme(),
   'toggle-lang': () => toggleLang(),
+  'toggle-settings-menu': () => toggleSettingsMenu(),
   'toggle-design': () => toggleDesign(),
   'toggle-pwd': el => togglePwd(el.dataset.target, el),
   'toggle-card': el => toggleCard(el.dataset.target),
@@ -5819,6 +5931,7 @@ function initNavigation() {
   const glassNav = document.querySelector('.glass-nav');
   const navScrollLeft = document.getElementById('nav-scroll-left');
   const navScrollRight = document.getElementById('nav-scroll-right');
+  const navOverflowTolerance = 12;
   let navigationLockTarget = null;
   let navigationLockTimer = 0;
   let scrollUpdatePending = false;
@@ -5827,7 +5940,7 @@ function initNavigation() {
     [...targetLinks, ...viewLinks].forEach(link => {
       link.classList.toggle('nav-active', link === activeLink);
     });
-    if (activeLink && glassNav && glassNav.scrollWidth > glassNav.clientWidth + 2) {
+    if (activeLink && glassNav && glassNav.scrollWidth > glassNav.clientWidth + navOverflowTolerance) {
       activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   }
@@ -5838,9 +5951,9 @@ function initNavigation() {
     const controlTop = navRect.top + (navRect.height - navScrollLeft.offsetHeight) / 2;
     navScrollLeft.style.top = `${controlTop}px`;
     navScrollRight.style.top = `${controlTop}px`;
-    const hasOverflow = glassNav.scrollWidth > glassNav.clientWidth + 2;
-    const atStart = glassNav.scrollLeft <= 2;
-    const atEnd = glassNav.scrollLeft + glassNav.clientWidth >= glassNav.scrollWidth - 2;
+    const hasOverflow = glassNav.scrollWidth > glassNav.clientWidth + navOverflowTolerance;
+    const atStart = glassNav.scrollLeft <= navOverflowTolerance;
+    const atEnd = glassNav.scrollLeft + glassNav.clientWidth >= glassNav.scrollWidth - navOverflowTolerance;
     navScrollLeft.classList.toggle('visible', hasOverflow && !atStart);
     navScrollRight.classList.toggle('visible', hasOverflow && !atEnd);
   }
@@ -5868,7 +5981,7 @@ function initNavigation() {
   navScrollRight?.addEventListener('click', () => scrollNavigation(1));
   glassNav?.addEventListener('scroll', updateNavScrollControls, { passive: true });
   glassNav?.addEventListener('wheel', event => {
-    if (glassNav.scrollWidth <= glassNav.clientWidth + 2 || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    if (glassNav.scrollWidth <= glassNav.clientWidth + navOverflowTolerance || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
     event.preventDefault();
     glassNav.scrollBy({ left: event.deltaY, behavior: 'auto' });
   }, { passive: false });

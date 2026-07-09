@@ -3,7 +3,7 @@
 Browser-based development tool for creating and inspecting encrypted
 [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.6.2-blueviolet)
+![Version](https://img.shields.io/badge/version-3.6.3-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -36,6 +36,7 @@ step.
 - cURL, PowerShell, Postman Collection and raw HTTP output formats
 - Optional REST API key storage in encrypted local credential profiles
 - REST request generation without credentials, using safe authentication placeholders by default
+- Optional Classic demo preview that calculates MAC, encrypted Data, Len and the complete URL with non-executable local demo credentials
 - Bilingual inline explanations for REST version, payment type, environment, authentication and output format
 - Automatic locally unique Pay By Link reference numbers
 - Configurable redirect URLs, payment methods and templates
@@ -82,8 +83,9 @@ The fixed glass navigation keeps the main tools available from every view:
 | Help | Integration guidance, usage, official documentation, test resources and privacy notes | `#help` |
 | Changelog | Complete bilingual release history | `#changelog` |
 
-The footer, language selector and theme control remain available throughout
-the application. Navigation badges distinguish Payment Workflow, Classic,
+The settings gear at the right of the navigation provides language, theme and
+presentation controls plus log management and local-data deletion throughout the application.
+Navigation badges distinguish Payment Workflow, Classic,
 orange REST and Guide tools; the optional Nexi design maps them to its own CI
 palette. When the desktop navigation does not fit, edge arrows appear
 automatically; touch gestures and horizontal mouse-wheel scrolling remain

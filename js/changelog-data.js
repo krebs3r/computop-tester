@@ -1,6 +1,21 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.6.3', de: { title: 'Kompaktes Glass-Einstellungsmenü', items: [
+    '<strong>Einstellungen gebündelt</strong> — Ein neues SVG-Zahnrad rechts in der Navigation öffnet ein barrierearmes Glass-Menü',
+    '<strong>Verschlüsselung auf einen Blick</strong> — Blowfish ECB und AES-CBC besitzen passende, leichte Inline-SVG-Icons direkt in der Classic-Auswahl',
+    '<strong>Classic ohne Credentials erkunden</strong> — Eine explizite Demo-Vorschau berechnet MAC, Data, Len und die vollständige URL mit lokalen Demo-Werten; Öffnen, QR-Weitergabe und Log-Speicherung bleiben gesperrt',
+    '<strong>Mehr Platz in der Navbar</strong> — Dark-/Light-Mode und Sprachwechsel sind aus der Navigation in das Einstellungsmenü umgezogen',
+    '<strong>Footer aufgeräumt</strong> — Log-Verwaltung, „Alles löschen“ und der zurückhaltende Designwechsel befinden sich jetzt ebenfalls im Einstellungsmenü',
+    '<strong>Saubere Bedienung</strong> — Das Menü unterstützt Tastaturfokus, Escape, Außenklick und eine responsive Positionierung; Theme- und Sprachwechsel halten es für weitere Anpassungen offen',
+  ]}, en: { title: 'Compact glass settings menu', items: [
+    '<strong>Central settings</strong> — A new SVG gear at the right side of the navigation opens an accessible glass menu',
+    '<strong>Encryption at a glance</strong> — Blowfish ECB and AES-CBC now have matching lightweight inline SVG icons in the Classic selector',
+    '<strong>Explore Classic without credentials</strong> — An explicit demo preview calculates MAC, Data, Len and the complete URL with local demo values while opening, QR sharing and request-log storage remain blocked',
+    '<strong>More navbar space</strong> — Dark/light mode and language switching moved from the navigation into the settings menu',
+    '<strong>Cleaner footer</strong> — Log management, “Clear all data” and the subtle presentation switch now also live in the settings menu',
+    '<strong>Polished interaction</strong> — The menu supports keyboard focus, Escape, outside clicks and responsive positioning; theme and language changes keep it open for further adjustments',
+  ]}},
   { v: 'v3.6.2', de: { title: 'Versionsbadges und zuverlässige Workflow-Navigation', items: [
     '<strong>Beta-Version sichtbar</strong> — Die Changelog-Navigation und der Changelog-Header zeigen die aktuelle Version nun einheitlich als <code>Beta v3.6.2</code>',
     '<strong>Footer aufgeräumt</strong> — Die redundante Versionsbadge wurde aus dem Footer entfernt; Log-Exporte erhalten die App-Version weiterhin korrekt',

@@ -2,6 +2,16 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.6.3 — Compact glass settings menu
+
+- Added an SVG settings gear at the right side of the navigation with an accessible glass overlay menu
+- Added matching inline SVG icons to the Blowfish ECB and AES-CBC Classic encryption choices
+- Added an explicit Classic demo-preview option that calculates MAC, Data, Len and the complete URL with local demo credentials while blocking execution, QR sharing and request-log storage
+- Moved the dark/light mode and German/English controls from the navigation into the settings menu
+- Moved combined log management, deletion of all local data and the presentation switch from the footer into the settings menu
+- Added keyboard navigation, Escape handling, outside-click closing and responsive positioning for the menu; theme and language changes keep it open for quick adjustments
+- Reclaimed horizontal navigation and footer space while preserving all existing actions
+
 ### v3.6.2 — Version badges and reliable workflow navigation
 
 - Replaced the static Changelog navigation hint with a dynamic `Beta v3.6.2` badge and added the same Beta version badge to the Changelog header
