@@ -1,6 +1,17 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.6.5', de: { title: 'Master-Passwort direkt bei Callback-Responses', items: [
+    '<strong>Entsperren ohne Umweg</strong> — Öffnet ein Classic-Callback die Response-Analyse mit gesperrtem Profil, erscheint direkt der app-eigene Master-Passwort-Dialog',
+    '<strong>Kontext verständlich erklärt</strong> — Der Dialog weist darauf hin, dass das zuletzt verwendete Profil zum Entschlüsseln der empfangenen Response geladen werden muss',
+    '<strong>Automatisch fortgesetzt</strong> — Nach erfolgreicher Eingabe lädt die App das Profil und setzt die Response-Entschlüsselung selbstständig fort',
+    '<strong>Abbruch bleibt sicher</strong> — Beim Abbrechen bleiben Callback-URL und Response-Analyse erhalten, sodass später manuell entschlüsselt werden kann',
+  ]}, en: { title: 'Master password directly for callback responses', items: [
+    '<strong>Unlock without a detour</strong> — When a Classic callback opens Response Analysis with a locked profile, the app-native master-password dialog appears immediately',
+    '<strong>Clear context</strong> — The dialog explains that the last used profile must be loaded to decrypt the received response',
+    '<strong>Automatic continuation</strong> — After a successful unlock, the app loads the profile and continues response decryption automatically',
+    '<strong>Safe cancellation</strong> — Cancelling keeps the callback URL and Response Analysis context available for later manual decryption',
+  ]}},
   { v: 'v3.6.4', de: { title: 'Autorenhinweis und sichere Callback-URLs', items: [
     '<strong>Designwechsel aufgewertet</strong> — „Original Design“ erscheint als vollwertiger Einstellungspunkt mit eigenem Pinsel-SVG',
     '<strong>Urheberschaft dezent sichtbar</strong> — Ein abgetrennter Autorenhinweis am Ende des Einstellungsmenüs verlinkt unaufdringlich auf <code>martin-krebs.eu</code>',

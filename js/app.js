@@ -3415,11 +3415,16 @@ async function _decryptData(enc, passphrase) {
 }
 
 // ── Master password: unlock, activate, change, disable ──
-function _promptMasterPassword() {
+function _promptMasterPassword(context = 'profiles') {
   return new Promise(resolve => {
     const modal = document.getElementById('master-unlock-modal');
     const input = document.getElementById('master-unlock-input');
     if (!modal || !input) { resolve(null); return; }
+    const callbackUnlock = context === 'callback';
+    const title = document.getElementById('master-unlock-title');
+    const text = document.getElementById('master-unlock-text');
+    if (title) title.textContent = t(callbackUnlock ? 'master_unlock_callback_title' : 'master_unlock_title');
+    if (text) text.textContent = t(callbackUnlock ? 'master_unlock_callback_text' : 'master_unlock_text');
     window.__masterUnlockResolve = resolve;
     input.value = '';
     modal.classList.add('open');
@@ -3445,10 +3450,10 @@ async function _unlockMasterPassword(pw) {
   updateCredentialLockUI();
 }
 
-async function _ensureUnlocked() {
+async function _ensureUnlocked(context = 'profiles') {
   if (!_credLocked()) return true;
   for (;;) {
-    const pw = await _promptMasterPassword();
+    const pw = await _promptMasterPassword(context);
     if (pw === null || pw === '') return false;
     try {
       await _unlockMasterPassword(pw);
@@ -3457,6 +3462,17 @@ async function _ensureUnlocked() {
       showToast(t('err_master_wrong'), 'error');
     }
   }
+}
+
+async function _decryptCallbackAfterCredentialsLoad() {
+  if (_credLocked() && !(await _ensureUnlocked('callback'))) return;
+  await loadCredentials();
+  const key = document.getElementById('blowfishKey')?.value || '';
+  if (!key) {
+    showToast(t('val_bf'), 'error');
+    return;
+  }
+  await decryptResponse();
 }
 
 async function unlockCredentialsInline() {
@@ -5371,17 +5387,14 @@ function handleCallbackUrl(urlString, cleanCurrentUrl = false) {
 
     showToast(t('toast_callback_received'), 'success');
 
-    // Wait for credentials to load (loadCredentials is async/PBKDF2) before decrypting
-    function _tryDecrypt(attemptsLeft) {
-      const key = document.getElementById('blowfishKey').value;
-      if (key) {
-        decryptResponse();
-      } else if (attemptsLeft > 0) {
-        setTimeout(() => _tryDecrypt(attemptsLeft - 1), 300);
-      }
-      // If key never appears, the user can click Decrypt manually
-    }
-    setTimeout(() => _tryDecrypt(10), 300);
+    // Loading credentials may require the app's master-password dialog.
+    // Once unlocked, restore the last profile and continue automatically.
+    setTimeout(() => {
+      _decryptCallbackAfterCredentialsLoad().catch(error => {
+        console.warn('Automatic callback decryption failed:', error);
+        showToast(error.message, 'error');
+      });
+    }, 0);
     return true;
   } catch(e) {
     console.warn('handleCallbackUrl error:', e);

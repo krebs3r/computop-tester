@@ -2,6 +2,13 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.6.5 — Master-password prompt for callback responses
+
+- Added an app-native master-password dialog when a Classic callback redirect opens Response Analysis while the saved credential profile is locked
+- Explained directly in the dialog that unlocking is required to load the last used profile and decrypt the received response
+- Continued callback processing automatically after a successful unlock instead of requiring a detour through Payment Workflow
+- Kept the callback URL and Response Analysis context intact when the dialog is cancelled, allowing manual decryption later
+
 ### v3.6.4 — Settings attribution and safer callback guidance
 
 - Restyled the presentation switch as a full settings item with its own paintbrush SVG icon
