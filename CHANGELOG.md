@@ -2,6 +2,21 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.6.6 — Pay By Link success redirects in the response log
+
+- Moved Overview out of the Payment Workflow into its own standalone start page, matching the separate-page pattern used by Request Log, Help and Changelog
+- Added Overview as the leftmost navbar entry, separated from the workflow steps by a vertical divider and marked with a compact `Start` badge
+- Added app-area cards to the Overview page below the download links, with matching navbar-style badges, concise descriptions and direct navigation to the main app areas
+- Updated the README application-view overview for the standalone Overview page, app-area shortcuts and direct Step 2/Step 3 workflow hashes
+- Fixed the outdated-preview warning for scripted Step 2 changes such as generated customer data, article lists, CustomField examples and external callback demo URLs
+- Clarified the URLNotify field hint so it describes the server-side payment notification purpose instead of only warning that it is not visible in the browser
+- Added a dedicated Payment Workflow page header so the workflow view keeps the same page-level orientation as the other standalone pages
+- Kept the Payment Workflow navigator focused on Step 1, Step 2 and Step 3
+- Detected unencrypted Pay By Link success redirects in the HPP return format when they contain result fields such as `Status`, `PayID`, `TransID`, `XID`, `Code` and `MAC`
+- Stored those redirects directly in the Response Log instead of treating them as a normal Payment Workflow app launch
+- Added a guarded unknown-callback fallback: when the app is active as callback receiver and receives an unrecognised query-string callback, it is stored as `UNKNOWN` in the Response Log instead of being silently ignored
+- Preserved payment method labels from Paygate fields such as `Type` and `pt`, so iDEAL and similar Pay By Link results remain visible in the log
+
 ### v3.6.5 — Master-password prompt for callback responses
 
 - Added an app-native master-password dialog when a Classic callback redirect opens Response Analysis while the saved credential profile is locked

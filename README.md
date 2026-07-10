@@ -3,7 +3,7 @@
 Browser-based development tool for creating, inspecting and troubleshooting
 encrypted [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.6.5-blueviolet)
+![Version](https://img.shields.io/badge/version-3.6.6-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -150,10 +150,17 @@ varies by browser and platform.
 
 ## Application Views
 
+The app opens on the standalone **Overview** page. Below the local-download
+links, app-area cards mirror the main navigation badges and jump directly to
+the most common destinations.
+
 | View | Purpose | URL hash |
 |---|---|---|
-| Payment Workflow | Build Classic and REST requests | `#payment-workflow` |
-| Request Log | Review generated Classic requests and REST status inquiries | `#request-log` |
+| Overview | Start page with introduction, security notice, download links and app-area shortcuts | `#overview` |
+| Payment Workflow | Build Classic and REST requests from configuration through preview | `#payment-workflow` |
+| Configure Request | Jump directly to Step 2 in the Payment Workflow | `#card-payment` |
+| Preview & Submit | Jump directly to Step 3 in the Payment Workflow | `#card-preview` |
+| Request Log | Review recently generated requests | `#request-log` |
 | Response Analysis | Decrypt Classic callbacks and inspect REST JSON | `#response` |
 | Response Log | Review analysed responses and captured browser redirects | `#response-log` |
 | Tools | Validate MACs and encode or decode Base64 parameters | `#tools` |

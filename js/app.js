@@ -911,6 +911,8 @@ function applyLang() {
   setText('nav-tools', 'nav_tools');
   setText('nav-help', 'nav_help');
   setText('nav-changelog', 'nav_changelog');
+  setText('payment-workflow-title', 'payment_workflow_title');
+  setText('payment-workflow-subtitle', 'payment_workflow_subtitle');
   setText('settings-menu-title', 'settings_title');
   setText('settings-theme-text', 'settings_theme');
   setText('settings-language-text', 'settings_language');
@@ -988,8 +990,9 @@ function applyLang() {
   setText('credential-lock-submit-text', 'btn_master_unlock');
   setText('credential-lock-settings-text', 'credential_lock_settings');
   setText('credential-lock-note', 'credential_lock_note');
+  setText('nav-overview-text', 'nav_overview');
+  setText('nav-overview-badge', 'nav_overview_badge');
   setText('workflow-nav-title', 'workflow_nav_title');
-  setText('workflow-nav-overview', 'workflow_nav_overview');
   setText('workflow-nav-step-credentials', 'workflow_nav_step_credentials');
   setText('workflow-nav-credentials', 'workflow_nav_credentials');
   setText('workflow-nav-profiles', 'workflow_nav_profiles');
@@ -1029,6 +1032,36 @@ function applyLang() {
   setText('sec-hint', 'sec_hint');
   setText('sec-releases', 'sec_releases');
   setText('sec-releases-hint', 'sec_releases_hint');
+  setText('overview-map-kicker', 'overview_map_kicker');
+  setText('overview-map-title', 'overview_map_title');
+  setText('overview-map-subtitle', 'overview_map_subtitle');
+  setText('overview-map-workflow-badge', 'overview_map_workflow_badge');
+  setText('overview-map-workflow-title', 'overview_map_workflow_title');
+  setText('overview-map-workflow-desc', 'overview_map_workflow_desc');
+  setText('overview-map-request-badge', 'overview_map_request_badge');
+  setText('overview-map-request-title', 'overview_map_request_title');
+  setText('overview-map-request-desc', 'overview_map_request_desc');
+  setText('overview-map-preview-badge', 'overview_map_preview_badge');
+  setText('overview-map-preview-title', 'overview_map_preview_title');
+  setText('overview-map-preview-desc', 'overview_map_preview_desc');
+  setText('overview-map-request-log-badge', 'overview_map_request_log_badge');
+  setText('overview-map-request-log-title', 'overview_map_request_log_title');
+  setText('overview-map-request-log-desc', 'overview_map_request_log_desc');
+  setText('overview-map-response-badge', 'overview_map_response_badge');
+  setText('overview-map-response-title', 'overview_map_response_title');
+  setText('overview-map-response-desc', 'overview_map_response_desc');
+  setText('overview-map-response-log-badge', 'overview_map_response_log_badge');
+  setText('overview-map-response-log-title', 'overview_map_response_log_title');
+  setText('overview-map-response-log-desc', 'overview_map_response_log_desc');
+  setText('overview-map-tools-badge', 'overview_map_tools_badge');
+  setText('overview-map-tools-title', 'overview_map_tools_title');
+  setText('overview-map-tools-desc', 'overview_map_tools_desc');
+  setText('overview-map-help-badge', 'overview_map_help_badge');
+  setText('overview-map-help-title', 'overview_map_help_title');
+  setText('overview-map-help-desc', 'overview_map_help_desc');
+  setText('overview-map-changelog-badge', 'overview_map_changelog_badge');
+  setText('overview-map-changelog-title', 'overview_map_changelog_title');
+  setText('overview-map-changelog-desc', 'overview_map_changelog_desc');
 
   setText('ct-creds', 'ct_creds');
   setText('l-mid', 'l_mid'); setText('l-bfpw', 'l_bfpw'); setText('h-bfpw', 'h_bfpw');
@@ -2065,6 +2098,7 @@ function generateTestCustomer() {
   toggleShippingAddress();
   ['ship-street', 'ship-street-number', 'ship-postal-code', 'ship-city'].forEach(id => setCustomerField(id, ''));
   setCustomerField('ship-country', sample.country);
+  markPreviewStale();
   showToast(t('toast_customer_generated'), 'success');
 }
 
@@ -2082,6 +2116,7 @@ function clearCustomerMasterData() {
   if (same) same.checked = true;
   toggleCustomerMasterData();
   toggleShippingAddress();
+  markPreviewStale();
   showToast(t('toast_customer_cleared'), 'info');
 }
 
@@ -2126,6 +2161,7 @@ function addArticleItem(values = {}) {
   container.appendChild(card);
   updateArticleItemLabels();
   updateArticleListSummary();
+  markPreviewStale();
 }
 
 function removeArticleItem(button) {
@@ -2133,6 +2169,7 @@ function removeArticleItem(button) {
   if (!document.querySelector('#article-list-items .article-item-card')) addArticleItem({ itemReference: '1', id: '', description: '', amount: '' });
   updateArticleItemLabels();
   updateArticleListSummary();
+  markPreviewStale();
 }
 
 function updateArticleItemLabels() {
@@ -2244,6 +2281,7 @@ function generateCustomFieldExample() {
   const enabled = document.getElementById('custom-fields-enabled');
   if (enabled) enabled.checked = true;
   toggleCustomFields();
+  markPreviewStale();
   showToast(t('toast_custom_fields_example'), 'success');
 }
 
@@ -2255,6 +2293,7 @@ function clearCustomFields() {
   const enabled = document.getElementById('custom-fields-enabled');
   if (enabled) enabled.checked = false;
   toggleCustomFields();
+  markPreviewStale();
   showToast(t('toast_custom_fields_cleared'), 'info');
 }
 
@@ -2271,6 +2310,7 @@ function generateTestArticleList() {
   const enabled = document.getElementById('article-list-enabled');
   if (enabled) enabled.checked = true;
   toggleArticleList();
+  markPreviewStale();
   showToast(t('toast_article_generated'), 'success');
 }
 
@@ -2281,6 +2321,7 @@ function clearArticleList() {
   const enabled = document.getElementById('article-list-enabled');
   if (enabled) enabled.checked = false;
   toggleArticleList();
+  markPreviewStale();
   showToast(t('toast_article_cleared'), 'info');
 }
 
@@ -4574,6 +4615,7 @@ async function _saveRespLogEntry(plain) {
   const entry  = {
     timestamp:  new Date().toISOString(),
     status:     params['Status']     || '',
+    paymentId:  params['PayID']      || params['PaymentID'] || '',
     transId:    params['TransID']    || params['TransId'] || '',
     merchantId: params['MerchantID'] || params['mid']     || '',
     paymentMethod: _paymentMethodFromPlain(plain),
@@ -4603,7 +4645,7 @@ async function renderResponseLog() {
   clearElement(container);
   responseLogCache.forEach((e, i) => {
     const ts     = new Date(e.timestamp).toLocaleString(currentLang === 'en' ? 'en-US' : 'de-DE');
-    const integration = e.integration === 'rest' ? 'REST' : 'CLASSIC';
+    const integration = e.integration === 'rest' ? 'REST' : e.integration === 'unknown' ? 'UNKNOWN' : 'CLASSIC';
     const status = e.status || e.result || '–';
     const paymentMethod = _responsePaymentMethod(e, requestEntries);
     const normalisedStatus = status.toUpperCase();
@@ -4614,7 +4656,7 @@ async function renderResponseLog() {
     entry.addEventListener('click', () => toggleRespLogDetail(i));
     const meta = appendTextElement(entry, 'div', 'log-meta', '');
     appendTextElement(meta, 'span', 'log-ts', ts);
-    const integrationBadge = appendTextElement(meta, 'span', `log-interface-${e.integration === 'rest' ? 'rest' : 'classic'}`, integration);
+    const integrationBadge = appendTextElement(meta, 'span', `log-interface-${e.integration === 'rest' ? 'rest' : e.integration === 'unknown' ? 'unknown' : 'classic'}`, integration);
     integrationBadge.classList.add('log-badge');
     const statusBadge = appendTextElement(meta, 'span', 'log-badge', status);
     if (['OK', 'SUCCESS'].includes(normalisedStatus)) {
@@ -4628,10 +4670,12 @@ async function renderResponseLog() {
     if (paymentMethod) appendTextElement(meta, 'span', 'log-badge log-payment-badge', paymentMethod);
     appendTextElement(meta, 'span', 'log-merchant', e.merchantId || '–');
     appendTextElement(meta, 'span', `log-status-dot ${dotCls}`, '');
-    const identifier = e.integration === 'rest'
+    const identifier = e.integration === 'unknown'
+      ? (e.callbackHost || e.url || '')
+      : e.integration === 'rest'
       ? (e.paymentId || _plainParamIgnoreCase(e.plain, ['PayID', 'PaymentID', 'paymentId']))
       : e.transId;
-    const transId = appendTextElement(entry, 'div', 'log-tid', e.integration === 'rest' ? 'PayID: ' : 'TransID: ');
+    const transId = appendTextElement(entry, 'div', 'log-tid', e.integration === 'unknown' ? 'Callback: ' : e.integration === 'rest' ? 'PayID: ' : 'TransID: ');
     const transIdValue = appendTextElement(transId, 'span', '', identifier || '–');
     transIdValue.style.color = 'var(--accent2)';
     const detail = appendTextElement(entry, 'div', 'log-detail', '');
@@ -5207,6 +5251,7 @@ function applyHttpbingoDemo() {
     _applyCallbackReceiver(false);
   }
   applyExternalDemoCallbackUrls();
+  markPreviewStale();
   showToast(t('toast_httpbingo_demo'), 'warning');
 }
 
@@ -5264,6 +5309,58 @@ function _restCallbackPayloadFromUrl(urlString) {
   };
 }
 
+function _plainPaygateCallbackPayloadFromUrl(urlString) {
+  const url = new URL(urlString, window.location.href);
+  const params = url.searchParams;
+  if (params.has('Data') || params.has('data') || params.has('Len') || params.has('len')) return null;
+
+  const hasResultState = ['Status', 'status', 'Code', 'code', 'MAC'].some(name => params.has(name));
+  const hasPaymentReference = [
+    'PayID', 'payId', 'paymentId', 'PaymentID',
+    'TransID', 'TransId', 'transId', 'transactionId',
+    'XID', 'refnr', 'RefNr'
+  ].some(name => params.has(name));
+  if (!hasResultState || !hasPaymentReference) return null;
+
+  return {
+    timestamp: new Date().toISOString(),
+    status: params.get('Status') || params.get('status') || '',
+    paymentId: params.get('PayID') || params.get('payId') || params.get('paymentId') || params.get('PaymentID') || '',
+    transId: params.get('TransID') || params.get('TransId') || params.get('transId') || params.get('transactionId') || '',
+    merchantId: params.get('MerchantID') || params.get('mid') || params.get('merchantId') || '',
+    paymentMethod: _normalisePaymentMethodLabel(
+      params.get('PayType') || params.get('paymentMethod') || params.get('paymentType') ||
+      params.get('Brand') || params.get('Type') || params.get('pt') || ''
+    ),
+    integration: 'classic',
+    url: url.href,
+    plain: params.toString(),
+  };
+}
+
+function _unknownCallbackPayloadFromUrl(urlString) {
+  const url = new URL(urlString, window.location.href);
+  const params = url.searchParams;
+  if (!params || Array.from(params.keys()).length === 0) return null;
+  if (params.has('Data') || params.has('data') || params.has('Len') || params.has('len')) return null;
+  if (_restCallbackPayloadFromUrl(urlString) || _plainPaygateCallbackPayloadFromUrl(urlString)) return null;
+  if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return null;
+
+  return {
+    timestamp: new Date().toISOString(),
+    status: 'UNKNOWN',
+    result: 'UNKNOWN',
+    paymentId: '',
+    transId: '',
+    merchantId: params.get('MerchantID') || params.get('mid') || params.get('merchantId') || '',
+    paymentMethod: _paymentMethodFromPlain(params.toString()),
+    integration: 'unknown',
+    callbackHost: url.host || url.pathname || 'callback',
+    url: url.href,
+    plain: params.toString(),
+  };
+}
+
 async function handleRestCallbackUrl(urlString) {
   try {
     if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return false;
@@ -5277,6 +5374,38 @@ async function handleRestCallbackUrl(urlString) {
     return true;
   } catch (e) {
     console.warn('handleRestCallbackUrl error:', e);
+    return false;
+  }
+}
+
+async function handlePlainPaygateCallbackUrl(urlString) {
+  try {
+    const entry = _plainPaygateCallbackPayloadFromUrl(urlString);
+    if (!entry) return false;
+    window.history.replaceState({}, '', _callbackBaseUrl());
+    await _addLogEntry(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY, entry);
+    await renderResponseLog();
+    document.getElementById('nav-resp-log')?.click();
+    showToast(t('toast_paygate_callback_received'), 'success');
+    return true;
+  } catch (e) {
+    console.warn('handlePlainPaygateCallbackUrl error:', e);
+    return false;
+  }
+}
+
+async function handleUnknownCallbackUrl(urlString) {
+  try {
+    const entry = _unknownCallbackPayloadFromUrl(urlString);
+    if (!entry) return false;
+    window.history.replaceState({}, '', _callbackBaseUrl());
+    await _addLogEntry(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY, entry);
+    await renderResponseLog();
+    document.getElementById('nav-resp-log')?.click();
+    showToast(t('toast_unknown_callback_received'), 'error');
+    return true;
+  } catch (e) {
+    console.warn('handleUnknownCallbackUrl error:', e);
     return false;
   }
 }
@@ -5405,6 +5534,14 @@ function handleCallbackUrl(urlString, cleanCurrentUrl = false) {
 function checkCallbackParams() {
   if (_restCallbackPayloadFromUrl(window.location.href)) {
     handleRestCallbackUrl(window.location.href);
+    return;
+  }
+  if (_plainPaygateCallbackPayloadFromUrl(window.location.href)) {
+    handlePlainPaygateCallbackUrl(window.location.href);
+    return;
+  }
+  if (_unknownCallbackPayloadFromUrl(window.location.href)) {
+    handleUnknownCallbackUrl(window.location.href);
     return;
   }
   const payload = _callbackPayloadFromUrl(window.location.href);
@@ -5932,6 +6069,7 @@ function initNavigation() {
   const viewLinks = Array.from(document.querySelectorAll('[data-nav-view]'));
   const paymentWorkflowView = document.getElementById('payment-workflow-view');
   const views = {
+    overview: document.getElementById('overview-view'),
     'request-log': document.getElementById('request-log-view'),
     response: document.getElementById('response-view'),
     'response-log': document.getElementById('response-log-view'),
@@ -6028,10 +6166,11 @@ function initNavigation() {
     scheduleWorkflowNavigationUpdate();
   }
 
-  function showPaymentWorkflowView(updateHistory = true) {
+  function showPaymentWorkflowView(updateHistory = true, hash = '#payment-workflow') {
     paymentWorkflowView.hidden = false;
     Object.values(views).forEach(view => { if (view) view.hidden = true; });
-    if (updateHistory && location.hash !== '#payment-workflow') history.pushState({}, '', '#payment-workflow');
+    requestAnimationFrame(() => refreshWorkflowNavigation());
+    if (updateHistory && location.hash !== hash) history.pushState({}, '', hash);
   }
 
   function showStandaloneView(viewName, updateHistory = true) {
@@ -6048,14 +6187,22 @@ function initNavigation() {
     link.addEventListener('click', () => {
       const target = document.getElementById(link.dataset.navTarget);
       if (!target) return;
-      showPaymentWorkflowView();
+      const targetHash = target.id === 'payment-workflow-view' ? '#payment-workflow' : `#${target.id}`;
+      showPaymentWorkflowView(true, targetHash);
       navigationLockTarget = target.id;
       clearTimeout(navigationLockTimer);
       navigationLockTimer = window.setTimeout(releaseNavigationLock, 1200);
       setActiveLink(link);
       requestAnimationFrame(() => {
         target.classList.remove('collapsed');
-        requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+        requestAnimationFrame(() => {
+          if (target.id === 'payment-workflow-view') window.scrollTo({ top: 0, behavior: 'smooth' });
+          else {
+            const offset = (glassNav?.getBoundingClientRect().bottom || 90) + 8;
+            const top = window.scrollY + target.getBoundingClientRect().top - offset;
+            window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+          }
+        });
       });
     });
   });
@@ -6063,11 +6210,29 @@ function initNavigation() {
   viewLinks.forEach(link => {
     link.addEventListener('click', () => showStandaloneView(link.dataset.navView));
   });
+  document.querySelectorAll('[data-overview-nav-view]').forEach(link => {
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      showStandaloneView(link.dataset.overviewNavView);
+    });
+  });
+  document.querySelectorAll('[data-overview-nav-target]').forEach(link => {
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      const targetLink = targetLinks.find(navLink => navLink.dataset.navTarget === link.dataset.overviewNavTarget);
+      if (targetLink) targetLink.click();
+    });
+  });
 
   function applyLocationView() {
     const viewName = location.hash.slice(1);
-    if (views[viewName]) showStandaloneView(viewName, false);
-    else showPaymentWorkflowView(false);
+    if (!viewName) showStandaloneView('overview', false);
+    else if (views[viewName]) showStandaloneView(viewName, false);
+    else {
+      showPaymentWorkflowView(false);
+      const targetLink = targetLinks.find(link => link.dataset.navTarget === viewName);
+      if (targetLink) targetLink.click();
+    }
   }
   window.addEventListener('popstate', applyLocationView);
   applyLocationView();

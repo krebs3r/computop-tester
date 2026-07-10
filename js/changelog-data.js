@@ -1,6 +1,33 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.6.6', de: { title: 'Pay-by-Link-Erfolgsredirects im Response-Log', items: [
+    '<strong>Übersicht als eigene Seite</strong> — Die Übersicht ist nun eine eigene Startseite wie Request-Log, Hilfe und Changelog, statt im Payment Workflow zu sitzen',
+    '<strong>Startpunkt links außen</strong> — Die Hauptnavigation führt ganz links zur Übersicht, mit vertikalem Trenner vor den Workflow-Schritten und kompaktem <code>Start</code>-Badge',
+    '<strong>App-Bereiche auf der Übersicht</strong> — Unter den Download-Links zeigen neue Kacheln die wichtigsten App-Bereiche mit passenden Navbar-Badges und führen direkt dorthin',
+    '<strong>README aktualisiert</strong> — Die Application-Views-Doku beschreibt nun die eigene Übersicht-Seite, App-Bereich-Karten und direkte Step-2-/Step-3-Hashes',
+    '<strong>Veraltete Demo-Vorschau erkannt</strong> — Per Button erzeugte Step-2-Daten wie Testkunden, Artikellisten, CustomFields und externe Callback-Demo-URLs markieren eine vorhandene Vorschau nun korrekt als nicht mehr aktuell',
+    '<strong>URLNotify verständlicher</strong> — Der Feldhinweis beschreibt nun die serverseitige Zahlungsbenachrichtigung, statt nur darauf hinzuweisen, dass sie im Browser nicht sichtbar ist',
+    '<strong>Workflow-Header zurück</strong> — Der Payment Workflow hat wieder einen eigenen Seitenheader im gleichen Muster wie die anderen App-Seiten',
+    '<strong>Fokussierter Payment Workflow</strong> — Die Workflow-Navigation beginnt direkt mit Schritt 1 und bleibt dadurch auf Konfiguration, Request und Vorschau konzentriert',
+    '<strong>Unverschlüsselte Pay-by-Link-Returns erkannt</strong> — Success-Redirects im HPP-Rücksprungformat mit Feldern wie <code>Status</code>, <code>PayID</code>, <code>TransID</code>, <code>XID</code>, <code>Code</code> und <code>MAC</code> werden nun als Callback erkannt',
+    '<strong>Direkt im Response-Log</strong> — Solche Redirects landen nicht mehr im Payment Workflow, sondern werden unmittelbar im gemeinsamen Response-Log gespeichert',
+    '<strong>Fallback für unbekannte Callbacks</strong> — Ist das Tool als Callback-Empfänger aktiv und kommt ein nicht erkanntes Query-String-Format an, wird es als <code>UNKNOWN</code> im Response-Log gespeichert',
+    '<strong>Zahlart bleibt sichtbar</strong> — Paygate-Felder wie <code>Type</code> und <code>pt</code> werden weiterhin zu lesbaren Labels wie iDEAL normalisiert',
+  ]}, en: { title: 'Pay By Link success redirects in the response log', items: [
+    '<strong>Overview as its own page</strong> — Overview is now a standalone start page like Request Log, Help and Changelog instead of living inside the Payment Workflow',
+    '<strong>Leftmost start point</strong> — The main navigation opens Overview on the far left, separated from the workflow steps by a vertical divider and marked with a compact <code>Start</code> badge',
+    '<strong>App areas on Overview</strong> — New cards below the download links show the main app areas with matching navbar-style badges and navigate directly to them',
+    '<strong>README updated</strong> — The Application Views documentation now covers the standalone Overview page, app-area cards and direct Step 2/Step 3 hashes',
+    '<strong>Stale demo preview detected</strong> — Button-generated Step 2 data such as test customers, article lists, CustomFields and external callback demo URLs now correctly mark an existing preview as outdated',
+    '<strong>URLNotify clarified</strong> — The field hint now describes the server-side payment notification purpose instead of only warning that it is not visible in the browser',
+    '<strong>Workflow header restored</strong> — Payment Workflow has its own page header again, using the same pattern as the other app pages',
+    '<strong>Focused Payment Workflow</strong> — The workflow navigator now starts directly with Step 1, keeping it focused on configuration, request setup and preview',
+    '<strong>Unencrypted Pay By Link returns detected</strong> — Success redirects in the HPP return format with fields such as <code>Status</code>, <code>PayID</code>, <code>TransID</code>, <code>XID</code>, <code>Code</code> and <code>MAC</code> are now recognised as callbacks',
+    '<strong>Directly in the Response Log</strong> — These redirects no longer fall through to the Payment Workflow and are stored in the shared Response Log instead',
+    '<strong>Fallback for unknown callbacks</strong> — When this tool is active as callback receiver and an unrecognised query-string format arrives, it is stored as <code>UNKNOWN</code> in the Response Log',
+    '<strong>Payment method stays visible</strong> — Paygate fields such as <code>Type</code> and <code>pt</code> continue to be normalised into readable labels such as iDEAL',
+  ]}},
   { v: 'v3.6.5', de: { title: 'Master-Passwort direkt bei Callback-Responses', items: [
     '<strong>Entsperren ohne Umweg</strong> — Öffnet ein Classic-Callback die Response-Analyse mit gesperrtem Profil, erscheint direkt der app-eigene Master-Passwort-Dialog',
     '<strong>Kontext verständlich erklärt</strong> — Der Dialog weist darauf hin, dass das zuletzt verwendete Profil zum Entschlüsseln der empfangenen Response geladen werden muss',
