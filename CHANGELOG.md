@@ -2,6 +2,11 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.6.7 — App parameters separated from callback detection
+
+- Excluded the app-owned `design` query parameter from the guarded unknown-callback detection, so links such as `?design=nexi` open normally without an `UNKNOWN` Response Log entry or warning
+- Kept unknown callback detection active for additional query-string fields even when `design` is also present
+
 ### v3.6.6 — Pay By Link success redirects in the response log
 
 - Moved Overview out of the Payment Workflow into its own standalone start page, matching the separate-page pattern used by Request Log, Help and Changelog

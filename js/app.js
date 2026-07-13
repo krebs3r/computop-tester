@@ -5159,6 +5159,7 @@ const CALLBACK_RELAY_KEY = 'computop_callback_relay';
 const CALLBACK_RELAY_ACK_KEY = 'computop_callback_relay_ack';
 const CALLBACK_RELAY_CHANNEL = 'computop_callback_channel';
 const CALLBACK_RELAY_MAX_AGE = 30 * 60 * 1000;
+const NON_CALLBACK_QUERY_PARAMS = new Set(['design']);
 const EXTERNAL_DEMO_CALLBACK_URLS = {
   urlSuccess: 'https://httpbingo.org/anything/paygate-success',
   urlFailure: 'https://httpbingo.org/anything/paygate-failure',
@@ -5340,7 +5341,8 @@ function _plainPaygateCallbackPayloadFromUrl(urlString) {
 
 function _unknownCallbackPayloadFromUrl(urlString) {
   const url = new URL(urlString, window.location.href);
-  const params = url.searchParams;
+  const params = new URLSearchParams(url.searchParams);
+  NON_CALLBACK_QUERY_PARAMS.forEach(name => params.delete(name));
   if (!params || Array.from(params.keys()).length === 0) return null;
   if (params.has('Data') || params.has('data') || params.has('Len') || params.has('len')) return null;
   if (_restCallbackPayloadFromUrl(urlString) || _plainPaygateCallbackPayloadFromUrl(urlString)) return null;
