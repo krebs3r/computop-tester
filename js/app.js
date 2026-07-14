@@ -1674,8 +1674,9 @@ async function aesCbcEncrypt(keyStr, plaintext) {
 }
 
 async function aesCbcDecrypt(keyStr, dataValue, len) {
-  const [ivHex, cipherHex] = String(dataValue || '').split('-');
-  if (!ivHex || !cipherHex) throw new Error(t('err_aes_data_format'));
+  const parts = String(dataValue || '').trim().split('-');
+  if (parts.length !== 2 || !parts[0] || !parts[1]) throw new Error(t('err_aes_data_format'));
+  const [ivHex, cipherHex] = parts;
   const iv = hexToBytes(ivHex);
   if (iv.length !== 16) throw new Error(t('err_aes_iv_length'));
   const key = await crypto.subtle.importKey('raw', aesKeyBytes(keyStr), { name: 'AES-CBC' }, false, ['decrypt']);
@@ -1690,8 +1691,12 @@ async function encryptClassicData(keyStr, plaintext) {
     : Blowfish.encrypt(keyStr, plaintext);
 }
 
+function detectClassicResponseEncryption(dataValue) {
+  return String(dataValue || '').trim().includes('-') ? 'aes' : 'blowfish';
+}
+
 async function decryptClassicData(keyStr, dataValue, len) {
-  return currentClassicEncryption === 'aes'
+  return detectClassicResponseEncryption(dataValue) === 'aes'
     ? aesCbcDecrypt(keyStr, dataValue, len)
     : Blowfish.decrypt(keyStr, dataValue, len || undefined);
 }
@@ -4934,6 +4939,8 @@ async function decryptResponse() {
   if (!dataHex)     { showToast(t('resp_no_data'), 'error'); return; }
 
   try {
+    const responseEncryption = detectClassicResponseEncryption(dataHex);
+    if (responseEncryption !== currentClassicEncryption) setClassicEncryption(responseEncryption);
     const plain = await decryptClassicData(blowfishKey, dataHex, lenVal || undefined);
 
     // Parse key=value pairs

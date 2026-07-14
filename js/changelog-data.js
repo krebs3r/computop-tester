@@ -1,12 +1,14 @@
 'use strict';
 
 const CHANGELOG = [
-  { v: 'v3.6.7', de: { title: 'App-Parameter sauber von Callbacks getrennt', items: [
+  { v: 'v3.6.7', de: { title: 'Callback-Parameter und Classic-Responses korrigiert', items: [
     '<strong>Design-Link ohne Fehlalarm</strong> — Der app-eigene Query-Parameter <code>design</code> wird bei der UNKNOWN-Callback-Prüfung ignoriert; Links wie <code>?design=nexi</code> öffnen normal ohne Response-Log-Eintrag oder Warnmeldung',
     '<strong>Callback-Fallback bleibt erhalten</strong> — Weitere Query-Parameter werden weiterhin als unbekanntes Callback-Format protokolliert, auch wenn <code>design</code> zusätzlich gesetzt ist',
-  ]}, en: { title: 'App parameters separated from callback detection', items: [
+    '<strong>AES-Responses automatisch erkannt</strong> — Classic-Responses im Format <code>IVhex-CiphertextHex</code> werden nach einem Callback-Seitenaufruf automatisch mit AES-CBC entschlüsselt, statt auf den Blowfish-Standardmodus zurückzufallen',
+  ]}, en: { title: 'Callback parameters and Classic response decryption fixes', items: [
     '<strong>Design links without false alarms</strong> — The app-owned <code>design</code> query parameter is ignored by UNKNOWN callback detection, so links such as <code>?design=nexi</code> open normally without a Response Log entry or warning',
     '<strong>Callback fallback preserved</strong> — Additional query parameters are still logged as an unknown callback format even when <code>design</code> is also present',
+    '<strong>AES responses detected automatically</strong> — Classic responses using the <code>IVhex-CiphertextHex</code> format are decrypted with AES-CBC automatically after a callback page load instead of falling back to the default Blowfish mode',
   ]}},
   { v: 'v3.6.6', de: { title: 'Pay-by-Link-Erfolgsredirects im Response-Log', items: [
     '<strong>Übersicht als eigene Seite</strong> — Die Übersicht ist nun eine eigene Startseite wie Request-Log, Hilfe und Changelog, statt im Payment Workflow zu sitzen',

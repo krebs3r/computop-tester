@@ -2,10 +2,11 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
-### v3.6.7 — App parameters separated from callback detection
+### v3.6.7 — Callback parameters and Classic response decryption fixes
 
 - Excluded the app-owned `design` query parameter from the guarded unknown-callback detection, so links such as `?design=nexi` open normally without an `UNKNOWN` Response Log entry or warning
 - Kept unknown callback detection active for additional query-string fields even when `design` is also present
+- Detected AES-CBC Classic responses from their `IVhex-CiphertextHex` `Data` format and decrypted them with AES automatically instead of falling back to the default Blowfish mode after a callback page load
 
 ### v3.6.6 — Pay By Link success redirects in the response log
 
