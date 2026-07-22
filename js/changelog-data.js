@@ -1,6 +1,29 @@
 'use strict';
 
 const CHANGELOG = [
+  { v: 'v3.6.8', de: { title: 'Credential-Profile und sichere Statusabfragen', items: [
+    '<strong>Aktives Profil klar erkennbar</strong> — Schritt 1 zeigt nun eindeutig, welches Credential-Profil aktiv ist, ob Felder ungespeichert verändert wurden und schützt vor dem unbeabsichtigten Verwerfen solcher Änderungen',
+    '<strong>Profile gezielt verwalten</strong> — Ein responsiver Profilmanager bündelt Anlegen, Aktivieren, Umbenennen und Löschen, ohne Profilauswahl und Credential-Bearbeitung zu vermischen',
+    '<strong>Verschlüsselte Profil-Backups</strong> — Credential-Profile lassen sich mit einem eigenen Backup-Passwort lokal als AES-GCM-verschlüsselte JSON-Datei exportieren und wieder importieren; der Schlüssel wird per PBKDF2-SHA-256 abgeleitet',
+    '<strong>Importkonflikte unter Kontrolle</strong> — Bei bereits vorhandenen Profil-IDs kann bewusst zwischen Aktualisieren und Import als Kopie gewählt werden; Format, Inhalt und Dateigröße werden geprüft',
+    '<strong>Transaktionen an Profile gebunden</strong> — Neue Request-Log-Einträge speichern Profil-ID und Profilrevision, wenn die sichtbaren Credentials dem aktiven gespeicherten Profil entsprechen',
+    '<strong>Statusabfragen abgesichert</strong> — Gespeicherte Transaktionen bleiben nach Merchant-Kontext getrennt, aktivieren nach Möglichkeit ihr Credential-Profil, warnen bei geänderten Profilen und blockieren die Abfrage bei einer falschen Profil- oder Merchant-ID-Zuordnung',
+    '<strong>Ältere Logs bleiben nutzbar</strong> — Fehlt in bestehenden Einträgen noch eine eindeutige Profilbindung, wird weiterhin vorsichtig über die Merchant ID zugeordnet',
+    '<strong>REST-Zahlungen im Request Log</strong> — Auch Vorschauen zum Erstellen einer REST-Zahlung werden nun protokolliert und stehen damit für profilgebundene Transaktionshistorie und spätere Statusabfragen bereit',
+    '<strong>Classic-Abbruch korrekt protokolliert</strong> — Der erzeugte <code>URLBack</code>-Redirect wird als <code>CANCELLED</code> im Response-Log gespeichert und nicht mehr als unbekannter Callback gemeldet',
+    '<strong>Oberfläche und README verfeinert</strong> — Der Classic-Demo-Schalter bleibt in der REST-Credential-Konfiguration ausgeblendet, Überlaufhinweise und Gruppierung der breiten Navigation wurden verbessert und das README enthält nun App-Vorschau sowie aktuelle Profil-, Callback-, Sicherheits- und Strukturhinweise',
+  ]}, en: { title: 'Credential profiles and safer status inquiries', items: [
+    '<strong>Clear active-profile state</strong> — Step 1 now clearly identifies the active credential profile, shows unsaved field changes and protects against discarding those changes unintentionally',
+    '<strong>Focused profile management</strong> — A responsive profile manager handles creation, activation, renaming and deletion without mixing profile selection with credential editing',
+    '<strong>Encrypted profile backups</strong> — Credential profiles can be exported and imported locally as an AES-GCM-encrypted JSON file protected by a separate backup password derived with PBKDF2-SHA-256',
+    '<strong>Controlled import conflicts</strong> — Existing profile IDs can be updated or imported as copies explicitly, while format, content and file-size validation guard the import',
+    '<strong>Transactions bound to profiles</strong> — New request-log entries retain the profile ID and revision when the visible credentials match the active saved profile',
+    '<strong>Safer status inquiries</strong> — Saved transactions stay separated by merchant context, reactivate their profile when possible, warn when it changed and block execution when the active profile or Merchant ID does not match',
+    '<strong>Older logs remain useful</strong> — Existing entries without an unambiguous profile binding continue to use a conservative Merchant ID match',
+    '<strong>REST payments in the Request Log</strong> — REST payment-creation previews are now logged as well, making them available for profile-bound transaction history and later status inquiries',
+    '<strong>Classic cancellation logged correctly</strong> — The generated <code>URLBack</code> redirect is stored as <code>CANCELLED</code> in the Response Log instead of being reported as an unknown callback',
+    '<strong>Interface and README refined</strong> — The Classic demo switch stays hidden in REST credential configuration, wide-navigation overflow cues and grouping were improved, and the README now includes an app preview plus current profile, callback, security and project-structure guidance',
+  ]}},
   { v: 'v3.6.7', de: { title: 'Callback-Parameter und Classic-Responses korrigiert', items: [
     '<strong>Design-Link ohne Fehlalarm</strong> — Der app-eigene Query-Parameter <code>design</code> wird bei der UNKNOWN-Callback-Prüfung ignoriert; Links wie <code>?design=nexi</code> öffnen normal ohne Response-Log-Eintrag oder Warnmeldung',
     '<strong>Callback-Fallback bleibt erhalten</strong> — Weitere Query-Parameter werden weiterhin als unbekanntes Callback-Format protokolliert, auch wenn <code>design</code> zusätzlich gesetzt ist',

@@ -45,7 +45,7 @@
       "image": "https://krebs3r.github.io/computop-tester/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any modern web browser",
-      "softwareVersion": "3.6.7",
+      "softwareVersion": "3.6.8",
       "isAccessibleForFree": true,
       "license": "https://github.com/krebs3r/computop-tester/blob/main/LICENSE",
       "codeRepository": "https://github.com/krebs3r/computop-tester"
@@ -82,18 +82,22 @@
   </div>
   <div class="nav-group nav-group-support">
     <button class="nav-link" data-nav-view="tools" data-nav-group="tools" id="nav-tools" type="button">Werkzeuge</button>
+  </div>
+  <div class="nav-group nav-group-guide">
     <button class="nav-link" data-nav-view="help" data-nav-group="guide" id="nav-help" type="button">Hilfe</button>
   </div>
   <div class="nav-group nav-group-right">
     <button class="nav-link" data-nav-view="changelog" data-nav-group="changelog" type="button">
       <span id="nav-changelog">Changelog</span>
-      <span class="nav-interface-badge changelog" id="nav-version-badge">Beta v3.6.7</span>
+      <span class="nav-interface-badge changelog" id="nav-version-badge">Beta v3.6.8</span>
     </button>
     <button class="settings-toggle" data-action="toggle-settings-menu" id="settings-toggle-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="settings-menu" title="Einstellungen">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.5 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.5a1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.5 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.14.37.35.7.64.97.3.27.68.42 1.08.43H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg>
     </button>
   </div>
 </nav>
+<div class="nav-scroll-fade nav-scroll-fade-left" id="nav-scroll-fade-left" aria-hidden="true"></div>
+<div class="nav-scroll-fade nav-scroll-fade-right" id="nav-scroll-fade-right" aria-hidden="true"></div>
 <div class="settings-menu" id="settings-menu" role="menu" aria-labelledby="settings-toggle-btn" hidden>
   <div class="settings-menu-title" id="settings-menu-title">Einstellungen</div>
   <button class="settings-menu-item theme-toggle" data-action="toggle-theme" id="theme-toggle-btn" type="button" role="menuitem">
@@ -267,7 +271,7 @@
         <small id="overview-map-help-desc">Integration, Bedienung, Dokumentation, Testdaten und Datenschutz nachlesen.</small>
       </a>
       <a class="help-resource" href="#changelog" data-overview-nav-view="changelog">
-        <span class="nav-interface-badge changelog" id="overview-map-changelog-badge">Beta v3.6.7</span>
+        <span class="nav-interface-badge changelog" id="overview-map-changelog-badge">Beta v3.6.8</span>
         <strong id="overview-map-changelog-title">Changelog</strong>
         <small id="overview-map-changelog-desc">Änderungen, Release-Historie und neue Funktionen verfolgen.</small>
       </a>
@@ -285,9 +289,9 @@
     </button>
     <nav class="workflow-nav-list" id="workflow-nav-list">
       <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-creds" id="workflow-nav-step-credentials">Schritt 1 · Credentials</button>
-      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-credentials" id="workflow-nav-credentials">Zugangsdaten</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="profile-section" id="workflow-nav-profiles">Credential-Profil</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-interface" id="workflow-nav-interface">Schnittstelle</button>
-      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="profile-section" id="workflow-nav-profiles">Gespeicherte Profile</button>
+      <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-credentials" id="workflow-nav-credentials">Zugangsdaten</button>
       <button class="workflow-nav-item workflow-nav-step" type="button" data-workflow-target="card-payment" id="workflow-nav-step-request">Schritt 2 · API-Request</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-encryption" data-workflow-visible="classic" id="workflow-nav-encryption">Verschlüsselung</button>
       <button class="workflow-nav-item workflow-nav-sub" type="button" data-workflow-target="workflow-use-case" id="workflow-nav-use-case">Use Case</button>
@@ -330,13 +334,63 @@
       <span class="card-toggle">▼</span>
     </div>
     <div class="card-body">
-      <span class="workflow-anchor" id="workflow-credentials" data-workflow-section tabindex="-1"></span>
-      <div class="field-grid full">
-        <div class="field">
-          <label><span id="l-mid">Merchant ID</span> <span class="required" id="merchant-required">*</span> <span class="hint" id="merchant-credential-hint"></span><button class="param-tip" id="tip-mid" tabindex="-1">?</button></label>
-          <input type="text" id="merchantId" placeholder="IhreMerchantID" autocomplete="off">
+      <div class="profile-section" id="profile-section" data-workflow-section tabindex="-1">
+        <div class="profile-top">
+          <span class="profile-top-title"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> <span id="cred-save-title">Aktives Credential-Profil</span></span>
+          <span class="profile-state" id="active-profile-state">Kein Profil aktiv</span>
+          <span id="cred-save-status">–</span>
+        </div>
+        <div class="profile-toolbar">
+          <select id="profile-select" data-action-change="on-profile-select">
+            <option value="" id="opt-profile-placeholder">— Ohne gespeichertes Profil —</option>
+          </select>
+          <button class="btn btn-ghost" data-action="new-profile" type="button">
+            <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            <span id="btn-new-profile-text">Neues Profil</span>
+          </button>
+          <button class="btn btn-ghost profile-manage-toggle" id="profile-manage-toggle" data-action="toggle-profile-manager" type="button" aria-expanded="false" aria-controls="profile-manager-details">
+            <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <span id="btn-manage-profile-text">Verwalten</span>
+          </button>
+        </div>
+        <div class="profile-active-summary" id="profile-active-summary">Credentials können direkt verwendet oder als neues Profil gespeichert werden.</div>
+        <div class="profile-manager-details" id="profile-manager-details" hidden>
+          <div class="profile-manager-heading">
+            <div>
+              <strong id="profile-manager-title">Gespeicherte Profile</strong>
+              <span id="profile-manager-description">Alle lokal gespeicherten Credential-Profile verwalten.</span>
+            </div>
+            <span class="profile-manager-count" id="profile-manager-count"></span>
+          </div>
+          <div class="profile-manager-list" id="profile-manager-list"></div>
+          <p class="profile-manager-empty" id="profile-manager-empty" hidden>Noch keine Profile gespeichert.</p>
+          <div class="profile-backup-actions">
+            <button class="btn btn-ghost" data-action="export-credential-profiles" id="btn-export-credential-profiles" type="button">
+              <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span>
+              <span id="btn-export-credential-profiles-text">Profile exportieren</span>
+            </button>
+            <button class="btn btn-ghost" data-action="open-credential-profile-import" id="btn-import-credential-profiles" type="button">
+              <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 3h14"/></svg></span>
+              <span id="btn-import-credential-profiles-text">Profile importieren</span>
+            </button>
+            <input type="file" id="credential-profile-import-file" accept="application/json,.json" hidden data-action-change="handle-credential-profile-import-file">
+          </div>
+        </div>
+        <div class="profile-hint" id="cred-save-text">Classic- und REST-Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert. Der lokale Schutz ersetzt keinen Passwortmanager.</div>
+        <div class="master-password-recommendation" id="master-password-recommendation" hidden>
+          <span class="master-password-recommendation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+          </span>
+          <div class="master-password-recommendation-copy">
+            <strong id="master-recommendation-title">Master-Passwort empfohlen</strong>
+            <span id="master-recommendation-text">Du speicherst Credentials im Browser. Ohne Master-Passwort schützt nur der app-eigene Standardschlüssel; mit Master-Passwort sind Profile an dein Passwort gebunden.</span>
+          </div>
+          <button class="btn btn-ghost master-password-recommendation-action" data-action="open-master-pw-modal" type="button" id="master-recommendation-action">Einrichten</button>
         </div>
       </div>
+
+      <div class="divider profile-divider"></div>
+
       <div class="credential-interface-selector" id="workflow-interface" data-workflow-section tabindex="-1">
         <div class="integration-label" id="integration-label">Schnittstelle</div>
         <div class="method-ctrl">
@@ -348,6 +402,13 @@
             <span class="icon icon-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="m9 9-3 3 3 3"/><path d="m15 9 3 3-3 3"/></svg></span>
             <span>REST API</span><span class="method-endpoint">JSON Builder</span>
           </button>
+        </div>
+      </div>
+      <span class="workflow-anchor" id="workflow-credentials" data-workflow-section tabindex="-1"></span>
+      <div class="field-grid full">
+        <div class="field">
+          <label><span id="l-mid">Merchant ID</span> <span class="required" id="merchant-required">*</span> <span class="hint" id="merchant-credential-hint"></span><button class="param-tip" id="tip-mid" tabindex="-1">?</button></label>
+          <input type="text" id="merchantId" placeholder="IhreMerchantID" autocomplete="off">
         </div>
       </div>
       <div class="credential-mode-notice" id="credential-mode-notice">
@@ -372,13 +433,6 @@
           </div>
         </div>
       </div>
-        <label class="classic-demo-row" for="classic-demo-mode">
-          <input type="checkbox" id="classic-demo-mode">
-          <span class="classic-demo-content">
-            <span class="classic-demo-title" id="classic-demo-title">Demo-Vorschau ohne Credentials</span>
-            <span class="classic-demo-description" id="classic-demo-description">Fehlende Classic-Credentials werden nur für die lokale Berechnung durch Demo-Werte ersetzt. Die erzeugte URL kann nicht ausgeführt werden.</span>
-          </span>
-        </label>
       </div>
       <div class="credential-group is-muted" id="rest-credential-group" style="display:none">
         <div class="credential-group-title"><strong id="rest-credential-title">REST-Authentifizierung</strong><span id="rest-credential-subtitle">optional – Platzhalter funktionieren ohne Zugangsdaten</span></div>
@@ -392,41 +446,19 @@
         </div>
       </div>
       </div>
-
-      <div class="divider"></div>
-
-      <div class="profile-section" id="profile-section" data-workflow-section tabindex="-1">
-        <div class="profile-top">
-          <span class="profile-top-title"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> <span id="cred-save-title">Verschlüsselte Profile</span></span>
-          <span id="cred-save-status" style="margin-left:auto;font-size:12px">–</span>
-        </div>
-        <div class="profile-row">
-          <input type="text" id="profile-name" placeholder="Profilname …" style="font-size:13px;padding:9px 12px">
-          <select id="profile-select" data-action-change="on-profile-select" style="font-size:13px;padding:9px 12px">
-            <option value="" id="opt-profile-placeholder">— Gespeicherte Profile —</option>
-          </select>
-          <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" data-action="save-profile"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></span> <span id="btn-save-text">Speichern</span></button>
-          <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px" data-action="load-profile"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></span> <span id="btn-load-text">Laden</span></button>
-          <button class="btn btn-danger-ghost" style="padding:8px 14px;font-size:12px" data-action="delete-profile"><span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span> <span id="btn-delete-text">Löschen</span></button>
-        </div>
-        <div class="profile-hint" id="cred-save-text">Classic- und REST-Credentials werden AES-GCM verschlüsselt im Browser-LocalStorage gespeichert. Der lokale Schutz ersetzt keinen Passwortmanager.</div>
-        <div class="master-password-recommendation" id="master-password-recommendation" hidden>
-          <span class="master-password-recommendation-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
-          </span>
-          <div class="master-password-recommendation-copy">
-            <strong id="master-recommendation-title">Master-Passwort empfohlen</strong>
-            <span id="master-recommendation-text">Du speicherst Credentials im Browser. Ohne Master-Passwort schützt nur der app-eigene Standardschlüssel; mit Master-Passwort sind Profile an dein Passwort gebunden.</span>
-          </div>
-          <button class="btn btn-ghost master-password-recommendation-action" data-action="open-master-pw-modal" type="button" id="master-recommendation-action">Einrichten</button>
-        </div>
-        <div class="btn-row" style="margin-top:8px">
-          <button class="btn btn-ghost" data-action="open-master-pw-modal" id="btn-master-pw" type="button">
-            <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg></span>
-            <span id="btn-master-pw-text">Master-Passwort …</span>
-          </button>
-        </div>
+      <div class="credential-save-row">
+        <button class="btn btn-primary" id="profile-save-button" data-action="save-profile" type="button" disabled>
+          <span class="icon icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></span>
+          <span id="btn-save-text">Profil speichern</span>
+        </button>
       </div>
+      <label class="classic-demo-row" id="classic-demo-row" for="classic-demo-mode">
+        <input type="checkbox" id="classic-demo-mode">
+        <span class="classic-demo-content">
+          <span class="classic-demo-title" id="classic-demo-title">Demo-Vorschau ohne Credentials</span>
+          <span class="classic-demo-description" id="classic-demo-description">Fehlende Classic-Credentials werden nur für die lokale Berechnung durch Demo-Werte ersetzt. Die erzeugte URL kann nicht ausgeführt werden.</span>
+        </span>
+      </label>
 
     </div>
     <div class="credential-lock-overlay" id="credential-lock-overlay" aria-hidden="true">
@@ -508,7 +540,7 @@
             <select id="status-saved-transaction">
               <option value="" id="status-saved-transaction-manual">Manuelle Eingabe</option>
             </select>
-            <span class="status-saved-transaction-hint" id="status-saved-transaction-summary">Gespeicherte IDs werden aus Request- und Response-Logs zusammengeführt. Die Felder bleiben editierbar.</span>
+            <span class="status-saved-transaction-hint" id="status-saved-transaction-summary">Gespeicherte IDs und ihr Credential-Profil werden aus Request- und Response-Logs zusammengeführt.</span>
           </div>
           <div class="field">
             <label><span id="l-status-lookup">Abfrage über</span><button class="param-tip" id="tip-status-lookup" tabindex="-1">?</button></label>
@@ -526,6 +558,7 @@
             <input type="text" id="status-transaction-id" placeholder="TID-12345" maxlength="64">
           </div>
         </div>
+        <div class="status-profile-match" id="status-profile-match" hidden></div>
         <div class="info-box rest-warning" id="status-use-case-info" style="margin-top:12px"></div>
       </div>
 
@@ -1425,7 +1458,7 @@
         <img class="brand-logo brand-logo-white" src="assets/nexi/logos/nexi-white.png" alt="">
       </div>
       <div class="standalone-header-copy">
-        <div class="nav-interface-badges header-nav-badges" aria-label="Changelog"><span class="nav-interface-badge changelog" id="changelog-version-badge">Beta v3.6.7</span></div>
+        <div class="nav-interface-badges header-nav-badges" aria-label="Changelog"><span class="nav-interface-badge changelog" id="changelog-version-badge">Beta v3.6.8</span></div>
         <h1 id="changelog-title">Changelog</h1>
         <p id="changelog-subtitle">Vollständige Versionshistorie und Änderungen</p>
       </div>
@@ -1685,6 +1718,65 @@
     <div class="app-modal-actions">
       <button class="btn btn-secondary" id="profile-delete-cancel" type="button">Abbrechen</button>
       <button class="btn btn-danger" id="profile-delete-confirm" type="button">Profil löschen</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="profile-name-modal" role="dialog" aria-modal="true" aria-labelledby="profile-name-modal-title" aria-describedby="profile-name-modal-text">
+  <div class="app-modal-panel" role="document">
+    <div class="app-modal-icon info" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
+    </div>
+    <h2 class="app-modal-title" id="profile-name-modal-title">Credential-Profil benennen</h2>
+    <p class="app-modal-text" id="profile-name-modal-text">Gib einen Namen für das Credential-Profil ein.</p>
+    <div class="field modal-field">
+      <label for="profile-name-modal-input" id="profile-name-modal-label">Profilname</label>
+      <input type="text" id="profile-name-modal-input" maxlength="64" autocomplete="off">
+    </div>
+    <div class="app-modal-actions">
+      <button class="btn btn-secondary" id="profile-name-modal-cancel" type="button">Abbrechen</button>
+      <button class="btn btn-primary" id="profile-name-modal-confirm" type="button">Profil speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="credential-export-modal" role="dialog" aria-modal="true" aria-labelledby="credential-export-modal-title" aria-describedby="credential-export-modal-text">
+  <div class="app-modal-panel" role="document">
+    <div class="app-modal-icon info" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+    </div>
+    <h2 class="app-modal-title" id="credential-export-modal-title">Credential-Profile verschlüsselt exportieren</h2>
+    <p class="app-modal-text" id="credential-export-modal-text">Vergib ein eigenes Backup-Passwort. Ohne dieses Passwort kann die Exportdatei nicht wiederhergestellt werden.</p>
+    <div class="field modal-field">
+      <label for="credential-export-password" id="credential-export-password-label">Backup-Passwort</label>
+      <input type="password" id="credential-export-password" autocomplete="new-password">
+    </div>
+    <div class="field modal-field">
+      <label for="credential-export-password-repeat" id="credential-export-password-repeat-label">Backup-Passwort wiederholen</label>
+      <input type="password" id="credential-export-password-repeat" autocomplete="new-password">
+    </div>
+    <div class="app-modal-actions">
+      <button class="btn btn-secondary" id="credential-export-cancel" type="button">Abbrechen</button>
+      <button class="btn btn-primary" id="credential-export-confirm" type="button">Verschlüsselt exportieren</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="credential-import-modal" role="dialog" aria-modal="true" aria-labelledby="credential-import-modal-title" aria-describedby="credential-import-modal-text">
+  <div class="app-modal-panel" role="document">
+    <div class="app-modal-icon info" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 3h14"/></svg>
+    </div>
+    <h2 class="app-modal-title" id="credential-import-modal-title">Credential-Profile importieren</h2>
+    <p class="app-modal-text" id="credential-import-modal-text">Gib das Backup-Passwort ein, mit dem diese Datei exportiert wurde.</p>
+    <div class="credential-import-file" id="credential-import-filename">–</div>
+    <div class="field modal-field">
+      <label for="credential-import-password" id="credential-import-password-label">Backup-Passwort</label>
+      <input type="password" id="credential-import-password" autocomplete="current-password">
+    </div>
+    <div class="app-modal-actions">
+      <button class="btn btn-secondary" id="credential-import-cancel" type="button">Abbrechen</button>
+      <button class="btn btn-primary" id="credential-import-confirm" type="button">Entschlüsseln und importieren</button>
     </div>
   </div>
 </div>

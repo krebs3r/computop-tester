@@ -3,11 +3,13 @@
 Browser-based development tool for creating, inspecting and troubleshooting
 encrypted [Paygate](https://www.computop.com) payment requests.
 
-![Version](https://img.shields.io/badge/version-3.6.7-blueviolet)
+![Version](https://img.shields.io/badge/version-3.6.8-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
 **[Open the live app](https://krebs3r.github.io/computop-tester/)**
+
+![Paygate Payment Tester overview header](assets/screenshots/readme-header.png)
 
 > This is an independent development tool and is not currently an officially
 > approved product of Computop or Nexi Group. The optional Nexi presentation is
@@ -57,7 +59,10 @@ offline caching and automatic browser redirects require HTTP/HTTPS.
 - JSON backup and restoration of both logs
 - Standalone MAC validator and Base64 encoder/decoder
 - `credentialOnFile` examples for CIT and MIT parameters
-- Named, locally encrypted credential profiles with an optional master password
+- Named, locally encrypted credential profiles with active/unsaved state,
+  profile management and an optional master password
+- Password-encrypted JSON export and import of credential profiles, including
+  explicit conflict handling for existing profile IDs
 - German and English interface, three appearance modes and two presentations
 - Installable PWA with network-first offline caching
 
@@ -94,7 +99,9 @@ deleting saved profiles, logs or settings.
 The Payment Workflow follows the same three-step sequence for Classic and REST:
 
 1. **Configuration** selects the interface and manages credentials or saved
-   profiles.
+   profiles. The active-profile state shows whether the credential fields still
+   match the saved profile; profile changes must be saved before they are bound
+   to a generated log entry.
 2. **Configure Request** selects the use case and contains only the options
    relevant to the current interface.
 3. **Preview & Submit** explains the assembled request before offering copy,
@@ -117,6 +124,13 @@ payload. The endpoint is designed as a server-to-server API, so browser CORS
 rules may prevent the app from reading the generated customer link. Its
 `action=create` URL can still be inspected and copied.
 
+Generated request-log entries retain the active credential profile and its
+revision when the credential fields match the saved profile. Selecting a saved
+transaction for a status inquiry activates the associated profile when
+available, warns when that profile has changed and blocks execution when the
+active profile or Merchant ID does not match. Older log entries without a
+profile ID continue to use a Merchant ID match when possible.
+
 REST mode instead shows composed objects, the final JSON payload and the
 selected client command. V1 uses the shared `/api/v1/payments` endpoint; V2 uses
 use-case-specific endpoints and an `Idempotency-Key` header. REST requests are
@@ -129,9 +143,12 @@ controlled external tool.
 REST JSON. Analysed results are added to the shared Response Log.
 
 On HTTP/HTTPS deployments, the internal callback receiver can set
-`URLSuccess`, `URLFailure` and `URLBack` to the tester. Browser redirects then
-return to Response Analysis automatically. REST success, failure and cancel
-redirects can also be captured in the Response Log.
+`URLSuccess`, `URLFailure` and `URLBack` to the tester. Classic success and
+failure redirects then return to Response Analysis automatically, while a
+Classic cancellation via the generated `URLBack` is stored directly as
+`CANCELLED` in the Response Log instead of falling through to the
+unknown-callback warning. REST success, failure and cancel redirects can also
+be captured in the Response Log.
 
 `URLNotify` is different: it is a server-to-server notification and cannot be
 received or observed by this static browser app. It must point to a trusted,
@@ -200,6 +217,7 @@ available.
 | MAC | HMAC-SHA256 through Web Crypto |
 | Classic payload | Blowfish ECB, or optional Helpdesk-enabled AES-CBC/PKCS7 |
 | Credential profiles | AES-GCM-encrypted in `localStorage` |
+| Credential-profile backups | Password-derived AES-GCM encryption in a downloaded JSON file; export and import run locally |
 | Request and response logs | Plain records in `IndexedDB`, with a `localStorage` fallback |
 | Language, appearance and settings | `localStorage` |
 | Runtime assets | Self-hosted; external scripts, styles and fonts are blocked |
@@ -252,6 +270,7 @@ js/vendor/qrcode.js        Vendored MIT-licensed QR generator
 assets/fonts/              Self-hosted application fonts
 assets/nexi/               Nexi preview fonts, logos and notices
 assets/payment-page/       Hosted Payment Page merchant-logo PNGs
+assets/screenshots/        Repository documentation screenshots
 icons/                     Browser, Apple Touch, PWA and header icons
 service-worker.js          PWA network-first cache
 manifest.json              Web app manifest

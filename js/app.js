@@ -97,6 +97,10 @@ let currentClassicEncryption = 'blowfish';
 let statusTransactionCandidates = [];
 let statusTransactionRefreshTimer = null;
 let statusTransactionRefreshToken = 0;
+let activeCredentialProfileId = '';
+let credentialProfileSnapshot = '';
+let credentialProfileDirty = false;
+let pendingProfileNameRequest = null;
 const PBL_REFS_LS_KEY = 'computop_paybylink_refs';
 const previewState = { hasPreview: false, isStale: false, isResetting: false };
 
@@ -495,7 +499,7 @@ function updateUseCaseUI() {
 }
 
 function _statusCandidateKey(candidate) {
-  return `${candidate.merchantId || ''}\u001f${candidate.paymentId || ''}\u001f${candidate.transId || ''}`;
+  return `${candidate.profileId || ''}\u001f${candidate.merchantId || ''}\u001f${candidate.paymentId || ''}\u001f${candidate.transId || ''}`;
 }
 
 function _statusIdentifier(value, maxLength = 26) {
@@ -523,8 +527,8 @@ function _plainParamIgnoreCase(plain, names) {
 function _mergeStatusCandidate(candidates, incoming) {
   if (!incoming.paymentId && !incoming.transId) return;
   const matches = candidates.filter(candidate => {
-    const samePayment = incoming.paymentId && candidate.paymentId === incoming.paymentId;
     const merchantCompatible = !incoming.merchantId || !candidate.merchantId || incoming.merchantId === candidate.merchantId;
+    const samePayment = incoming.paymentId && candidate.paymentId === incoming.paymentId && merchantCompatible;
     const sameTransaction = incoming.transId && candidate.transId === incoming.transId && merchantCompatible;
     return samePayment || sameTransaction;
   });
@@ -538,6 +542,9 @@ function _mergeStatusCandidate(candidates, incoming) {
     transId: result.transId || candidate.transId,
     merchantId: result.merchantId || candidate.merchantId,
     integration: result.integration || candidate.integration,
+    profileId: result.profileId || candidate.profileId,
+    profileName: result.profileName || candidate.profileName,
+    profileRevision: Number(result.profileRevision || candidate.profileRevision || 0),
     timestamp: String(result.timestamp || '') > String(candidate.timestamp || '') ? result.timestamp : candidate.timestamp,
   }), incoming);
   matches.forEach(candidate => candidates.splice(candidates.indexOf(candidate), 1));
@@ -550,11 +557,14 @@ async function collectStatusTransactionCandidates() {
     _getLogEntries(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY),
   ]);
   const candidates = [];
-  requests.forEach(entry => _mergeStatusCandidate(candidates, {
+  requests.filter(entry => entry.useCase !== 'payment-status').forEach(entry => _mergeStatusCandidate(candidates, {
     paymentId: String(entry.paymentId || '').trim(),
     transId: String(entry.transId || '').trim(),
     merchantId: String(entry.merchantId || '').trim(),
     integration: String(entry.integration || '').trim(),
+    profileId: String(entry.profileId || '').trim(),
+    profileName: String(entry.profileName || '').trim(),
+    profileRevision: Number(entry.profileRevision || 0),
     timestamp: entry.timestamp || '',
   }));
   responses.forEach(entry => _mergeStatusCandidate(candidates, {
@@ -562,6 +572,9 @@ async function collectStatusTransactionCandidates() {
     transId: String(entry.transId || '').trim() || _plainParamIgnoreCase(entry.plain, ['TransID', 'TransactionID']),
     merchantId: String(entry.merchantId || '').trim() || _plainParamIgnoreCase(entry.plain, ['MerchantID', 'mid']),
     integration: entry.integration === 'rest' ? 'rest' : 'classic',
+    profileId: String(entry.profileId || '').trim(),
+    profileName: String(entry.profileName || '').trim(),
+    profileRevision: Number(entry.profileRevision || 0),
     timestamp: entry.timestamp || '',
   }));
   return candidates
@@ -577,6 +590,7 @@ function _formatStatusTransactionOption(candidate) {
   if (candidate.paymentId) identifiers.push(`PayID ${_statusIdentifier(candidate.paymentId)}`);
   if (candidate.transId) identifiers.push(`TransID ${_statusIdentifier(candidate.transId)}`);
   if (candidate.merchantId) identifiers.push(`MID ${_statusIdentifier(candidate.merchantId, 18)}`);
+  if (candidate.profileName) identifiers.push(candidate.profileName);
   return [date, ...identifiers].filter(Boolean).join(' · ');
 }
 
@@ -613,7 +627,7 @@ async function populateStatusTransactionOptions() {
   }
 }
 
-function applySavedStatusTransaction() {
+async function applySavedStatusTransaction() {
   const select = document.getElementById('status-saved-transaction');
   if (!select || select.value === '') {
     if (select) delete select.dataset.selectedKey;
@@ -632,6 +646,8 @@ function applySavedStatusTransaction() {
     const currentValueAvailable = lookup.value === 'paymentId' ? candidate.paymentId : candidate.transId;
     if (!currentValueAvailable) lookup.value = candidate.paymentId ? 'paymentId' : 'transactionId';
   }
+  if (candidate.integration && candidate.integration !== currentIntegration) setIntegration(candidate.integration);
+  await activateProfileForStatusCandidate(candidate);
   updateUseCaseUI();
 }
 
@@ -640,12 +656,84 @@ function markStatusTransactionManual() {
   if (!select) return;
   select.value = '';
   delete select.dataset.selectedKey;
+  updateStatusProfileMatch(null);
 }
 
 function scheduleStatusTransactionRefresh() {
   if (currentUseCase !== 'payment-status') return;
   clearTimeout(statusTransactionRefreshTimer);
   statusTransactionRefreshTimer = setTimeout(populateStatusTransactionOptions, 0);
+}
+
+function _selectedStatusCandidate() {
+  const select = document.getElementById('status-saved-transaction');
+  if (!select || select.value === '') return null;
+  return statusTransactionCandidates[Number(select.value)] || null;
+}
+
+function updateStatusProfileMatch(candidate = _selectedStatusCandidate()) {
+  const panel = document.getElementById('status-profile-match');
+  if (!panel) return;
+  panel.classList.remove('is-match', 'is-warning', 'is-error');
+  if (!candidate) {
+    panel.hidden = true;
+    panel.textContent = '';
+    return;
+  }
+
+  const profile = _activeProfile();
+  const currentMerchantId = (document.getElementById('merchantId')?.value || '').trim();
+  const exactProfile = candidate.profileId && profile?.id === candidate.profileId && !credentialProfileDirty;
+  const merchantMatches = !candidate.merchantId || candidate.merchantId === currentMerchantId;
+  const revisionChanged = exactProfile && candidate.profileRevision && Number(profile.revision || 0) !== Number(candidate.profileRevision);
+
+  panel.hidden = false;
+  if (exactProfile && merchantMatches && !revisionChanged) {
+    panel.classList.add('is-match');
+    panel.textContent = t('status_profile_match').replace('{name}', profile.name);
+  } else if (exactProfile && merchantMatches && revisionChanged) {
+    panel.classList.add('is-warning');
+    panel.textContent = t('status_profile_revision_warning').replace('{name}', profile.name);
+  } else if (!candidate.profileId && merchantMatches) {
+    panel.classList.add('is-warning');
+    panel.textContent = t('status_profile_merchant_match').replace('{merchantId}', candidate.merchantId || currentMerchantId || '–');
+  } else {
+    panel.classList.add('is-error');
+    panel.textContent = t('status_profile_mismatch')
+      .replace('{name}', candidate.profileName || t('status_profile_unknown'))
+      .replace('{merchantId}', candidate.merchantId || '–');
+  }
+}
+
+async function activateProfileForStatusCandidate(candidate) {
+  if (!candidate) return;
+  let profile = candidate.profileId ? _getProfiles().find(entry => entry.id === candidate.profileId) : null;
+  if (!profile && !candidate.profileId && candidate.merchantId) {
+    const matches = _getProfiles().filter(entry => entry.merchantId && entry.merchantId === candidate.merchantId);
+    if (matches.length === 1) profile = matches[0];
+  }
+  if (profile && (activeCredentialProfileId !== profile.id || credentialProfileDirty)) {
+    if (!_confirmDiscardProfileChanges()) {
+      updateStatusProfileMatch(candidate);
+      return;
+    }
+    await loadProfile(profile.id, false);
+  }
+  updateStatusProfileMatch(candidate);
+}
+
+function validateStatusProfileContext() {
+  const candidate = _selectedStatusCandidate();
+  if (!candidate) return;
+  const profile = _activeProfile();
+  const currentMerchantId = (document.getElementById('merchantId')?.value || '').trim();
+  const profileMismatch = candidate.profileId && (profile?.id !== candidate.profileId || credentialProfileDirty);
+  const merchantMismatch = candidate.merchantId && candidate.merchantId !== currentMerchantId;
+  if (profileMismatch || merchantMismatch) {
+    updateStatusProfileMatch(candidate);
+    throw new Error(t('status_profile_mismatch_blocked'));
+  }
+  updateStatusProfileMatch(candidate);
 }
 
 function updateCredentialModeUI() {
@@ -669,8 +757,10 @@ function updateCredentialModeUI() {
   if (merchantHint) merchantHint.textContent = t(isRest ? 'cred_mid_rest_hint' : 'cred_mid_classic_hint');
   const classicGroup = document.getElementById('classic-credential-group');
   const restGroup = document.getElementById('rest-credential-group');
+  const classicDemoRow = document.getElementById('classic-demo-row');
   if (classicGroup) classicGroup.style.display = isRest ? 'none' : '';
   if (restGroup) restGroup.style.display = isRest ? '' : 'none';
+  if (classicDemoRow) classicDemoRow.hidden = isRest;
   classicGroup?.classList.toggle('is-muted', isRest);
   restGroup?.classList.toggle('is-muted', !isRest);
   restGroup?.classList.toggle('is-emphasized', isRest);
@@ -971,7 +1061,6 @@ function applyLang() {
   setText('qr-modal-fallback-text', 'qr_modal_fallback_text');
   setText('qr-modal-dense-hint', 'qr_modal_dense_hint');
   setText('qr-modal-close', 'btn_embed_close');
-  setText('btn-master-pw-text', 'btn_master_pw');
   setText('master-pw-title', 'master_pw_title');
   setText('master-pw-text', 'master_pw_text');
   setText('l-master-pw-current', 'l_master_pw_current');
@@ -1087,11 +1176,20 @@ function applyLang() {
   setText('master-recommendation-text', 'master_recommendation_text');
   setText('master-recommendation-action', 'master_recommendation_action');
   setText('btn-save-text', 'btn_save');
-  setText('btn-load-text', 'btn_load');
-  setText('btn-delete-text', 'btn_delete');
+  setText('btn-new-profile-text', 'btn_new_profile');
+  setText('btn-manage-profile-text', 'btn_manage_profile');
+  setText('btn-export-credential-profiles-text', 'btn_export_credential_profiles');
+  setText('btn-import-credential-profiles-text', 'btn_import_credential_profiles');
+  setText('profile-manager-title', 'profile_manager_title');
+  setText('profile-manager-description', 'profile_manager_description');
+  setText('profile-manager-empty', 'profile_manager_empty');
+  setText('profile-name-modal-label', 'profile_name_modal_label');
+  setText('profile-name-modal-cancel', 'profile_name_modal_cancel');
+  _updateProfileNameModalCopy();
   setText('opt-profile-placeholder', 'profile_placeholder');
-  const pnEl = document.getElementById('profile-name'); if (pnEl && !pnEl.value) pnEl.placeholder = t('profile_name_ph');
   _renderProfileSelect(localStorage.getItem(LAST_PROFILE_KEY) || '');
+  _updateActiveProfileUI();
+  updateStatusProfileMatch();
 
   setText('te-title', 'te_title');
   setText('te-s1-label', 'te_s1_label'); setHtml('te-s1-desc', 'te_s1_desc');
@@ -1325,6 +1423,17 @@ function applyLang() {
   setText('profile-delete-modal-title', 'profile_delete_modal_title');
   setText('profile-delete-cancel', 'profile_delete_modal_cancel');
   setText('profile-delete-confirm', 'profile_delete_modal_confirm');
+  setText('credential-export-modal-title', 'credential_export_modal_title');
+  setText('credential-export-modal-text', 'credential_export_modal_text');
+  setText('credential-export-password-label', 'credential_export_password_label');
+  setText('credential-export-password-repeat-label', 'credential_export_password_repeat_label');
+  setText('credential-export-cancel', 'profile_delete_modal_cancel');
+  setText('credential-export-confirm', 'credential_export_confirm');
+  setText('credential-import-modal-title', 'credential_import_modal_title');
+  setText('credential-import-modal-text', 'credential_import_modal_text');
+  setText('credential-import-password-label', 'credential_import_password_label');
+  setText('credential-import-cancel', 'profile_delete_modal_cancel');
+  setText('credential-import-confirm', 'credential_import_confirm');
   setText('new-flow-modal-title', 'new_flow_modal_title');
   setText('new-flow-modal-text', 'new_flow_modal_text');
   setText('new-flow-cancel', 'clear_all_modal_cancel');
@@ -2884,6 +2993,7 @@ function renderCommandSyntax(element, source, tool) {
 async function buildRestPreview() {
   try {
     const isStatus = currentUseCase === 'payment-status';
+    if (isStatus) validateStatusProfileContext();
     const lookup = document.getElementById('status-lookup')?.value || 'paymentId';
     const identifier = lookup === 'paymentId'
       ? document.getElementById('status-payment-id')?.value.trim()
@@ -2939,6 +3049,7 @@ async function buildRestPreview() {
     markPreviewFresh();
     if (isStatus) {
       await _saveLogEntry({
+        ...(credentials.include ? _profileContextForLog() : {}),
         merchantId: credentials.include ? credentials.merchantId : '',
         transId: lookup === 'transactionId' ? identifier : '',
         paymentId: lookup === 'paymentId' ? identifier : '',
@@ -2946,6 +3057,17 @@ async function buildRestPreview() {
         integration: 'rest',
         lookup,
         url
+      });
+      await renderLog();
+    } else {
+      await _saveLogEntry({
+        ...(credentials.include ? _profileContextForLog() : {}),
+        merchantId: credentials.include ? credentials.merchantId : '',
+        transId: String(idempotencyKey || ''),
+        paymentId: '',
+        useCase: 'create-payment',
+        integration: 'rest',
+        url,
       });
       await renderLog();
     }
@@ -2958,6 +3080,7 @@ async function buildRestPreview() {
 
 async function buildClassicStatusPreview() {
   try {
+    validateStatusProfileContext();
     _renderDerivedParameterItems('derived-parameters-section', 'derived-parameters-list', []);
     const credentials = classicCredentialsForPreview();
     const { merchantId, blowfishKey, isDemo } = credentials;
@@ -2994,6 +3117,7 @@ async function buildClassicStatusPreview() {
     document.getElementById('full-url').dataset.raw = request.finalUrl;
 
     if (!isDemo) await _saveLogEntry({
+      ..._profileContextForLog(),
       merchantId,
       transId: transactionId,
       paymentId,
@@ -3192,7 +3316,7 @@ async function buildAndPreview() {
 
     // Save to request log
     if (!isDemo) {
-      await _saveLogEntry({ merchantId, transId, amount, currency, paymentMethod: payTypes, integration: 'classic', encryption: currentClassicEncryption, url: finalUrl });
+      await _saveLogEntry({ ..._profileContextForLog(), merchantId, transId, amount, currency, paymentMethod: payTypes, useCase: 'create-payment', integration: 'classic', encryption: currentClassicEncryption, url: finalUrl });
       await renderLog();
     }
 
@@ -3375,11 +3499,16 @@ const PROFILES_LS_KEY = 'computop_profiles';
 const LAST_PROFILE_KEY = 'computop_last_profile';
 const CRED_KDF_LS_KEY  = 'computop_cred_kdf';
 const CRED_PASSPHRASE  = 'computop-tester-v1-local-storage';
+const CREDENTIAL_BACKUP_FORMAT = 'paygate-payment-tester-credential-backup';
+const CREDENTIAL_BACKUP_VERSION = 1;
+const CREDENTIAL_BACKUP_ITERATIONS = 310000;
+const CREDENTIAL_BACKUP_MAX_BYTES = 5 * 1024 * 1024;
 const CLEAR_ALL_SCROLL_RESET_KEY = 'computop_clear_all_scroll_reset';
 
 // With an optional user-defined master password the AES key is no longer
 // derivable from the public source code. The passphrase lives in memory only.
 let credMasterPassphrase = null;
+let pendingCredentialImport = null;
 
 function _credKdfMode() {
   return localStorage.getItem(CRED_KDF_LS_KEY) === 'password' ? 'password' : 'static';
@@ -3411,8 +3540,16 @@ function updateCredentialLockUI() {
 function updateMasterPasswordRecommendation() {
   const panel = document.getElementById('master-password-recommendation');
   if (!panel) return;
-  const shouldShow = _credKdfMode() !== 'password' && _getProfiles().length > 0;
-  panel.hidden = !shouldShow;
+  const hasProfiles = _getProfiles().length > 0;
+  const active = _credKdfMode() === 'password';
+  panel.hidden = !hasProfiles;
+  panel.classList.toggle('is-active', active);
+  const title = document.getElementById('master-recommendation-title');
+  const text = document.getElementById('master-recommendation-text');
+  const action = document.getElementById('master-recommendation-action');
+  if (title) title.textContent = t(active ? 'master_active_title' : 'master_recommendation_title');
+  if (text) text.textContent = t(active ? 'master_active_text' : 'master_recommendation_text');
+  if (action) action.textContent = t(active ? 'master_active_action' : 'master_recommendation_action');
 }
 
 async function _deriveKey(salt, passphrase) {
@@ -3671,26 +3808,298 @@ function _readFormCredentials() {
 }
 
 function _fillFormCredentials(data) {
-  if (data.merchantId)  document.getElementById('merchantId').value  = data.merchantId;
-  if (data.blowfishKey) document.getElementById('blowfishKey').value = data.blowfishKey;
-  if (data.hmacKey)     document.getElementById('hmacKey').value     = data.hmacKey;
-  if (data.restApiKey)  document.getElementById('restApiKey').value  = data.restApiKey;
+  document.getElementById('merchantId').value  = data?.merchantId || '';
+  document.getElementById('blowfishKey').value = data?.blowfishKey || '';
+  document.getElementById('hmacKey').value     = data?.hmacKey || '';
+  document.getElementById('restApiKey').value  = data?.restApiKey || '';
+  markPreviewStale();
+}
+
+function _backfillProfileMetadata(profile, data) {
+  if (!profile || profile.merchantId !== undefined) return;
+  const profiles = _getProfiles();
+  const index = profiles.findIndex(entry => entry.id === profile.id);
+  if (index < 0) return;
+  profiles[index] = { ...profiles[index], merchantId: data?.merchantId || '', revision: Number(profiles[index].revision || 0) };
+  _saveProfiles(profiles);
+}
+
+function _activeProfile() {
+  return _getProfiles().find(profile => profile.id === activeCredentialProfileId) || null;
+}
+
+function _profileFormState() {
+  return JSON.stringify(_readFormCredentials());
+}
+
+function _suggestProfileName() {
+  const merchantId = (document.getElementById('merchantId')?.value || '').trim();
+  return merchantId.slice(0, 64);
+}
+
+function _setProfileManagerOpen(open) {
+  const details = document.getElementById('profile-manager-details');
+  const toggle = document.getElementById('profile-manage-toggle');
+  if (open) _renderProfileManager();
+  if (details) details.hidden = !open;
+  toggle?.setAttribute('aria-expanded', String(open));
+}
+
+function toggleProfileManager() {
+  const details = document.getElementById('profile-manager-details');
+  _setProfileManagerOpen(Boolean(details?.hidden));
+}
+
+function _profileManagerButton(label, action, profileId, className = 'btn btn-ghost') {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = className;
+  button.dataset.action = action;
+  button.dataset.profileId = profileId;
+  button.textContent = label;
+  return button;
+}
+
+function _renderProfileManager() {
+  const list = document.getElementById('profile-manager-list');
+  const empty = document.getElementById('profile-manager-empty');
+  const count = document.getElementById('profile-manager-count');
+  if (!list) return;
+  const profiles = _getProfiles();
+  clearElement(list);
+  if (count) count.textContent = t('profile_manager_count').replace('{count}', String(profiles.length));
+  if (empty) empty.hidden = profiles.length > 0;
+  profiles.forEach(profile => {
+    const active = profile.id === activeCredentialProfileId;
+    const item = document.createElement('div');
+    item.className = 'profile-manager-item' + (active ? ' is-active' : '');
+
+    const copy = document.createElement('div');
+    copy.className = 'profile-manager-item-copy';
+    const title = document.createElement('div');
+    title.className = 'profile-manager-item-title';
+    const name = document.createElement('strong');
+    name.textContent = profile.name;
+    title.appendChild(name);
+    if (active) {
+      const badge = document.createElement('span');
+      badge.className = 'profile-manager-active-badge';
+      badge.textContent = t('profile_manager_active');
+      title.appendChild(badge);
+    }
+    const meta = document.createElement('span');
+    meta.className = 'profile-manager-item-meta';
+    meta.textContent = t('profile_manager_merchant').replace('{merchantId}', profile.merchantId || '–');
+    copy.append(title, meta);
+
+    const actions = document.createElement('div');
+    actions.className = 'profile-manager-item-actions';
+    const activate = _profileManagerButton(t('profile_manager_activate'), 'activate-managed-profile', profile.id);
+    activate.disabled = active && !credentialProfileDirty;
+    actions.append(
+      activate,
+      _profileManagerButton(t('profile_manager_rename'), 'rename-profile', profile.id),
+      _profileManagerButton(t('profile_manager_delete'), 'delete-profile', profile.id, 'btn btn-danger-ghost')
+    );
+    item.append(copy, actions);
+    list.appendChild(item);
+  });
+}
+
+async function activateManagedProfile(id) {
+  if (!id || (id === activeCredentialProfileId && !credentialProfileDirty)) return;
+  if (!_confirmDiscardProfileChanges()) return;
+  await loadProfile(id);
+  _setProfileManagerOpen(true);
+}
+
+function _updateProfileNameModalCopy() {
+  const request = pendingProfileNameRequest;
+  if (!request) return;
+  const rename = request.mode === 'rename';
+  const title = document.getElementById('profile-name-modal-title');
+  const text = document.getElementById('profile-name-modal-text');
+  const confirm = document.getElementById('profile-name-modal-confirm');
+  if (title) title.textContent = t(rename ? 'profile_name_modal_rename_title' : 'profile_name_modal_new_title');
+  if (text) {
+    text.textContent = t(rename ? 'profile_name_modal_rename_text' : 'profile_name_modal_new_text')
+      .replace('{name}', request.originalName || '');
+  }
+  if (confirm) confirm.textContent = t(rename ? 'profile_name_modal_rename' : 'profile_name_modal_save');
+}
+
+function requestProfileName(mode, initialName = '', excludeId = '') {
+  return new Promise(resolve => {
+    pendingProfileNameRequest = { mode, excludeId, originalName: initialName, resolve };
+    const modal = document.getElementById('profile-name-modal');
+    const input = document.getElementById('profile-name-modal-input');
+    if (!modal || !input) {
+      pendingProfileNameRequest = null;
+      resolve(null);
+      return;
+    }
+    input.value = initialName;
+    _updateProfileNameModalCopy();
+    modal.classList.add('open');
+    document.body.classList.add('modal-open');
+    setTimeout(() => {
+      input.focus();
+      input.select?.();
+    }, 50);
+  });
+}
+
+function closeProfileNameModal(value = null) {
+  const request = pendingProfileNameRequest;
+  document.getElementById('profile-name-modal')?.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  pendingProfileNameRequest = null;
+  const input = document.getElementById('profile-name-modal-input');
+  if (input) input.value = '';
+  request?.resolve(value);
+  document.getElementById(request?.mode === 'rename' ? 'profile-manage-toggle' : 'profile-save-button')?.focus();
+}
+
+function confirmProfileNameModal() {
+  const request = pendingProfileNameRequest;
+  if (!request) return;
+  const input = document.getElementById('profile-name-modal-input');
+  const name = (input?.value || '').trim().slice(0, 64);
+  if (!name) {
+    showToast(t('toast_profile_name_req'), 'error');
+    input?.focus();
+    return;
+  }
+  const duplicate = _getProfiles().some(profile => profile.id !== request.excludeId && profile.name.toLowerCase() === name.toLowerCase());
+  if (duplicate) {
+    showToast(t('toast_profile_name_exists'), 'error');
+    input?.focus();
+    return;
+  }
+  closeProfileNameModal(name);
+}
+
+async function renameProfile(id) {
+  const profiles = _getProfiles();
+  const index = profiles.findIndex(profile => profile.id === id);
+  if (index < 0) return;
+  const profile = profiles[index];
+  const name = await requestProfileName('rename', profile.name, profile.id);
+  if (!name || name === profile.name) return;
+  profiles[index] = { ...profile, name };
+  _saveProfiles(profiles);
+  _renderProfileSelect(activeCredentialProfileId);
+  showToast(t('profile_manager_renamed'), 'success');
+}
+
+function _updateActiveProfileUI() {
+  const profile = _activeProfile();
+  const state = document.getElementById('active-profile-state');
+  const summary = document.getElementById('profile-active-summary');
+  const saveText = document.getElementById('btn-save-text');
+  const saveButton = document.getElementById('profile-save-button');
+  const select = document.getElementById('profile-select');
+
+  state?.classList.toggle('is-active', Boolean(profile) && !credentialProfileDirty);
+  state?.classList.toggle('is-dirty', credentialProfileDirty);
+  if (state) {
+    state.textContent = credentialProfileDirty
+      ? t('profile_state_dirty')
+      : profile
+        ? t('profile_state_active').replace('{name}', profile.name)
+        : t('profile_state_none');
+  }
+  if (summary) {
+    summary.textContent = credentialProfileDirty
+      ? t('profile_summary_dirty')
+      : profile
+        ? t('profile_summary_active').replace('{name}', profile.name).replace('{merchantId}', profile.merchantId || document.getElementById('merchantId')?.value || '–')
+        : t('profile_summary_none');
+  }
+  if (saveText) saveText.textContent = t(profile ? 'btn_profile_update' : 'btn_profile_save');
+  if (saveButton) saveButton.disabled = !credentialProfileDirty;
+  if (select && select.value !== activeCredentialProfileId) select.value = activeCredentialProfileId;
+}
+
+function _captureProfileSnapshot() {
+  credentialProfileSnapshot = _profileFormState();
+  credentialProfileDirty = false;
+  _updateActiveProfileUI();
+}
+
+function _refreshProfileDirtyState() {
+  credentialProfileDirty = _profileFormState() !== credentialProfileSnapshot;
+  _updateActiveProfileUI();
+}
+
+function _profileContextForLog() {
+  const profile = _activeProfile();
+  if (!profile || credentialProfileDirty) return { profileId: '', profileName: '', profileRevision: 0 };
+  return {
+    profileId: profile.id,
+    profileName: profile.name,
+    profileRevision: Number(profile.revision || 0),
+  };
+}
+
+function _confirmDiscardProfileChanges() {
+  return !credentialProfileDirty || window.confirm(t('profile_confirm_discard'));
+}
+
+function _prepareNewProfile(openManager = true) {
+  activeCredentialProfileId = '';
+  localStorage.removeItem(LAST_PROFILE_KEY);
+  _fillFormCredentials({});
+  credentialProfileSnapshot = _profileFormState();
+  credentialProfileDirty = false;
+  const select = document.getElementById('profile-select');
+  if (select) select.value = '';
+  if (openManager) _setProfileManagerOpen(true);
+  _updateActiveProfileUI();
+  _renderProfileManager();
+  updateStatusProfileMatch(null);
+}
+
+function newProfile() {
+  if (!_confirmDiscardProfileChanges()) return;
+  _prepareNewProfile(false);
+  document.getElementById('merchantId')?.focus();
 }
 
 async function saveProfile() {
-  const name = (document.getElementById('profile-name').value || '').trim();
-  if (!name) { showToast(t('toast_profile_name_req'), 'error'); return; }
+  const currentProfiles = _getProfiles();
+  const currentIndex = currentProfiles.findIndex(profile => profile.id === activeCredentialProfileId);
+  const currentProfile = currentIndex >= 0 ? currentProfiles[currentIndex] : null;
+  let name = currentProfile?.name || _suggestProfileName();
+  const suggestedNameConflict = currentProfiles.some((profile, index) => index !== currentIndex && profile.name.toLowerCase() === name.toLowerCase());
+  if (!name || suggestedNameConflict) {
+    name = await requestProfileName('new', name, currentProfile?.id || '');
+    if (!name) return;
+  }
   if (!(await _ensureUnlocked())) return;
   try {
     const enc      = await _encryptData(_readFormCredentials());
     const profiles = _getProfiles();
-    const idx      = profiles.findIndex(p => p.name === name);
-    const entry    = { id: idx >= 0 ? profiles[idx].id : _uid(), name, enc };
+    const idx      = profiles.findIndex(profile => profile.id === activeCredentialProfileId);
+    const duplicateName = profiles.some((profile, profileIndex) => profileIndex !== idx && profile.name.toLowerCase() === name.toLowerCase());
+    if (duplicateName) {
+      showToast(t('toast_profile_name_exists'), 'error');
+      return;
+    }
+    const previous = idx >= 0 ? profiles[idx] : null;
+    const entry    = {
+      id: previous?.id || _uid(),
+      name,
+      merchantId: (document.getElementById('merchantId')?.value || '').trim(),
+      revision: Number(previous?.revision || 0) + 1,
+      enc,
+    };
     if (idx >= 0) profiles[idx] = entry; else profiles.push(entry);
     _saveProfiles(profiles);
+    activeCredentialProfileId = entry.id;
     localStorage.setItem(LAST_PROFILE_KEY, entry.id);
     _renderProfileSelect(entry.id);
-    document.getElementById('profile-name').value = '';
+    _captureProfileSnapshot();
     const hasMasterPassword = _credKdfMode() === 'password';
     showToast(t(hasMasterPassword ? 'toast_profile_saved' : 'toast_profile_saved_master_hint'), hasMasterPassword ? 'success' : 'warning');
   } catch(e) {
@@ -3698,17 +4107,21 @@ async function saveProfile() {
   }
 }
 
-async function loadProfile() {
-  const id = document.getElementById('profile-select').value;
+async function loadProfile(id = document.getElementById('profile-select')?.value || '', showLoadedToast = true) {
   if (!id) { showToast(t('toast_profile_none'), 'error'); return; }
   const profile = _getProfiles().find(p => p.id === id);
   if (!profile) return;
   if (!(await _ensureUnlocked())) return;
   try {
-    _fillFormCredentials(await _decryptData(profile.enc));
+    const data = await _decryptData(profile.enc);
+    _fillFormCredentials(data);
+    _backfillProfileMetadata(profile, data);
+    activeCredentialProfileId = id;
     localStorage.setItem(LAST_PROFILE_KEY, id);
+    _captureProfileSnapshot();
+    _renderProfileManager();
     _updateCredStatus();
-    showToast(t('toast_profile_loaded') + ': ' + profile.name, 'success');
+    if (showLoadedToast) showToast(t('toast_profile_loaded') + ': ' + profile.name, 'success');
   } catch(e) {
     showToast(t('toast_cred_err') + e.message, 'error');
   }
@@ -3716,8 +4129,7 @@ async function loadProfile() {
 
 let pendingProfileDeleteId = '';
 
-function deleteProfile() {
-  const id = document.getElementById('profile-select').value;
+function deleteProfile(id = document.getElementById('profile-select')?.value || '') {
   if (!id) { showToast(t('toast_profile_none'), 'error'); return; }
   const profile = _getProfiles().find(p => p.id === id);
   if (!profile) return;
@@ -3744,7 +4156,7 @@ function closeProfileDeleteModal() {
   modal.classList.remove('open');
   document.body.classList.remove('modal-open');
   pendingProfileDeleteId = '';
-  document.getElementById('profile-select')?.focus();
+  document.getElementById('profile-manage-toggle')?.focus();
 }
 
 function confirmProfileDelete() {
@@ -3756,13 +4168,24 @@ function confirmProfileDelete() {
   closeProfileDeleteModal();
   _saveProfiles(remainingProfiles);
   if (localStorage.getItem(LAST_PROFILE_KEY) === id) localStorage.removeItem(LAST_PROFILE_KEY);
-  document.getElementById('profile-name').value = '';
-  _renderProfileSelect('');
+  if (activeCredentialProfileId === id) _prepareNewProfile(false);
+  _renderProfileSelect(activeCredentialProfileId);
   showToast(t('toast_profile_deleted'), 'info');
 }
 
-function onProfileSelect() {
-  // Intentionally left empty — profile name input is for new names only
+async function onProfileSelect() {
+  const select = document.getElementById('profile-select');
+  const id = select?.value || '';
+  if (id === activeCredentialProfileId) return;
+  if (!_confirmDiscardProfileChanges()) {
+    if (select) select.value = activeCredentialProfileId;
+    return;
+  }
+  if (!id) {
+    _prepareNewProfile(false);
+    return;
+  }
+  await loadProfile(id);
 }
 
 function _renderProfileSelect(selectedId) {
@@ -3781,7 +4204,10 @@ function _renderProfileSelect(selectedId) {
     option.selected = profile.id === selectedId;
     select.appendChild(option);
   });
+  activeCredentialProfileId = profiles.some(profile => profile.id === selectedId) ? selectedId : activeCredentialProfileId;
   _updateCredStatus();
+  _updateActiveProfileUI();
+  _renderProfileManager();
 }
 
 async function _migrateOldCredentials() {
@@ -3793,7 +4219,7 @@ async function _migrateOldCredentials() {
     const stored = JSON.parse(old);
     const data   = await _decryptData(stored);
     const enc    = await _encryptData(data);
-    _saveProfiles([{ id: _uid(), name: 'Standard', enc }]);
+    _saveProfiles([{ id: _uid(), name: 'Standard', merchantId: data.merchantId || '', revision: 1, enc }]);
     localStorage.removeItem(CRED_LS_KEY);
   } catch(e) {
     localStorage.removeItem(CRED_LS_KEY);
@@ -3809,9 +4235,13 @@ async function loadCredentials() {
   if (!profile) return;
   // With an active master password the app never prompts on startup;
   // loading a profile is the deliberate unlock action.
-  if (_credLocked()) { updateCredentialLockUI(); return; }
+  activeCredentialProfileId = profile.id;
+  if (_credLocked()) { updateCredentialLockUI(); _updateActiveProfileUI(); return; }
   try {
-    _fillFormCredentials(await _decryptData(profile.enc));
+    const data = await _decryptData(profile.enc);
+    _fillFormCredentials(data);
+    _backfillProfileMetadata(profile, data);
+    _captureProfileSnapshot();
     updateCredentialLockUI();
   } catch(e) {
     console.warn('Profil konnte nicht geladen werden:', e);
@@ -3831,6 +4261,358 @@ function _updateCredStatus() {
   }
   updateCredentialLockUI();
   updateMasterPasswordRecommendation();
+  _updateActiveProfileUI();
+}
+
+function initCredentialProfileControls() {
+  const credentialIds = ['merchantId', 'blowfishKey', 'hmacKey', 'restApiKey'];
+  credentialIds.forEach(id => document.getElementById(id)?.addEventListener('input', _refreshProfileDirtyState));
+  credentialProfileSnapshot = _profileFormState();
+  _updateActiveProfileUI();
+}
+
+async function _deriveCredentialBackupKey(salt, password, iterations = CREDENTIAL_BACKUP_ITERATIONS) {
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']
+  );
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+async function _createCredentialBackup(password) {
+  const profiles = _getProfiles();
+  const portableProfiles = [];
+  for (const profile of profiles) {
+    const credentials = await _decryptData(profile.enc);
+    portableProfiles.push({
+      id: String(profile.id || _uid()),
+      name: String(profile.name || ''),
+      merchantId: String(profile.merchantId ?? credentials.merchantId ?? ''),
+      revision: Number(profile.revision || 0),
+      credentials: {
+        merchantId: String(credentials.merchantId || ''),
+        blowfishKey: String(credentials.blowfishKey || ''),
+        hmacKey: String(credentials.hmacKey || ''),
+        restApiKey: String(credentials.restApiKey || ''),
+      },
+    });
+  }
+
+  const exportedAt = new Date().toISOString();
+  const plaintext = new TextEncoder().encode(JSON.stringify({
+    format: CREDENTIAL_BACKUP_FORMAT,
+    version: CREDENTIAL_BACKUP_VERSION,
+    exportedAt,
+    profiles: portableProfiles,
+  }));
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await _deriveCredentialBackupKey(salt, password);
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plaintext);
+  return {
+    format: CREDENTIAL_BACKUP_FORMAT,
+    version: CREDENTIAL_BACKUP_VERSION,
+    appVersion: _appVersion(),
+    exportedAt,
+    encryption: {
+      algorithm: 'AES-GCM',
+      kdf: 'PBKDF2-SHA-256',
+      iterations: CREDENTIAL_BACKUP_ITERATIONS,
+      salt: Array.from(salt),
+      iv: Array.from(iv),
+    },
+    ciphertext: Array.from(new Uint8Array(ciphertext)),
+  };
+}
+
+function _validateCredentialBackupEnvelope(payload) {
+  const encryption = payload?.encryption;
+  const validArray = (value, length = null) => Array.isArray(value)
+    && (length === null || value.length === length)
+    && value.every(byte => Number.isInteger(byte) && byte >= 0 && byte <= 255);
+  if (
+    payload?.format !== CREDENTIAL_BACKUP_FORMAT ||
+    payload?.version !== CREDENTIAL_BACKUP_VERSION ||
+    encryption?.algorithm !== 'AES-GCM' ||
+    encryption?.kdf !== 'PBKDF2-SHA-256' ||
+    !Number.isInteger(encryption?.iterations) ||
+    encryption.iterations < 100000 ||
+    encryption.iterations > 2000000 ||
+    !validArray(encryption.salt, 16) ||
+    !validArray(encryption.iv, 12) ||
+    !validArray(payload.ciphertext) ||
+    payload.ciphertext.length < 17 ||
+    payload.ciphertext.length > CREDENTIAL_BACKUP_MAX_BYTES
+  ) throw new Error(t('err_credential_backup_format'));
+  return payload;
+}
+
+function _sanitizePortableCredentialProfile(profile) {
+  if (!profile || typeof profile !== 'object' || !profile.credentials || typeof profile.credentials !== 'object') {
+    throw new Error(t('err_credential_backup_content'));
+  }
+  const cleanString = (value, maxLength) => String(value ?? '').slice(0, maxLength);
+  const id = cleanString(profile.id, 80).trim();
+  const name = cleanString(profile.name, 120).trim();
+  if (!id || !name) throw new Error(t('err_credential_backup_content'));
+  return {
+    id,
+    name,
+    merchantId: cleanString(profile.merchantId ?? profile.credentials.merchantId, 120).trim(),
+    revision: Math.max(0, Math.min(Number(profile.revision || 0) || 0, Number.MAX_SAFE_INTEGER)),
+    credentials: {
+      merchantId: cleanString(profile.credentials.merchantId, 120),
+      blowfishKey: cleanString(profile.credentials.blowfishKey, 10000),
+      hmacKey: cleanString(profile.credentials.hmacKey, 10000),
+      restApiKey: cleanString(profile.credentials.restApiKey, 10000),
+    },
+  };
+}
+
+async function _decryptCredentialBackup(payload, password) {
+  _validateCredentialBackupEnvelope(payload);
+  try {
+    const salt = new Uint8Array(payload.encryption.salt);
+    const iv = new Uint8Array(payload.encryption.iv);
+    const key = await _deriveCredentialBackupKey(salt, password, payload.encryption.iterations);
+    const plaintext = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv }, key, new Uint8Array(payload.ciphertext)
+    );
+    const inner = JSON.parse(new TextDecoder().decode(plaintext));
+    if (
+      inner?.format !== CREDENTIAL_BACKUP_FORMAT ||
+      inner?.version !== CREDENTIAL_BACKUP_VERSION ||
+      !Array.isArray(inner.profiles) ||
+      inner.profiles.length < 1 ||
+      inner.profiles.length > 200
+    ) throw new Error(t('err_credential_backup_content'));
+    const profiles = inner.profiles.map(_sanitizePortableCredentialProfile);
+    if (new Set(profiles.map(profile => profile.id)).size !== profiles.length) {
+      throw new Error(t('err_credential_backup_content'));
+    }
+    return profiles;
+  } catch (error) {
+    if (error?.message === t('err_credential_backup_content')) throw error;
+    throw new Error(t('err_credential_backup_password'));
+  }
+}
+
+async function openCredentialExportModal() {
+  if (!_getProfiles().length) {
+    showToast(t('toast_credential_export_empty'), 'info');
+    return;
+  }
+  if (!(await _ensureUnlocked())) return;
+  const modal = document.getElementById('credential-export-modal');
+  if (!modal) return;
+  document.getElementById('credential-export-password').value = '';
+  document.getElementById('credential-export-password-repeat').value = '';
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+  document.getElementById('credential-export-password')?.focus();
+}
+
+function closeCredentialExportModal() {
+  const modal = document.getElementById('credential-export-modal');
+  modal?.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  const password = document.getElementById('credential-export-password');
+  const repeat = document.getElementById('credential-export-password-repeat');
+  if (password) password.value = '';
+  if (repeat) repeat.value = '';
+  document.getElementById('btn-export-credential-profiles')?.focus();
+}
+
+async function confirmCredentialExport() {
+  const password = document.getElementById('credential-export-password')?.value || '';
+  const repeat = document.getElementById('credential-export-password-repeat')?.value || '';
+  if (password.length < 8) {
+    showToast(t('err_credential_backup_password_short'), 'error');
+    return;
+  }
+  if (password !== repeat) {
+    showToast(t('err_credential_backup_password_repeat'), 'error');
+    return;
+  }
+  const button = document.getElementById('credential-export-confirm');
+  if (button) button.disabled = true;
+  try {
+    const exportDate = new Date();
+    const payload = await _createCredentialBackup(password);
+    _downloadTextFile(
+      `paygate-payment-tester-credentials-${_localTimestampForFilename(exportDate)}.json`,
+      JSON.stringify(payload, null, 2)
+    );
+    closeCredentialExportModal();
+    showToast(t('toast_credential_exported'), 'success');
+  } catch (error) {
+    showToast(t('toast_credential_export_error') + error.message, 'error');
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+async function openCredentialProfileImport() {
+  if (!_confirmDiscardProfileChanges()) return;
+  if (!(await _ensureUnlocked())) return;
+  document.getElementById('credential-profile-import-file')?.click();
+}
+
+async function handleCredentialProfileImportFile(input) {
+  const file = input?.files?.[0];
+  if (input) input.value = '';
+  if (!file) return;
+  try {
+    if (file.size > CREDENTIAL_BACKUP_MAX_BYTES) throw new Error(t('err_credential_backup_size'));
+    let payload;
+    try {
+      payload = JSON.parse(await file.text());
+    } catch (_) {
+      throw new Error(t('err_credential_backup_format'));
+    }
+    _validateCredentialBackupEnvelope(payload);
+    pendingCredentialImport = { payload, filename: String(file.name || '') };
+    const filename = document.getElementById('credential-import-filename');
+    const password = document.getElementById('credential-import-password');
+    if (filename) filename.textContent = pendingCredentialImport.filename;
+    if (password) password.value = '';
+    document.getElementById('credential-import-modal')?.classList.add('open');
+    document.body.classList.add('modal-open');
+    password?.focus();
+  } catch (error) {
+    pendingCredentialImport = null;
+    showToast(t('toast_credential_import_error') + error.message, 'error');
+  }
+}
+
+function closeCredentialImportModal(restoreFocus = true) {
+  document.getElementById('credential-import-modal')?.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  const password = document.getElementById('credential-import-password');
+  if (password) password.value = '';
+  pendingCredentialImport = null;
+  if (restoreFocus) document.getElementById('btn-import-credential-profiles')?.focus();
+}
+
+function _uniqueImportedProfileName(name, usedNames) {
+  let candidate = name;
+  let counter = 2;
+  while (usedNames.has(candidate.toLowerCase())) {
+    candidate = `${name} (${t('profile_import_suffix')} ${counter})`;
+    counter += 1;
+  }
+  usedNames.add(candidate.toLowerCase());
+  return candidate;
+}
+
+async function _storeImportedCredentialProfiles(importedProfiles, conflictMode) {
+  const existing = _getProfiles();
+  const result = [...existing];
+  const usedNames = new Set(existing.map(profile => String(profile.name || '').toLowerCase()));
+  let overwrittenActiveProfile = false;
+
+  for (const imported of importedProfiles) {
+    const existingIndex = result.findIndex(profile => profile.id === imported.id);
+    let id = imported.id;
+    let name = imported.name;
+    if (existingIndex >= 0 && conflictMode === 'copies') {
+      do { id = _uid(); } while (result.some(profile => profile.id === id));
+      name = _uniqueImportedProfileName(imported.name, usedNames);
+    } else {
+      const previousName = existingIndex >= 0 ? String(result[existingIndex].name || '').toLowerCase() : '';
+      if (previousName) usedNames.delete(previousName);
+      name = _uniqueImportedProfileName(imported.name, usedNames);
+    }
+    const entry = {
+      id,
+      name,
+      merchantId: imported.merchantId || imported.credentials.merchantId || '',
+      revision: Number(imported.revision || 0),
+      enc: await _encryptData(imported.credentials),
+    };
+    if (existingIndex >= 0 && conflictMode === 'overwrite') {
+      result[existingIndex] = entry;
+      if (id === activeCredentialProfileId) overwrittenActiveProfile = true;
+    } else {
+      result.push(entry);
+    }
+  }
+
+  _saveProfiles(result);
+  _renderProfileSelect(activeCredentialProfileId);
+  if (overwrittenActiveProfile) await loadProfile(activeCredentialProfileId, false);
+  return importedProfiles.length;
+}
+
+async function confirmCredentialImport() {
+  const pending = pendingCredentialImport;
+  const password = document.getElementById('credential-import-password')?.value || '';
+  if (!pending || !password) {
+    showToast(t('err_credential_backup_password_required'), 'error');
+    return;
+  }
+  const button = document.getElementById('credential-import-confirm');
+  if (button) button.disabled = true;
+  try {
+    const importedProfiles = await _decryptCredentialBackup(pending.payload, password);
+    const existingIds = new Set(_getProfiles().map(profile => profile.id));
+    const conflictCount = importedProfiles.filter(profile => existingIds.has(profile.id)).length;
+    document.getElementById('credential-import-modal')?.classList.remove('open');
+    document.body.classList.remove('modal-open');
+    const passwordInput = document.getElementById('credential-import-password');
+    if (passwordInput) passwordInput.value = '';
+    pendingCredentialImport = null;
+
+    let conflictMode = 'overwrite';
+    if (conflictCount > 0) {
+      const action = await openLogActionModal({
+        mode: 'import',
+        title: t('credential_import_conflict_title'),
+        text: t('credential_import_conflict_text').replace('{count}', String(conflictCount)),
+        confirmText: t('credential_import_conflict_overwrite'),
+        secondaryText: t('credential_import_conflict_copies'),
+      });
+      if (!action) return;
+      conflictMode = action === 'secondary' ? 'copies' : 'overwrite';
+    }
+    const count = await _storeImportedCredentialProfiles(importedProfiles, conflictMode);
+    showToast(t('toast_credential_imported').replace('{count}', String(count)), 'success');
+  } catch (error) {
+    showToast(t('toast_credential_import_error') + error.message, 'error');
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+function initCredentialBackupModals() {
+  const exportModal = document.getElementById('credential-export-modal');
+  const importModal = document.getElementById('credential-import-modal');
+  document.getElementById('credential-export-cancel')?.addEventListener('click', closeCredentialExportModal);
+  document.getElementById('credential-export-confirm')?.addEventListener('click', confirmCredentialExport);
+  document.getElementById('credential-import-cancel')?.addEventListener('click', () => closeCredentialImportModal());
+  document.getElementById('credential-import-confirm')?.addEventListener('click', confirmCredentialImport);
+  document.getElementById('credential-export-password-repeat')?.addEventListener('keydown', event => {
+    if (event.key === 'Enter') confirmCredentialExport();
+  });
+  document.getElementById('credential-import-password')?.addEventListener('keydown', event => {
+    if (event.key === 'Enter') confirmCredentialImport();
+  });
+  exportModal?.addEventListener('click', event => {
+    if (event.target === exportModal) closeCredentialExportModal();
+  });
+  importModal?.addEventListener('click', event => {
+    if (event.target === importModal) closeCredentialImportModal();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape') return;
+    if (exportModal?.classList.contains('open')) closeCredentialExportModal();
+    if (importModal?.classList.contains('open')) closeCredentialImportModal();
+  });
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -4078,6 +4860,9 @@ function _sanitizeLogEntry(kind, entry) {
       transId: _safeLogString(entry.transId, 120),
       merchantId: _safeLogString(entry.merchantId, 120),
       paymentId: _safeLogString(entry.paymentId, 120),
+      profileId: _safeLogString(entry.profileId, 80),
+      profileName: _safeLogString(entry.profileName, 120),
+      profileRevision: Number(entry.profileRevision || 0),
       integration: _safeLogString(entry.integration || 'classic', 30),
       result: _safeLogString(entry.result, 30),
       url: _safeLogString(entry.url),
@@ -4091,6 +4876,9 @@ function _sanitizeLogEntry(kind, entry) {
     merchantId: _safeLogString(entry.merchantId, 120),
     transId: _safeLogString(entry.transId, 120),
     paymentId: _safeLogString(entry.paymentId, 120),
+    profileId: _safeLogString(entry.profileId, 80),
+    profileName: _safeLogString(entry.profileName, 120),
+    profileRevision: Number(entry.profileRevision || 0),
     useCase: _safeLogString(entry.useCase, 60),
     integration: _safeLogString(entry.integration, 30),
     lookup: _safeLogString(entry.lookup, 30),
@@ -4102,8 +4890,8 @@ function _sanitizeLogEntry(kind, entry) {
 
 function _logEntryKey(kind, entry) {
   return kind === 'response'
-    ? ['response', entry.integration, entry.plain, entry.paymentId, entry.transId, entry.status, entry.merchantId].join('\u001f')
-    : ['request', entry.url, entry.transId, entry.paymentId, entry.useCase, entry.integration, entry.lookup, entry.amount, entry.currency, entry.merchantId].join('\u001f');
+    ? ['response', entry.integration, entry.plain, entry.paymentId, entry.transId, entry.status, entry.merchantId, entry.profileId].join('\u001f')
+    : ['request', entry.url, entry.transId, entry.paymentId, entry.useCase, entry.integration, entry.lookup, entry.amount, entry.currency, entry.merchantId, entry.profileId].join('\u001f');
 }
 
 function _dedupeLogEntries(kind, entries) {
@@ -4654,8 +5442,10 @@ async function renderResponseLog() {
     const status = e.status || e.result || '–';
     const paymentMethod = _responsePaymentMethod(e, requestEntries);
     const normalisedStatus = status.toUpperCase();
+    const failedStatuses = ['FAILED', 'FAILURE', 'CANCEL', 'CANCELLED', 'CANCELED'];
+    const isClassicBackCancel = e.integration === 'classic' && e.callbackType === 'back';
     const dotCls = ['OK', 'SUCCESS'].includes(normalisedStatus) ? 'rlog-status-ok'
-                 : ['FAILED', 'FAILURE'].includes(normalisedStatus) ? 'rlog-status-fail'
+                 : failedStatuses.includes(normalisedStatus) ? 'rlog-status-fail'
                  : 'rlog-status-other';
     const entry = appendTextElement(container, 'div', 'log-entry', '');
     entry.addEventListener('click', () => toggleRespLogDetail(i));
@@ -4668,7 +5458,7 @@ async function renderResponseLog() {
       statusBadge.classList.add('status-ok');
       statusBadge.style.cssText = 'background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25);color:var(--success)';
     }
-    if (['FAILED', 'FAILURE'].includes(normalisedStatus)) {
+    if (failedStatuses.includes(normalisedStatus)) {
       statusBadge.classList.add('status-failed');
       statusBadge.style.cssText = 'background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:var(--danger)';
     }
@@ -4677,10 +5467,12 @@ async function renderResponseLog() {
     appendTextElement(meta, 'span', `log-status-dot ${dotCls}`, '');
     const identifier = e.integration === 'unknown'
       ? (e.callbackHost || e.url || '')
+      : isClassicBackCancel
+      ? 'URLBack'
       : e.integration === 'rest'
       ? (e.paymentId || _plainParamIgnoreCase(e.plain, ['PayID', 'PaymentID', 'paymentId']))
       : e.transId;
-    const transId = appendTextElement(entry, 'div', 'log-tid', e.integration === 'unknown' ? 'Callback: ' : e.integration === 'rest' ? 'PayID: ' : 'TransID: ');
+    const transId = appendTextElement(entry, 'div', 'log-tid', e.integration === 'unknown' || isClassicBackCancel ? 'Callback: ' : e.integration === 'rest' ? 'PayID: ' : 'TransID: ');
     const transIdValue = appendTextElement(transId, 'span', '', identifier || '–');
     transIdValue.style.color = 'var(--accent2)';
     const detail = appendTextElement(entry, 'div', 'log-detail', '');
@@ -5187,6 +5979,13 @@ function _restCallbackUrl(result) {
   return url.href;
 }
 
+function _classicCallbackUrl(result) {
+  const url = new URL(_callbackBaseUrl());
+  url.searchParams.set('callback', 'classic');
+  url.searchParams.set('result', result);
+  return url.href;
+}
+
 function _restoreCallbackInput(input) {
   input.value = input.dataset.backup || '';
   delete input.dataset.backup;
@@ -5207,7 +6006,11 @@ function _applyCallbackReceiver(enabled) {
         return;
       }
       const restResults = { urlSuccess: 'success', urlFailure: 'failure', urlBack: 'cancel' };
-      el.value = currentIntegration === 'rest' ? _restCallbackUrl(restResults[id]) : base;
+      el.value = currentIntegration === 'rest'
+        ? _restCallbackUrl(restResults[id])
+        : id === 'urlBack'
+          ? _classicCallbackUrl('cancel')
+          : base;
       el.readOnly = true;
       el.style.opacity = '0.65';
     } else {
@@ -5346,13 +6149,37 @@ function _plainPaygateCallbackPayloadFromUrl(urlString) {
   };
 }
 
+function _classicCancelCallbackPayloadFromUrl(urlString) {
+  const url = new URL(urlString, window.location.href);
+  const params = url.searchParams;
+  if (params.get('callback') !== 'classic' || params.get('result') !== 'cancel') return null;
+
+  return {
+    timestamp: new Date().toISOString(),
+    status: 'CANCELLED',
+    result: 'cancel',
+    paymentId: '',
+    transId: '',
+    merchantId: '',
+    paymentMethod: '',
+    integration: 'classic',
+    callbackType: 'back',
+    url: url.href,
+    plain: params.toString(),
+  };
+}
+
 function _unknownCallbackPayloadFromUrl(urlString) {
   const url = new URL(urlString, window.location.href);
   const params = new URLSearchParams(url.searchParams);
   NON_CALLBACK_QUERY_PARAMS.forEach(name => params.delete(name));
   if (!params || Array.from(params.keys()).length === 0) return null;
   if (params.has('Data') || params.has('data') || params.has('Len') || params.has('len')) return null;
-  if (_restCallbackPayloadFromUrl(urlString) || _plainPaygateCallbackPayloadFromUrl(urlString)) return null;
+  if (
+    _restCallbackPayloadFromUrl(urlString) ||
+    _plainPaygateCallbackPayloadFromUrl(urlString) ||
+    _classicCancelCallbackPayloadFromUrl(urlString)
+  ) return null;
   if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return null;
 
   return {
@@ -5399,6 +6226,23 @@ async function handlePlainPaygateCallbackUrl(urlString) {
     return true;
   } catch (e) {
     console.warn('handlePlainPaygateCallbackUrl error:', e);
+    return false;
+  }
+}
+
+async function handleClassicCancelCallbackUrl(urlString) {
+  try {
+    if (localStorage.getItem(CALLBACK_RECEIVER_KEY) !== '1') return false;
+    const entry = _classicCancelCallbackPayloadFromUrl(urlString);
+    if (!entry) return false;
+    window.history.replaceState({}, '', _callbackBaseUrl());
+    await _addLogEntry(LOG_RESPONSE_STORE, RESP_LOG_LS_KEY, entry);
+    await renderResponseLog();
+    document.getElementById('nav-resp-log')?.click();
+    showToast(t('toast_classic_cancel_received'), 'info');
+    return true;
+  } catch (e) {
+    console.warn('handleClassicCancelCallbackUrl error:', e);
     return false;
   }
 }
@@ -5549,6 +6393,10 @@ function checkCallbackParams() {
     handlePlainPaygateCallbackUrl(window.location.href);
     return;
   }
+  if (_classicCancelCallbackPayloadFromUrl(window.location.href)) {
+    handleClassicCancelCallbackUrl(window.location.href);
+    return;
+  }
   if (_unknownCallbackPayloadFromUrl(window.location.href)) {
     handleUnknownCallbackUrl(window.location.href);
     return;
@@ -5588,6 +6436,7 @@ document.addEventListener('DOMContentLoaded', () => {
   generateTransId();
   initPayByLinkDefaults();
   setIntegration(currentIntegration);
+  initCredentialProfileControls();
   loadCredentials();
   initLogStorage().then(() => {
     renderLog();
@@ -5598,6 +6447,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initClearAllModal();
   initQrModal();
   initMasterPwModals();
+  initCredentialBackupModals();
+  initProfileNameModal();
   initProfileDeleteModal();
   initNewFlowModal();
   initLogActionModal();
@@ -5636,8 +6487,13 @@ const CLICK_ACTIONS = {
   'set-integration': el => setIntegration(el.dataset.arg),
   'set-classic-encryption': el => setClassicEncryption(el.dataset.arg),
   'save-profile': () => saveProfile(),
-  'load-profile': () => loadProfile(),
-  'delete-profile': () => deleteProfile(),
+  'new-profile': () => newProfile(),
+  'toggle-profile-manager': () => toggleProfileManager(),
+  'activate-managed-profile': el => activateManagedProfile(el.dataset.profileId),
+  'rename-profile': el => renameProfile(el.dataset.profileId),
+  'delete-profile': el => deleteProfile(el.dataset.profileId),
+  'export-credential-profiles': () => openCredentialExportModal(),
+  'open-credential-profile-import': () => openCredentialProfileImport(),
   'remove-article-item': el => removeArticleItem(el),
   'open-log-import': el => openLogImport(el.dataset.arg),
   'open-log-data-modal': () => openLogDataModal(),
@@ -5689,6 +6545,7 @@ const CHANGE_ACTIONS = {
   'toggle-articlelist': () => toggleArticleList(),
   'on-template-change': () => onTemplateChange(),
   'on-profile-select': () => onProfileSelect(),
+  'handle-credential-profile-import-file': el => handleCredentialProfileImportFile(el),
   'on-orderdesc-change': el => onOrderDescChange(el),
   'handle-log-import-file': el => handleLogImportFile(el.dataset.arg, el),
   'handle-combined-log-import-file': el => handleCombinedLogImportFile(el),
@@ -5754,6 +6611,26 @@ function initProfileDeleteModal() {
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && modal.classList.contains('open')) closeProfileDeleteModal();
+  });
+}
+
+function initProfileNameModal() {
+  const modal = document.getElementById('profile-name-modal');
+  const input = document.getElementById('profile-name-modal-input');
+  const cancel = document.getElementById('profile-name-modal-cancel');
+  const confirmButton = document.getElementById('profile-name-modal-confirm');
+  if (!modal || !input || !cancel || !confirmButton) return;
+
+  cancel.addEventListener('click', () => closeProfileNameModal());
+  confirmButton.addEventListener('click', confirmProfileNameModal);
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Enter') confirmProfileNameModal();
+  });
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeProfileNameModal();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeProfileNameModal();
   });
 }
 
@@ -6092,6 +6969,8 @@ function initNavigation() {
   const glassNav = document.querySelector('.glass-nav');
   const navScrollLeft = document.getElementById('nav-scroll-left');
   const navScrollRight = document.getElementById('nav-scroll-right');
+  const navScrollFadeLeft = document.getElementById('nav-scroll-fade-left');
+  const navScrollFadeRight = document.getElementById('nav-scroll-fade-right');
   const navOverflowTolerance = 12;
   let navigationLockTarget = null;
   let navigationLockTimer = 0;
@@ -6112,11 +6991,20 @@ function initNavigation() {
     const controlTop = navRect.top + (navRect.height - navScrollLeft.offsetHeight) / 2;
     navScrollLeft.style.top = `${controlTop}px`;
     navScrollRight.style.top = `${controlTop}px`;
+    [navScrollFadeLeft, navScrollFadeRight].forEach(fade => {
+      if (!fade) return;
+      fade.style.top = `${navRect.top + 1}px`;
+      fade.style.height = `${Math.max(0, navRect.height - 2)}px`;
+    });
+    if (navScrollFadeLeft) navScrollFadeLeft.style.left = `${navRect.left}px`;
+    if (navScrollFadeRight) navScrollFadeRight.style.left = `${navRect.right - navScrollFadeRight.offsetWidth - 1}px`;
     const hasOverflow = glassNav.scrollWidth > glassNav.clientWidth + navOverflowTolerance;
     const atStart = glassNav.scrollLeft <= navOverflowTolerance;
     const atEnd = glassNav.scrollLeft + glassNav.clientWidth >= glassNav.scrollWidth - navOverflowTolerance;
     navScrollLeft.classList.toggle('visible', hasOverflow && !atStart);
     navScrollRight.classList.toggle('visible', hasOverflow && !atEnd);
+    navScrollFadeLeft?.classList.toggle('visible', hasOverflow && !atStart);
+    navScrollFadeRight?.classList.toggle('visible', hasOverflow && !atEnd);
   }
 
   function updateMobileContentOffset() {

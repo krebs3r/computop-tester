@@ -2,6 +2,19 @@
 
 All notable changes to Paygate Payment Tester are documented here.
 
+### v3.6.8 — Credential profiles and safer status inquiries
+
+- Reworked Step 1 around a clearly identified active credential profile, including visible saved/unsaved state and protection against silently discarding credential changes
+- Added a responsive profile manager for creating, activating, renaming and deleting locally stored profiles without mixing profile selection with credential editing
+- Added local password-encrypted credential-profile export and import using AES-GCM with a key derived through PBKDF2-SHA-256
+- Added format, content and file-size validation plus an explicit choice between updating existing profiles and importing copies when profile IDs conflict
+- Bound generated request-log entries to the active credential profile and revision when the visible credentials still match that saved profile
+- Made saved status transactions stay separated by merchant context, reactivate their associated profile when available, warn when a profile changed and block status inquiries when the active profile or Merchant ID does not match the selected transaction
+- Kept older request and response log entries useful through a conservative Merchant ID match when no unambiguous profile binding exists
+- Added REST payment-creation previews to the Request Log so they participate in profile-bound transaction history and later status selection
+- Recognised the generated Classic `URLBack` cancellation redirect and stored it as `CANCELLED` in the Response Log instead of reporting it as an unknown callback
+- Kept the Classic demo switch out of REST credential configuration, improved wide-navigation overflow cues and grouping, and refreshed the README with an application preview plus current profile, callback, security and project-structure documentation
+
 ### v3.6.7 — Callback parameters and Classic response decryption fixes
 
 - Excluded the app-owned `design` query parameter from the guarded unknown-callback detection, so links such as `?design=nexi` open normally without an `UNKNOWN` Response Log entry or warning
